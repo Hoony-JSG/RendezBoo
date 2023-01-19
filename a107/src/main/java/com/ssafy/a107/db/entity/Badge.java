@@ -10,6 +10,6 @@ import javax.persistence.Entity;
 @Getter @Setter
 public class Badge extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String url;
 }
