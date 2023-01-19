@@ -35,7 +35,8 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/api/**"))
-                .build();
+                .build()
+                .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
@@ -50,7 +51,7 @@ public class SwaggerConfig {
      * @return
      */
     private ApiKey apiKey() {
-        return new ApiKey("JWT", "제작예정", "header");
+        return new ApiKey("JWT", "access-token", "header");
     }
 
     private List<SecurityReference> defaultAuth() {
