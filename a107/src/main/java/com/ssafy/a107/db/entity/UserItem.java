@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@IdClass(UserItemId.class)
+@IdClass(UserItemSeq.class)
 public class UserItem {
 
     @Id
