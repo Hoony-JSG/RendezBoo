@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 public class Report extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "reporter_seq")
     private User reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "target_seq")
     private User target;
 
     @Column
