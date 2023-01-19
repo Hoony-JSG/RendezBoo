@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class UserInterestSeq implements Serializable {
 
-    private String user;
-    private String interest;
+    private Long user;
+    private Long interest;
 
     @Override
     public boolean equals(Object o) {
