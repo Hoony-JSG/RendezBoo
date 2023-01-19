@@ -1,8 +1,8 @@
 package com.ssafy.a107.db.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -10,8 +10,8 @@ import javax.persistence.*;
  * 엔티티 공통 사항 정의
  */
 @Entity
-@Getter @Setter
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BaseEntity {
 
     @Id
