@@ -17,3 +17,6 @@ spring:
       host: localhost
       port: 27017
       database: a107_mongodb
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
