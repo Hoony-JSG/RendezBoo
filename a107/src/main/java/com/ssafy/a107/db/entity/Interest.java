@@ -8,11 +8,10 @@ import javax.persistence.Entity;
 
 @Entity
 @Getter @Setter
-public class Item extends BaseEntity {
+public class Interest extends BaseEntity {
 
-    @Column(nullable = false)
-    private byte type;
+    @Column(nullable = false, length = 20)
+    private String name;
 
-    @Column(nullable = false, length = 100)
-    private String url;
+
 }

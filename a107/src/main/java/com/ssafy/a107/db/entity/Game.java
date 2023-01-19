@@ -10,9 +10,9 @@ import javax.persistence.Entity;
 @Getter @Setter
 public class Game extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String description;
 }
