@@ -8,9 +8,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @EntityListeners(AuditingEntityListener.class)
 public class User extends BaseEntity{
 
@@ -23,6 +25,9 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 20)
     private String city;
 
+    /**
+     * 남자: 1 여자: 0
+     */
     @Column(nullable = false)
     private Boolean gender;
 
@@ -50,8 +55,10 @@ public class User extends BaseEntity{
     private LocalDateTime updatedAt;
 
     @OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "badge_id")
+    @JoinColumn(name = "badge_seq")
     private Badge badge;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserInterestRelation> userInterestRelations = new ArrayList<>();
 
 }
