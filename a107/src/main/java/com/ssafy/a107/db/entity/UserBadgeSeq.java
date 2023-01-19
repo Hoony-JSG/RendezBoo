@@ -2,7 +2,7 @@ package com.ssafy.a107.db.entity;
 
 import java.io.Serializable;
 
-public class UserBadgeId implements Serializable {
+public class UserBadgeSeq implements Serializable {
 
     private Long user;
     private Long badge;
@@ -12,7 +12,7 @@ public class UserBadgeId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserBadgeId that = (UserBadgeId) o;
+        UserBadgeSeq that = (UserBadgeSeq) o;
 
         if (!user.equals(that.user)) return false;
         return badge.equals(that.badge);

@@ -2,7 +2,7 @@ package com.ssafy.a107.db.entity;
 
 import java.io.Serializable;
 
-public class UserItemId implements Serializable {
+public class UserItemSeq implements Serializable {
 
     private Long user;
     private Long item;
@@ -12,7 +12,7 @@ public class UserItemId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserItemId that = (UserItemId) o;
+        UserItemSeq that = (UserItemSeq) o;
 
         if (!user.equals(that.user)) return false;
         return item.equals(that.item);

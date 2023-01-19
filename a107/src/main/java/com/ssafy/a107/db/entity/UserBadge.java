@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@IdClass(UserBadgeId.class)
+@IdClass(UserBadgeSeq.class)
 public class UserBadge {
 
     @Id
