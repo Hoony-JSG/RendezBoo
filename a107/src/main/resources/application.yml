@@ -20,3 +20,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+jwt:
+  header: Authorization
+  secret: rendez-boo-secret-key-needs-very-long-secret-key-for-safety
+  access-token-validity-milliseconds: 1800000
+  refresh-token-validity-milliseconds: 259200000
+
