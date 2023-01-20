@@ -32,7 +32,7 @@ public class BadgeController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
         }catch(Exception e){
-            return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 }
