@@ -1,14 +1,21 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.db.entity.User;
+import com.ssafy.a107.db.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     
-    @Override
+    private final UserRepository userRepository;
+
+
     public User getUserBySeq(Long userSeq) {
-        // TODO: JPA 뉴비 이슈로 보류
-        return null;
+
+        return userRepository.findBySeq(userSeq);
     }
 }
