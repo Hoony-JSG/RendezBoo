@@ -1,6 +1,7 @@
 package com.ssafy.a107.db.repository;
 
 
+import com.ssafy.a107.api.service.UserServiceImpl;
 import com.ssafy.a107.db.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,9 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+//    @Autowired
+//    private UserServiceImpl userService;
+
     @Test
     @DisplayName("저장 테스트")
     public void saveTest() {
@@ -42,4 +46,6 @@ public class UserRepositoryTest {
 
         Assertions.assertEquals("test@test.com", savedUser.getEmail());
     }
+
+
 }
