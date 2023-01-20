@@ -13,13 +13,13 @@ public class UserInterestRelation extends UserInterestSeq{
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_seq", columnDefinition = "INT UNSIGNED")
     @JsonIgnore
     private User user;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "interest_seq")
+    @JoinColumn(name = "interest_seq", columnDefinition = "INT UNSIGNED")
     @JsonIgnore
     private Interest interest;
 }

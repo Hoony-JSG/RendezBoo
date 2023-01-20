@@ -11,11 +11,11 @@ public class UserBadge {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_seq", columnDefinition = "INT UNSIGNED")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "badge_seq")
+    @JoinColumn(name = "badge_seq", columnDefinition = "INT UNSIGNED")
     private Badge badge;
 }

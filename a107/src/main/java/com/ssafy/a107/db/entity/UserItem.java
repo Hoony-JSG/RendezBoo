@@ -11,11 +11,11 @@ public class UserItem {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "user_seq")
+    @JoinColumn(name = "user_seq", columnDefinition = "INT UNSIGNED")
     private User user;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "item_seq")
+    @JoinColumn(name = "item_seq", columnDefinition = "INT UNSIGNED")
     private Item item;
 }

@@ -5,11 +5,17 @@ spring:
     username: ssafy
     password: ssafy
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
-      show_sql: true
-      format_sql: true
+      hibernate:
+        show_sql: true
+        format_sql: true
+    open-in-view: true
+
   redis:
     lettuce:
       pool:
@@ -18,11 +24,13 @@ spring:
         min-idle: 2
     host: localhost
     port: 6379
+
   data:
     mongodb:
       host: localhost
       port: 27017
       database: a107_mongodb
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
