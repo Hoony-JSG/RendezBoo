@@ -5,6 +5,7 @@ import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,14 +28,14 @@ public class UserController {
             User user = userService.getUserBySeq(userSeq);
 
             if(user != null) {
-                return ResponseEntity.status(200).body(user);
+                return ResponseEntity.status(HttpStatus.OK).body(user);
             }
             else {
-                return ResponseEntity.status(404).body(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         }
         catch(Exception e) {
-            return ResponseEntity.status(500).body(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
     }
 }
