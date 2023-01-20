@@ -9,9 +9,9 @@ import javax.persistence.*;
 /**
  * 엔티티 공통 사항 정의
  */
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@MappedSuperclass
 public class BaseEntity {
 
     @Id
