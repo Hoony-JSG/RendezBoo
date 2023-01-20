@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 public class OnetoOneMeetingRoom extends BaseEntity{
-    @Column(nullable = false)
-    private int meetingRootSeq;
+
     @Column(nullable = false)
     private Byte status;
 

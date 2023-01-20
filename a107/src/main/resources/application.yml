@@ -41,3 +41,7 @@ jwt:
   access-token-validity-milliseconds: 1800000
   refresh-token-validity-milliseconds: 259200000
 
+openvidu:
+  url: http://localhost:4443/
+  secret: MY_SECRET
+
