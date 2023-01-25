@@ -64,4 +64,44 @@ class FriendControllerTest {
 
         Assertions.assertThat(responseEntity).isEqualTo(ResponseEntity.status(HttpStatus.OK).build());
     }
+
+    @Test
+    void deleteFriend() {
+        User userMe = User.builder()
+                .email("test@test.com")
+                .password("pass")
+                .city("seoul")
+                .gender(true)
+                .phoneNumber("01012341234")
+                .name("홍길동")
+                .profileImagePath("abc.jpg")
+                .MBTI("ENTJ")
+                .point(1000L)
+                .build();
+
+        User me = userRepository.save(userMe);
+
+        User userOther = User.builder()
+                .email("test@test.com")
+                .password("pass")
+                .city("seoul")
+                .gender(true)
+                .phoneNumber("01012341234")
+                .name("홍길동")
+                .profileImagePath("abc.jpg")
+                .MBTI("ENTJ")
+                .point(1000L)
+                .build();
+
+        User other = userRepository.save(userOther);
+
+        ResponseEntity<?> addFriend = friendController.addFriend(me.getSeq(), other.getSeq());
+
+//        System.out.println(addFriend);
+
+        ResponseEntity<?> deleteFriend = friendController.deleteFriend(me.getSeq(), other.getSeq());
+
+        Assertions.assertThat(deleteFriend).isEqualTo(ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+
+    }
 }
