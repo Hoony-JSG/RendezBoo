@@ -46,13 +46,15 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
+      - redis
+      - mongodb
     networks:
       - a107_network
     environment:
       SERVER_MODE: prod
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: ssafy
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ssafy
 
 volumes:
   a107-mysql-data:
