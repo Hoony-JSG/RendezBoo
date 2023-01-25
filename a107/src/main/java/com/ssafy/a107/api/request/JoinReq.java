@@ -12,4 +12,10 @@ import lombok.NoArgsConstructor;
 public class JoinReq {
     private String email;
     private String password;
+    private String city;
+    private Boolean gender;
+    private String phoneNumber;
+    private String name;
+    private String profileImagePath;
+    private String MBTI;
 }
