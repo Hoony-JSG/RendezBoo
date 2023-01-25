@@ -5,12 +5,10 @@ import lombok.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
-@Entity
+
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Entity
 public class Badge extends BaseEntity {
 
     @Column(nullable = false, length = 30)
@@ -18,4 +16,10 @@ public class Badge extends BaseEntity {
 
     @Column(nullable = false, length = 100)
     private String url;
+
+    @Builder
+    public Badge(String name, String url) {
+        this.name = name;
+        this.url = url;
+    }
 }
