@@ -29,7 +29,7 @@ public class FriendController {
     ) {
         try {
             Long friendSeq = friendService.addFriend(userSeq, otherUserSeq);
-            return ResponseEntity.status(HttpStatus.OK).body(friendSeq);
+            return ResponseEntity.status(HttpStatus.CREATED).body(friendSeq);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);

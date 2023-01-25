@@ -63,7 +63,7 @@ class FriendControllerTest {
         ResponseEntity<?> responseEntity = friendController.addFriend(me.getSeq(), other.getSeq());
 
         System.out.println(responseEntity.getStatusCode());
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
