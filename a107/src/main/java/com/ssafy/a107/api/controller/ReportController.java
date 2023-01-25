@@ -14,18 +14,18 @@ import java.util.List;
 @Api(value = "신고 API", tags = {"Report"})
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/report")
+@RequestMapping("/api/reports")
 public class ReportController {
 
     private final ReportService reportService;
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<?> save(@RequestBody ReportReq req){
         Long reportSeq = reportService.save(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(reportSeq);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<?> findAll(){
         List<ReportRes> all = reportService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(all);
