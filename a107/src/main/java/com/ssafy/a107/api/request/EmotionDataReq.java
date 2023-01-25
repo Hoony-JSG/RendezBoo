@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ExpressionDataReq {
+public class EmotionDataReq {
     private Double anger;
     private Double contempt;
     private Double disgust;
@@ -19,7 +19,7 @@ public class ExpressionDataReq {
     private Long meeting_room_seq;
     private Long user_seq;
     @Builder
-    public ExpressionDataReq(Double anger, Double contempt, Double disgust, Double fear, Double happiness, Double neutral, Double sadness, Double surprise,Long meeting_room_seq, Long user_seq) {
+    public EmotionDataReq(Double anger, Double contempt, Double disgust, Double fear, Double happiness, Double neutral, Double sadness, Double surprise, Long meeting_room_seq, Long user_seq) {
         this.anger = anger;
         this.contempt = contempt;
         this.disgust = disgust;
