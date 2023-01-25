@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  springboot:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8.0.31
+    volumes:
+      - a107-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_DB: a107_mysql
+      MYSQL_USER: ssafy
+      MYSQL_PASSWORD: ssafy
+
+volumes:
+  a107-mysql-data:
