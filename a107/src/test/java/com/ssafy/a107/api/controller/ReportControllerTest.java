@@ -31,14 +31,14 @@ public class ReportControllerTest {
                 .build();
 
         mvc.perform(
-                MockMvcRequestBuilders.post("/api/report")
+                MockMvcRequestBuilders.post("/api/reports")
                         .accept(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(req))
 
                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
     }
 
