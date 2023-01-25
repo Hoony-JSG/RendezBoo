@@ -1,16 +1,17 @@
 package com.ssafy.a107.api.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ssafy.a107.db.entity.Badge;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class BadgeRes {
-    private Long seq;
-    private String name;
-    private String url;
+    private final Long seq;
+    private final String name;
+    private final String url;
+    public BadgeRes(Badge badge){
+        this.seq = badge.getSeq();
+        this.name = badge.getName();
+        this.url = badge.getUrl();
+    }
 }

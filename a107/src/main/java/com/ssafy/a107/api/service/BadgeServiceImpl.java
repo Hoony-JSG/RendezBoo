@@ -51,7 +51,7 @@ public class BadgeServiceImpl implements BadgeService{
 
     @Override
     public Long createBadge(BadgeCreateReq badgeCreateReq) {
-        Badge badge = new Badge().builder()
+        Badge badge = Badge.builder()
                 .name(badgeCreateReq.getName())
                 .url(badgeCreateReq.getUrl())
                 .build();
@@ -63,8 +63,7 @@ public class BadgeServiceImpl implements BadgeService{
     public Long updateBadge(BadgeUpdateReq badgeUpdateReq) throws NotFoundException {
         Badge badge = badgeRepository.findById(badgeUpdateReq.getSeq())
                 .orElseThrow(() -> new NotFoundException("Wrong Badge Seq"));
-        badge.setName(badgeUpdateReq.getName());
-        badge.setUrl(badgeUpdateReq.getUrl());
+        badge.update(badgeUpdateReq.getName(), badgeUpdateReq.getUrl());
         badgeRepository.save(badge);
         return badge.getSeq();
     }
