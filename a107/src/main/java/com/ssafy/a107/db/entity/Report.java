@@ -1,13 +1,16 @@
 package com.ssafy.a107.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
+@NoArgsConstructor
+@Entity
 public class Report extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,8 +25,17 @@ public class Report extends BaseEntity{
     private byte reportType;
 
     @Column(columnDefinition = "TEXT")
-    private String reportReason;
+    private String reportDetail;
 
     @CreatedDate
     @Column(updatable = false)
-    private LocalDateTime createdAt;}
+    private LocalDateTime createdAt;
+
+    @Builder
+    public Report(User reporter, User target, byte reportType, String reportDetail) {
+        this.reporter = reporter;
+        this.target = target;
+        this.reportType = reportType;
+        this.reportDetail = reportDetail;
+    }
+}
