@@ -1,8 +1,6 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.service.BlockedUserService;
 import com.ssafy.a107.api.service.BlockedUserServiceImpl;
-import com.ssafy.a107.api.service.FriendServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +25,8 @@ public class BlockedUserController {
             @PathVariable Long userSeq, @PathVariable Long targetUserSeq
     ) {
         try {
-            blockedUserService.addBlockedUser(userSeq, targetUserSeq);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            Long blocked = blockedUserService.addBlockedUser(userSeq, targetUserSeq);
+            return ResponseEntity.status(HttpStatus.CREATED).body(blocked);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
