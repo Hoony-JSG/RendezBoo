@@ -1,12 +1,16 @@
 package com.ssafy.a107.db.entity;
 
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Badge extends BaseEntity {
 
     @Column(nullable = false, length = 30)
