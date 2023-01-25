@@ -7,13 +7,13 @@ import lombok.Builder;
 @Getter
 @NoArgsConstructor
 public class ReportReq {
-    private int reporterSeq;
-    private int targetSeq;
-    private String reportType;
+    private Long reporterSeq;
+    private Long targetSeq;
+    private byte reportType;
     private String reportDetail;
 
     @Builder
-    public ReportReq(int reporterSeq, int targetSeq, String reportType, String reportDetail) {
+    public ReportReq(Long reporterSeq, Long targetSeq, byte reportType, String reportDetail) {
         this.reporterSeq = reporterSeq;
         this.targetSeq = targetSeq;
         this.reportType = reportType;
