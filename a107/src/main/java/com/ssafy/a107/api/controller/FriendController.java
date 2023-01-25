@@ -28,8 +28,8 @@ public class FriendController {
             @PathVariable Long userSeq, @PathVariable Long otherUserSeq
     ) {
         try {
-            friendService.addFriend(userSeq, otherUserSeq);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            Long friendSeq = friendService.addFriend(userSeq, otherUserSeq);
+            return ResponseEntity.status(HttpStatus.CREATED).body(friendSeq);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
@@ -49,7 +49,7 @@ public class FriendController {
     ) {
         try {
             friendService.deleteFriend(userSeq, otherUserSeq);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
