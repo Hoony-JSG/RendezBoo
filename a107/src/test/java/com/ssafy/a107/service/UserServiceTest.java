@@ -66,6 +66,6 @@ public class UserServiceTest {
         Assertions.assertEquals(userService.getUserBySeq(savedUser).getEmail(), joinReq.getEmail());
         Assertions.assertEquals(userService.getUserBySeq(savedUser).getPoint(), 0);
 
-        System.out.println("비밀번호 테스트: " + userService.getUserBySeq(savedUser).getPassword());
+//        System.out.println("비밀번호 테스트: " + userService.getUserBySeq(savedUser).getPassword());
     }
 }
