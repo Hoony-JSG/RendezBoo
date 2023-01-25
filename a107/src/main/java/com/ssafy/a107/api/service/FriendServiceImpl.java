@@ -20,7 +20,7 @@ public class FriendServiceImpl implements FriendService{
      * @param otherUserSeq: 친구로 추가할 유저(상대방)의 userSeq
      */
     @Override
-    public void addFriend(Long userSeq, Long otherUserSeq) {
+    public Long addFriend(Long userSeq, Long otherUserSeq) {
         User user = userRepository.findBySeq(userSeq);
         User otherUser = userRepository.findBySeq(otherUserSeq);
 
@@ -29,7 +29,9 @@ public class FriendServiceImpl implements FriendService{
                 .friend(otherUser)
                 .build();
 
-        friendRepository.save(friend);
+        Friend savedFriend = friendRepository.save(friend);
+
+        return savedFriend.getSeq();
     }
 
     @Override

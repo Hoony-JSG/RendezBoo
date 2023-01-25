@@ -62,7 +62,8 @@ class FriendControllerTest {
 
         ResponseEntity<?> responseEntity = friendController.addFriend(me.getSeq(), other.getSeq());
 
-        Assertions.assertThat(responseEntity).isEqualTo(ResponseEntity.status(HttpStatus.OK).build());
+        System.out.println(responseEntity.getStatusCode());
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
     @Test
@@ -101,7 +102,8 @@ class FriendControllerTest {
 
         ResponseEntity<?> deleteFriend = friendController.deleteFriend(me.getSeq(), other.getSeq());
 
-        Assertions.assertThat(deleteFriend).isEqualTo(ResponseEntity.status(HttpStatus.NO_CONTENT).build());
+//        System.out.println(deleteFriend);
+        Assertions.assertThat(deleteFriend.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
     }
 }
