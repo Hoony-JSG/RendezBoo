@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-//    @Modifying
-//    @Transactional
-//    void deleteByUserAndFriend(Long userSeq, Long friendSeq);
+    @Modifying
+    @Transactional
+    void deleteByUserSeqAndFriendSeq(Long userSeq, Long friendSeq);
 }

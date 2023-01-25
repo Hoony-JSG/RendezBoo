@@ -31,4 +31,9 @@ public class FriendServiceImpl implements FriendService{
 
         friendRepository.save(friend);
     }
+
+    @Override
+    public void deleteFriend(Long userSeq, Long otherUserSeq) {
+        friendRepository.deleteByUserSeqAndFriendSeq(userSeq, otherUserSeq);
+    }
 }
