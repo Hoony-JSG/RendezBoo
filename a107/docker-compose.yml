@@ -1,6 +1,28 @@
 version: "3.7"
 
 services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - a107_network
+
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ssafy
+      MONGO_INITDB_ROOT_PASSWORD: ssafy
+      MONGO_INITDB_DATABASE: a107_mongodb
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - a107_network
+
   mysql:
     image: mysql:8.0.31
     volumes:
@@ -27,9 +49,10 @@ services:
     networks:
       - a107_network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ssafy
+      SERVER_MODE: prod
+#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: ssafy
 
 volumes:
   a107-mysql-data:
