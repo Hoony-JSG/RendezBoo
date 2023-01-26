@@ -61,8 +61,9 @@ public class UserController {
         }
     }
 
+    // 로그인
     @PostMapping("/login")
-    @ApiOperation(value = "유저 로그인")
+    @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
     public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException {
         UserRes findUser = userService.getUserByEmail(loginReq.getEmail());
 
@@ -73,5 +74,13 @@ public class UserController {
         else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
+
+    // 아이디 중복체크
+    @GetMapping("/check/{email}")
+    @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복 체크")
+    public ResponseEntity<?> checkEmail(@PathVariable String email) {
+        if(userService.checkEmailDuplicate(email)) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
