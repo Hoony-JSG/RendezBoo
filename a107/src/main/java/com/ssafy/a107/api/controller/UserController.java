@@ -2,7 +2,9 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.UserService;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +32,7 @@ public class UserController {
     @ApiOperation(value = "유저 정보 조회", notes = "Seq로 유저 정보 제공")
     public ResponseEntity<?> getUserInfo(@PathVariable Long userSeq) {
         try {
-            User user = userService.getUserBySeq(userSeq);
+            UserRes user = userService.getUserBySeq(userSeq);
 
             if(user != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(user);
@@ -47,8 +49,8 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) {
-        User findUser = userService.getUserByEmail(joinReq.getEmail());
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws NotFoundException {
+        UserRes findUser = userService.getUserByEmail(joinReq.getEmail());
 
         if(findUser == null) {
             userService.createUser(joinReq);
@@ -61,8 +63,8 @@ public class UserController {
 
     @PostMapping("/login")
     @ApiOperation(value = "유저 로그인")
-    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
-        User findUser = userService.getUserByEmail(loginReq.getEmail());
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException {
+        UserRes findUser = userService.getUserByEmail(loginReq.getEmail());
 
         // 비밀번호가 일치하면
         if(findUser != null && passwordEncoder.matches(loginReq.getPassword(), findUser.getPassword())) {
