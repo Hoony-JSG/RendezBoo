@@ -10,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -46,10 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserRes getUserByEmail(String email) throws NotFoundException {
-        Optional<User> result = userRepository.findByEmail(email);
-
-        if(result.isPresent()) return new UserRes(result.get());
-        throw new NotFoundException("Wrong User Seq!");
+        return new UserRes(userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Wrong User Seq!")));
     }
 
     @Override
