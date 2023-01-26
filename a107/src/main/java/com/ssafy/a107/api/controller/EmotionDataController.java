@@ -3,6 +3,7 @@ package com.ssafy.a107.api.controller;
 import com.ssafy.a107.api.request.EmotionDataReq;
 import com.ssafy.a107.api.response.EmotionDataRes;
 import com.ssafy.a107.api.service.EmotionDataService;
+import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class EmotionDataController {
     private final EmotionDataService emotionDataService;
     @PostMapping("/")
     @ApiOperation(value="유저가 감정 저장", notes = "RequestBody로 매 1:1미팅에서의 유저가 유발한 감정을 반영한다")
-    public ResponseEntity<?> save(@RequestBody EmotionDataReq req){
+    public ResponseEntity<?> save(@RequestBody EmotionDataReq req) throws NotFoundException {
         Long result = emotionDataService.addExpressionData(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
