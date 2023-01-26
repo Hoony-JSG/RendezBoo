@@ -7,11 +7,11 @@ import javax.persistence.Entity;
 
 @Entity
 @Getter
-public class Game extends BaseEntity {
+public class Interest extends BaseEntity {
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, length = 300)
-    private String description;
+    @Column(nullable = false)
+    private byte type;
 }

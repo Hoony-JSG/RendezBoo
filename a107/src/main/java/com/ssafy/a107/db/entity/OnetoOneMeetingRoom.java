@@ -4,24 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
-public class Notice extends BaseEntity {
+public class OnetoOneMeetingRoom extends BaseEntity{
 
-    @Column(nullable = false, length = 40)
-    private String title;
+    @Column(nullable = false)
+    private Byte status;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
-
-    @Column(columnDefinition = "INTEGER DEFAULT 0", nullable = false)
-    private int hit;
+    private int manSeq;
+    private int womanSeq;
 
     @CreatedDate
     @JsonProperty("created_at")
