@@ -13,15 +13,15 @@ public class EmotionDataRes {
     private final Double neutral;
     private final Double sadness;
     private final Double surprise;
-    public EmotionDataRes(EmotionData expressionData){
-        this.anger = expressionData.getAnger();
-        this.contempt = expressionData.getContempt();
-        this.disgust = expressionData.getDisgust();
-        this.fear = expressionData.getFear();
-        this.happiness = expressionData.getHappiness();
-        this.neutral = expressionData.getNeutral();
-        this.sadness = expressionData.getSadness();
-        this.surprise = expressionData.getSurprise();
+    public EmotionDataRes(EmotionData emotionData){
+        this.anger = emotionData.getAnger();
+        this.contempt = emotionData.getContempt();
+        this.disgust = emotionData.getDisgust();
+        this.fear = emotionData.getFear();
+        this.happiness = emotionData.getHappiness();
+        this.neutral = emotionData.getNeutral();
+        this.sadness = emotionData.getSadness();
+        this.surprise = emotionData.getSurprise();
     }
 
 }
