@@ -6,6 +6,6 @@ import com.ssafy.a107.common.exception.NotFoundException;
 
 public interface EmotionDataService {
     Long addExpressionData(EmotionDataReq req) throws NotFoundException;
-    EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq);
+    EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) throws NotFoundException;
 
 }

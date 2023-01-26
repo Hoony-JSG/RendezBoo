@@ -31,7 +31,7 @@ public class BadgeController {
     public ResponseEntity<?> getAllBadgeList() {
         List<BadgeRes> badges = badgeService.getAllBadges();
         if (badges == null || badges.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(badgeService.getAllBadges());
     }
@@ -51,9 +51,9 @@ public class BadgeController {
     public ResponseEntity<?> addBadgeToUser(@PathVariable Long userSeq, @RequestBody UserBadgeReq userBadgeReq) {
         try {
             badgeService.createUserBadge(userBadgeReq);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
         } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -69,9 +69,9 @@ public class BadgeController {
     public ResponseEntity<?> updateBadge(@RequestBody BadgeUpdateReq badgeUpdateReq) {
         try {
             badgeService.updateBadge(badgeUpdateReq);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(null);
         } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -79,6 +79,6 @@ public class BadgeController {
     @ApiOperation("뱃지 삭제 - 관리자만 사용가능 해야함")
     public ResponseEntity<?> deleteBadge(@PathVariable Long badgeSeq) {
         badgeService.deleteBadge(badgeSeq);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
