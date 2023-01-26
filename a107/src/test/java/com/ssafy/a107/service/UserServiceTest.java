@@ -2,6 +2,7 @@ package com.ssafy.a107.service;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.service.UserServiceImpl;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ public class UserServiceTest {
 
     @Test
     @DisplayName("유저 조회 테스트")
-    public void findUserBySeqTest() {
+    public void findUserBySeqTest() throws NotFoundException {
         User user = User.builder()
                 .email("test@test.com")
                 .password("pass")

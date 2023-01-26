@@ -12,6 +12,8 @@ import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class EmotionDataServiceImpl implements EmotionDataService {
@@ -20,11 +22,11 @@ public class EmotionDataServiceImpl implements EmotionDataService {
     private final UserRepository userRepository;
     private final OneToOneMeetingRoomRepository onetoOneMeetingRoomRepository;
     @Override
-    public Long addExpressionData(EmotionDataReq req){
-        User user = userRepository.findBySeq(req.getUser_seq());
+    public Long addExpressionData(EmotionDataReq req) throws NotFoundException {
         //OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getUser_seq()).get();
         EmotionData e = emotionDataRepository.save(EmotionData.builder()
-                .user(user)
+                .user(userRepository.findById(req.getUser_seq())
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 //.meetingRoom(room)
                 .anger(req.getAnger())
                 .contempt(req.getContempt())
@@ -39,7 +41,7 @@ public class EmotionDataServiceImpl implements EmotionDataService {
 
     @Override
     public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) {
-        User user = userRepository.findBySeq(userSeq);
+        Optional<User> user = userRepository.findById(userSeq);
         //수정할 부분
         EmotionData e = EmotionData.builder()
                 .build();

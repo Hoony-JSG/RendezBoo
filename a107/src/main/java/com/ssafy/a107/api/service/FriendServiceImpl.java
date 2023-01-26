@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.Friend;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.FriendRepository;
@@ -20,13 +21,12 @@ public class FriendServiceImpl implements FriendService{
      * @param otherUserSeq: 친구로 추가할 유저(상대방)의 userSeq
      */
     @Override
-    public Long addFriend(Long userSeq, Long otherUserSeq) {
-        User user = userRepository.findBySeq(userSeq);
-        User otherUser = userRepository.findBySeq(otherUserSeq);
-
+    public Long addFriend(Long userSeq, Long otherUserSeq) throws NotFoundException {
         Friend friend = Friend.builder()
-                .user(user)
-                .friend(otherUser)
+                .user(userRepository.findById(userSeq)
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+                .friend(userRepository.findById(otherUserSeq)
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 .build();
 
         Friend savedFriend = friendRepository.save(friend);

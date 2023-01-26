@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.BlockedUser;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.BlockedUserRepository;
@@ -15,13 +16,12 @@ public class BlockedUserServiceImpl implements BlockedUserService{
     private final UserRepository userRepository;
     private final BlockedUserRepository blockedUserRepository;
     @Override
-    public Long addBlockedUser(Long userSeq, Long targetUserSeq) {
-        User user = userRepository.findBySeq(userSeq);
-        User targetUser = userRepository.findBySeq(targetUserSeq);
-
+    public Long addBlockedUser(Long userSeq, Long targetUserSeq) throws NotFoundException {
         BlockedUser blockedUser = BlockedUser.builder()
-                .user(user)
-                .target(targetUser)
+                .user(userRepository.findById(userSeq)
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+                .target(userRepository.findById(targetUserSeq)
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 .build();
 
         BlockedUser save = blockedUserRepository.save(blockedUser);
