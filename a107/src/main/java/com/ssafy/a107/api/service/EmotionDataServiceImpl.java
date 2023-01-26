@@ -16,18 +16,20 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class EmotionDataServiceImpl implements EmotionDataService {
+public class EmotionDataServiceImpl implements EmotionDataService{
 
     private final EmotionDataRepository emotionDataRepository;
     private final UserRepository userRepository;
     private final OneToOneMeetingRoomRepository onetoOneMeetingRoomRepository;
     @Override
-    public Long addExpressionData(EmotionDataReq req) throws NotFoundException {
-        //OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getUser_seq()).get();
+    public Long addExpressionData(EmotionDataReq req) throws NotFoundException{
+        User user = userRepository.findById(req.getUser_seq())
+                .orElseThrow(()->new NotFoundException());
+        OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getUser_seq())
+                .orElseThrow(()->new NotFoundException());
         EmotionData e = emotionDataRepository.save(EmotionData.builder()
-                .user(userRepository.findById(req.getUser_seq())
-                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
-                //.meetingRoom(room)
+                .user(user)
+                .meetingRoom(room)
                 .anger(req.getAnger())
                 .contempt(req.getContempt())
                 .disgust(req.getDisgust())
@@ -40,12 +42,9 @@ public class EmotionDataServiceImpl implements EmotionDataService {
     }
 
     @Override
-    public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) {
-        Optional<User> user = userRepository.findById(userSeq);
-        //수정할 부분
-        EmotionData e = EmotionData.builder()
-                .build();
-
-        return null;
+    public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) throws NotFoundException{
+        EmotionData ed = emotionDataRepository.getAVGExpressionDataByUserSeq(userSeq)
+                .orElseThrow(()->new NotFoundException());
+        return new EmotionDataRes(ed);
     }
 }
