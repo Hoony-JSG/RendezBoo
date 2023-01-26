@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
+import com.ssafy.a107.api.request.LoginReq;
 import com.ssafy.a107.api.service.UserService;
 import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
@@ -49,6 +52,20 @@ public class UserController {
 
         if(findUser == null) {
             userService.createUser(joinReq);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PostMapping("/login")
+    @ApiOperation(value = "유저 로그인")
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
+        User findUser = userService.getUserByEmail(loginReq.getEmail());
+
+        // 비밀번호가 일치하면
+        if(passwordEncoder.encode(loginReq.getPassword()).equals(findUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         else {
