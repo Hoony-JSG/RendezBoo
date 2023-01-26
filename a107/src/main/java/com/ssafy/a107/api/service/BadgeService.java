@@ -6,6 +6,7 @@ import com.ssafy.a107.api.request.UserBadgeReq;
 import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BadgeService {
@@ -15,9 +16,9 @@ public interface BadgeService {
 
     List<BadgeRes> getAllBadges();
 
-    Long createBadge(BadgeCreateReq badgeCreateReq);
+    Long createBadge(BadgeCreateReq badgeCreateReq) throws IOException;
 
-    Long updateBadge(BadgeUpdateReq badgeUpdateReq) throws NotFoundException;
+    Long updateBadge(BadgeUpdateReq badgeUpdateReq) throws NotFoundException, IOException;
 
     void deleteBadge(Long seq);
 

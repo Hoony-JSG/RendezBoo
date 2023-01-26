@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
@@ -12,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class BadgeUpdateReq {
     private Long seq;
     private String name;
-    private String url;
+    private MultipartFile image;
 }
