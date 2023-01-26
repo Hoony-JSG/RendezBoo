@@ -3,6 +3,7 @@ package com.ssafy.a107.api.service;
 import com.ssafy.a107.api.request.BadgeCreateReq;
 import com.ssafy.a107.api.request.BadgeUpdateReq;
 import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.Badge;
 import com.ssafy.a107.db.entity.UserBadge;
@@ -13,9 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class BadgeServiceImpl implements BadgeService{
+public class BadgeServiceImpl implements BadgeService {
 
     UserRepository userRepository;
     BadgeRepository badgeRepository;
@@ -29,8 +31,12 @@ public class BadgeServiceImpl implements BadgeService{
     }
 
     @Override
-    public List<Badge> getBadgeByUserSeq(Long userSeq) {
-        return badgeRepository.findBadgesByUserSeq(userSeq);
+    public List<BadgeRes> getBadgeByUserSeq(Long userSeq) {
+        List<Badge> badgeList = badgeRepository.findBadgesByUserSeq(userSeq);
+        List<BadgeRes> badgeResList = badgeList.stream()
+                .map(badge -> new BadgeRes(badge))
+                .collect(Collectors.toList());
+        return badgeResList;
     }
 
     @Override
@@ -45,8 +51,12 @@ public class BadgeServiceImpl implements BadgeService{
     }
 
     @Override
-    public List<Badge> getAllBadges() {
-        return badgeRepository.findAll();
+    public List<BadgeRes> getAllBadges() {
+        List<Badge> badgeList = badgeRepository.findAll();
+        List<BadgeRes> badgeResList = badgeList.stream()
+                .map(badge -> new BadgeRes(badge))
+                .collect(Collectors.toList());
+        return badgeResList;
     }
 
     @Override
