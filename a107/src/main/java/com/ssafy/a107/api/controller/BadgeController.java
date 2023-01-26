@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Api(value = "뱃지 API", tags = {"Badge"})
@@ -59,19 +60,26 @@ public class BadgeController {
 
     @PostMapping()
     @ApiOperation("새로운 뱃지 생성 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> createBadge(@RequestBody BadgeCreateReq badgeCreateReq) {
-        badgeService.createBadge(badgeCreateReq);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> createBadge(BadgeCreateReq badgeCreateReq) {
+        try {
+            badgeService.createBadge(badgeCreateReq);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IOException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: '이미지 업로드 실패'}");
+        }
+
     }
 
     @PutMapping()
     @ApiOperation("뱃지 업데이트 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> updateBadge(@RequestBody BadgeUpdateReq badgeUpdateReq) {
+    public ResponseEntity<?> updateBadge(BadgeUpdateReq badgeUpdateReq) {
         try {
             badgeService.updateBadge(badgeUpdateReq);
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
         } catch (NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (IOException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: '이미지 업로드 실패'}");
         }
     }
 
