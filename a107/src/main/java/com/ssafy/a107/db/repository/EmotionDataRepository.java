@@ -4,15 +4,9 @@ import com.ssafy.a107.db.entity.EmotionData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface EmotionDataRepository extends JpaRepository<EmotionData, Long> {
+import java.util.Optional;
 
-    //SELECT AVG(e1),AVG(e2),AVG(e3),AVG(e4),AVG(e5),AVG(e6),AVG(e7),AVG(e8)
-    //FROM emotion_data
-    //WHERE user_seq = "aaa"
-    //ORDER BY created_time desc;
-    @Query("SELECT AVG(anger),AVG(contempt),AVG(disgust),AVG(fear)," +
-            "AVG(happiness),AVG(neutral),AVG(sadness),AVG(surprise) "+
-            "FROM emotion_data WHERE user_seq = {userSeq}"+
-            "ORDER BY created_time DESC")
-    EmotionData getAVGExpressionDataByUserSeq(Long userSeq);
+public interface EmotionDataRepository extends JpaRepository<EmotionData, Long> {
+    @Query("SELECT AVG(e.anger), AVG(e.contempt), AVG(e.disgust), AVG(e.fear), AVG(e.happiness), AVG(e.neutral), AVG(e.sadness), AVG(e.surprise) FROM EmotionData e WHERE e.user.seq = ?1 ORDER BY e.createdAt DESC")
+    Optional<EmotionData> getAVGExpressionDataByUserSeq(Long userSeq);
 }
