@@ -12,8 +12,6 @@ import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class EmotionDataServiceImpl implements EmotionDataService{
@@ -43,8 +41,7 @@ public class EmotionDataServiceImpl implements EmotionDataService{
 
     @Override
     public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) throws NotFoundException{
-        EmotionData ed = emotionDataRepository.getAVGExpressionDataByUserSeq(userSeq)
-                .orElseThrow(()->new NotFoundException());
-        return new EmotionDataRes(ed);
+        //emotionDataRepository.findAllByuseruserSeq(userSeq);
+        return null;
     }
 }

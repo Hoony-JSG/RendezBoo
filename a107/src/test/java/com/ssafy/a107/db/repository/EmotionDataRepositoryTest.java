@@ -5,18 +5,14 @@ import com.ssafy.a107.db.entity.OnetoOneMeetingRoom;
 import com.ssafy.a107.db.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class EmotionDataRepositoryTest {
     @Autowired
     private UserRepository userRepository;
@@ -24,10 +20,8 @@ public class EmotionDataRepositoryTest {
     private OneToOneMeetingRoomRepository roomRepository;
     @Autowired
     private EmotionDataRepository emotionDataRepository;
-
-
     @Test
-    public void 유저가_유발한_감정_테스트(){
+    public void test(){
         User user = User.builder()
                 .email("email")
                 .password("password")
@@ -43,9 +37,12 @@ public class EmotionDataRepositoryTest {
         Random r = new Random();
         EmotionData[] e = new EmotionData[MAX];
         double[] d = new double[MAX];
+        List<EmotionData> list2 = new ArrayList<>();
         for(int i=0; i<MAX; i++) {
             d[i] = r.nextDouble();
             OnetoOneMeetingRoom o = new OnetoOneMeetingRoom();
+            o.addMan(new Long(i));
+            o.addWoman(new Long(i));
             roomRepository.save(o);
             e[i] = EmotionData.builder()
                     .user(user)
@@ -59,10 +56,12 @@ public class EmotionDataRepositoryTest {
                     .sadness(d[i])
                     .surprise(d[i]).build();
             emotionDataRepository.save(e[i]);
+            list2.add(e[i]);
         }
-        double avg = Arrays.stream(d).average().getAsDouble();
-        EmotionData eResult = emotionDataRepository.getAVGExpressionDataByUserSeq(user.getSeq()).get();
-        Assertions.assertEquals(avg, eResult.getAnger());
-    }
+        List<EmotionData> list1 = emotionDataRepository.findTop10ByUserSeq(user.getSeq());
+        for(int i=0; i<10; i++){
+            Assertions.assertEquals(list1.get(i).getAnger(), list2.get(i).getAnger());
+        }
 
+    }
 }

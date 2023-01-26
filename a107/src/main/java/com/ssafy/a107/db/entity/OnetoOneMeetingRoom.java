@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class OnetoOneMeetingRoom extends BaseEntity{
 
     @Column(nullable = false)
-    private Byte status;
+    private Byte status = 0;
 
     private Long manSeq;
     private Long womanSeq;
@@ -29,10 +29,10 @@ public class OnetoOneMeetingRoom extends BaseEntity{
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
-    @Builder
-    public OnetoOneMeetingRoom(Byte status, Long manSeq, Long womanSeq) {
-        this.status = status;
+    public void addMan(Long manSeq) {
         this.manSeq = manSeq;
+    }
+    public void addWoman(Long womanSeq){
         this.womanSeq = womanSeq;
     }
 }
