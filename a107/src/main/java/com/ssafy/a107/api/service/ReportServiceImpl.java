@@ -4,15 +4,14 @@ import com.ssafy.a107.api.request.ReportReq;
 import com.ssafy.a107.api.response.ReportRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.Report;
-import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.ReportRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,9 +32,8 @@ public class ReportServiceImpl implements ReportService{
         return reportRepository.save(newReport).getSeq();
     }
     public List<ReportRes> findAll(){
-        List<Report> entityAll = reportRepository.findAll();
-        List<ReportRes> resAll = new ArrayList<>();
-        for(Report r: entityAll) resAll.add(new ReportRes(r));
-        return resAll;
+        return reportRepository.findAll().stream()
+                .map(ReportRes::new)
+                .collect(Collectors.toList());
     }
 }
