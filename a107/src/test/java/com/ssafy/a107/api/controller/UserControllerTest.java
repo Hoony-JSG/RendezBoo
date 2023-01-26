@@ -38,6 +38,12 @@ class UserControllerTest {
         JoinReq joinReq = JoinReq.builder()
                 .email("test@ssafy.com")
                 .password("test123")
+                .city("Seoul")
+                .gender(true)
+                .phoneNumber("010-1234-1234")
+                .name("김싸피")
+                .profileImagePath("test.jpg")
+                .MBTI("INTP")
                 .build();
 
         LoginReq loginReq = LoginReq.builder()
@@ -56,5 +62,37 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void loginFailTest() throws Exception {
+        //given
+        JoinReq joinReq = JoinReq.builder()
+                .email("test@ssafy.com")
+                .password("test123")
+                .city("Seoul")
+                .gender(true)
+                .phoneNumber("010-1234-1234")
+                .name("김싸피")
+                .profileImagePath("test.jpg")
+                .MBTI("INTP")
+                .build();
+
+        LoginReq loginReq = LoginReq.builder()
+                .email("test@ssafy.com")
+                .password("test123123")
+                .build();
+
+        //when
+        userService.createUser(joinReq);
+
+        //then
+        mvc.perform(
+                        MockMvcRequestBuilders.post("/api/user/login")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(new ObjectMapper().writeValueAsString(loginReq))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isConflict());
     }
 }
