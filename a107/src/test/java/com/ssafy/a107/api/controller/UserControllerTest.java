@@ -1,23 +1,36 @@
 package com.ssafy.a107.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 @Transactional
 class UserControllerTest {
 
     @Autowired
-    UserController userController;
+    private MockMvc mvc;
+
+    @Autowired
+    private UserService userService;
 
     @Test
     public void loginSuccessTest() throws Exception {
@@ -33,10 +46,15 @@ class UserControllerTest {
                 .build();
 
         //when
-        userController.joinUser(joinReq);
-        ResponseEntity<?> responseEntity = userController.login(loginReq);
+        userService.createUser(joinReq);
 
         //then
-        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        mvc.perform(
+                MockMvcRequestBuilders.post("/api/user/login")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginReq))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isOk());
     }
 }

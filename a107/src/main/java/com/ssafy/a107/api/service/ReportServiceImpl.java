@@ -2,6 +2,7 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.ReportReq;
 import com.ssafy.a107.api.response.ReportRes;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.Report;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.ReportRepository;
@@ -20,12 +21,12 @@ public class ReportServiceImpl implements ReportService{
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
     @Transactional
-    public Long save(ReportReq req){
-        User reporter = userRepository.findBySeq(req.getReporterSeq());
-        User target = userRepository.findBySeq(req.getTargetSeq());
+    public Long save(ReportReq req) throws NotFoundException {
         Report newReport = Report.builder()
-                .reporter(reporter)
-                .target(target)
+                .reporter(userRepository.findById(req.getReporterSeq())
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+                .target(userRepository.findById(req.getTargetSeq())
+                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 .reportType(req.getReportType())
                 .reportDetail(req.getReportDetail())
                 .build();
