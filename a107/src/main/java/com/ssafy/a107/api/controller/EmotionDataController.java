@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmotionDataController {
     private final EmotionDataService emotionDataService;
     @PostMapping("/")
-    @ApiOperation(value="유저가 감정 저장", notes = "RequestBody로 매 1:1미팅에서의 유저가 유발한 감정을 반영한다")
+    @ApiOperation(value="유저가 유발한 감정 저장", notes = "RequestBody로 매 1:1미팅에서의 유저가 유발한 감정을 반영한다")
     public ResponseEntity<?> save(@RequestBody EmotionDataReq req){
         try{
             Long result = emotionDataService.addExpressionData(req);
