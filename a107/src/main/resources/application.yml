@@ -59,6 +59,14 @@ logging:
     root: info
     com.ssafy: debug
 
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
+
 ---
 
 spring:
@@ -111,3 +119,10 @@ openvidu:
 #  url: http://localhost:4443/
 #  secret: MY_SECRET
 
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
