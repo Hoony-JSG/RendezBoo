@@ -48,7 +48,7 @@ public class BadgeController {
 
     @PostMapping("/{userSeq}")
     @ApiOperation(value = "특정 유저에게 뱃지를 생성함")
-    public ResponseEntity<?> addBadgeToUser(@PathVariable Long userSeq, UserBadgeReq userBadgeReq) {
+    public ResponseEntity<?> addBadgeToUser(@PathVariable Long userSeq, @RequestBody UserBadgeReq userBadgeReq) {
         try {
             badgeService.createUserBadge(userBadgeReq);
             return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -59,14 +59,14 @@ public class BadgeController {
 
     @PostMapping()
     @ApiOperation("새로운 뱃지 생성 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> createBadge(BadgeCreateReq badgeCreateReq) {
+    public ResponseEntity<?> createBadge(@RequestBody BadgeCreateReq badgeCreateReq) {
         badgeService.createBadge(badgeCreateReq);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping()
     @ApiOperation("뱃지 업데이트 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> updateBadge(BadgeUpdateReq badgeUpdateReq) {
+    public ResponseEntity<?> updateBadge(@RequestBody BadgeUpdateReq badgeUpdateReq) {
         try {
             badgeService.updateBadge(badgeUpdateReq);
             return ResponseEntity.status(HttpStatus.CREATED).build();
