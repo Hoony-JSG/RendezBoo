@@ -10,4 +10,5 @@ public interface UserService {
     Long createUser(JoinReq joinReq);
     UserRes getUserBySeq(Long userSeq) throws NotFoundException;
     UserRes getUserByEmail(String email) throws NotFoundException;
+    Boolean checkEmailDuplicate(String email);
 }

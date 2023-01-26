@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserService {
         if(result.isPresent()) return new UserRes(result.get());
         throw new NotFoundException("Wrong User Seq!");
     }
+
+    @Override
+    public Boolean checkEmailDuplicate(String email) {
+        return userRepository.existsByEmail(email);
+    }
 }
