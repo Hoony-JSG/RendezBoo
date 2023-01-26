@@ -65,7 +65,7 @@ public class UserController {
         User findUser = userService.getUserByEmail(loginReq.getEmail());
 
         // 비밀번호가 일치하면
-        if(passwordEncoder.encode(loginReq.getPassword()).equals(findUser.getPassword())) {
+        if(findUser != null && passwordEncoder.matches(loginReq.getPassword(), findUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         else {
