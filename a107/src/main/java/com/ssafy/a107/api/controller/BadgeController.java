@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -60,26 +61,28 @@ public class BadgeController {
 
     @PostMapping()
     @ApiOperation("새로운 뱃지 생성 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> createBadge(BadgeCreateReq badgeCreateReq) {
+    public ResponseEntity<?> createBadge(@RequestPart MultipartFile multipartFile, @RequestParam String name) {
+        BadgeCreateReq badgeCreateReq = new BadgeCreateReq(name, multipartFile);
         try {
             badgeService.createBadge(badgeCreateReq);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (IOException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: '이미지 업로드 실패'}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: 'Image Upload Fail'}");
         }
 
     }
 
-    @PutMapping()
+    @PutMapping("/{badgeSeq}")
     @ApiOperation("뱃지 업데이트 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> updateBadge(BadgeUpdateReq badgeUpdateReq) {
+    public ResponseEntity<?> updateBadge(@PathVariable Long badgeSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name) {
+        BadgeUpdateReq badgeUpdateReq = new BadgeUpdateReq(badgeSeq, name, multipartFile);
         try {
             badgeService.updateBadge(badgeUpdateReq);
             return ResponseEntity.status(HttpStatus.CREATED).body(null);
         } catch (NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (IOException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: '이미지 업로드 실패'}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: 'Image Upload Fail'}");
         }
     }
 
