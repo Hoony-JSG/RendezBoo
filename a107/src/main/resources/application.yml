@@ -54,6 +54,11 @@ openvidu:
   url: http://localhost:4443/
   secret: MY_SECRET
 
+logging:
+  level:
+    root: info
+    com.ssafy: debug
+
 ---
 
 spring:
@@ -105,3 +110,4 @@ jwt:
 openvidu:
 #  url: http://localhost:4443/
 #  secret: MY_SECRET
+
