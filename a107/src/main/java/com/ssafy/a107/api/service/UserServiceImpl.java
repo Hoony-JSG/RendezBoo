@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public UserRes getUserBySeq(Long userSeq) throws NotFoundException {
         Optional<User> result = userRepository.findById(userSeq);
 
-        if(result.isPresent()) return buildUserToUserRes(result.get());
+        if(result.isPresent()) return new UserRes(result.get());
         throw new NotFoundException("Wrong User Seq!");
     }
 
@@ -50,27 +50,7 @@ public class UserServiceImpl implements UserService {
     public UserRes getUserByEmail(String email) throws NotFoundException {
         Optional<User> result = userRepository.findByEmail(email);
 
-        if(result.isPresent()) return buildUserToUserRes(result.get());
+        if(result.isPresent()) return new UserRes(result.get());
         throw new NotFoundException("Wrong User Seq!");
-    }
-
-    private UserRes buildUserToUserRes(User user) {
-        UserRes res = UserRes.builder()
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .city(user.getCity())
-                .gender(user.getGender())
-                .phoneNumber(user.getPhoneNumber())
-                .name(user.getName())
-                .profileImagePath(user.getProfileImagePath())
-                .MBTI(user.getMBTI())
-                .point(user.getPoint())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
-                .badge(user.getBadge())
-                .userInterestRelations(user.getUserInterestRelations())
-                .build();
-
-        return res;
     }
 }
