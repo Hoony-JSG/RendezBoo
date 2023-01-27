@@ -61,6 +61,8 @@ logging:
 
 cloud:
   aws:
+    s3:
+      bucket: rendezboo-s3
     region:
       static: ap-northeast-2
     stack:
@@ -121,6 +123,8 @@ openvidu:
 
 cloud:
   aws:
+    s3:
+      bucket: rendezboo-s3
     region:
       static: ap-northeast-2
     stack:
