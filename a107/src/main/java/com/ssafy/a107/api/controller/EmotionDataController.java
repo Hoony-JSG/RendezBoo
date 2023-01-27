@@ -35,12 +35,11 @@ public class EmotionDataController {
     @ApiOperation(value="유저 감정 조회", notes="유저가 유발한 평균적인 감정을 제공한다.")
     public ResponseEntity<?> getUserEmotion(@PathVariable Long userSeq){
         try{
-            EmotionDataRes result = emotionDataService.getAvgExpressionDataByUserSeq(userSeq);
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        }catch(NotFoundException e){
+                EmotionDataRes result = emotionDataService.getAvgExpressionDataByUserSeq(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch(NotFoundException e){
             log.info(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-
     }
 }
