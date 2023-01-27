@@ -21,20 +21,20 @@ public class UserFriendServiceImpl implements UserFriendService {
      */
     @Override
     public Long addFriend(Long userSeq, Long otherUserSeq) throws NotFoundException {
-        UserFriend userFriend = UserFriend.builder()
-                .user(userRepository.findById(userSeq)
-                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
-                .friend(userRepository.findById(otherUserSeq)
-                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
-                .build();
-
-        UserFriend savedUserFriend = userFriendRepository.save(userFriend);
-
-        return savedUserFriend.getSeq();
+        return userFriendRepository.save(UserFriend.builder()
+            .user(userRepository.findById(userSeq)
+                    .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+            .friend(userRepository.findById(otherUserSeq)
+                    .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+            .build()).getSeq();
     }
 
     @Override
-    public void deleteFriend(Long userSeq, Long otherUserSeq) {
-        userFriendRepository.deleteByUserSeqAndFriendSeq(userSeq, otherUserSeq);
+    public void deleteFriend(Long userSeq, Long otherUserSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)
+        && userRepository.existsById(otherUserSeq)) {
+            userFriendRepository.deleteByUserSeqAndFriendSeq(userSeq, otherUserSeq);
+        }else throw new NotFoundException("Wrong User Seq!");
     }
+
 }

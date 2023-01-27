@@ -10,6 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -51,5 +54,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean checkEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public List<UserRes> getFriends(Long userSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)) {
+            return userRepository.findFriendByUserSeq(userSeq).stream()
+                    .map(UserRes::new)
+                    .collect(Collectors.toList());
+        }else throw new NotFoundException("Wrong User Seq!");
+    }
+    @Override
+    public List<UserRes> getBlockeds(Long userSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)) {
+            return userRepository.findBlockedByUserSeq(userSeq).stream()
+                    .map(UserRes::new)
+                    .collect(Collectors.toList());
+        }else throw new NotFoundException("Wrong User Seq!");
     }
 }
