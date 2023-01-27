@@ -6,5 +6,5 @@ public interface UserFriendService {
 
     Long addFriend(Long userSeq, Long otherUserSeq) throws NotFoundException;
 
-    void deleteFriend(Long userSeq, Long otherUserSeq);
+    void deleteFriend(Long userSeq, Long otherUserSeq) throws NotFoundException;
 }
