@@ -1,6 +1,6 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.service.FriendServiceImpl;
+import com.ssafy.a107.api.service.UserFriendServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/friend")
 @RequiredArgsConstructor
-public class FriendController {
+public class UserFriendController {
 
-    private final FriendServiceImpl friendService;
+    private final UserFriendServiceImpl friendService;
 
     /**
      * 친구 추가 api

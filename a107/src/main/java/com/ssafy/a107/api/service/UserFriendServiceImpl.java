@@ -1,19 +1,18 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.common.exception.NotFoundException;
-import com.ssafy.a107.db.entity.Friend;
-import com.ssafy.a107.db.entity.User;
-import com.ssafy.a107.db.repository.FriendRepository;
+import com.ssafy.a107.db.entity.UserFriend;
+import com.ssafy.a107.db.repository.UserFriendRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FriendServiceImpl implements FriendService{
+public class UserFriendServiceImpl implements UserFriendService {
 
     private final UserRepository userRepository;
-    private final FriendRepository friendRepository;
+    private final UserFriendRepository userFriendRepository;
 
     /**
      * 친구 추가
@@ -22,20 +21,20 @@ public class FriendServiceImpl implements FriendService{
      */
     @Override
     public Long addFriend(Long userSeq, Long otherUserSeq) throws NotFoundException {
-        Friend friend = Friend.builder()
+        UserFriend userFriend = UserFriend.builder()
                 .user(userRepository.findById(userSeq)
                         .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 .friend(userRepository.findById(otherUserSeq)
                         .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
                 .build();
 
-        Friend savedFriend = friendRepository.save(friend);
+        UserFriend savedUserFriend = userFriendRepository.save(userFriend);
 
-        return savedFriend.getSeq();
+        return savedUserFriend.getSeq();
     }
 
     @Override
     public void deleteFriend(Long userSeq, Long otherUserSeq) {
-        friendRepository.deleteByUserSeqAndFriendSeq(userSeq, otherUserSeq);
+        userFriendRepository.deleteByUserSeqAndFriendSeq(userSeq, otherUserSeq);
     }
 }

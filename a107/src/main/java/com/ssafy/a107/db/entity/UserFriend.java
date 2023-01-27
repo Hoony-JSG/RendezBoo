@@ -1,9 +1,6 @@
 package com.ssafy.a107.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,24 +10,22 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
-public class BlockedUser extends BaseEntity {
+public class UserFriend extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "target_seq")
-    private User target;
+    @JoinColumn(name = "friend_seq")
+    private User friend;
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    @Builder
-    public BlockedUser(User user, User target) {
-        this.user = user;
-        this.target = target;
-    }
+
 }

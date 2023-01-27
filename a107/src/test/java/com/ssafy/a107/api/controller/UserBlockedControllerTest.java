@@ -10,14 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
-class BlockedUserControllerTest {
+class UserBlockedControllerTest {
 
     @Autowired
-    BlockedUserController blockedUserController;
+    UserBlockedController userBlockedController;
 
     @Autowired
     UserRepository userRepository;
@@ -53,7 +51,7 @@ class BlockedUserControllerTest {
 
         User other = userRepository.save(userOther);
 
-        ResponseEntity<?> responseEntity = blockedUserController.createBlockedUser(me.getSeq(), other.getSeq());
+        ResponseEntity<?> responseEntity = userBlockedController.createBlockedUser(me.getSeq(), other.getSeq());
 
 //        System.out.println(responseEntity);
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
