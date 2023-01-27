@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   redis:
+    container_name: redis
     image: redis:latest
     ports:
       - "6379:6379"
@@ -10,6 +11,7 @@ services:
       - a107_network
 
   mongodb:
+    container_name: mongodb
     image: mongo
     restart: always
     ports:
@@ -24,6 +26,7 @@ services:
       - a107_network
 
   mysql:
+    container_name: mysql
     image: mysql:8.0.31
     volumes:
       - a107-mysql-data:/var/lib/mysql
@@ -39,6 +42,7 @@ services:
       - a107_network
 
   springboot:
+    container_name: springboot
     build:
       context: .
       dockerfile: ./Dockerfile
