@@ -2,7 +2,7 @@ package com.ssafy.a107.api.response;
 
 import com.ssafy.a107.db.entity.Badge;
 import com.ssafy.a107.db.entity.User;
-import com.ssafy.a107.db.entity.UserInterestRelation;
+import com.ssafy.a107.db.entity.UserInterest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class UserRes {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Badge badge;
-    private List<UserInterestRelation> userInterestRelations = new ArrayList<>();
+    private List<UserInterest> userInterests = new ArrayList<>();
 
     public UserRes(User user) {
         this.email = user.getEmail();
@@ -48,6 +48,6 @@ public class UserRes {
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
         this.badge = user.getBadge();
-        this.userInterestRelations = user.getUserInterestRelations();
+        this.userInterests = user.getUserInterests();
     }
 }
