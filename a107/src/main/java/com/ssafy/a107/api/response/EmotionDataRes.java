@@ -1,9 +1,11 @@
 package com.ssafy.a107.api.response;
 
-import com.ssafy.a107.db.entity.EmotionData;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+
 @Getter
+@AllArgsConstructor
 public class EmotionDataRes {
     private final Double anger;
     private final Double contempt;
@@ -13,15 +15,15 @@ public class EmotionDataRes {
     private final Double neutral;
     private final Double sadness;
     private final Double surprise;
-    public EmotionDataRes(EmotionData emotionData){
-        this.anger = emotionData.getAnger();
-        this.contempt = emotionData.getContempt();
-        this.disgust = emotionData.getDisgust();
-        this.fear = emotionData.getFear();
-        this.happiness = emotionData.getHappiness();
-        this.neutral = emotionData.getNeutral();
-        this.sadness = emotionData.getSadness();
-        this.surprise = emotionData.getSurprise();
-    }
 
+    public EmotionDataRes() {
+        this.anger = 0.0;
+        this.contempt = 0.0;
+        this.disgust = 0.0;
+        this.fear = 0.0;
+        this.happiness = 0.0;
+        this.neutral = 0.0;
+        this.sadness = 0.0;
+        this.surprise = 0.0;
+    }
 }

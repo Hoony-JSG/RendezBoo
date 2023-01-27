@@ -12,6 +12,8 @@ import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class EmotionDataServiceImpl implements EmotionDataService{
@@ -41,7 +43,26 @@ public class EmotionDataServiceImpl implements EmotionDataService{
 
     @Override
     public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) throws NotFoundException{
-        //emotionDataRepository.findAllByuseruserSeq(userSeq);
-        return null;
+        userRepository.findById(userSeq).orElseThrow(()->new NotFoundException("Wrong User Seq!"));
+
+        List<EmotionData> elist = emotionDataRepository.findTop10ByUserSeq(userSeq);
+        double anger = 0.0, contempt = 0.0, disgust = 0.0,
+                fear = 0.0, happiness = 0.0, neutral = 0.0,
+                sadness = 0.0, surprise = 0.0;
+        int len = elist.size();
+        for(EmotionData e: elist){
+            anger += e.getAnger();
+            contempt += e.getContempt();
+            disgust += e.getDisgust();
+            fear += e.getDisgust();
+            happiness += e.getHappiness();
+            neutral += e.getNeutral();
+            sadness += e.getSadness();
+            surprise += e.getSurprise();
+        }
+        return len == 0? new EmotionDataRes() : new EmotionDataRes(
+         anger/len, contempt/len, disgust/len, fear/len,
+                happiness/len, neutral/len, sadness/len, surprise/len
+        );
     }
 }
