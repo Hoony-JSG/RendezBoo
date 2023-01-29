@@ -8,8 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BadgeUpdateReq {
-    private Long seq;
+public class ItemCreateReq {
+
+    private Byte type;
     private String name;
     private MultipartFile image;
 }

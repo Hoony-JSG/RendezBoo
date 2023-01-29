@@ -61,6 +61,5 @@ public class User extends BaseEntity{
     private Badge badge;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserInterestRelation> userInterestRelations = new ArrayList<>();
-
+    private List<UserInterest> userInterests = new ArrayList<>();
 }

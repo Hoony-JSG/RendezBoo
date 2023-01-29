@@ -1,18 +1,15 @@
 package com.ssafy.a107.api.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BadgeCreateReq {
     private String name;
-    private String url;
+    private MultipartFile image;
 
-    @Builder
-    public BadgeCreateReq(String name, String url) {
-        this.name = name;
-        this.url = url;
-    }
 }

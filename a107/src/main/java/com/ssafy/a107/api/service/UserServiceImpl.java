@@ -1,12 +1,17 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.JoinReq;
+import com.ssafy.a107.api.response.UserRes;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,12 +40,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserBySeq(Long userSeq) {
-        return userRepository.findBySeq(userSeq);
+    public UserRes getUserBySeq(Long userSeq) throws NotFoundException {
+        return new UserRes(userRepository.findById(userSeq)
+                .orElseThrow(() -> new NotFoundException("Wrong User Seq!")));
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserRes getUserByEmail(String email) throws NotFoundException {
+        return new UserRes(userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Wrong User Seq!")));
+    }
+
+    @Override
+    public Boolean checkEmailDuplicate(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public List<UserRes> getFriends(Long userSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)) {
+            return userRepository.findFriendByUserSeq(userSeq).stream()
+                    .map(UserRes::new)
+                    .collect(Collectors.toList());
+        }else throw new NotFoundException("Wrong User Seq!");
+    }
+    @Override
+    public List<UserRes> getBlockeds(Long userSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)) {
+            return userRepository.findBlockedByUserSeq(userSeq).stream()
+                    .map(UserRes::new)
+                    .collect(Collectors.toList());
+        }else throw new NotFoundException("Wrong User Seq!");
     }
 }

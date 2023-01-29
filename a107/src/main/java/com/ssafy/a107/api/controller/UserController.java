@@ -1,7 +1,10 @@
 package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
+import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.UserService;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -21,13 +25,14 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 조회", notes = "Seq로 유저 정보 제공")
     public ResponseEntity<?> getUserInfo(@PathVariable Long userSeq) {
         try {
-            User user = userService.getUserBySeq(userSeq);
+            UserRes user = userService.getUserBySeq(userSeq);
 
             if(user != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(user);
@@ -44,8 +49,8 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) {
-        User findUser = userService.getUserByEmail(joinReq.getEmail());
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws NotFoundException {
+        UserRes findUser = userService.getUserByEmail(joinReq.getEmail());
 
         if(findUser == null) {
             userService.createUser(joinReq);
@@ -54,5 +59,28 @@ public class UserController {
         else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException {
+        UserRes findUser = userService.getUserByEmail(loginReq.getEmail());
+
+        // 비밀번호가 일치하면
+        if(findUser != null && passwordEncoder.matches(loginReq.getPassword(), findUser.getPassword())) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    // 아이디 중복체크
+    @GetMapping("/check/{email}")
+    @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복 체크")
+    public ResponseEntity<?> checkEmail(@PathVariable String email) {
+        if(userService.checkEmailDuplicate(email)) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

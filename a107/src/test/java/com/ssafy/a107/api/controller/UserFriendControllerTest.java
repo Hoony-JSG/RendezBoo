@@ -2,7 +2,7 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.service.UserServiceImpl;
 import com.ssafy.a107.db.entity.User;
-import com.ssafy.a107.db.repository.FriendRepository;
+import com.ssafy.a107.db.repository.UserFriendRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
-class FriendControllerTest {
+class UserFriendControllerTest {
 
     @Autowired
     UserRepository userRepository;
@@ -25,10 +23,10 @@ class FriendControllerTest {
     UserServiceImpl userService;
 
     @Autowired
-    FriendRepository friendRepository;
+    UserFriendRepository userFriendRepository;
 
     @Autowired
-    FriendController friendController;
+    UserFriendController userFriendController;
 
     @Test
     void addFriend() {
@@ -60,7 +58,7 @@ class FriendControllerTest {
 
         User other = userRepository.save(userOther);
 
-        ResponseEntity<?> responseEntity = friendController.addFriend(me.getSeq(), other.getSeq());
+        ResponseEntity<?> responseEntity = userFriendController.addFriend(me.getSeq(), other.getSeq());
 
         System.out.println(responseEntity.getStatusCode());
         Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -96,11 +94,11 @@ class FriendControllerTest {
 
         User other = userRepository.save(userOther);
 
-        ResponseEntity<?> addFriend = friendController.addFriend(me.getSeq(), other.getSeq());
+        ResponseEntity<?> addFriend = userFriendController.addFriend(me.getSeq(), other.getSeq());
 
 //        System.out.println(addFriend);
 
-        ResponseEntity<?> deleteFriend = friendController.deleteFriend(me.getSeq(), other.getSeq());
+        ResponseEntity<?> deleteFriend = userFriendController.deleteFriend(me.getSeq(), other.getSeq());
 
 //        System.out.println(deleteFriend);
         Assertions.assertThat(deleteFriend.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
