@@ -25,20 +25,9 @@ public class UserController {
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 조회", notes = "Seq로 유저 정보 제공")
-    public ResponseEntity<?> getUserInfo(@PathVariable Long userSeq) {
-        try {
-            UserRes user = userService.getUserBySeq(userSeq);
-
-            if(user != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(user);
-            }
-            else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        }
-        catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
-        }
+    public ResponseEntity<?> getUserInfo(@PathVariable Long userSeq) throws NotFoundException{
+        UserRes user = userService.getUserBySeq(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
     // 회원가입

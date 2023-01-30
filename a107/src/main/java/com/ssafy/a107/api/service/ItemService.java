@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ItemService {
 
-    List<ItemRes> getItemByUserSeq(Long userSeq);
+    List<ItemRes> getItemByUserSeq(Long userSeq) throws NotFoundException;
 
     void createUserItem(UserItemReq userItemReq) throws NotFoundException;
 
@@ -21,5 +21,5 @@ public interface ItemService {
 
     Long updateItem(ItemUpdateReq itemUpdateReq) throws NotFoundException, IOException;
 
-    void deleteItem(Long itemSeq);
+    void deleteItem(Long itemSeq) throws NotFoundException;
 }
