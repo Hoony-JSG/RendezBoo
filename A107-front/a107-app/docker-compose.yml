@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   a107_frontend:
+    container_name: react
     build:
       context: .
       dockerfile: ./Dockerfile
