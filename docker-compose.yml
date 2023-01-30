@@ -1,0 +1,60 @@
+version: "3.7"
+
+services:
+  proxy-nginx:
+    container_name: proxy-name
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /opt/openvidu/certificates:/etc/letsencrypt
+      - ./conf:/etx/nginx/conf.d
+    networks:
+      - a107_network
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - a107_network
+
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ssafy
+      MONGO_INITDB_ROOT_PASSWORD: ssafy
+      MONGO_INITDB_DATABASE: a107_mongodb
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - a107_network
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.31
+    volumes:
+      - a107-mysql-data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_DB: a107_mysql
+      MYSQL_USER: ssafy
+      MYSQL_PASSWORD: ssafy
+    networks:
+      - a107_network
+
+volumes:
+  a107-mysql-data:
+
+networks:
+  a107_network:
