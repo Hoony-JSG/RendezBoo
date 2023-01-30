@@ -1,3 +1,6 @@
+NAVER_CLIENT_SECRET: "3uChno1v8b"
+KAKAO_CLIENT_SECRET: "DGuf0uZuIjHSWb144JPJNsPBfxsSKJVD"
+
 spring:
   profiles:
     active: local
