@@ -6,8 +6,7 @@ import com.ssafy.a107.api.response.JoinRes;
 import com.ssafy.a107.api.service.UserService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,17 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/oauth")
 @RequiredArgsConstructor
+@Slf4j
 public class OAuthController {
 
-    private static Logger log = LoggerFactory.getLogger(OAuthController.class);
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
     @GetMapping("/naver")
     public ResponseEntity<?> naverCallBack(@RequestParam String code, @RequestParam String state) throws Exception {
 
-        log.info("OAuth code: {}", code);
-        log.info("OAuth state: {}", state);
+        log.debug("OAuth code: {}", code);
+        log.debug("OAuth state: {}", state);
 
         try {
             // Access Token
@@ -44,8 +42,8 @@ public class OAuthController {
             JsonElement userInfo = element.getAsJsonObject().get("response");
             String userEmail = userInfo.getAsJsonObject().get("email").toString().replaceAll("\"", "");
 
-            log.info("userInfo: {}", userInfo);
-            log.info("userEmail: {}", userEmail);
+            log.debug("userInfo: {}", userInfo);
+            log.debug("userEmail: {}", userEmail);
 
             Boolean dupCheck = userService.checkEmailDuplicate(userEmail);
 
