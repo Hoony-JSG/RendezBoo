@@ -19,7 +19,6 @@ import java.util.List;
 public class UserRes {
 
     private String email;
-    private String password;
     private String city;
     /**
      * 남자: 1 여자: 0
