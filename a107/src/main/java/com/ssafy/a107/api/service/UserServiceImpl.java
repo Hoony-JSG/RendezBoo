@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     @Override
     public Long createUser(JoinReq joinReq) {
         User user = User.builder()
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(joinReq.getPhoneNumber())
                 .name(joinReq.getName())
                 .profileImagePath(joinReq.getProfileImagePath())
-                .MBTI(joinReq.getMBTI())
+                .mbti(joinReq.getMbti())
                 .point(0L)
                 .build();
 

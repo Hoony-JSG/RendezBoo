@@ -28,7 +28,7 @@ public class UserRes {
     private String phoneNumber;
     private String name;
     private String profileImagePath;
-    private String MBTI;
+    private String mbti;
     private Long point;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -37,13 +37,12 @@ public class UserRes {
 
     public UserRes(User user) {
         this.email = user.getEmail();
-        this.password = user.getPassword();
         this.city = user.getCity();
         this.gender = user.getGender();
         this.phoneNumber = user.getPhoneNumber();
         this.name = user.getName();
         this.profileImagePath = user.getProfileImagePath();
-        this.MBTI = user.getMBTI();
+        this.mbti = user.getMbti();
         this.point = user.getPoint();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();

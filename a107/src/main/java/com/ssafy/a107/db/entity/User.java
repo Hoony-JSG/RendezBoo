@@ -43,7 +43,7 @@ public class User extends BaseEntity{
     private String profileImagePath;
 
     @Column(nullable = false, length = 4)
-    private String MBTI;
+    private String mbti;
 
     @Column
     private Long point;
