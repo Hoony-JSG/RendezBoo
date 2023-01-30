@@ -1,46 +1,6 @@
 version: "3.7"
 
 services:
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    restart: always
-    networks:
-      - a107_network
-
-  mongodb:
-    container_name: mongodb
-    image: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ssafy
-      MONGO_INITDB_ROOT_PASSWORD: ssafy
-      MONGO_INITDB_DATABASE: a107_mongodb
-    volumes:
-      - ./mongodb:/data/db
-    networks:
-      - a107_network
-
-  mysql:
-    container_name: mysql
-    image: mysql:8.0.31
-    volumes:
-      - a107-mysql-data:/var/lib/mysql
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ssafy
-      MYSQL_DB: a107_mysql
-      MYSQL_USER: ssafy
-      MYSQL_PASSWORD: ssafy
-    networks:
-      - a107_network
-
   springboot:
     container_name: springboot
     build:
@@ -48,10 +8,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - mysql
-      - redis
-      - mongodb
     networks:
       - a107_network
     environment:
@@ -61,9 +17,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: ssafy
       AWS_ACCESS_KEY: "${AWS_ACCESS_KEY}"
       AWS_SECRET_KEY: "${AWS_SECRET_KEY}"
-
-volumes:
-  a107-mysql-data:
 
 networks:
   a107_network:
