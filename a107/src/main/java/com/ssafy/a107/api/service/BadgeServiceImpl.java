@@ -80,8 +80,10 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public void deleteBadge(Long seq) {
-        badgeRepository.deleteById(seq);
+    public void deleteBadge(Long seq) throws NotFoundException{
+        if(badgeRepository.existsById(seq)){
+            badgeRepository.deleteById(seq);
+        }else throw new NotFoundException("Invalid badge sequence!");
     }
 
 

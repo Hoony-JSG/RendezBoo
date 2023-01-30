@@ -61,7 +61,7 @@ public class BadgeController {
 
     @DeleteMapping("/{badgeSeq}")
     @ApiOperation("뱃지 삭제 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> deleteBadge(@PathVariable Long badgeSeq) {
+    public ResponseEntity<?> deleteBadge(@PathVariable Long badgeSeq) throws NotFoundException{
         badgeService.deleteBadge(badgeSeq);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

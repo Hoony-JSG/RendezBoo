@@ -20,6 +20,6 @@ public interface BadgeService {
 
     Long updateBadge(BadgeUpdateReq badgeUpdateReq) throws NotFoundException, IOException;
 
-    void deleteBadge(Long seq);
+    void deleteBadge(Long seq) throws NotFoundException;
 
 }
