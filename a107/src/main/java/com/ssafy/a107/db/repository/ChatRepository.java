@@ -10,7 +10,7 @@ public interface ChatRepository extends MongoRepository <Chat, Long> {
     Chat findTopByOrderByCreatedAtDesc();
     
 //    채팅방 번호로 찾아서 생성일 내림차순으로 반환
-    List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(String chatRoomSeq);
+    List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(Long chatRoomSeq);
 
     Chat findBySeq(String seq);
 }

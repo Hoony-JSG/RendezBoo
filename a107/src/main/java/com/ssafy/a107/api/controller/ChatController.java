@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Api(value = "채팅(친구 추가 이후) API", tags = {"Chat"})
 @RestController
 @RequestMapping("/api/chat")
@@ -30,6 +32,14 @@ public class ChatController {
         } catch (NotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/{chatRoomSeq}")
+    @ApiOperation("해당 채팅 방의 채팅 내역 불러오기")
+    public ResponseEntity<?> getChatByChatRoomSeq(@PathVariable Long chatRoomSeq) throws NotFoundException{
+        List<Chat> chatList = chatService.findByChatRoomSeqOrderByCreatedAtDesc(chatRoomSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(chatList);
+
     }
 
 

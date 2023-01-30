@@ -12,6 +12,6 @@ public interface ChatService {
 
     Chat findBySeq(String seq) throws NotFoundException;
 
-    List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(String chatRoomSeq) throws NotFoundException;
+    List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(Long chatRoomSeq) throws NotFoundException;
 
 }
