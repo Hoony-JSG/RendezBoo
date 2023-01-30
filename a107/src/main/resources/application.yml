@@ -77,7 +77,7 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://host.docker.internal:3306/a107_mysql?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
     username: root
     password: ssafy
   jpa:
@@ -98,12 +98,12 @@ spring:
         max-active: 5
         max-idle: 5
         min-idle: 2
-      host: host.docker.internal
+      host: redis
       port: 6379
 
   data:
     mongodb:
-      host: host.docker.internal
+      host: mongodb
       port: 27017
       authentication-database: admin
       database: a107_mongodb
@@ -121,7 +121,7 @@ jwt:
   refresh-token-validity-milliseconds: 259200000
 
 openvidu:
-  url: http://host.docker.internal:4443/
+  url: http://openvidu-openvidu-server-1:4443/
   secret: thisisrendezbooopenviduserversecretkey
 
 cloud:
