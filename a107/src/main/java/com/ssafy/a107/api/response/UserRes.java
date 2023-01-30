@@ -13,37 +13,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserRes {
 
-    private String email;
-    private String password;
-    private String city;
+    private final Long seq;
+    private final String email;
+    private final String city;
     /**
      * 남자: 1 여자: 0
      */
-    private Boolean gender;
-    private String phoneNumber;
-    private String name;
-    private String profileImagePath;
-    private String MBTI;
-    private Long point;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Badge badge;
-    private List<UserInterest> userInterests = new ArrayList<>();
+    private final Boolean gender;
+    private final String phoneNumber;
+    private final String name;
+    private final String profileImagePath;
+    private final String mbti;
+    private final Long point;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+    private final Badge badge;
+    private final List<UserInterest> userInterests;
 
     public UserRes(User user) {
+        this.seq = user.getSeq();
         this.email = user.getEmail();
-        this.password = user.getPassword();
         this.city = user.getCity();
         this.gender = user.getGender();
         this.phoneNumber = user.getPhoneNumber();
         this.name = user.getName();
         this.profileImagePath = user.getProfileImagePath();
-        this.MBTI = user.getMBTI();
+        this.mbti = user.getMbti();
         this.point = user.getPoint();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();

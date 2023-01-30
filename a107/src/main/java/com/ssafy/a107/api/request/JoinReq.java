@@ -17,5 +17,5 @@ public class JoinReq {
     private String phoneNumber;
     private String name;
     private String profileImagePath;
-    private String MBTI;
+    private String mbti;
 }
