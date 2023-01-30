@@ -29,17 +29,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
-        String token = jwtTokenProvider.resolveToken(request);
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("SecurityContext에 인증 저장됨, uri:{}", requestURI);
-        } else {
-            log.debug("유효한 토큰이 없습니다. uri:{}", requestURI);
-        }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         filterChain.doFilter(request, response);
     }
+
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//            throws ServletException, IOException {
+//        String requestURI = request.getRequestURI();
+//        String token = jwtTokenProvider.resolveToken(request);
+//        if (token != null && jwtTokenProvider.validateToken(token)) {
+//            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//            log.debug("SecurityContext에 인증 저장됨, uri:{}", requestURI);
+//        } else {
+//            log.debug("유효한 토큰이 없습니다. uri:{}", requestURI);
+//        }
+//        filterChain.doFilter(request, response);
+//    }
 }

@@ -1,4 +1,4 @@
-package com.ssafy.a107.api.request;
+package com.ssafy.a107.api.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JoinReq {
-    private String email;
-    private String password;
-    private String city;
+public class JoinRes {
+
     private Boolean gender;
+    private String email;
     private String phoneNumber;
     private String name;
-    private String profileImagePath;
-    private String mbti;
 }

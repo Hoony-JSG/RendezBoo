@@ -12,10 +12,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
 
-    @Query("select i from UserFriend ui inner join Item i where ui.user.seq = ?1")
+    @Query("select u from UserFriend uf inner join User u on uf.user.seq = u.seq where uf.user.seq = ?1")
     List<User> findFriendByUserSeq(Long userSeq);
 
-    @Query("select i from UserBlocked ub inner join Item i where ub.user.seq = ?1")
+    @Query("select u from UserBlocked ub inner join User u on ub.user.seq = u.seq where ub.user.seq = ?1")
     List<User> findBlockedByUserSeq(Long userSeq);
 
 }

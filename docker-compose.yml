@@ -12,6 +12,8 @@ services:
       - ./conf:/etx/nginx/conf.d
     networks:
       - a107_network
+      - front
+      - openvidu
 
   redis:
     container_name: redis
@@ -58,3 +60,9 @@ volumes:
 
 networks:
   a107_network:
+  front:
+    external:
+      name: a107-app_default
+  openvidu:
+    external:
+      name: openvidu_default

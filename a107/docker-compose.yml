@@ -8,15 +8,12 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "8080:8080"
-    networks:
-      - a107_network
     environment:
       SERVER_MODE: prod
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: ssafy
       AWS_ACCESS_KEY: "${AWS_ACCESS_KEY}"
       AWS_SECRET_KEY: "${AWS_SECRET_KEY}"
 
 networks:
-  a107_network:
+  default:
+    external:
+      name: master-dependencies_a107_network
