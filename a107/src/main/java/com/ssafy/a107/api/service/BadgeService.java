@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface BadgeService {
-    List<BadgeRes> getBadgeByUserSeq(Long userSeq);
+    List<BadgeRes> getBadgeByUserSeq(Long userSeq) throws NotFoundException;
 
     void createUserBadge(UserBadgeReq userBadgeReq) throws NotFoundException;
 
