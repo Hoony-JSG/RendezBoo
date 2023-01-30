@@ -9,6 +9,7 @@ import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -34,6 +35,12 @@ public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${NAVER_CLIENT_SECRET}")
+    private String NAVER_CLIENT_SECRET;
+
+    @Value("${KAKAO_CLIENT_SECRET}")
+    private String KAKAO_CLIENT_SECRET;
 
     @Override
     public Long createUser(JoinReq joinReq) {
@@ -95,7 +102,8 @@ public class UserServiceImpl implements UserService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "F3K8r9yyEG_RFk8RpLgi");
-        params.add("client_secret", "3uChno1v8b");
+        //params.add("client_secret", "3uChno1v8b");
+        params.add("client_secret", NAVER_CLIENT_SECRET);
         params.add("code", code);
         params.add("state", state);
 
@@ -159,7 +167,7 @@ public class UserServiceImpl implements UserService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=712c281c808f36c63bc8cea4a11ba42f");
-            sb.append("&client_secret=DGuf0uZuIjHSWb144JPJNsPBfxsSKJVD");
+            sb.append("&client_secret=" + KAKAO_CLIENT_SECRET);
             sb.append("&redirect_uri=http://localhost:8080/api/oauth/kakao");
             sb.append("&code=" + code);
             bw.write(sb.toString());
