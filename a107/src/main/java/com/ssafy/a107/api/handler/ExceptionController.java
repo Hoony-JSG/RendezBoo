@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.handler;
 
+import com.ssafy.a107.common.exception.NotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,15 @@ public class ExceptionController {
         log.warn("error", ex);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
+
+    // 404 INTERNAL_SERVER_ERROR
+    @ExceptionHandler({ NotFoundException.class })
+    public ResponseEntity<?> handleNotFound(final NotFoundException ex) {
+        log.info(ex.getClass().getName());
+        log.error("error", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     // 500 INTERNAL_SERVER_ERROR
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<?> handleAll(final Exception ex) {
@@ -34,4 +44,6 @@ public class ExceptionController {
         log.error("error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
+
+
 }
