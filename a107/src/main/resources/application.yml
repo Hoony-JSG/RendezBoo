@@ -1,9 +1,7 @@
 spring:
   profiles:
     active: local
-
 ---
-
 spring:
   config:
     activate:
@@ -73,16 +71,15 @@ cloud:
     cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
 
 ---
-
 spring:
   config:
     activate:
       on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: jdbc:mysql://mysql:3306/a107_mysql?serverTimezone=Asia/Seoul
-  #    username: root
-  #    password: ssafy
+    url: jdbc:mysql://host.docker.internal:3306/a107_mysql?serverTimezone=Asia/Seoul
+    username: root
+    password: ssafy
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -101,14 +98,17 @@ spring:
         max-active: 5
         max-idle: 5
         min-idle: 2
-      host: redis
+      host: host.docker.internal
       port: 6379
 
   data:
     mongodb:
-      host: mongodb
+      host: host.docker.internal
       port: 27017
+      authentication-database: admin
       database: a107_mongodb
+      username: ssafy
+      password: ssafy
 
   mvc:
     pathmatch:
@@ -121,8 +121,8 @@ jwt:
   refresh-token-validity-milliseconds: 259200000
 
 openvidu:
-  url: http://localhost:4443/
-  secret: MY_SECRET
+  url: http://host.docker.internal:4443/
+  secret: thisisrendezbooopenviduserversecretkey
 
 cloud:
   aws:
