@@ -11,9 +11,7 @@ import com.ssafy.a107.db.entity.UserBadge;
 import com.ssafy.a107.db.repository.BadgeRepository;
 import com.ssafy.a107.db.repository.UserBadgeRepository;
 import com.ssafy.a107.db.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +31,9 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public List<BadgeRes> getBadgeByUserSeq(Long userSeq) {
-        List<Badge> badgeList = badgeRepository.findBadgesByUserSeq(userSeq);
-        List<BadgeRes> badgeResList = badgeList.stream()
-                .map(badge -> new BadgeRes(badge))
+        return badgeRepository.findBadgesByUserSeq(userSeq).stream()
+                .map(BadgeRes::new)
                 .collect(Collectors.toList());
-        return badgeResList;
     }
 
     @Override
@@ -54,11 +50,9 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public List<BadgeRes> getAllBadges() {
-        List<Badge> badgeList = badgeRepository.findAll();
-        List<BadgeRes> badgeResList = badgeList.stream()
-                .map(badge -> new BadgeRes(badge))
+        return badgeRepository.findAll().stream()
+                .map(BadgeRes::new)
                 .collect(Collectors.toList());
-        return badgeResList;
     }
 
     @Override
