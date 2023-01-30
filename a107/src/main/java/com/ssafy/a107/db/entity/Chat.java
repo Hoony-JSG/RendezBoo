@@ -5,21 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
 
-import javax.persistence.EntityListeners;
 import java.time.LocalDateTime;
 
 @Document(collection = "chat")
 @Getter
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Chat{
 
     @Id
-    private Long seq;
+    @Field(value = "_id", targetType = FieldType.OBJECT_ID)
+    private String seq;
     private String message;
+    private Long chatRoomSeq;
     private Long senderSeq;
     private Long receiverSeq;
 
@@ -27,8 +28,9 @@ public class Chat{
     private LocalDateTime createdAt;
 
     @Builder
-    public Chat(String message, Long senderSeq, Long receiverSeq) {
+    public Chat(String message, Long chatRoomSeq, Long senderSeq, Long receiverSeq) {
         this.message = message;
+        this.chatRoomSeq = chatRoomSeq;
         this.senderSeq = senderSeq;
         this.receiverSeq = receiverSeq;
     }
