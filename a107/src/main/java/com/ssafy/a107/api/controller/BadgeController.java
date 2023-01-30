@@ -40,12 +40,8 @@ public class BadgeController {
 
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "특정 유저의 뱃지 리스트 조회", notes = "유저 시퀀스로 뱃지 리스트 제공")
-    public ResponseEntity<?> getBadgeListByUserSeq(@PathVariable Long userSeq) {
-        List<BadgeRes> badgeList = badgeService.getBadgeByUserSeq(userSeq);
-        if (badgeList != null && !badgeList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(badgeList);
-        }
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    public ResponseEntity<?> getBadgeListByUserSeq(@PathVariable Long userSeq) throws NotFoundException{
+        return ResponseEntity.status(HttpStatus.OK).body(badgeService.getBadgeByUserSeq(userSeq));
     }
 
     @PostMapping("/{userSeq}")
