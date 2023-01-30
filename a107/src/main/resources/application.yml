@@ -38,7 +38,10 @@ spring:
     mongodb:
       host: localhost
       port: 27017
+      authentication-database: admin
       database: a107_mongodb
+      username: ssafy
+      password: ssafy
 
   mvc:
     pathmatch:
