@@ -2,14 +2,14 @@ version: "3.7"
 
 services:
   proxy-nginx:
-    container_name: proxy-name
+    container_name: proxy-nginx
     image: nginx
     ports:
       - 80:80
       - 443:443
     volumes:
       - /opt/openvidu/certificates:/etc/letsencrypt
-      - ./conf:/etx/nginx/conf.d
+      - ./conf/nginx.conf:/etx/nginx/nginx.conf
     networks:
       - a107_network
       - front
