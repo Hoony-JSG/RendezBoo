@@ -9,7 +9,7 @@ services:
       - 443:443
     volumes:
       - /opt/openvidu/certificates:/etc/letsencrypt
-      - ./conf/nginx.conf:/etx/nginx/nginx.conf
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - a107_network
       - front
