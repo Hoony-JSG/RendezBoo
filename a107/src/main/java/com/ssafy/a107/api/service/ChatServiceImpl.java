@@ -34,7 +34,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(String chatRoomSeq) {
+    public List<Chat> findByChatRoomSeqOrderByCreatedAtDesc(Long chatRoomSeq) throws NotFoundException{
         return chatRepository.findByChatRoomSeqOrderByCreatedAtDesc(chatRoomSeq);
     }
 }
