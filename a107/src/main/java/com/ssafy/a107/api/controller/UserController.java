@@ -50,9 +50,9 @@ public class UserController {
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
     public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws NotFoundException {
-        UserRes findUser = userService.getUserByEmail(joinReq.getEmail());
+        Boolean dupCheck = userService.checkEmailDuplicate(joinReq.getEmail());
 
-        if(findUser == null) {
+        if(!dupCheck) {
             userService.createUser(joinReq);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
