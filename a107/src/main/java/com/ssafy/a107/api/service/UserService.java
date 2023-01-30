@@ -24,4 +24,6 @@ public interface UserService {
     ResponseEntity<String> requestAccessToken(HttpEntity req);
     ResponseEntity<String> requestProfile(HttpEntity req);
     HttpEntity<MultiValueMap<String, String>> generateProfileRequest(String accessToken);
+    String getKakaoAccessToken(String code);
+    String getKakaoProfile(String token) throws Exception;
 }
