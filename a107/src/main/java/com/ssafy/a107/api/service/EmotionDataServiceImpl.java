@@ -11,6 +11,7 @@ import com.ssafy.a107.db.repository.OneToOneMeetingRoomRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,12 +22,13 @@ public class EmotionDataServiceImpl implements EmotionDataService{
     private final EmotionDataRepository emotionDataRepository;
     private final UserRepository userRepository;
     private final OneToOneMeetingRoomRepository onetoOneMeetingRoomRepository;
+    @Transactional
     @Override
     public Long addExpressionData(EmotionDataReq req) throws NotFoundException{
         User user = userRepository.findById(req.getUser_seq())
-                .orElseThrow(()->new NotFoundException());
+                .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
         OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getUser_seq())
-                .orElseThrow(()->new NotFoundException());
+                .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
         EmotionData e = emotionDataRepository.save(EmotionData.builder()
                 .user(user)
                 .meetingRoom(room)
@@ -43,7 +45,7 @@ public class EmotionDataServiceImpl implements EmotionDataService{
 
     @Override
     public EmotionDataRes getAvgExpressionDataByUserSeq(Long userSeq) throws NotFoundException{
-        userRepository.findById(userSeq).orElseThrow(()->new NotFoundException("Wrong User Seq!"));
+        if(!userRepository.existsById(userSeq)) throw new NotFoundException("Wrong User Seq!");
 
         List<EmotionData> elist = emotionDataRepository.findTop10ByUserSeq(userSeq);
         double anger = 0.0, contempt = 0.0, disgust = 0.0,

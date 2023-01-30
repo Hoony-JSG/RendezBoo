@@ -30,7 +30,8 @@ public class BadgeServiceImpl implements BadgeService {
 
 
     @Override
-    public List<BadgeRes> getBadgeByUserSeq(Long userSeq) {
+    public List<BadgeRes> getBadgeByUserSeq(Long userSeq) throws NotFoundException{
+        if(userRepository.existsById(userSeq)) throw new NotFoundException("Wrong User Seq!");
         return badgeRepository.findBadgesByUserSeq(userSeq).stream()
                 .map(BadgeRes::new)
                 .collect(Collectors.toList());
@@ -79,8 +80,10 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
-    public void deleteBadge(Long seq) {
-        badgeRepository.deleteById(seq);
+    public void deleteBadge(Long seq) throws NotFoundException{
+        if(badgeRepository.existsById(seq)){
+            badgeRepository.deleteById(seq);
+        }else throw new NotFoundException("Invalid badge sequence!");
     }
 
 
