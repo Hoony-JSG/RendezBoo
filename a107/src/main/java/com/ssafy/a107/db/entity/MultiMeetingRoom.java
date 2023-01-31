@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-public class MultyMeetingRoom extends BaseEntity {
+public class MultiMeetingRoom extends BaseEntity {
     @Column
     private String title;
     @Column(nullable = false)
@@ -29,7 +29,7 @@ public class MultyMeetingRoom extends BaseEntity {
     private LocalDateTime updatedAt;
 
     @Builder
-    public MultyMeetingRoom(String title, Byte status, Long manNum, Long womanNum) {
+    public MultiMeetingRoom(String title, Byte status, Long manNum, Long womanNum) {
         this.title = title;
         this.status = (byte)0;
     }
