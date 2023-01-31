@@ -1,27 +1,29 @@
-import logo from "./logo.svg";
+// import logo from "./logo.svg";
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { Rendezboo, Signal, Login, Rocket } from './pages'
+// import Rendezboo from './pages/Rendezboo';
+// import Signal from './pages/Signal';
+// import Login from './pages/Login';
+// import Rocket from './pages/Rocket';
+import Navbar from './components/Navbar';
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Rendez-boo</h1>
-        <p>This is A107 Project</p>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      home(rendezboo)
+        <Navbar />
+      <Routes>
+          <Route exact path="/" component={ <Rendezboo/> } />
+          <Route path="/signal" component={ Signal } />
+          <Route path="/login" component={ Login } />
+          <Route path="/rocket/:userid" component={ Rocket } />
+      </Routes>
+        {/* <Rendezboo /> */}
     </div>
   );
 }
 
 export default App;
+
