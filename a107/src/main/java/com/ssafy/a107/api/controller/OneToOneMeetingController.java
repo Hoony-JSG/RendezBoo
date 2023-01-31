@@ -6,6 +6,7 @@ import com.ssafy.a107.common.exception.NotFoundException;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class OneToOneMeetingController {
     @Autowired
     OneToOneMeetingService oneToOneMeetingService;
 
+    @ApiOperation("유저 시퀀스 기반으로 일대일 매칭을 신청하면 세션아이디와 토큰을 전달")
     @PostMapping("/{userSeq}")
     public ResponseEntity<?> joinMatch(@PathVariable Long userSeq) throws OpenViduJavaClientException, OpenViduHttpException, NotFoundException {
         MeetingRoomRes meetingRoomRes = oneToOneMeetingService.joinMatch(userSeq);

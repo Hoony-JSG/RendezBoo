@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +42,16 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와
+     * 토큰을 컨트롤러로 전달
+     *
+     * @param userSeq
+     * @return
+     * @throws NotFoundException
+     * @throws OpenViduJavaClientException
+     * @throws OpenViduHttpException
+     */
     @Override
     @Transactional
     public MeetingRoomRes joinMatch(Long userSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
