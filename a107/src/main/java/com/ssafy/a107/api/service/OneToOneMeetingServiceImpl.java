@@ -2,6 +2,7 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.util.SessionKeyProvider;
 import com.ssafy.a107.db.entity.OnetoOneMeetingRoom;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.OneToOneMeetingRoomRepository;
@@ -72,7 +73,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
 
         } else {
             // 리스트 없으면 세션 생성
-            Map<String, Object> params = Map.of("customSessionId", Long.toString(System.currentTimeMillis()));
+            Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey(true));
             SessionProperties properties = SessionProperties.fromJson(params).build();
             session = openVidu.createSession(properties);
             onetoOneMeetingRoom = new OnetoOneMeetingRoom();
