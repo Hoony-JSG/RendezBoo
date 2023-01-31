@@ -1,6 +1,5 @@
 package com.ssafy.a107.api.request;
 
-import com.ssafy.a107.db.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ChatRoomCreateReq {
 
-    private User userMale;
-    private User userFemale;
+    private Long userMaleSeq;
+    private Long userFemaleSeq;
 
 }

@@ -20,12 +20,12 @@ public class ChatRoom extends BaseEntity{
 
 //    남자 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_male_id")
+    @JoinColumn(name = "user_male_seq")
     private User userMale;
 
 //    여자 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_female_id")
+    @JoinColumn(name = "user_female_seq")
     private User userFemale;
 
     @CreatedDate

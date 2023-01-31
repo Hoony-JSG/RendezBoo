@@ -13,4 +13,8 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     List<ChatRoom> findByUserFemaleSeq(Long userFemaleSeq);
 
     List<ChatRoom> findByUserMaleSeq(Long userMaleSeq);
+
+    Boolean existsByUserMaleSeqAndUserFemaleSeq(Long userMaleSeq, Long userFemaleSeq);
+
+    ChatRoom findByUserMaleSeqAndUserFemaleSeq(Long userMaleSeq, Long userFemaleSeq);
 }

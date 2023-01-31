@@ -9,7 +9,6 @@ import com.ssafy.a107.db.repository.ChatRoomRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,17 +20,12 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 남자일 경우 여자일 경우 나눠서 조회
-     * @param userSeq
-     * @return 해당 유저의 채팅방 리스트
-     * @throws NotFoundException
-     */
+//    남자 여자 나눠서 조회
     @Override
     public List<ChatRoomRes> getAllRoomByUserSeq(Long userSeq) throws NotFoundException {
 
         if(userRepository.existsById(userSeq)) {
-            User user = userRepository.getById(userSeq);
+            User user = userRepository.findById(userSeq).get();
             Boolean gender = user.getGender();
 
             List<ChatRoom> chatRoomList;
@@ -55,16 +49,32 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     }
     
-//    수정해야됨 (방 있으면 기존 방 반환하도록)
+//    기존에 방 있으면 기존 방 번호 반환 없으면 새로운 방 생성 후 해당 방 번호 반환
     @Override
-    public Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq) throws HttpClientErrorException.BadRequest {
-        ChatRoom chatRoom = ChatRoom.builder()
-                .userMale(chatRoomCreateReq.getUserMale())
-                .userFemale(chatRoomCreateReq.getUserFemale())
-                .build();
+    public Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq) throws NotFoundException {
 
-        ChatRoom save = chatRoomRepository.save(chatRoom);
+        Long userMaleSeq = chatRoomCreateReq.getUserMaleSeq();
+        Long userFemaleSeq = chatRoomCreateReq.getUserFemaleSeq();
 
-        return save.getSeq();
+        if (userRepository.existsById(userMaleSeq) && userRepository.existsById(userFemaleSeq)) {
+
+            if (!chatRoomRepository.existsByUserMaleSeqAndUserFemaleSeq(userMaleSeq, userFemaleSeq)) {
+                ChatRoom chatRoom = ChatRoom.builder()
+                        .userMale(userRepository.findById(userMaleSeq).get())
+                        .userFemale(userRepository.findById(userFemaleSeq).get())
+                        .build();
+
+                ChatRoom save = chatRoomRepository.save(chatRoom);
+                return save.getSeq();
+            }
+            else
+            {
+                ChatRoom byUserMaleSeqAndUserFemaleSeq = chatRoomRepository.findByUserMaleSeqAndUserFemaleSeq(userMaleSeq, userFemaleSeq);
+                return byUserMaleSeqAndUserFemaleSeq.getSeq();
+            }
+        } else throw new NotFoundException("Wrong User Seq!");
+
+
+
     }
 }

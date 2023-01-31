@@ -13,5 +13,5 @@ public interface ChatRoomService {
 //    List<ChatRoom> getRoomByFemaleSeq(Long userFemaleSeq);
 //    List<ChatRoom> getRoomByMaleSeq(Long userMaleSeq);
     ChatRoomRes getBySeq(Long Seq) throws NotFoundException;
-    Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq) throws HttpClientErrorException.BadRequest;
+    Long createChatRoom(ChatRoomCreateReq chatRoomCreateReq) throws NotFoundException;
 }
