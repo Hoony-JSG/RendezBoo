@@ -36,11 +36,9 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    @Autowired
-    OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
+    private final OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와

@@ -22,8 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/onetoone")
 public class OneToOneMeetingController {
 
-    @Autowired
-    OneToOneMeetingService oneToOneMeetingService;
+    private final OneToOneMeetingService oneToOneMeetingService;
 
     @ApiOperation("유저 시퀀스 기반으로 일대일 매칭을 신청하면 세션아이디와 토큰을 전달")
     @PostMapping("/{userSeq}")
