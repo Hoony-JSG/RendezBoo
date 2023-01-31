@@ -30,7 +30,7 @@ public class EmotionDataRepositoryTest {
                 .phoneNumber("010-0000-0000")
                 .name("Hongju")
                 .profileImagePath("/hahaha")
-                .MBTI("ENTP")
+                .mbti("ENTP")
                 .point(100L).build();
         userRepository.save(user);
         final int MAX = 20;
