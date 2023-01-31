@@ -14,10 +14,12 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class MultiMeetingRoom extends BaseEntity {
+    @Column(length = 30)
+    private String sessionId;
     @Column
     private String title;
     @Column(nullable = false)
-    private Byte status;
+    private Byte status = 0;
 
     @CreatedDate
     @JsonProperty("created_at")
@@ -29,8 +31,15 @@ public class MultiMeetingRoom extends BaseEntity {
     private LocalDateTime updatedAt;
 
     @Builder
-    public MultiMeetingRoom(String title, Byte status, Long manNum, Long womanNum) {
+    public MultiMeetingRoom(String title, Byte status) {
         this.title = title;
-        this.status = (byte)0;
+        this.status = status;
+    }
+    public void createSession(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public void changeStatus(Byte status) {
+        this.status = status;
     }
 }
