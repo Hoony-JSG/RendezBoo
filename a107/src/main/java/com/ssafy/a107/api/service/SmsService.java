@@ -9,4 +9,6 @@ public interface SmsService {
     Long createSms(SmsReq smsReq, String code);
     SmsRes getRecentCodeByEmail(String email) throws NotFoundException;
     Boolean matchCodes(String sentCode, String typedCode);
+    String makeRandomCode();
+    String sendSmsToUser(String phoneNumber, String code);
 }
