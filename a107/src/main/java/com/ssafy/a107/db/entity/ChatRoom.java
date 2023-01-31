@@ -1,5 +1,7 @@
 package com.ssafy.a107.db.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,8 +12,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Builder
 public class ChatRoom extends BaseEntity{
 
 //    남자 유저
