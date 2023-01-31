@@ -10,6 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +25,20 @@ import java.util.stream.Collectors;
 public class ChatController {
 
     private final ChatServiceImpl chatService;
+
+    @MessageMapping("/{chatRoomSeq}")
+    @SendTo("/{chatRoomSeq}")
+    public ResponseEntity<?> chat(@DestinationVariable Long chatRoomSeq, ChatReq req) throws NotFoundException{
+
+        String insertChat = chatService.insertChat(req);
+        Chat chat = chatService.findBySeq(insertChat);
+
+        ChatRes chatRes = new ChatRes(chat);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(chatRes);
+    }
+
+
 
     @PostMapping("/insert")
     @ApiOperation("채팅 생성(보내기)")
