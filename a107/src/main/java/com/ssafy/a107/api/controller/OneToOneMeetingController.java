@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("일대일 미팅방 관련 컨트롤러")
+@Api(value = "일대일 미팅방 관련 컨트롤러", tags = {"MeetingRoomRes"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/onetoone")

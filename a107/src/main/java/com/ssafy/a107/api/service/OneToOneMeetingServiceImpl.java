@@ -46,11 +46,11 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
      * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와
      * 토큰을 컨트롤러로 전달
      *
-     * @param userSeq
-     * @return
-     * @throws NotFoundException
-     * @throws OpenViduJavaClientException
-     * @throws OpenViduHttpException
+     * @param userSeq 유저 시퀀스 필요
+     * @return MeetingRoomRes에 세션아이디와 토큰 담김
+     * @throws NotFoundException           유저가 없을 때
+     * @throws OpenViduJavaClientException 오픈비두 에러
+     * @throws OpenViduHttpException       오픈비두 에러
      */
     @Override
     @Transactional
