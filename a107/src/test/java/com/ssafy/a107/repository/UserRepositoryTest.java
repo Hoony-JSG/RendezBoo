@@ -29,12 +29,12 @@ public class UserRepositoryTest {
                 .phoneNumber("010-0000-0000")
                 .name("Hongju")
                 .profileImagePath("/~")
-                .MBTI(myMBTI)
+                .mbti(myMBTI)
                 .build();
 
         User joinUser = userRepository.save(user);
         Assertions.assertEquals(joinUser.getEmail(), myEmail);
-        Assertions.assertEquals(joinUser.getMBTI(), myMBTI);
+        Assertions.assertEquals(joinUser.getMbti(), myMBTI);
 
     }
 }

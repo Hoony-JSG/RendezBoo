@@ -38,7 +38,7 @@ public class UserRepositoryTest {
                 .phoneNumber("01012341234")
                 .name("홍길동")
                 .profileImagePath("abc.jpg")
-                .MBTI("ENTJ")
+                .mbti("ENTJ")
                 .point(1000L)
                 .build();
 
