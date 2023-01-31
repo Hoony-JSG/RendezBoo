@@ -7,21 +7,23 @@ import com.ssafy.a107.api.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/game")
+@Controller
+@RequestMapping("/websocket/game")
 @RequiredArgsConstructor
 public class GameController {
     private final GameService gameService;
 
-    @PostMapping("/br31")
+    @MessageMapping("/br31/start")
     public ResponseEntity<?> startBR31(@RequestBody BR31CreateReq br31CreateReq) {
         String sessionId = gameService.createBRGameSession(br31CreateReq);
         return ResponseEntity.status(HttpStatus.OK).body(sessionId);
     }
 
-    @PutMapping("/br31")
+    @MessageMapping("/br31")
     public ResponseEntity<?> setBR31point(@RequestBody BR31Req br31Req) {
         BR31Res br31Res = gameService.setBR31point(br31Req);
         return ResponseEntity.status(HttpStatus.OK).body(br31Res);
