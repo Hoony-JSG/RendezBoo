@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.api.request.ChatRoomCreateReq;
 import com.ssafy.a107.api.service.ChatRoomServiceImpl;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
@@ -23,5 +24,10 @@ public class ChatRoomController {
         return ResponseEntity.status(HttpStatus.OK).body(chatRoomService.getAllRoomByUserSeq(userSeq));
     }
 
+    @PostMapping("")
+    @ApiOperation(value = "채팅방 생성", notes = "채팅방 생성")
+    public ResponseEntity<?> createChatRoom(@RequestBody ChatRoomCreateReq chatRoomCreateReq) throws NotFoundException{
+        return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.createChatRoom(chatRoomCreateReq));
+    }
 
 }
