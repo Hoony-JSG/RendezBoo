@@ -14,4 +14,8 @@ public class SessionKeyProvider {
                 .append(new SimpleDateFormat("yy-MM-dd-hh:mm:ss").format(new Timestamp(System.currentTimeMillis())))
                 .toString();
     }
+    public static void main(String[] args){
+        System.out.println(getSessionKey(true));
+        System.out.println(getSessionKey(false));
+    }
 }
