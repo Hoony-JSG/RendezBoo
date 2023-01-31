@@ -8,8 +8,7 @@ import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    @Override
-    Optional<ChatRoom> findById(Long seq);
+    Optional<ChatRoom> findBySeq(Long seq);
 
     List<ChatRoom> findByUserFemaleSeq(Long userFemaleSeq);
 
