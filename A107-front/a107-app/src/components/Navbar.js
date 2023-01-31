@@ -5,7 +5,7 @@ import logo from "../logo.png";
 const Navbar = () => {
 
     const navStyle = {
-        position: "fixed",
+        position: "absolute fixed",
         top: 0,
         width: "100%",
         height: "90px",
@@ -38,7 +38,7 @@ const Navbar = () => {
           </NavLink>
         </div>
         <div style={divStyle}>
-            <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
+            <img src={logo} className="nav-logo" alt="logo" style={logoStyle} />
         </div>
         <div style={divStyle}>
           <NavLink to="/login">
