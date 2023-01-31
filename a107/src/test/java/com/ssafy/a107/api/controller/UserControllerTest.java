@@ -38,7 +38,7 @@ class UserControllerTest {
                 .phoneNumber("010-1234-1234")
                 .name("김싸피")
                 .profileImagePath("test.jpg")
-                .MBTI("INTP")
+                .mbti("INTP")
                 .build();
 
         LoginReq loginReq = LoginReq.builder()
@@ -70,7 +70,7 @@ class UserControllerTest {
                 .phoneNumber("010-1234-1234")
                 .name("김싸피")
                 .profileImagePath("test.jpg")
-                .MBTI("INTP")
+                .mbti("INTP")
                 .build();
 
         LoginReq loginReq = LoginReq.builder()
@@ -102,7 +102,7 @@ class UserControllerTest {
                 .phoneNumber("010-1234-1234")
                 .name("김싸피")
                 .profileImagePath("test.jpg")
-                .MBTI("INTP")
+                .mbti("INTP")
                 .build();
 
         //when
@@ -126,7 +126,7 @@ class UserControllerTest {
                 .phoneNumber("010-1234-1234")
                 .name("김싸피")
                 .profileImagePath("test.jpg")
-                .MBTI("INTP")
+                .mbti("INTP")
                 .build();
 
         //when
