@@ -15,10 +15,10 @@ function App() {
       home(rendezboo)
         <Navbar />
       <Routes>
-          <Route exact path="/" component={ <Rendezboo/> } />
-          <Route path="/signal" component={ Signal } />
-          <Route path="/login" component={ Login } />
-          <Route path="/rocket/:userid" component={ Rocket } />
+          <Route exact path="/" element={ <Rendezboo/> } />
+          <Route path="/signal" element={ <Signal/> } />
+          <Route path="/login" element={ <Login/> } />
+          <Route path="/rocket/:userid" element={ <Rocket /> } />
       </Routes>
         {/* <Rendezboo /> */}
     </div>
