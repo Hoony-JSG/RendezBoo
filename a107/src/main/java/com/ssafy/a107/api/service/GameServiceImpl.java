@@ -2,23 +2,31 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.game.BR31CreateReq;
 import com.ssafy.a107.api.request.game.BR31Req;
+import com.ssafy.a107.api.request.game.GameOfDeathCreateReq;
+import com.ssafy.a107.api.request.game.GameOfDeathReq;
 import com.ssafy.a107.api.response.game.BR31Res;
+import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.entity.game.BR31;
+import com.ssafy.a107.db.entity.game.GameOfDeath;
 import com.ssafy.a107.db.repository.MultiMeetingRoomRepository;
 import com.ssafy.a107.db.repository.game.BR31Repository;
+import com.ssafy.a107.db.repository.game.GameOfDeathRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class GameServiceImpl implements GameService {
 
     private final BR31Repository br31Repository;
+
+    private final GameOfDeathRepository gameOfDeathRepository;
 
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
 
@@ -67,16 +75,66 @@ public class GameServiceImpl implements GameService {
         Long nextUserSeq = br31.getUsers().get(nextUserSeqIndex);
         br31.setNextUser(nextUserSeq);
         br31Repository.save(br31);
+
         if (br31.getPoint() == 30) {
+            //게임이 끝난 경우
             String msg = "30을 말하셔서 다음 분이 패배하셨습니다.";
             return new BR31Res(br31, msg, br31.getNowUser());
         } else if (br31.getPoint() >= 31) {
+            // 게임이 끝난 경우 2
             String msg = "31을 말하셔서 패배하셨습니다.";
             return new BR31Res(br31, msg, br31Req.getUserSeq());
         } else {
+            // 게임이 지속될 경우
             String msg = "다음 분의 차례입니다.";
             return new BR31Res(br31, msg, br31.getNowUser());
         }
 
+    }
+
+    @Override
+    @Transactional
+    public GameOfDeathRes createGameOfDeathSession(GameOfDeathCreateReq createReq) throws NotFoundException {
+        if (createReq.getCount() < 3 || createReq.getCount() > 20) {
+            throw new NotFoundException("Wrong Request");
+        }
+
+        GameOfDeath gameOfDeath = GameOfDeath.builder()
+                .gameId(System.currentTimeMillis())
+                .count(createReq.getCount())
+                .startUserSeq(createReq.getStartUserSeq())
+                .multiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq())
+                .targets(Map.of())
+                .build();
+        gameOfDeathRepository.save(gameOfDeath);
+        GameOfDeathRes gameOfDeathRes = new GameOfDeathRes(gameOfDeath, List.of(), 0L);
+        return gameOfDeathRes;
+    }
+
+    @Override
+    @Transactional
+    public GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException {
+        GameOfDeath gameOfDeath = gameOfDeathRepository.findById(gameOfDeathReq.getGameId())
+                .orElseThrow(() -> new NotFoundException("Wrong GameId"));
+        Map<Long, Long> targets = gameOfDeath.getTargets();
+        targets.put(gameOfDeathReq.getUserSeq(), gameOfDeathReq.getTargetSeq());
+        gameOfDeath.updateTargets(targets);
+        gameOfDeathRepository.save(gameOfDeath);
+
+        // 게임이 종료된 경우
+        if (targets.size() == 6) {
+            List<Long> countingList = List.of();
+            Long loseUserSeq = targets.get(gameOfDeath.getStartUserSeq());
+            countingList.add(loseUserSeq);
+
+            for (int i = 1; i < gameOfDeath.getCount(); i++) {
+                loseUserSeq = targets.get(loseUserSeq);
+                countingList.add(loseUserSeq);
+            }
+
+            return new GameOfDeathRes(gameOfDeath, countingList, loseUserSeq);
+        }
+
+        return new GameOfDeathRes(gameOfDeath, List.of(), 0L);
     }
 }

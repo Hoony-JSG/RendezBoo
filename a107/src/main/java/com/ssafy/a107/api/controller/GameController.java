@@ -2,7 +2,10 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.game.BR31CreateReq;
 import com.ssafy.a107.api.request.game.BR31Req;
+import com.ssafy.a107.api.request.game.GameOfDeathCreateReq;
+import com.ssafy.a107.api.request.game.GameOfDeathReq;
 import com.ssafy.a107.api.response.game.BR31Res;
+import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.api.service.GameService;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
@@ -34,4 +37,19 @@ public class GameController {
         BR31Res br31Res = gameService.setBR31point(br31Req);
         return ResponseEntity.status(HttpStatus.OK).body(br31Res);
     }
+
+    @ApiOperation("새로운 더 게임 오브 데스 세션을 생성")
+    @PostMapping("/gameofdeath/start")
+    public ResponseEntity<?> startGameOfDeath(@RequestBody GameOfDeathCreateReq gameOfDeathCreateReq) throws NotFoundException {
+        GameOfDeathRes gameOfDeathRes = gameService.createGameOfDeathSession(gameOfDeathCreateReq);
+        return ResponseEntity.status(HttpStatus.OK).body(gameOfDeathRes);
+    }
+
+    @ApiOperation("더 게임 오브 데스 진행")
+    @PostMapping("/gameofdeath")
+    public ResponseEntity<?> runGameOfDeath(@RequestBody GameOfDeathReq gameOfDeathReq) throws NotFoundException {
+        GameOfDeathRes gameOfDeathRes = gameService.runGameOfDeathSession(gameOfDeathReq);
+        return ResponseEntity.status(HttpStatus.OK).body(gameOfDeathRes);
+    }
+
 }
