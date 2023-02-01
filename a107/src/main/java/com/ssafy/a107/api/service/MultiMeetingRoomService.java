@@ -15,4 +15,6 @@ public interface MultiMeetingRoomService {
     MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException;
 //    Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException;
     List<MultiMeetingRoomRes> findAllMultiMeetingRoom();
+
+    void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException;
 }

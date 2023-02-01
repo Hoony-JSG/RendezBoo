@@ -22,8 +22,8 @@ public class MultiMeetingRoomUserServiceImpl implements MultiMeetingRoomUserServ
         return muRepo.save(MultiMeetingRoomUser.builder()
                 .multiMeetingRoom(mRepo.findById(multiMeetingRoomSeq)
                         .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!")))
-                        .user(userRepo.findById(userSeq)
-                                .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
+                .user(userRepo.findById(userSeq)
+                        .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
                 .build()).getSeq();
     }
 
