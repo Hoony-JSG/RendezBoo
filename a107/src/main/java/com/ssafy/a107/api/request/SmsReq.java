@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SmsReq {
 
-    private String email;
     private String phoneNumber;
     private String code;
 }

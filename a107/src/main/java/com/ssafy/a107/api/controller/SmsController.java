@@ -25,20 +25,24 @@ public class SmsController {
     @PostMapping("/send")
     public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) {
 
-        // 잘못된 요청
-        if(smsReq.getEmail() == null || smsReq.getPhoneNumber() == null || smsReq.getCode() != null) {
+        // 잘못된 요청 or 잘못된 양식
+        if(smsReq.getPhoneNumber() == null || smsReq.getCode() != null
+                || smsReq.getPhoneNumber().contains("-") || !smsReq.getPhoneNumber().startsWith("010")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
         String code = smsService.makeRandomCode();
+        log.debug("Generated code: {}", code);
 
         // SMS 전송 정상 접수
         if(smsService.sendSmsToUser(smsReq.getPhoneNumber(), code).equals("2000")) {
+            log.debug("Sent SMS to {}", smsReq.getPhoneNumber());
             smsService.createSms(smsReq, code.toString());
+            log.debug("SMS info has been created in Redis.");
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         else {
-            log.debug("SMS 전송 접수 실패");
+            log.debug("SMS failed to be sent.");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -47,14 +51,37 @@ public class SmsController {
     @PostMapping("/check")
     public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws NotFoundException {
 
-        SmsRes smsRes = smsService.getRecentCodeByEmail(smsReq.getEmail());
+        if(smsReq.getCode() == null) {
+            log.debug("Code typed by user is null.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        String phoneNumber = smsReq.getPhoneNumber();
+        String codeFromRedis = smsService.getRecentCodeByPhoneNumber(phoneNumber);
+
+        // 시간 초과 or 서버 에러
+        if(codeFromRedis == null) {
+            log.debug("Code from Redis is null.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        log.debug("Code from Redis: {}", codeFromRedis);
+        log.debug("Code typed by user: {}", smsReq.getCode());
 
         // 인증번호가 일치하면
-        if(smsService.matchCodes(smsRes.getCode(), smsReq.getCode())) {
-            return ResponseEntity.status(HttpStatus.OK).body(smsRes);
+        if(smsService.matchCodes(codeFromRedis, smsReq.getCode())) {
+            log.debug("Two codes match.");
+
+            if(smsService.hasKey(phoneNumber)) {
+                smsService.removeSms(phoneNumber);
+                log.debug("Code for {} has been removed from Redis.", phoneNumber);
+            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(new SmsRes(smsReq));
         }
 
         // 일치하지 않으면
+        log.debug("Two codes not match.");
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 }

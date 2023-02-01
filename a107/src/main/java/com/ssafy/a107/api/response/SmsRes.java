@@ -1,6 +1,6 @@
 package com.ssafy.a107.api.response;
 
-import com.ssafy.a107.db.entity.Sms;
+import com.ssafy.a107.api.request.SmsReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,13 +12,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SmsRes {
 
-    private String email;
     private String phoneNumber;
     private String code;
 
-    public SmsRes(Sms sms) {
-        this.email = sms.getEmail();
-        this.phoneNumber = sms.getPhoneNumber();
-        this.code = sms.getCode();
+    public SmsRes(SmsReq smsReq) {
+        this.phoneNumber = smsReq.getPhoneNumber();
+        this.code = smsReq.getCode();
     }
 }

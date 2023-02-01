@@ -6,8 +6,10 @@ import com.ssafy.a107.common.exception.NotFoundException;
 
 public interface SmsService {
 
-    Long createSms(SmsReq smsReq, String code);
-    SmsRes getRecentCodeByEmail(String email) throws NotFoundException;
+    void createSms(SmsReq smsReq, String code);
+    String getRecentCodeByPhoneNumber(String phoneNumber) throws NotFoundException;
+    void removeSms(String phoneNumber);
+    boolean hasKey(String phoneNumber);
     Boolean matchCodes(String sentCode, String typedCode);
     String makeRandomCode();
     String sendSmsToUser(String phoneNumber, String code);
