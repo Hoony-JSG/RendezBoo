@@ -2,15 +2,18 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.api.response.SmsRes;
+import com.ssafy.a107.common.exception.BadRequestException;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 
 public interface SmsService {
 
     void createSms(SmsReq smsReq, String code);
     String getRecentCodeByPhoneNumber(String phoneNumber);
-    void removeSms(String phoneNumber);
-    boolean hasKey(String phoneNumber);
-    Boolean matchCodes(String sentCode, String typedCode);
+    void removeSms(String phoneNumber) throws NotFoundException;
+    void matchCodes(String sentCode, String typedCode) throws ConflictException;
     String makeRandomCode();
-    String sendSmsToUser(String phoneNumber, String code);
+    void sendSmsToUser(String phoneNumber, String code) throws Exception;
+    void checkSmsReq(SmsReq smsReq) throws BadRequestException;
+    void checkCode(String code, String from) throws Exception;
 }
