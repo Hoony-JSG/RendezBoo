@@ -41,12 +41,10 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
-
     private final UserRepository userRepository;
 
-
     @Transactional
-    @Override //MultiMeetingRoomReq: title, userSeq
+    @Override
     public Long saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         log.debug(multiMeetingRoomReq.toString());
         User user = userRepository.findById(multiMeetingRoomReq.getUserSeq())
@@ -75,17 +73,6 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 maleNum, femaleNum
         );
     }
-//    @Override
-//    public Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException {
-//        User user = userRepository.findById(userSeq)
-//                .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
-//        MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(meetingRoomSeq)
-//                .orElseThrow(()->new NotFoundException("Invalid Multi meeting sequence!"));
-//        multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
-//                .user(user)
-//                .multiMeetingRoom(multiMeetingRoom).build());
-//        return null;
-//    }
     @Override
     public List<MultiMeetingRoomRes> findAllMultiMeetingRoom(){
         return multiMeetingRoomRepository.findAll().stream()
@@ -95,4 +82,12 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(meetingRoomSeq)) throw new NotFoundException("Invalid multi meeting room sequence!");
+        //meetingRoomSeq가 일치하는 multiMeetingRoomUser 데이터들을 먼저 삭제해야 한다
+        multiMeetingRoomRepository.deleteById(meetingRoomSeq);
+    }
+
 }
