@@ -50,7 +50,7 @@ public class SmsController {
 
     @ApiOperation(value = "인증번호가 일치하는지 확인")
     @PostMapping("/check")
-    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException, NotFoundException {
+    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
 
         // 잘못된 인증코드 체크
         smsService.checkCode(smsReq.getCode(), "user");
@@ -67,10 +67,6 @@ public class SmsController {
         // 인증번호가 일치하는지 체크
         smsService.matchCodes(codeFromRedis, smsReq.getCode());
         log.debug("Two codes match.");
-
-        // 사용된 인증번호 삭제
-        smsService.removeSms(phoneNumber);
-        log.debug("Code for {} has been removed from Redis.", phoneNumber);
 
         return ResponseEntity.status(HttpStatus.OK).body(new SmsRes(smsReq));
     }
