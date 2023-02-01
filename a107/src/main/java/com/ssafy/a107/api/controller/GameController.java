@@ -12,18 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/websocket/game")
+@RequestMapping("/api/game")
 @RequiredArgsConstructor
 public class GameController {
     private final GameService gameService;
 
-    @MessageMapping("/br31/start")
+    @PostMapping("/br31/start")
     public ResponseEntity<?> startBR31(@RequestBody BR31CreateReq br31CreateReq) {
-        String sessionId = gameService.createBRGameSession(br31CreateReq);
-        return ResponseEntity.status(HttpStatus.OK).body(sessionId);
+        BR31Res br31Res = gameService.createBRGameSession(br31CreateReq);
+        return ResponseEntity.status(HttpStatus.OK).body(br31Res);
     }
 
-    @MessageMapping("/br31")
+    @PostMapping("/br31")
     public ResponseEntity<?> setBR31point(@RequestBody BR31Req br31Req) {
         BR31Res br31Res = gameService.setBR31point(br31Req);
         return ResponseEntity.status(HttpStatus.OK).body(br31Res);
