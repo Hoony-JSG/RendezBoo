@@ -229,4 +229,11 @@ public class UserServiceImpl implements UserService {
 
         return res.toString();
     }
+
+    @Override
+    public void deleteUser(Long userSeq) throws NotFoundException{
+        User toBeDeleted = userRepository.findById(userSeq)
+                .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
+        toBeDeleted.deleteUser();
+    }
 }
