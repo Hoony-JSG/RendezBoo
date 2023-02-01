@@ -1,6 +1,9 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.SmsReq;
+import com.ssafy.a107.common.exception.BadRequestException;
+import com.ssafy.a107.common.exception.ConflictException;
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.repository.SmsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,19 +35,20 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public void removeSms(String phoneNumber) {
-        smsRepository.removeSmsRedis(phoneNumber);
+    public void removeSms(String phoneNumber) throws NotFoundException {
+        if(smsRepository.hasKey(phoneNumber)) {
+            smsRepository.removeSmsRedis(phoneNumber);
+        }
+        else {
+            throw new NotFoundException("해당 번호의 인증코드가 존재하지 않습니다.");
+        }
     }
 
     @Override
-    public boolean hasKey(String phoneNumber) {
-        return smsRepository.hasKey(phoneNumber);
-    }
-
-    @Override
-    public Boolean matchCodes(String sentCode, String typedCode) {
-        if(sentCode == null || typedCode == null) return false;
-        return sentCode.equals(typedCode);
+    public void matchCodes(String sentCode, String typedCode) throws ConflictException {
+        if(!sentCode.equals(typedCode)) {
+            throw new ConflictException("인증번호가 일치하지 않습니다.");
+        }
     }
 
     @Override
@@ -60,7 +64,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public String sendSmsToUser(String phoneNumber, String code) {
+    public void sendSmsToUser(String phoneNumber, String code) throws Exception {
         Message message = new Message();
         message.setFrom("01099065910");
         message.setTo(phoneNumber);
@@ -69,6 +73,31 @@ public class SmsServiceImpl implements SmsService {
         SingleMessageSentResponse res = this.messageService.sendOne(new SingleMessageSendingRequest(message));
         log.debug("response: {}", res);
 
-        return res.getStatusCode();
+        if(!res.getStatusCode().equals("2000")) {
+            throw new Exception("SMS 전송 실패");
+        }
+    }
+
+    @Override
+    public void checkSmsReq(SmsReq smsReq) throws BadRequestException {
+        if(smsReq.getPhoneNumber() == null || smsReq.getCode() != null) {
+            throw new BadRequestException("잘못된 요청입니다.");
+        }
+        // TODO: 정규표현식으로 변경
+        else if(smsReq.getPhoneNumber().contains("-") || !smsReq.getPhoneNumber().startsWith("010")) {
+            throw new BadRequestException("잘못된 번호 양식입니다.");
+        }
+    }
+
+    @Override
+    public void checkCode(String code, String from) throws Exception {
+        if(code == null) {
+            if(from.equals("user")) {
+                throw new BadRequestException("잘못된 인증코드입니다.");
+            }
+            else if(from.equals("redis")) {
+                throw new Exception("시간 초과 혹은 서버 에러입니다.");
+            }
+        }
     }
 }

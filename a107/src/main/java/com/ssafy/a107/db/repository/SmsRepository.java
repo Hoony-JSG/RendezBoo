@@ -11,7 +11,7 @@ import java.time.Duration;
 public class SmsRepository {
 
     private final String PREFIX = "sms:";
-    private final int TIME_LIMIT = 60; // for test
+    private final int TIME_LIMIT = 3 * 60;
 
     private final StringRedisTemplate stringRedisTemplate;
     public void createSmsRedis(String phoneNumber, String code) {
