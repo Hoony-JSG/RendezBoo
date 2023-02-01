@@ -4,6 +4,7 @@ import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.SmsException;
 import com.ssafy.a107.db.repository.SmsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +65,7 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public void sendSmsToUser(String phoneNumber, String code) throws Exception {
+    public void sendSmsToUser(String phoneNumber, String code) throws SmsException {
         Message message = new Message();
         message.setFrom("01099065910");
         message.setTo(phoneNumber);
@@ -74,7 +75,7 @@ public class SmsServiceImpl implements SmsService {
         log.debug("response: {}", res);
 
         if(!res.getStatusCode().equals("2000")) {
-            throw new Exception("SMS 전송 실패");
+            throw new SmsException("SMS 전송 실패");
         }
     }
 
@@ -90,13 +91,13 @@ public class SmsServiceImpl implements SmsService {
     }
 
     @Override
-    public void checkCode(String code, String from) throws Exception {
+    public void checkCode(String code, String from) throws BadRequestException, SmsException {
         if(code == null) {
             if(from.equals("user")) {
                 throw new BadRequestException("잘못된 인증코드입니다.");
             }
             else if(from.equals("redis")) {
-                throw new Exception("시간 초과 혹은 서버 에러입니다.");
+                throw new SmsException("시간 초과 혹은 서버 에러입니다.");
             }
         }
     }

@@ -3,6 +3,10 @@ package com.ssafy.a107.api.controller;
 import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.api.response.SmsRes;
 import com.ssafy.a107.api.service.SmsService;
+import com.ssafy.a107.common.exception.BadRequestException;
+import com.ssafy.a107.common.exception.ConflictException;
+import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.SmsException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +26,7 @@ public class SmsController {
 
     @ApiOperation(value = "사용자에게 인증번호 전송", notes = "번호는 01012345678 형태로 입력")
     @PostMapping("/send")
-    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws Exception {
+    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException {
 
         smsService.checkSmsReq(smsReq);
 
@@ -46,7 +50,7 @@ public class SmsController {
 
     @ApiOperation(value = "인증번호가 일치하는지 확인")
     @PostMapping("/check")
-    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws Exception {
+    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException, NotFoundException {
 
         // 잘못된 인증코드 체크
         smsService.checkCode(smsReq.getCode(), "user");
