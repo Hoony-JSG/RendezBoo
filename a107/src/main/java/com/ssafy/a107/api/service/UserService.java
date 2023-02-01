@@ -26,4 +26,5 @@ public interface UserService {
     HttpEntity<MultiValueMap<String, String>> generateProfileRequest(String accessToken);
     String getKakaoAccessToken(String code);
     String getKakaoProfile(String token) throws Exception;
+    void deleteUser(Long userSeq) throws NotFoundException;
 }

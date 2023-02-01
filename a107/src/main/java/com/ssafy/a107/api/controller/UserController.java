@@ -78,4 +78,10 @@ public class UserController {
     public ResponseEntity<?> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getBlockeds(userSeq));
     }
+    @DeleteMapping("/{userSeq}")
+    @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userSeq) throws NotFoundException{
+        userService.deleteUser(userSeq);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
 }
