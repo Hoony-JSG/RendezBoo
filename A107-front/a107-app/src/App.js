@@ -10,7 +10,8 @@ function App() {
         <Navbar />
       <Routes>
           <Route exact path="/" element={ <Rendezboo/> } />
-          <Route path="/signal" element={ <Signal/> } />
+          <Route exact path="/signal" element={ <Signal/> } />
+          <Route path="/signal/:userid" element={ <Signal/> } />
           <Route path="/login" element={ <Login/> } />
           <Route path="/rocket/:userid" element={ <Rocket /> } />
       </Routes>
