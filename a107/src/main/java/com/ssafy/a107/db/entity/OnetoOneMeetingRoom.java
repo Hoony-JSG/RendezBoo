@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class OnetoOneMeetingRoom extends BaseEntity {
 
-    @Column(length = 30)
+    @Column(length = 50)
     private String sessionId;
 
     @Column(nullable = false)
