@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(value = "미팅방-유저 APi", tags = {"MultiMeetingRoomUser"})
 @RestController
-@RequestMapping("/api/multimeeting-user")
+@RequestMapping("/api/multi-meeting-user")
 @RequiredArgsConstructor
 public class MultiMeetingRoomUserController {
     private final MultiMeetingRoomUserService multiMeetingRoomUserService;
