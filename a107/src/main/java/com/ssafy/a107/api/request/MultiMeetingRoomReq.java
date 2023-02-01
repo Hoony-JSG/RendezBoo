@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MultyMeetingRoomReq {
+public class MultiMeetingRoomReq {
     private String title;
     private Long userSeq;
 }

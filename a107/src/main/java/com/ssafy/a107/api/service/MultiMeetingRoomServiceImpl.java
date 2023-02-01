@@ -1,6 +1,6 @@
 package com.ssafy.a107.api.service;
 
-import com.ssafy.a107.api.request.MultyMeetingRoomReq;
+import com.ssafy.a107.api.request.MultiMeetingRoomReq;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.SessionKeyProvider;
@@ -15,9 +15,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -36,40 +39,60 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    MultiMeetingRoomRepository multyMeetingRoomRepository;
-    MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
+    private final MultiMeetingRoomRepository multiMeetingRoomRepository;
+    private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
 
-    @Override
-    public Long saveMultiMeetingRoom(MultyMeetingRoomReq multyMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        User user = userRepository.findById(multyMeetingRoomReq.getUserSeq())
+    @Transactional
+    @Override //MultiMeetingRoomReq: title, userSeq
+    public Long saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+        log.debug(multiMeetingRoomReq.toString());
+        User user = userRepository.findById(multiMeetingRoomReq.getUserSeq())
                 .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
-
-        Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey(false));
+        log.debug(user.toString());
+        Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey("OPENVIDU","MULTI"));
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openVidu.createSession(properties);
         MultiMeetingRoom multiMeetingRoom = MultiMeetingRoom.builder()
-                .title(multyMeetingRoomReq.getTitle())
+                .title(multiMeetingRoomReq.getTitle())
                 .status((byte)0).build();
         multiMeetingRoom.createSession(session.getSessionId());
 
-        multiMeetingRoomUserRepository.save(new MultiMeetingRoomUser(user, multiMeetingRoom));
-        return null;
+        Long roomSeq = multiMeetingRoomRepository.save(multiMeetingRoom).getSeq();
+        multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
+                .user(user)
+                .multiMeetingRoom(multiMeetingRoom).build());
+        return roomSeq;
     }
     @Override
     public MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException {
         int maleNum=0, femaleNum=0;
         //
-        return new MultiMeetingRoomRes(multyMeetingRoomRepository.findById(roomSeq)
+        return new MultiMeetingRoomRes(multiMeetingRoomRepository.findById(roomSeq)
                 .orElseThrow(()->new NotFoundException("Invalid multiMeetingRoom sequence")),
                 maleNum, femaleNum
         );
     }
-
+//    @Override
+//    public Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException {
+//        User user = userRepository.findById(userSeq)
+//                .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
+//        MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(meetingRoomSeq)
+//                .orElseThrow(()->new NotFoundException("Invalid Multi meeting sequence!"));
+//        multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
+//                .user(user)
+//                .multiMeetingRoom(multiMeetingRoom).build());
+//        return null;
+//    }
     @Override
-    public Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException {
-        return null;
+    public List<MultiMeetingRoomRes> findAllMultiMeetingRoom(){
+        return multiMeetingRoomRepository.findAll().stream()
+                .map((multimeetingroom)->new MultiMeetingRoomRes(multimeetingroom,
+                        0,//multiMeetingRoomUserRepository.countMaleByMeetingRoomSeq(multimeetingroom.getSeq()),
+                        0//multiMeetingRoomUserRepository.countFemaleByMeetingRoomSeq(multimeetingroom.getSeq())
+                ))
+                .collect(Collectors.toList());
     }
 }

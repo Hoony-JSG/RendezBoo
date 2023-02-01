@@ -13,27 +13,27 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MultiMeetingRoomUserServiceImpl implements MultiMeetingRoomUserService{
 
-    private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
-    private final UserRepository userRepository;
-    private final MultiMeetingRoomRepository multiMeetingRoomRepository;
+    private final MultiMeetingRoomUserRepository muRepo;
+    private final UserRepository userRepo;
+    private final MultiMeetingRoomRepository mRepo;
     @Transactional
     @Override
     public Long addUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
-        return multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
-                .multiMeetingRoom(multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
-                        .orElseThrow(() -> new NotFoundException("Invalid User Seq!")))
-                        .user(userRepository.findById(userSeq)
-                                .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room Seq!")))
+        return muRepo.save(MultiMeetingRoomUser.builder()
+                .multiMeetingRoom(mRepo.findById(multiMeetingRoomSeq)
+                        .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!")))
+                        .user(userRepo.findById(userSeq)
+                                .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
                 .build()).getSeq();
     }
 
     @Transactional
     @Override
     public void removeUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
-        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+        if(!mRepo.existsById(multiMeetingRoomSeq))
             throw new NotFoundException("Invalid multi meeting room sequence!");
-        else if(!userRepository.existsById(userSeq))
+        else if(!userRepo.existsById(userSeq))
             throw new NotFoundException("Invalid user sequence!");
-        multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
+        muRepo.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
     }
 }

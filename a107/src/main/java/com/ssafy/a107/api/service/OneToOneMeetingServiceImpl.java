@@ -73,7 +73,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
 
         } else {
             // 리스트 없으면 세션 생성
-            Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey(true));
+            Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey("OPENVIDU", "OTO"));
             SessionProperties properties = SessionProperties.fromJson(params).build();
             session = openVidu.createSession(properties);
             onetoOneMeetingRoom = new OnetoOneMeetingRoom();
