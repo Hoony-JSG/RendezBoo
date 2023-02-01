@@ -38,10 +38,10 @@ public class MultiMeetingRoomController {
     public ResponseEntity<?> getAllMultiRoom(){
         return ResponseEntity.status(HttpStatus.OK).body(multiMeetingRoomService.findAllMultiMeetingRoom());
     }
-//    @ApiOperation(value = "")
-//    @PostMapping("/{meetingRoomSeq}/join/{userSeq}")
-//    public ResponseEntity<?> joinMultiRoom(@PathVariable Long meetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException {
-//        multiMeetingRoomService.joinMultiMeetingRoom(meetingRoomSeq, userSeq);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-//    }
+    @ApiOperation(value = "단체 미팅방 삭제하기", notes = "단체 미팅방 삭제하기")
+    @DeleteMapping("/{meetingRoomSeq}")
+    public ResponseEntity<?> deleteMultiRoom(@PathVariable Long meetingRoomSeq) throws NotFoundException{
+        multiMeetingRoomService.deleteMultiMeetingRoom(meetingRoomSeq);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
 }
