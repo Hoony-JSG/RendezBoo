@@ -11,7 +11,6 @@ public interface SmsService {
 
     void createSms(SmsReq smsReq, String code);
     String getRecentCodeByPhoneNumber(String phoneNumber);
-    void removeSms(String phoneNumber) throws NotFoundException;
     void matchCodes(String sentCode, String typedCode) throws ConflictException;
     String makeRandomCode();
     void sendSmsToUser(String phoneNumber, String code) throws SmsException;

@@ -3,7 +3,6 @@ package com.ssafy.a107.api.service;
 import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
-import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.exception.SmsException;
 import com.ssafy.a107.db.repository.SmsRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,16 +32,6 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public String getRecentCodeByPhoneNumber(String phoneNumber) {
         return smsRepository.getSmsRedis(phoneNumber);
-    }
-
-    @Override
-    public void removeSms(String phoneNumber) throws NotFoundException {
-        if(smsRepository.hasKey(phoneNumber)) {
-            smsRepository.removeSmsRedis(phoneNumber);
-        }
-        else {
-            throw new NotFoundException("해당 번호의 인증코드가 존재하지 않습니다.");
-        }
     }
 
     @Override
