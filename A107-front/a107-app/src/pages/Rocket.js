@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useParams } from "react-router-dom";
+import RocketBadge from "../components/RocketBadge";
 import RocketItem from "../components/RocketItem";
 
 const Rocket = () => {
+  const Me = "훈스";
+  const Inquire = useParams().userid;
+  const Same = Me === Inquire ? true : false;
   const MeAndYou = {
-    Me: "훈스",
-    Inquire: useParams().userid,
+    Me: Me,
+    Inquire: Inquire,
+    Same: Same,
+    BadgeRep: 1,
   };
+
   return (
     <div>
+      <div></div>
       <h1>{useParams().userid}'s Rocket</h1>
-      <RocketItem {...MeAndYou} />
+      <div>
+        <RocketItem {...MeAndYou} />
+      </div>
+      <div>
+        <RocketBadge {...MeAndYou} />
+      </div>
     </div>
   );
 };

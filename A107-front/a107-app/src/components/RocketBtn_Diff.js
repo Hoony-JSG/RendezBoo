@@ -1,7 +1,4 @@
-import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-// import { Userinfo } from "../pages";
-import Userinfo from "../pages/Userinfo";
+import { useNavigate } from "react-router-dom";
 
 const RocketBtn_Diff = () => {
   const navigate = useNavigate();
