@@ -7,6 +7,7 @@ import com.ssafy.a107.db.repository.MultiMeetingRoomUserRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class MultiMeetingRoomUserServiceImpl implements MultiMeetingRoomUserServ
     private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
     private final UserRepository userRepository;
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
+    @Transactional
     @Override
     public Long addUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
         return multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
@@ -25,6 +27,7 @@ public class MultiMeetingRoomUserServiceImpl implements MultiMeetingRoomUserServ
                 .build()).getSeq();
     }
 
+    @Transactional
     @Override
     public void removeUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
         if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
