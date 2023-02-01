@@ -22,10 +22,19 @@ public class GameServiceImpl implements GameService {
 
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
 
+    /**
+     * 새로운 배스킨라빈스게임 세션 생성 --- 미완성
+     *
+     * @param br31CreateReq
+     * @return
+     * @throws NotFoundException
+     */
     @Override
     @Transactional
-    public BR31Res createBRGameSession(BR31CreateReq br31CreateReq) {
+    public BR31Res createBRGameSession(BR31CreateReq br31CreateReq) throws NotFoundException {
         List<Long> userSeqList = null;
+//        List<Long> userSeqList = multiMeetingRoomRepository.findById(br31CreateReq.getMultiMeetingRoomSeq())
+//                .orElseThrow(() -> new NotFoundException("Wrong MeetingRoom!")).get;
         BR31 br31 = BR31.builder().sessionId(System.currentTimeMillis())
                 .multiMeetingRoomSeq(br31CreateReq.getMultiMeetingRoomSeq())
                 .users(userSeqList)
@@ -37,6 +46,13 @@ public class GameServiceImpl implements GameService {
         return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!!!", br31.getNowUser());
     }
 
+    /**
+     * 배스킨 라빈스 게임을 진행 --- 미완성
+     *
+     * @param br31Req
+     * @return
+     * @throws NotFoundException
+     */
     @Override
     @Transactional
     public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException {
