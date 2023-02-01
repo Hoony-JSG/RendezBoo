@@ -9,7 +9,7 @@ public class SessionKeyProvider {
         return new StringBuffer()
                 .append(sessionType).append('_')
                 .append(subType).append('_')
-                .append(new SimpleDateFormat("yy-MM-dd-hh:mm:ss").format(new Timestamp(System.currentTimeMillis())))
+                .append(new SimpleDateFormat("yyMMddhhmmss").format(new Timestamp(System.currentTimeMillis())))
                 .toString();
     }
     public static void main(String[] args){
