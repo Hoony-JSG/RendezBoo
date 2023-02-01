@@ -22,7 +22,7 @@ public class MultiMeetingRoomController {
 
     @ApiOperation(value = "새 단체 미팅방 생성하기",notes = "새 단체 미팅방 생성하기")
     @PostMapping("/")
-    public ResponseEntity<?> makeMultiRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<?> makeMultiRoom(@RequestBody MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         Long newRoomSeq = multiMeetingRoomService.saveMultiMeetingRoom(multiMeetingRoomReq);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRoomSeq);
     }
@@ -38,10 +38,10 @@ public class MultiMeetingRoomController {
     public ResponseEntity<?> getAllMultiRoom(){
         return ResponseEntity.status(HttpStatus.OK).body(multiMeetingRoomService.findAllMultiMeetingRoom());
     }
-    @ApiOperation(value = "")
-    @PostMapping("/{meetingRoomSeq}/join/{userSeq}")
-    public ResponseEntity<?> joinMultiRoom(@PathVariable Long meetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException {
-        multiMeetingRoomService.joinMultiMeetingRoom(meetingRoomSeq, userSeq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
+//    @ApiOperation(value = "")
+//    @PostMapping("/{meetingRoomSeq}/join/{userSeq}")
+//    public ResponseEntity<?> joinMultiRoom(@PathVariable Long meetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException {
+//        multiMeetingRoomService.joinMultiMeetingRoom(meetingRoomSeq, userSeq);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+//    }
 }
