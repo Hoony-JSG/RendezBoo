@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { Rendezboo, Signal, Login, Rocket } from './pages'
+import { Rendezboo, Signal, Login, Rocket, Docking1 } from './pages'
 import Navbar from './components/Navbar';
 import "./App.css";
 
@@ -12,6 +12,7 @@ function App() {
           <Route exact path="/" element={ <Rendezboo/> } />
           <Route path="/signal" element={ <Signal/> } />
           <Route path="/login" element={ <Login/> } />
+          <Route path="/docking1" element={ <Docking1/> } />
           <Route path="/rocket/:userid" element={ <Rocket /> } />
       </Routes>
     </div>
