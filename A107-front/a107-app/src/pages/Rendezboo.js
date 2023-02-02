@@ -4,6 +4,7 @@ import RocketBtn from '../components/RocketBtn'
 import RocketItem from '../components/RocketItem'
 import { BsFillDoorClosedFill, BsFillDoorOpenFill } from 'react-icons/bs'
 const Rendezboo = () => {
+  console.log('랑데부 페이지')
   const id = 'wjdgnsxhsl'
   const navigate = useNavigate()
   const goToPage = (props) => {
