@@ -124,7 +124,7 @@ jwt:
   refresh-token-validity-milliseconds: 259200000
 
 openvidu:
-  url: http://openvidu-openvidu-server-1:4443/
+  url: http://i8a107.p.ssafy.io:4080/
   secret: thisisrendezbooopenviduserversecretkey
 
 cloud:
