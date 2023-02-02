@@ -1,28 +1,28 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import logo from "../logo.png";
+import React from 'react'
+import { NavLink } from 'react-router-dom'
+import logo from '../logo.png'
 
 const Navbar = () => {
   const navStyle = {
-    position: "initial",
+    position: 'absolute fixed',
     top: 0,
-    width: "100%",
-    height: "90px",
-    display: "flex",
-    border: "solid 2px",
-  };
+    width: '100%',
+    height: '90px',
+    display: 'flex',
+    border: 'solid 2px',
+  }
 
   const divStyle = {
-    width: "100%",
-    height: "90px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+    width: '100%',
+    height: '90px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 
   const logoStyle = {
-    height: "inherit",
-  };
+    height: 'inherit',
+  }
 
   return (
     <nav style={navStyle}>
@@ -42,7 +42,7 @@ const Navbar = () => {
         <NavLink to="/rocket/:userid">MyRocket</NavLink>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
