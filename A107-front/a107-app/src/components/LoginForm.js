@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   console.log("로그인 폼");
@@ -72,8 +72,8 @@ const LoginForm = () => {
           type="button"
           disabled={!button}
           onClick={(e) => {
-            if (id == realId) {
-              if (pw == realPw) {
+            if (id === realId) {
+              if (pw === realPw) {
                 e.stopPropagation();
                 goToAfterLogin(id);
               }
