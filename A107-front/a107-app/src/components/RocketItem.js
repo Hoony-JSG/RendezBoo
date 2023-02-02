@@ -1,12 +1,19 @@
-import RocketBtn from "./RocketBtn";
+import RocketBtn from './RocketBtn'
 
 const RocketItem = (props) => {
-  const Me = props.Me;
-  const Inquire = props.Inquire;
-  const Same = props.Same;
+  console.log('rocketitem')
+  const Me = props.Me
+  const Inquire = props.Inquire
+  const Same = Me === Inquire ? true : false
+  const propsToBtn = {
+    Me: Me,
+    Same: Same,
+    Rendez: props.Rendez,
+  }
+  console.log(propsToBtn)
   const setTempBorder = {
-    border: "1px solid black",
-  };
+    border: '1px solid black',
+  }
   return (
     <div style={setTempBorder}>
       <h1> 로켓아이템 </h1>
@@ -16,9 +23,9 @@ const RocketItem = (props) => {
       <h3>Me = {Me}</h3>
       <h5>Inquire = {Inquire}</h5>
 
-      <RocketBtn Same={Same} />
+      <RocketBtn {...propsToBtn} />
     </div>
-  );
-};
+  )
+}
 
-export default RocketItem;
+export default RocketItem
