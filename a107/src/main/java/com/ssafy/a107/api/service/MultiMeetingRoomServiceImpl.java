@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.MultiMeetingRoomReq;
+import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.SessionKeyProvider;
@@ -41,20 +42,18 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
-
     private final UserRepository userRepository;
 
-
     @Transactional
-    @Override //MultiMeetingRoomReq: title, userSeq
-    public Long saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        log.debug(multiMeetingRoomReq.toString());
+    @Override
+    public MeetingRoomRes saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         User user = userRepository.findById(multiMeetingRoomReq.getUserSeq())
                 .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
-        log.debug(user.toString());
+
         Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey("OPENVIDU","MULTI"));
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openVidu.createSession(properties);
+
         MultiMeetingRoom multiMeetingRoom = MultiMeetingRoom.builder()
                 .title(multiMeetingRoomReq.getTitle())
                 .status((byte)0).build();
@@ -64,7 +63,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
                 .user(user)
                 .multiMeetingRoom(multiMeetingRoom).build());
-        return roomSeq;
+        if (session == null) {
+            throw new NotFoundException("Wrong Session");
+        }
+        // 커넥션용 토큰 생성
+        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
+        Connection connection = session.createConnection(connectionProperties);
+        String token = connection.getToken();
+        return new MeetingRoomRes(session.getSessionId(), token);
     }
     @Override
     public MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException {
@@ -75,17 +81,6 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 maleNum, femaleNum
         );
     }
-//    @Override
-//    public Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException {
-//        User user = userRepository.findById(userSeq)
-//                .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
-//        MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(meetingRoomSeq)
-//                .orElseThrow(()->new NotFoundException("Invalid Multi meeting sequence!"));
-//        multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
-//                .user(user)
-//                .multiMeetingRoom(multiMeetingRoom).build());
-//        return null;
-//    }
     @Override
     public List<MultiMeetingRoomRes> findAllMultiMeetingRoom(){
         return multiMeetingRoomRepository.findAll().stream()
@@ -95,4 +90,12 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(meetingRoomSeq)) throw new NotFoundException("Invalid multi meeting room sequence!");
+        //meetingRoomSeq가 일치하는 multiMeetingRoomUser 데이터들을 먼저 삭제해야 한다
+        multiMeetingRoomRepository.deleteById(meetingRoomSeq);
+    }
+
 }

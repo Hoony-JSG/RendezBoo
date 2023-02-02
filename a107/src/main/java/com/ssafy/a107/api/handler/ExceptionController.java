@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.handler;
 
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,20 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
-    // 404 INTERNAL_SERVER_ERROR
+    // 404 NOT FOUND
     @ExceptionHandler({ NotFoundException.class })
-    public ResponseEntity<?> handleNotFound(final NotFoundException ex) {
+    public ResponseEntity<?> handleNotFoundException(final NotFoundException ex) {
         log.info(ex.getClass().getName());
         log.error("error", ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    // 409 CONFLICT
+    @ExceptionHandler({ ConflictException.class })
+    public ResponseEntity<?> handleConflictException(final ConflictException ex) {
+        log.info(ex.getClass().getName());
+        log.error("error", ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     // 500 INTERNAL_SERVER_ERROR

@@ -55,8 +55,12 @@ jwt:
   refresh-token-validity-milliseconds: 259200000
 
 openvidu:
-  url: http://localhost:4443/
-  secret: MY_SECRET
+#  url: http://i8a107.p.ssafy.io:4443/
+  url: https://52.78.60.53:4443/
+  secret: thisisrendezbooopenviduserversecretkey
+#openvidu:
+#  url: http://localhost:4443/
+#  secret: MY_SECRET
 
 logging:
   level:
@@ -123,8 +127,9 @@ jwt:
   access-token-validity-milliseconds: 1800000
   refresh-token-validity-milliseconds: 259200000
 
+#https로 요청 보내야함(http로 요청보낼시 https로 리다이렉트하고 301응답함)
 openvidu:
-  url: http://openvidu-openvidu-server-1:4443/
+  url: https://52.78.60.53:4443/
   secret: thisisrendezbooopenviduserversecretkey
 
 cloud:

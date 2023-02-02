@@ -55,6 +55,8 @@ public class UserServiceImpl implements UserService {
                 .profileImagePath(joinReq.getProfileImagePath())
                 .mbti(joinReq.getMbti())
                 .point(0L)
+                .isAdmin(false)
+                .isValid(true)
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -228,5 +230,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return res.toString();
+    }
+
+    @Override
+    public void deleteUser(Long userSeq) throws NotFoundException{
+        User toBeDeleted = userRepository.findById(userSeq)
+                .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
+        toBeDeleted.deleteUser();
     }
 }

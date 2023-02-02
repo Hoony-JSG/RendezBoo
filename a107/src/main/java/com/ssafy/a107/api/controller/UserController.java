@@ -38,7 +38,7 @@ public class UserController {
 
         if(!dupCheck) {
             userService.createUser(joinReq);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -77,5 +77,11 @@ public class UserController {
     @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
     public ResponseEntity<?> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getBlockeds(userSeq));
+    }
+    @DeleteMapping("/{userSeq}")
+    @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
+    public ResponseEntity<?> deleteUser(@PathVariable Long userSeq) throws NotFoundException{
+        userService.deleteUser(userSeq);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

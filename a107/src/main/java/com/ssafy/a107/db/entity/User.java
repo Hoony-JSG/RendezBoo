@@ -48,6 +48,12 @@ public class User extends BaseEntity{
     @Column
     private Long point;
 
+    @Column(nullable = false)
+    private Boolean isValid = true;
+
+    @Column(nullable = false)
+    private Boolean isAdmin = false;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -62,4 +68,8 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    public void deleteUser(){
+        isValid = false;
+    }
 }

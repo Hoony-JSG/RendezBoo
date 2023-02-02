@@ -3,7 +3,10 @@ package com.ssafy.a107.api.controller;
 import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.api.response.SmsRes;
 import com.ssafy.a107.api.service.SmsService;
+import com.ssafy.a107.common.exception.BadRequestException;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.SmsException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,65 +26,48 @@ public class SmsController {
 
     @ApiOperation(value = "사용자에게 인증번호 전송", notes = "번호는 01012345678 형태로 입력")
     @PostMapping("/send")
-    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) {
+    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException {
 
-        // 잘못된 요청 or 잘못된 양식
-        if(smsReq.getPhoneNumber() == null || smsReq.getCode() != null
-                || smsReq.getPhoneNumber().contains("-") || !smsReq.getPhoneNumber().startsWith("010")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        smsService.checkSmsReq(smsReq);
 
         String code = smsService.makeRandomCode();
         log.debug("Generated code: {}", code);
 
+        smsService.sendSmsToUser(smsReq.getPhoneNumber(), code);
+
         // SMS 전송 정상 접수
-        if(smsService.sendSmsToUser(smsReq.getPhoneNumber(), code).equals("2000")) {
-            log.debug("Sent SMS to {}", smsReq.getPhoneNumber());
-            smsService.createSms(smsReq, code.toString());
-            log.debug("SMS info has been created in Redis.");
-            return ResponseEntity.status(HttpStatus.OK).build();
-        }
-        else {
-            log.debug("SMS failed to be sent.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        log.debug("Sent SMS to {}", smsReq.getPhoneNumber());
+        smsService.createSms(smsReq, code.toString());
+        log.debug("SMS info has been created in Redis.");
+
+        SmsRes res = SmsRes.builder()
+                .phoneNumber(smsReq.getPhoneNumber())
+                .code(code)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @ApiOperation(value = "인증번호가 일치하는지 확인")
     @PostMapping("/check")
-    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws NotFoundException {
+    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
 
-        if(smsReq.getCode() == null) {
-            log.debug("Code typed by user is null.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        // 잘못된 인증코드 체크
+        smsService.checkCode(smsReq.getCode(), "user");
 
         String phoneNumber = smsReq.getPhoneNumber();
         String codeFromRedis = smsService.getRecentCodeByPhoneNumber(phoneNumber);
 
-        // 시간 초과 or 서버 에러
-        if(codeFromRedis == null) {
-            log.debug("Code from Redis is null.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        // 시간 초과 or 서버 에러 체크
+        smsService.checkCode(codeFromRedis, "redis");
 
         log.debug("Code from Redis: {}", codeFromRedis);
         log.debug("Code typed by user: {}", smsReq.getCode());
 
-        // 인증번호가 일치하면
-        if(smsService.matchCodes(codeFromRedis, smsReq.getCode())) {
-            log.debug("Two codes match.");
+        // 인증번호가 일치하는지 체크
+        smsService.matchCodes(codeFromRedis, smsReq.getCode());
+        log.debug("Two codes match.");
 
-            if(smsService.hasKey(phoneNumber)) {
-                smsService.removeSms(phoneNumber);
-                log.debug("Code for {} has been removed from Redis.", phoneNumber);
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(new SmsRes(smsReq));
-        }
-
-        // 일치하지 않으면
-        log.debug("Two codes not match.");
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.status(HttpStatus.OK).body(new SmsRes(smsReq));
     }
 }
