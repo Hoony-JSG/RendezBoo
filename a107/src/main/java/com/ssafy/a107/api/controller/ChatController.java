@@ -10,8 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +27,10 @@ public class ChatController {
     private final SimpMessageSendingOperations sendingOperations;
 
 
-    @MessageMapping("/{chatRoomSeq}")
+
+    @PostMapping("/send")
     @ApiOperation("채팅 생성(보내기) - stomp")
-    public ResponseEntity<?> chat(@DestinationVariable Long chatRoomSeq, ChatReq req) throws NotFoundException{
+    public ResponseEntity<?> sendChat(@RequestBody ChatReq req) throws NotFoundException{
 
         String insertChat = chatService.insertChat(req);
         Chat chat = chatService.findBySeq(insertChat);
@@ -45,23 +44,23 @@ public class ChatController {
 
 
 
-    @PostMapping("/insert")
-    @ApiOperation("채팅 생성(보내기) - 테스트")
-    public ResponseEntity<?> createChat(@RequestBody ChatReq req){
-        try {
-            String insertChat = chatService.insertChat(req);
-            Chat chat = chatService.findBySeq(insertChat);
-
-            ChatRes chatRes = new ChatRes(chat);
-
-            sendingOperations.convertAndSend("/sub/" + req.getChatRoomSeq(), req);
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(chatRes);
-
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+//    @PostMapping("/insert")
+//    @ApiOperation("채팅 생성(보내기) - 테스트")
+//    public ResponseEntity<?> createChat(@RequestBody ChatReq req){
+//        try {
+//            String insertChat = chatService.insertChat(req);
+//            Chat chat = chatService.findBySeq(insertChat);
+//
+//            ChatRes chatRes = new ChatRes(chat);
+//
+//            sendingOperations.convertAndSend("/sub/" + req.getChatRoomSeq(), req);
+//
+//            return ResponseEntity.status(HttpStatus.CREATED).body(chatRes);
+//
+//        } catch (NotFoundException ex) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        }
+//    }
 
     @GetMapping("/{chatRoomSeq}")
     @ApiOperation("해당 채팅 방의 채팅 내역 불러오기")
