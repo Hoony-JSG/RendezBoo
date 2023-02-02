@@ -55,6 +55,8 @@ public class UserServiceImpl implements UserService {
                 .profileImagePath(joinReq.getProfileImagePath())
                 .mbti(joinReq.getMbti())
                 .point(0L)
+                .isAdmin(false)
+                .isValid(true)
                 .build();
 
         User savedUser = userRepository.save(user);
