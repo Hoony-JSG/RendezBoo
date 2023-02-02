@@ -4,13 +4,11 @@ import axios from 'axios'
 // import { SignalList, SignalItem, SignalForm } from "../components"
 import SignalList from '../components/SignalList'
 import SignalSelected from '../components/SignalSelected'
-import SignalForm from '../components/SignalForm'
+// import SignalForm from '../components/SignalForm'
 
 const Signal = () => {
   const userid = useParams().userid
 const { selected, setSelected } = useState(userid)
-  console.log(userid)
-  console.log(selected)
   const selectChat = () => setSelected(this.chat_seq)
 
   const [chatRoom, setChatRoom] = useState([
@@ -145,8 +143,8 @@ const { selected, setSelected } = useState(userid)
     boxSizing: 'border-box',
 
     position: 'absolute',
-    width: '1600px',
-    height: '900px',
+    width: '80%',
+    height: '80%',
     left: '160px',
     top: '120px',
 
@@ -166,8 +164,8 @@ const { selected, setSelected } = useState(userid)
     gap: '10px',
     justifyContent: 'center',
     position: 'absolute',
-    width: '450px',
-    height: '800px',
+    width: '20%',
+    height: '80%',
     left: '65px',
     top: '45px',
   }
@@ -180,8 +178,12 @@ const { selected, setSelected } = useState(userid)
           <SignalList chatRoom={chatRoom} />
         </div>
         <div className="content">
-          <SignalSelected content={chatRoom[userid].content} />
-          <SignalForm />
+          {userid ? (
+            <SignalSelected content={chatRoom[userid].content} />
+            // <SignalForm />
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </div>

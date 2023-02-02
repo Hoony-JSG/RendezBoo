@@ -1,3 +1,4 @@
+import SignalForm from './SignalForm';
 import SignalSelectedItem from './SignalSelectedItem'
 
 const SignalSelected = ({content}) => {
@@ -9,6 +10,7 @@ const SignalSelected = ({content}) => {
                     <SignalSelectedItem chat={chat} key={chat.chatSeq} />
                 ))}
             </div>
+            <SignalForm />
         </div>
     )
   }
