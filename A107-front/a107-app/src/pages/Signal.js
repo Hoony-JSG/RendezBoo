@@ -7,9 +7,10 @@ import SignalSelected from '../components/SignalSelected'
 import SignalForm from '../components/SignalForm'
 
 const Signal = () => {
-//   const userid = useParams().userid
-//   console.log(userid)
-  const { selected, setSelected } = useState(useParams().userid)
+  const userid = useParams().userid
+const { selected, setSelected } = useState(userid)
+  console.log(userid)
+  console.log(selected)
   const selectChat = () => setSelected(this.chat_seq)
 
   const [chatRoom, setChatRoom] = useState([
@@ -179,7 +180,7 @@ const Signal = () => {
           <SignalList chatRoom={chatRoom} />
         </div>
         <div className="content">
-          <SignalSelected content={chatRoom[selected].content} />
+          <SignalSelected content={chatRoom[userid].content} />
           <SignalForm />
         </div>
       </div>
