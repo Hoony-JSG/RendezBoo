@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.MultiMeetingRoomReq;
+import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.service.MultiMeetingRoomService;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.openvidu.java.client.OpenViduHttpException;
@@ -23,8 +24,8 @@ public class MultiMeetingRoomController {
     @ApiOperation(value = "새 단체 미팅방 생성하기",notes = "새 단체 미팅방 생성하기")
     @PostMapping("/")
     public ResponseEntity<?> makeMultiRoom(@RequestBody MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        Long newRoomSeq = multiMeetingRoomService.saveMultiMeetingRoom(multiMeetingRoomReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newRoomSeq);
+        MeetingRoomRes meetingRoomRes = multiMeetingRoomService.saveMultiMeetingRoom(multiMeetingRoomReq);
+        return ResponseEntity.status(HttpStatus.CREATED).body(meetingRoomRes);
     }
     @ApiOperation(value = "단체 미팅방 시퀀스로 단체 미팅방 정보 가져오기", notes = "단체 미팅방 시퀀스로 단체 미팅방 정보 가져오기")
     @GetMapping("/{meetingRoomSeq}")

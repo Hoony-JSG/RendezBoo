@@ -38,7 +38,7 @@ public class UserController {
 
         if(!dupCheck) {
             userService.createUser(joinReq);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         }
         else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

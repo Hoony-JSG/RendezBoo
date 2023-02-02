@@ -3,10 +3,7 @@ package com.ssafy.a107.db.entity;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity
@@ -18,9 +15,17 @@ public class MultiMeetingRoomUser extends BaseEntity{
     @JoinColumn(name = "multi_meeting_room_seq")
     private MultiMeetingRoom multiMeetingRoom;
 
+    //status 0: 대기중, 1: 미팅 진행중
+    @Column(nullable = false)
+    private Byte status;
+
     @Builder
     public MultiMeetingRoomUser(User user, MultiMeetingRoom multiMeetingRoom){
         this.user = user;
         this.multiMeetingRoom = multiMeetingRoom;
+        this.status = 0;
+    }
+    public void start(){
+        status = 1;
     }
 }
