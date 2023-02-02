@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.MultiMeetingRoomReq;
+import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.SessionKeyProvider;
@@ -45,14 +46,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
     @Transactional
     @Override
-    public Long saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        log.debug(multiMeetingRoomReq.toString());
+    public MeetingRoomRes saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         User user = userRepository.findById(multiMeetingRoomReq.getUserSeq())
                 .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
-        log.debug(user.toString());
+
         Map<String, Object> params = Map.of("customSessionId", SessionKeyProvider.getSessionKey("OPENVIDU","MULTI"));
         SessionProperties properties = SessionProperties.fromJson(params).build();
         Session session = openVidu.createSession(properties);
+
         MultiMeetingRoom multiMeetingRoom = MultiMeetingRoom.builder()
                 .title(multiMeetingRoomReq.getTitle())
                 .status((byte)0).build();
@@ -62,7 +63,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
                 .user(user)
                 .multiMeetingRoom(multiMeetingRoom).build());
-        return roomSeq;
+        if (session == null) {
+            throw new NotFoundException("Wrong Session");
+        }
+        // 커넥션용 토큰 생성
+        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
+        Connection connection = session.createConnection(connectionProperties);
+        String token = connection.getToken();
+        return new MeetingRoomRes(session.getSessionId(), token);
     }
     @Override
     public MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException {
