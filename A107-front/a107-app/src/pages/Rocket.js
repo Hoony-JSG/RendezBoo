@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react'
 
-import { useParams } from "react-router-dom";
-import RocketBadge from "../components/RocketBadge";
-import RocketItem from "../components/RocketItem";
+import { useParams } from 'react-router-dom'
+import RocketBadge from '../components/RocketBadge'
+import RocketItem from '../components/RocketItem'
 
 const Rocket = () => {
-  const Me = "훈스";
-  const Inquire = useParams().userid;
-  const Same = Me === Inquire ? true : false;
+  const Me = 'wjdgnsxhsl'
+  const Inquire = useParams().userid
+  const Same = Me === Inquire ? true : false
   const MeAndYou = {
     Me: Me,
     Inquire: Inquire,
     Same: Same,
     BadgeRep: 1,
-  };
+  }
 
   return (
     <div>
@@ -27,7 +27,7 @@ const Rocket = () => {
       </div>
       <div></div>
     </div>
-  );
-};
+  )
+}
 
-export default Rocket;
+export default Rocket
