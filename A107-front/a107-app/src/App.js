@@ -20,6 +20,17 @@ function App() {
           <Route path="/Inventory/:userid" element={<Inventory />}></Route>;
         </Routes>
       </div>
+      {/*  <div style={{ height: "100px" }}>
+        <Navbar />
+      </div>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/signal" element={<Signal />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/rocket/:userid" element={<Rocket />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Join" element={<Join />} />
+      </Routes> */}
     </div>
   );
 }
