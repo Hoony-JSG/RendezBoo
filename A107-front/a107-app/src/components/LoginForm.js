@@ -72,8 +72,8 @@ const LoginForm = () => {
           type="button"
           disabled={!button}
           onClick={(e) => {
-            if (id == realId) {
-              if (pw == realPw) {
+            if (id === realId) {
+              if (pw === realPw) {
                 e.stopPropagation();
                 goToAfterLogin(id);
               }
