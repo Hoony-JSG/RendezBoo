@@ -1,11 +1,17 @@
-import React from "react";
+import LoginForm from "../components/LoginForm";
+import LoginSocial from "../components/LoginSocial";
 
 const Login = () => {
-    return (
-        <div>
-            <h1>Login</h1>
-        </div>
-    )
-  }
+  console.log("로그인 화면");
+  return (
+    <div>
+      로그인
+      <div>
+        <LoginForm />
+        <LoginSocial />
+      </div>
+    </div>
+  );
+};
 
 export default Login;

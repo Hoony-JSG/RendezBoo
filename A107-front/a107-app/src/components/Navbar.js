@@ -13,17 +13,17 @@ const Navbar = () => {
         border: "solid 2px",
     }
 
-    const divStyle = {
-        width: "100%",
-        height: "90px",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }
-    
-    const logoStyle = {
-        height: "inherit"
-    }
+  const divStyle = {
+    width: "100%",
+    height: "90px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const logoStyle = {
+    height: "inherit",
+  };
 
     return (
       <nav style={navStyle}>
@@ -38,7 +38,7 @@ const Navbar = () => {
           </NavLink>
         </div>
         <div style={divStyle}>
-            <img src={logo} className="nav-logo" alt="logo" style={logoStyle} />
+            <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
         </div>
         <div style={divStyle}>
           <NavLink to="/login">
