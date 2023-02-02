@@ -5,7 +5,7 @@ import logo from "../logo.png";
 const Navbar = () => {
 
     const navStyle = {
-        position: "fixed",
+        position: "initial",
         top: 0,
         width: "100%",
         height: "90px",
