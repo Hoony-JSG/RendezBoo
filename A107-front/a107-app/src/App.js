@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Home, Rendezboo, Signal, Login, Rocket, Docking1 } from './pages'
+import { Home, Rendezboo, Signal, Login, Rocket, Docking1, Join } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
 import Userinfo from './pages/Userinfo'
@@ -17,6 +17,7 @@ function App() {
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:userid" element={<Signal />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/Userinfo/:userid" element={<Userinfo />}></Route>;
