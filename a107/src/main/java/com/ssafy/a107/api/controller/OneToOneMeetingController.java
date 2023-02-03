@@ -22,12 +22,13 @@ import java.util.List;
 @RequestMapping("/api/onetoone")
 public class OneToOneMeetingController {
 
-    /*
-     *   1. Session Initialization, 2. Connection Creation
-     * @return   MeetingRoomRes dto
-     * */
     private final OneToOneMeetingService oneToOneMeetingService;
 
+    /**
+     * 1. Session Initialization, 2. Connection Creation
+     *
+     * @return MeetingRoomRes dto
+     */
     @ApiOperation("유저 시퀀스 기반으로 일대일 매칭을 신청하면 토큰을 전달")
     @PostMapping("")
     public ResponseEntity<?> joinMatch(@RequestBody OneToOneMeetingJoinReq oneToOneMeetingJoinReq) throws OpenViduJavaClientException, OpenViduHttpException, NotFoundException {
@@ -45,8 +46,9 @@ public class OneToOneMeetingController {
 
 
     @ApiOperation("일대일 매칭의 종료")
-    @PutMapping("")
-    public ResponseEntity<?> closeMatch() {
+    @DeleteMapping("/{meetingRoomSeq}")
+    public ResponseEntity<?> closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException {
+        oneToOneMeetingService.closeMatch(meetingRoomSeq);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

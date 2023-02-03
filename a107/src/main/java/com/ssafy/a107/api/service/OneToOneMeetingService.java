@@ -14,4 +14,6 @@ public interface OneToOneMeetingService {
             throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
 
     List<OneToOneMeetingRoomRes> getOneToOneMeetingRooms(Byte status);
+
+    void closeMatch(Long meetingRoomSeq) throws NotFoundException;
 }

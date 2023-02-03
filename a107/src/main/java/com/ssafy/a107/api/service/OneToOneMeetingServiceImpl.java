@@ -106,4 +106,13 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .stream().map(OneToOneMeetingRoomRes::new).collect(Collectors.toList());
         return list;
     }
+
+    @Override
+    @Transactional
+    public void closeMatch(Long meetingRoomSeq) throws NotFoundException {
+        OnetoOneMeetingRoom room = oneToOneMeetingRoomRepository.findById(meetingRoomSeq)
+                .orElseThrow(() -> new NotFoundException("Wrong Room Seq"));
+        room.changeStatus((byte) 2);
+        oneToOneMeetingRoomRepository.save(room);
+    }
 }
