@@ -45,4 +45,18 @@ public class MultiMeetingRoomController {
         multiMeetingRoomService.deleteMultiMeetingRoom(meetingRoomSeq);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
+    @PostMapping("/{multiMeetingRoomSeq}/{userSeq}")
+    @ApiOperation(value = "미팅방에 유저 더하기", notes = "미팅방에 유저 더하기")
+    public ResponseEntity<?> addUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException{
+        multiMeetingRoomService.addUserToMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    @DeleteMapping("/{multiMeetingRoomSeq}/{userSeq}")
+    @ApiOperation(value = "미팅방에서 유저 삭제", notes = "미팅방에서 유저 삭제")
+    public ResponseEntity<?> removeUserFromMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException{
+        multiMeetingRoomService.removeUserFromMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
 }

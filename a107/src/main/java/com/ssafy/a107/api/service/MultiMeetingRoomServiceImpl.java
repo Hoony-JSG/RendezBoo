@@ -97,5 +97,25 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         //meetingRoomSeq가 일치하는 multiMeetingRoomUser 데이터들을 먼저 삭제해야 한다
         multiMeetingRoomRepository.deleteById(meetingRoomSeq);
     }
+    @Transactional
+    @Override
+    public Long addUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+        return multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
+                .multiMeetingRoom(multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
+                        .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!")))
+                .user(userRepository.findById(userSeq)
+                        .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
+                .build()).getSeq();
+    }
+
+    @Transactional
+    @Override
+    public void removeUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+            throw new NotFoundException("Invalid multi meeting room sequence!");
+        else if(!userRepository.existsById(userSeq))
+            throw new NotFoundException("Invalid user sequence!");
+        multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
+    }
 
 }

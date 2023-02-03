@@ -18,4 +18,6 @@ public interface MultiMeetingRoomService {
     List<MultiMeetingRoomRes> findAllMultiMeetingRoom();
 
     void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException;
+    Long addUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
+    void removeUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 }
