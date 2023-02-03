@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import UserVideoComponent from '../openvidu/UserVideoComponent';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://i8a107.p.ssafy.io:8080/';
 
 class Docking1 extends Component {
     constructor(props) {
@@ -117,7 +117,7 @@ class Docking1 extends Component {
                 // --- 4) Connect to the session with a valid user token ---
 
                 // Get a token from the OpenVidu deployment
-                this.getToken().then((token) => {
+                this.getDocking1Token(1).then((token) => {
                     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                     mySession.connect(token, { clientData: this.state.myUserName })
@@ -323,7 +323,7 @@ class Docking1 extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionId = await this.createSession(this.state.mySessionId);
+        const sessionId = await this.createSession(this.state.mySessionId);  
         return await this.createToken(sessionId);
     }
 
@@ -339,6 +339,13 @@ class Docking1 extends Component {
             headers: { 'Content-Type': 'application/json', },
         });
         return response.data; // The token
+    }
+
+    async getDocking1Token(userSeq) {
+        const response = await axios.post(APPLICATION_SERVER_URL + 'api/onetoone/' + userSeq, {}, {
+            
+        })
+        return response.data.token;
     }
 }
 
