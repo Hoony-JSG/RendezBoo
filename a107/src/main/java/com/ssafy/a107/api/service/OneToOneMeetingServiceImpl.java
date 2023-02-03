@@ -97,7 +97,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
-        return new MeetingRoomRes(token);
+        return new MeetingRoomRes(onetoOneMeetingRoom.getSeq(), token);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     private String OPENVIDU_SECRET;
 
     private OpenVidu openVidu;
+
     @PostConstruct
     public void init() {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
@@ -52,13 +53,13 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     @Override
     public MeetingRoomRes initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         User user = userRepository.findById(multiMeetingRoomCreationReq.getUserSeq())
-                .orElseThrow(()->new NotFoundException("Invalid User sequence!"));
+                .orElseThrow(() -> new NotFoundException("Invalid User sequence!"));
         //세션 만들기
         Session session = openVidu.createSession();
         //멀티미팅방 데이터 생성
         MultiMeetingRoom multiMeetingRoom = MultiMeetingRoom.builder()
                 .title(multiMeetingRoomCreationReq.getTitle())
-                .status((byte)0)
+                .status((byte) 0)
                 .sessionId(session.getSessionId())
                 .build();
         //만들어진 멀티미팅망을 multi_meeting_room테이블에 저장
@@ -75,19 +76,20 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         String token = connection.getToken();
         //initialize session은 원래 세션 아이디만을 리턴하지만
         //미팅방을 만든 유저 connect까지 해줬으므로 토큰 정보까지 리턴
-        return new MeetingRoomRes(token);
+        return new MeetingRoomRes(roomSeq, token);
     }
+
     @Transactional
     @Override
-    public MeetingRoomRes createConnection(MultiMeetingRoomJoinReq multiMeetingRoomJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException{
+    public MeetingRoomRes createConnection(MultiMeetingRoomJoinReq multiMeetingRoomJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         String sessionId = multiMeetingRoomRepository.findById(multiMeetingRoomJoinReq.getMultiMeetingRoomSeq())
-                .orElseThrow(()->new NotFoundException("Invalid multi meeting sequence!")).getSessionId();
+                .orElseThrow(() -> new NotFoundException("Invalid multi meeting sequence!")).getSessionId();
         Session session = openVidu.getActiveSession(sessionId);
 
         ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
-        return new MeetingRoomRes(token);
+        return new MeetingRoomRes(multiMeetingRoomJoinReq.getMultiMeetingRoomSeq(), token);
     }
 
     /*
@@ -97,15 +99,16 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     public MultiMeetingRoomRes findMultiMeetingRoom(Long multiMeetingRoomSeq) throws NotFoundException {
         return MultiMeetingRoomRes.builder()
                 .roomEntity(multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
-                .orElseThrow(()->new NotFoundException("Invalid multiMeetingRoom sequence")))
+                        .orElseThrow(() -> new NotFoundException("Invalid multiMeetingRoom sequence")))
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
                 .build();
     }
+
     @Override
-    public List<MultiMeetingRoomRes> findAllMultiMeetingRoom(){
+    public List<MultiMeetingRoomRes> findAllMultiMeetingRoom() {
         return multiMeetingRoomRepository.findAll().stream()
-                .map((multiMeetingRoom)->MultiMeetingRoomRes.builder()
+                .map((multiMeetingRoom) -> MultiMeetingRoomRes.builder()
                         .roomEntity(multiMeetingRoom)
                         .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoom.getSeq(), true))
                         .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoom.getSeq(), false))
@@ -117,7 +120,8 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     @Transactional
     @Override
     public void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException {
-        if(!multiMeetingRoomRepository.existsById(meetingRoomSeq)) throw new NotFoundException("Invalid multi meeting room sequence!");
+        if (!multiMeetingRoomRepository.existsById(meetingRoomSeq))
+            throw new NotFoundException("Invalid multi meeting room sequence!");
         multiMeetingRoomUserRepository.deleteAllByMultiMeetingRoomSeq(meetingRoomSeq);
         multiMeetingRoomRepository.deleteById(meetingRoomSeq);
     }
@@ -137,9 +141,9 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     @Transactional
     @Override
     public void deleteUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
-        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+        if (!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
             throw new NotFoundException("Invalid multi meeting room sequence!");
-        else if(!userRepository.existsById(userSeq))
+        else if (!userRepository.existsById(userSeq))
             throw new NotFoundException("Invalid user sequence!");
         multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
     }

@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MeetingRoomRes {
+
+    Long meetingRoomSeq;
     String token;
 }
