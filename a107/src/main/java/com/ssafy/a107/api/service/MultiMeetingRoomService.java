@@ -3,6 +3,7 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.MultiMeetingRoomCreationReq;
 import com.ssafy.a107.api.request.MultiMeetingRoomJoinReq;
+import com.ssafy.a107.api.request.MultiWebSocketReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -25,4 +26,8 @@ public interface MultiMeetingRoomService {
     void deleteUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 
     void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
+
+    void sendToWebSocket (MultiWebSocketReq req) throws NotFoundException;
+
+    void sendToWebSocketAtExit(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 }

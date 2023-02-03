@@ -2,6 +2,7 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.MultiMeetingRoomCreationReq;
 import com.ssafy.a107.api.request.MultiMeetingRoomJoinReq;
+import com.ssafy.a107.api.request.MultiWebSocketReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.api.response.MultiWebSocketRes;
@@ -157,20 +158,44 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         else if(!userRepository.existsById(userSeq))
             throw new NotFoundException("Invalid user sequence!");
 
-        MultiWebSocketRes.MultiJoinRes multiJoinRes = MultiWebSocketRes.MultiJoinRes.builder()
+        MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(userSeq)
                 .multiMeetingRoomSeq(multiMeetingRoomSeq)
                 .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
+                .message("유저 " + userSeq + " 가 입장했습니다.")
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
                 .createdAt(LocalDateTime.now())
                 .build();
 
 //        미팅 룸 번호 구독 주소에 메세지 보냄
-        simpMessageSendingOperations.convertAndSend("/sub/" + multiJoinRes.getMultiMeetingRoomSeq(), multiJoinRes);
+        simpMessageSendingOperations.convertAndSend("/sub/" + multiMeetingRoomSeq, res);
     }
 
+//    multimeetingroom 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
+    @Override
+    public void sendToWebSocket (MultiWebSocketReq req) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(req.getMultiMeetingRoomSeq()))
+            throw new NotFoundException("Invalid multi meeting room sequence!");
+        else if(!userRepository.existsById(req.getSenderSeq()))
+            throw new NotFoundException("Invalid user sequence!");
 
+        MultiWebSocketRes res = MultiWebSocketRes.builder()
+                .senderSeq(req.getSenderSeq())
+                .multiMeetingRoomSeq(req.getMultiMeetingRoomSeq())
+                .flag(MultiWebSocketRes.MultiWebSocketFlag.CHAT)
+                .message(req.getMessage())
+                .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(req.getMultiMeetingRoomSeq(), true))
+                .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(req.getMultiMeetingRoomSeq(), false))
+                .createdAt(LocalDateTime.now())
+                .build();
 
+//        미팅 룸 번호 구독 주소에 메세지 보냄
+        simpMessageSendingOperations.convertAndSend("/sub/" + req.getMultiMeetingRoomSeq(), res);
+    }
 
+    @Override
+    public void sendToWebSocketAtExit(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+
+    }
 }
