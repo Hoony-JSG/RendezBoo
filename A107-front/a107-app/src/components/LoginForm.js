@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://i8a107.p.ssafy.io:8080/';
 
 const LoginForm = () => {
   console.log('로그인 폼')
@@ -44,18 +42,12 @@ const LoginForm = () => {
     borderradius: '5px',
   }
 
-  // const userValid = async function(loginForm) {
-  //   await axios.post('api/user/login', {loginForm}, {
-  //     headers: { 'Content-Type': 'application/json', },
-  //   })
-// }
-
   return (
     <div>
       로그인폼
       <div>
         <input
-          placeholder="Enter ID..."
+          placeholder="Eneter ID..."
           id="id"
           onChange={(e) => {
             setId(e.target.value)
@@ -80,13 +72,19 @@ const LoginForm = () => {
           type="button"
           disabled={!button}
           onClick={(e) => {
-            // userValid({id: id, pw: pw})
-            }}
+            if (id === realId) {
+              if (pw === realPw) {
+                e.stopPropagation()
+                goToAfterLogin(id)
+              }
+            } else {
+              alert('Wrong ID or PW')
+            }
+          }}
         />
       </div>
     </div>
   )
-
 }
 
 export default LoginForm

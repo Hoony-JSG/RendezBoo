@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import UserVideoComponent from '../openvidu/UserVideoComponent';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://i8a107.p.ssafy.io:8080/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://52.78.60.53:8080/';
 
 class Docking1 extends Component {
     constructor(props) {
@@ -135,7 +135,7 @@ class Docking1 extends Component {
                                 resolution: '640x480', // The resolution of your video
                                 frameRate: 30, // The frame rate of your video
                                 insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
-                                mirror: false, // Whether to mirror your local video or not
+                                mirror: true, // Whether to mirror your local video or not
                             });
 
                             // --- 6) Publish your stream ---
