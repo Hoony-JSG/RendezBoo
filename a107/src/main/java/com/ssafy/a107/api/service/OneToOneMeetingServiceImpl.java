@@ -10,7 +10,6 @@ import com.ssafy.a107.db.repository.UserRepository;
 import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,6 +94,6 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
-        return new MeetingRoomRes(session.getSessionId(), token);
+        return new MeetingRoomRes(token);
     }
 }

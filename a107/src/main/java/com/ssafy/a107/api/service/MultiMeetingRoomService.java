@@ -1,7 +1,8 @@
 package com.ssafy.a107.api.service;
 
 
-import com.ssafy.a107.api.request.MultiMeetingRoomReq;
+import com.ssafy.a107.api.request.MultiMeetingRoomCreationReq;
+import com.ssafy.a107.api.request.MultiMeetingRoomJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -12,12 +13,14 @@ import java.util.List;
 
 public interface MultiMeetingRoomService {
 
-    MeetingRoomRes saveMultiMeetingRoom(MultiMeetingRoomReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
-    MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException;
-//    Long joinMultiMeetingRoom(Long meetingRoomSeq, Long userSeq) throws NotFoundException;
+    MeetingRoomRes initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
+    MeetingRoomRes createConnection(MultiMeetingRoomJoinReq multiMeetingRoomJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
+    void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException;
+
+
+    MultiMeetingRoomRes findMultiMeetingRoom(Long roomSeq) throws NotFoundException;
     List<MultiMeetingRoomRes> findAllMultiMeetingRoom();
 
-    void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException;
-    Long addUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
-    void removeUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
+    Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
+    void deleteUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 }
