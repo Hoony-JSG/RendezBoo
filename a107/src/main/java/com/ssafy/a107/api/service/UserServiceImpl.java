@@ -4,7 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.response.UserRes;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.TokenException;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.*;
@@ -76,8 +79,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean checkEmailDuplicate(String email) {
-        return userRepository.existsByEmail(email);
+    public void checkEmailDuplicate(String email) throws ConflictException {
+        if(userRepository.existsByEmail(email)) {
+            throw new ConflictException("이미 등록된 유저입니다.");
+        }
     }
 
     @Override
@@ -113,10 +118,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String extractAccessToken(String tokenRes) {
+    public String extractAccessToken(String tokenRes) throws TokenException {
         JsonParser parser = new JsonParser();
         JsonElement element = parser.parse(tokenRes);
-        return element.getAsJsonObject().get("access_token").getAsString();
+        String accessToken = element.getAsJsonObject().get("access_token").getAsString();
+        
+        if(accessToken != null && !accessToken.equals("")) return accessToken;
+        else throw new TokenException("토큰 에러 발생");
     }
 
     @Override
@@ -153,7 +161,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getKakaoAccessToken(String code) {
+    public String getNaverEmail(String accessToken) {
+        ResponseEntity<String> profile = requestProfile(generateProfileRequest(accessToken));
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(profile.getBody());
+        JsonElement userInfo = element.getAsJsonObject().get("response");
+        String email = userInfo.getAsJsonObject().get("email").toString().replaceAll("\"", "");
+
+        log.debug("userInfo: {}", userInfo);
+        log.debug("userEmail: {}", email);
+
+        return email;
+    }
+
+    @Override
+    public String getKakaoAccessToken(String code) throws TokenException {
         String accessToken = "";
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
 
@@ -193,6 +216,10 @@ public class UserServiceImpl implements UserService {
 
             br.close();
             bw.close();
+
+            if(accessToken == null || accessToken.equals("")) {
+                throw new TokenException("토큰 에러 발생");
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -202,7 +229,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getKakaoProfile(String token) throws Exception {
+    public String getKakaoProfile(String token) throws NotFoundException {
         String reqURL = "https://kapi.kakao.com/v2/user/me";
         StringBuilder res = new StringBuilder();
         String line = "";
@@ -229,7 +256,23 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
 
+        if(res.length() == 0) throw new NotFoundException("카카오 이메일 불러오기 실패");
+
         return res.toString();
+    }
+
+    @Override
+    public String getKakaoEmail(String accessToken) throws NotFoundException {
+        String profile = getKakaoProfile(accessToken);
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(profile);
+        JsonElement kakaoAccount = element.getAsJsonObject().get("kakao_account");
+        String email = kakaoAccount.getAsJsonObject().get("email").toString().replaceAll("\"", "");
+
+        log.debug("userEmail: {}", email);
+
+        return email;
     }
 
     @Override
