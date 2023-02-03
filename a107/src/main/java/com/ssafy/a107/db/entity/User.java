@@ -1,5 +1,6 @@
 package com.ssafy.a107.db.entity;
 
+import com.ssafy.a107.api.request.JoinReq;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -8,7 +9,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -62,18 +68,28 @@ public class User extends BaseEntity{
     @Column
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch =FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "badge_seq")
     private Badge badge;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
 
-    @Column
-    @JoinColumn(name = "refresh_token")
-    private String refreshToken;
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Authority> authorities = new HashSet<>();
 
     public void deleteUser(){
         isValid = false;
+    }
+
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+    }
+
+    public List<String> getRoles() {
+        return authorities.stream()
+                .map(Authority::getRole)
+                .collect(Collectors.toList());
     }
 }
