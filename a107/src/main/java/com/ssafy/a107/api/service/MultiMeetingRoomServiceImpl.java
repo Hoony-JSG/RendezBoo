@@ -73,28 +73,29 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         return new MeetingRoomRes(session.getSessionId(), token);
     }
     @Override
-    public MultiMeetingRoomRes getMultiMeetingRoom(Long roomSeq) throws NotFoundException {
-        int maleNum=0, femaleNum=0;
-        //
-        return new MultiMeetingRoomRes(multiMeetingRoomRepository.findById(roomSeq)
-                .orElseThrow(()->new NotFoundException("Invalid multiMeetingRoom sequence")),
-                maleNum, femaleNum
-        );
+    public MultiMeetingRoomRes getMultiMeetingRoom(Long multiMeetingRoomSeq) throws NotFoundException {
+        return MultiMeetingRoomRes.builder()
+                .roomEntity(multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
+                .orElseThrow(()->new NotFoundException("Invalid multiMeetingRoom sequence")))
+                .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
+                .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
+                .build();
     }
     @Override
     public List<MultiMeetingRoomRes> findAllMultiMeetingRoom(){
         return multiMeetingRoomRepository.findAll().stream()
-                .map((multimeetingroom)->new MultiMeetingRoomRes(multimeetingroom,
-                        0,//multiMeetingRoomUserRepository.countMaleByMeetingRoomSeq(multimeetingroom.getSeq()),
-                        0//multiMeetingRoomUserRepository.countFemaleByMeetingRoomSeq(multimeetingroom.getSeq())
-                ))
+                .map((multiMeetingRoom)->MultiMeetingRoomRes.builder()
+                        .roomEntity(multiMeetingRoom)
+                        .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoom.getSeq(), true))
+                        .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoom.getSeq(), false))
+                        .build())
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException {
         if(!multiMeetingRoomRepository.existsById(meetingRoomSeq)) throw new NotFoundException("Invalid multi meeting room sequence!");
-        //meetingRoomSeq가 일치하는 multiMeetingRoomUser 데이터들을 먼저 삭제해야 한다
+        multiMeetingRoomUserRepository.deleteAllByMultiMeetingRoomSeq(meetingRoomSeq);
         multiMeetingRoomRepository.deleteById(meetingRoomSeq);
     }
     @Transactional

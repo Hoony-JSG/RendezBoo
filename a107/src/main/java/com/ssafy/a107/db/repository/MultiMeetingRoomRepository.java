@@ -11,4 +11,7 @@ public interface MultiMeetingRoomRepository extends JpaRepository<MultiMeetingRo
 
     @Query("select u from MultiMeetingRoomUser mu inner join User u on mu.user.seq = u.seq where mu.multiMeetingRoom.seq = ?1")
     List<User> findUsersByMultiMeetingRoomSeq(Long roomSeq);
+
+    @Query("select count(*) from MultiMeetingRoomUser mu where mu.multiMeetingRoom.seq=?1 and mu.user.gender=?2")
+    Long countByMultiMeetingRoomSeqAndGender(Long multiMeetingRoomSeq, Boolean gender);
 }
