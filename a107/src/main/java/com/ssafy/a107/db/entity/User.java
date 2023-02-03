@@ -69,7 +69,7 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
 
-    @Column(length = 100)
+    @Column
     @JoinColumn(name = "refresh_token")
     private String refreshToken;
 
