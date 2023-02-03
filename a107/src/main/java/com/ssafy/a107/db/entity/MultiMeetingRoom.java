@@ -34,11 +34,9 @@ public class MultiMeetingRoom extends BaseEntity {
     private LocalDateTime updatedAt;
 
     @Builder
-    public MultiMeetingRoom(String title, Byte status) {
+    public MultiMeetingRoom(String title, Byte status, String sessionId) {
         this.title = title;
         this.status = status;
-    }
-    public void createSession(String sessionId) {
         this.sessionId = sessionId;
     }
 
