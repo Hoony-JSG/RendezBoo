@@ -44,11 +44,11 @@ const LoginForm = () => {
     borderradius: '5px',
   }
 
-  const userValid = async function(loginForm) {
-    await axios.post('api/user/login', {loginForm}, {
-      headers: { 'Content-Type': 'application/json', },
-    })
-}
+  // const userValid = async function(loginForm) {
+  //   await axios.post('api/user/login', {loginForm}, {
+  //     headers: { 'Content-Type': 'application/json', },
+  //   })
+// }
 
   return (
     <div>
@@ -80,7 +80,7 @@ const LoginForm = () => {
           type="button"
           disabled={!button}
           onClick={(e) => {
-            userValid({id: id, pw: pw})
+            // userValid({id: id, pw: pw})
             }}
         />
       </div>
