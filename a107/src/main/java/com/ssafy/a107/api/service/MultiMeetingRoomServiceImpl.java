@@ -4,6 +4,7 @@ import com.ssafy.a107.api.request.MultiMeetingRoomCreationReq;
 import com.ssafy.a107.api.request.MultiMeetingRoomJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
+import com.ssafy.a107.api.response.MultiWebSocketRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.MultiMeetingRoom;
 import com.ssafy.a107.db.entity.MultiMeetingRoomUser;
@@ -15,10 +16,12 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,6 +46,8 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     private final MultiMeetingRoomUserRepository multiMeetingRoomUserRepository;
     private final UserRepository userRepository;
+
+    private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     /*
      *   1. Session Initialization, 2. Connection Creation
@@ -143,5 +148,27 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
             throw new NotFoundException("Invalid user sequence!");
         multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
     }
+
+    @Override
+    public void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+            throw new NotFoundException("Invalid multi meeting room sequence!");
+        else if(!userRepository.existsById(userSeq))
+            throw new NotFoundException("Invalid user sequence!");
+
+        MultiWebSocketRes.MultiJoinRes multiJoinRes = MultiWebSocketRes.MultiJoinRes.builder()
+                .senderSeq(userSeq)
+                .multiMeetingRoomSeq(multiMeetingRoomSeq)
+                .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
+                .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
+                .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        simpMessageSendingOperations.convertAndSend("/sub/" + multiJoinRes.getMultiMeetingRoomSeq(), multiJoinRes);
+    }
+
+
+
 
 }
