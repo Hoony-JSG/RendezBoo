@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-const JoinItem = () => {
-  console.log('조인아이템')
-  return <div> 조인 아이템 </div>
-=======
 import { useState } from 'react'
 import JoinItem_1st_SocialJoin from './JoinItem_1st_SocialJoin'
 import JoinItem_2nd_PhoneNumber from './JoinItem_2nd_PhoneNumber'
@@ -89,7 +84,6 @@ const JoinItem = () => {
       </button>
     </div>
   )
->>>>>>> Stashed changes
 }
 
 export default JoinItem
