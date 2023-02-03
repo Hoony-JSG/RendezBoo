@@ -4,7 +4,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import UserVideoComponent from '../openvidu/UserVideoComponent';
 
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'https://demos.openvidu.io/';
+const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://i8a107.p.ssafy.io:8080/';
 
 class Docking1 extends Component {
     constructor(props) {
@@ -13,7 +13,7 @@ class Docking1 extends Component {
         // These properties are in the state's component in order to re-render the HTML whenever their values change
         this.state = {
             mySessionId: 'SessionA',
-            myUserName: 'Participant' + Math.floor(Math.random() * 100),
+            myUserName: 'Participant' + Math.floor(Math.random() * 10),
             session: undefined,
             mainStreamManager: undefined,  // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
             publisher: undefined,
@@ -117,7 +117,7 @@ class Docking1 extends Component {
                 // --- 4) Connect to the session with a valid user token ---
 
                 // Get a token from the OpenVidu deployment
-                this.getToken().then((token) => {
+                this.getDocking1Token(1).then((token) => {
                     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                     mySession.connect(token, { clientData: this.state.myUserName })
@@ -179,7 +179,7 @@ class Docking1 extends Component {
             session: undefined,
             subscribers: [],
             mySessionId: 'SessionA',
-            myUserName: 'Participant' + Math.floor(Math.random() * 100),
+            myUserName: 'Participant' + Math.floor(Math.random() * 10),
             mainStreamManager: undefined,
             publisher: undefined
         });
@@ -228,11 +228,7 @@ class Docking1 extends Component {
             <div className="container">
                 {this.state.session === undefined ? (
                     <div id="join">
-                        <div id="img-div">
-                            <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-                        </div>
                         <div id="join-dialog" className="jumbotron vertical-center">
-                            <h1> Join a video session </h1>
                             <form className="form-group" onSubmit={this.joinSession}>
                                 <p>
                                     <label>Participant: </label>
@@ -310,7 +306,7 @@ class Docking1 extends Component {
         );
     }
 
-
+    
     /**
      * --------------------------------------------
      * GETTING A TOKEN FROM YOUR APPLICATION SERVER
@@ -327,7 +323,7 @@ class Docking1 extends Component {
      * more about the integration of OpenVidu in your application server.
      */
     async getToken() {
-        const sessionId = await this.createSession(this.state.mySessionId);
+        const sessionId = await this.createSession(this.state.mySessionId);  
         return await this.createToken(sessionId);
     }
 
@@ -343,6 +339,13 @@ class Docking1 extends Component {
             headers: { 'Content-Type': 'application/json', },
         });
         return response.data; // The token
+    }
+
+    async getDocking1Token(userSeq) {
+        const response = await axios.post(APPLICATION_SERVER_URL + 'api/onetoone/' + userSeq, {}, {
+            
+        })
+        return response.data.token;
     }
 }
 
