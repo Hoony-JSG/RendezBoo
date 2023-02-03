@@ -149,6 +149,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
     }
 
+//    multimeetingroom 세션 참가 시 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
     @Override
     public void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
         if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
@@ -165,6 +166,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .createdAt(LocalDateTime.now())
                 .build();
 
+//        미팅 룸 번호 구독 주소에 메세지 보냄
         simpMessageSendingOperations.convertAndSend("/sub/" + multiJoinRes.getMultiMeetingRoomSeq(), multiJoinRes);
     }
 
