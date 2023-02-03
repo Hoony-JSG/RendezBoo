@@ -10,4 +10,6 @@ public interface OneToOneMeetingRoomRepository extends JpaRepository<OnetoOneMee
     List<OnetoOneMeetingRoom> getOnetoOneMeetingRoomsByManSeqIsNullAndStatus(Byte status);
 
     List<OnetoOneMeetingRoom> getOnetoOneMeetingRoomsByWomanSeqIsNullAndStatus(Byte status);
+
+    List<OnetoOneMeetingRoom> getOnetoOneMeetingRoomsByStatus(Byte status);
 }
