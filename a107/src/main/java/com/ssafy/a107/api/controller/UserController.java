@@ -4,6 +4,7 @@ import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
 import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.UserService;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,16 +34,12 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) {
-        Boolean dupCheck = userService.checkEmailDuplicate(joinReq.getEmail());
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException {
+        userService.checkEmailDuplicate(joinReq.getEmail());
 
-        if(!dupCheck) {
-            userService.createUser(joinReq);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        userService.createUser(joinReq);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // 로그인
@@ -63,8 +60,9 @@ public class UserController {
     // 아이디 중복체크
     @GetMapping("/check/{email}")
     @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복 체크")
-    public ResponseEntity<?> checkEmail(@PathVariable String email) {
-        if(userService.checkEmailDuplicate(email)) return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    public ResponseEntity<?> checkEmail(@PathVariable String email) throws ConflictException {
+        userService.checkEmailDuplicate(email);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
