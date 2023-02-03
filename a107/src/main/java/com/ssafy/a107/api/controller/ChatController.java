@@ -8,8 +8,10 @@ import com.ssafy.a107.db.entity.Chat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
+@Slf4j
 public class ChatController {
 
     private final ChatServiceImpl chatService;
@@ -28,9 +31,11 @@ public class ChatController {
 
 
 
-    @PostMapping("/send")
+    @MessageMapping("/send")
     @ApiOperation("채팅 생성(보내기) - stomp")
     public ResponseEntity<?> sendChat(@RequestBody ChatReq req) throws NotFoundException{
+        log.debug("got message");
+
 
         String insertChat = chatService.insertChat(req);
         Chat chat = chatService.findBySeq(insertChat);
