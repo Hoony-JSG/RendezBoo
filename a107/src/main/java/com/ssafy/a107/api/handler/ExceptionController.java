@@ -1,7 +1,6 @@
 package com.ssafy.a107.api.handler;
 
-import com.ssafy.a107.common.exception.ConflictException;
-import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.*;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.web.client.RestClientException;
 
 @ControllerAdvice
 @Slf4j
@@ -18,8 +18,8 @@ public class ExceptionController {
 //    })
 
     //400 BAD REQUEST
-    @ExceptionHandler({BadRequest.class})
-    public ResponseEntity<?> handleBadRequestException(final RuntimeException ex){
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity<?> handleBadRequestException(final BadRequestException ex){
         log.warn("error", ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
@@ -44,6 +44,22 @@ public class ExceptionController {
         log.info(ex.getClass().getName());
         log.error("error", ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    // Sms
+    @ExceptionHandler({SmsException.class})
+    public ResponseEntity<?> handleSmsException(final SmsException ex) {
+        log.info(ex.getClass().getName());
+        log.error("error", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    // Token
+    @ExceptionHandler({SmsException.class})
+    public ResponseEntity<?> handleTokenException(final TokenException ex) {
+        log.info(ex.getClass().getName());
+        log.error("error", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 
     // 500 INTERNAL_SERVER_ERROR
