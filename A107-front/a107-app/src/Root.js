@@ -1,13 +1,13 @@
-import React from "react";
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react'
+import App from './App'
+import { BrowserRouter } from 'react-router-dom'
 
 const Root = () => {
-    return (
+  return (
     <BrowserRouter>
-        <App/>
+        <App />
     </BrowserRouter>
   )
 }
 
-export default Root;
+export default Root

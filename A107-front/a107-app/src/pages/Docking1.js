@@ -117,7 +117,7 @@ class Docking1 extends Component {
                 // --- 4) Connect to the session with a valid user token ---
 
                 // Get a token from the OpenVidu deployment
-                this.getDocking1Token(1).then((token) => {
+                this.getDocking1Token(2).then((token) => {
                     // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
                     // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
                     mySession.connect(token, { clientData: this.state.myUserName })
@@ -342,7 +342,7 @@ class Docking1 extends Component {
     }
 
     async getDocking1Token(userSeq) {
-        const response = await axios.post(APPLICATION_SERVER_URL + 'api/onetoone/' + userSeq, {}, {
+        const response = await axios.post(APPLICATION_SERVER_URL + 'api/onetoone', {userSeq: userSeq}, {
         })
         return response.data.token;
     }
