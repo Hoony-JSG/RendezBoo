@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MultiMeetingRoomJoinReq {
-    String userSeq;
+    Long userSeq;
     Long multiMeetingRoomSeq;
 }
