@@ -18,4 +18,5 @@ public class JoinReq {
     private String name;
     private String profileImagePath;
     private String mbti;
+    private Boolean isAdmin;
 }
