@@ -1,6 +1,8 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
+import com.ssafy.a107.api.response.OneToOneMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.SessionKeyProvider;
 import com.ssafy.a107.db.entity.OnetoOneMeetingRoom;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,7 +47,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
      * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와
      * 토큰을 컨트롤러로 전달
      *
-     * @param userSeq 유저 시퀀스 필요
+     * @param oneToOneMeetingJoinReq 유저 시퀀스 필요
      * @return MeetingRoomRes에 세션아이디와 토큰 담김
      * @throws NotFoundException           유저가 없을 때
      * @throws OpenViduJavaClientException 오픈비두 에러
@@ -52,8 +55,8 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
      */
     @Override
     @Transactional
-    public MeetingRoomRes joinMatch(Long userSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        User user = userRepository.findById(userSeq)
+    public MeetingRoomRes joinMatch(OneToOneMeetingJoinReq oneToOneMeetingJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+        User user = userRepository.findById(oneToOneMeetingJoinReq.getUserSeq())
                 .orElseThrow(() -> new NotFoundException("Wrong User Seq!"));
         OnetoOneMeetingRoom onetoOneMeetingRoom = null;
         List<OnetoOneMeetingRoom> list = null;
@@ -80,9 +83,9 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         }
         // 세션에 성별 기준으로 유저 추가
         if (user.getGender()) {
-            onetoOneMeetingRoom.addMan(userSeq);
+            onetoOneMeetingRoom.addMan(oneToOneMeetingJoinReq.getUserSeq());
         } else {
-            onetoOneMeetingRoom.addWoman(userSeq);
+            onetoOneMeetingRoom.addWoman(oneToOneMeetingJoinReq.getUserSeq());
         }
         log.debug(onetoOneMeetingRoom.toString());
         oneToOneMeetingRoomRepository.save(onetoOneMeetingRoom);
@@ -95,5 +98,21 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
         return new MeetingRoomRes(token);
+    }
+
+    @Override
+    public List<OneToOneMeetingRoomRes> getOneToOneMeetingRooms(Byte status) {
+        List<OneToOneMeetingRoomRes> list = oneToOneMeetingRoomRepository.getOnetoOneMeetingRoomsByStatus(status)
+                .stream().map(OneToOneMeetingRoomRes::new).collect(Collectors.toList());
+        return list;
+    }
+
+    @Override
+    @Transactional
+    public void closeMatch(Long meetingRoomSeq) throws NotFoundException {
+        OnetoOneMeetingRoom room = oneToOneMeetingRoomRepository.findById(meetingRoomSeq)
+                .orElseThrow(() -> new NotFoundException("Wrong Room Seq"));
+        room.changeStatus((byte) 2);
+        oneToOneMeetingRoomRepository.save(room);
     }
 }
