@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import Root from './Root';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import Root from './Root'
+import reportWebVitals from './reportWebVitals'
 
 // ReactDOM.render(
 //   <React.StrictMode>
@@ -11,6 +11,6 @@ import reportWebVitals from './reportWebVitals';
 //   document.getElementById('root')
 // );
 
-ReactDOM.render(<Root />, document.getElementById('root'));
+ReactDOM.render(<Root />, document.getElementById('root'))
 
-reportWebVitals();
+reportWebVitals()
