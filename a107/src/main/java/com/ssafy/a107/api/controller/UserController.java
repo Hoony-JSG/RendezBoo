@@ -2,10 +2,12 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.UserService;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -34,10 +36,13 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException {
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, NotFoundException {
         userService.checkEmailDuplicate(joinReq.getEmail());
 
         userService.createUser(joinReq);
+
+        // for test
+        UserRes user = userService.getUserByEmail(joinReq.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -45,16 +50,10 @@ public class UserController {
     // 로그인
     @PostMapping("/login")
     @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
-    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException {
-        //UserRes findUser = userService.getUserByEmail(loginReq.getEmail());
+    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
+        TokenRes res = userService.login(loginReq);
 
-        // 비밀번호가 일치하면
-        //if(findUser != null && passwordEncoder.matches(loginReq.getPassword(), findUser.getPassword())) {
-//            return ResponseEntity.status(HttpStatus.OK).build();
-        //}
-//        else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
+        return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     // 아이디 중복체크
