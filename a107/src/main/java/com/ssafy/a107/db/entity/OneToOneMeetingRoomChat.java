@@ -1,5 +1,6 @@
 package com.ssafy.a107.db.entity;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,25 +12,25 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "multichat")
+@Document(collection = "onechat")
 @Getter
 @NoArgsConstructor
-public class MultiMeetingRoomChat {
+public class OneToOneMeetingRoomChat {
 
     @Id
     @Field(value = "_id", targetType = FieldType.OBJECT_ID)
     private String seq;
     private String message;
-    private Long multiMeetingRoomSeq;
+    private Long oneToOneMeetingRoomSeq;
     private Long senderSeq;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public MultiMeetingRoomChat(String message, Long multiMeetingRoomSeq, Long senderSeq) {
+    public OneToOneMeetingRoomChat(String message, Long oneToOneMeetingRoomSeq, Long senderSeq) {
         this.message = message;
-        this.multiMeetingRoomSeq = multiMeetingRoomSeq;
+        this.oneToOneMeetingRoomSeq = oneToOneMeetingRoomSeq;
         this.senderSeq = senderSeq;
     }
 
