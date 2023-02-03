@@ -68,7 +68,7 @@ const Rendezboo = () => {
           <div style={doorIconLayoutStyle}>
             <BsFillDoorOpenFill style={doorIconStyle} />
           </div>
-          Doking1
+          Docking1
         </button>
       </div>
       <div style={rocketItemSizeStyle}>
@@ -86,7 +86,7 @@ const Rendezboo = () => {
             <BsFillDoorOpenFill style={doorIconStyle} />
             <BsFillDoorClosedFill style={doorIconStyle} />
           </div>
-          Doking3
+          Docking3
         </button>
       </div>
     </div>

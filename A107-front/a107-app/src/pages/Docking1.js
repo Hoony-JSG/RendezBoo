@@ -343,7 +343,6 @@ class Docking1 extends Component {
 
     async getDocking1Token(userSeq) {
         const response = await axios.post(APPLICATION_SERVER_URL + 'api/onetoone/' + userSeq, {}, {
-            
         })
         return response.data.token;
     }
