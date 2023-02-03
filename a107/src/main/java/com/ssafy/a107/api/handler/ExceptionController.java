@@ -55,7 +55,7 @@ public class ExceptionController {
     }
 
     // Token
-    @ExceptionHandler({SmsException.class})
+    @ExceptionHandler({TokenException.class})
     public ResponseEntity<?> handleTokenException(final TokenException ex) {
         log.info(ex.getClass().getName());
         log.error("error", ex);
