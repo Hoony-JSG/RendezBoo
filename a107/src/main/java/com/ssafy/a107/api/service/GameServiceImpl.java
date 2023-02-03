@@ -1,10 +1,8 @@
 package com.ssafy.a107.api.service;
 
-import com.ssafy.a107.api.request.game.BR31CreateReq;
-import com.ssafy.a107.api.request.game.BR31Req;
-import com.ssafy.a107.api.request.game.GameOfDeathCreateReq;
-import com.ssafy.a107.api.request.game.GameOfDeathReq;
+import com.ssafy.a107.api.request.game.*;
 import com.ssafy.a107.api.response.game.BR31Res;
+import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
@@ -136,5 +134,15 @@ public class GameServiceImpl implements GameService {
         }
 
         return new GameOfDeathRes(gameOfDeath, List.of(), 0L);
+    }
+
+    @Override
+    public FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public FastClickRes runFastClickSession(FastClickReq fastClickReq) throws NotFoundException {
+        return null;
     }
 }
