@@ -2,6 +2,7 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
+import com.ssafy.a107.api.response.OneToOneMeetingChatRes;
 import com.ssafy.a107.api.response.OneToOneMeetingRoomRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.SessionKeyProvider;
@@ -13,10 +14,14 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +43,8 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
     public void init() {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
+
+    private SimpMessageSendingOperations simpMessageSendingOperations;
 
     private final OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
 
@@ -109,10 +116,57 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
 
     @Override
     @Transactional
-    public void closeMatch(Long meetingRoomSeq) throws NotFoundException {
+    public void closeMatch(Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         OnetoOneMeetingRoom room = oneToOneMeetingRoomRepository.findById(meetingRoomSeq)
                 .orElseThrow(() -> new NotFoundException("Wrong Room Seq"));
         room.changeStatus((byte) 2);
         oneToOneMeetingRoomRepository.save(room);
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
+                .oneToOneMeetingRoomSeq(meetingRoomSeq)
+                .senderSeq(0L)
+                .message("매칭이 종료되었습니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+        Session session = openVidu.getActiveSession(room.getSessionId());
+        session.close();
+    }
+
+    @Override
+    public void startOneToOneMeeting(Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE1)
+                .oneToOneMeetingRoomSeq(meetingRoomSeq)
+                .senderSeq(0L)
+                .message("미팅이 시작되었습니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+
+    }
+
+    @Override
+    public void deleteGlasses(Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE2)
+                .oneToOneMeetingRoomSeq(meetingRoomSeq)
+                .senderSeq(0L)
+                .message("1분이 지났습니다. 눈을 공개합니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+    }
+
+    @Override
+    public void deleteMasks(Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE3)
+                .oneToOneMeetingRoomSeq(meetingRoomSeq)
+                .senderSeq(0L)
+                .message("2분이 지났습니다. 얼굴을 공개합니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
     }
 }

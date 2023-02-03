@@ -12,7 +12,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -47,8 +49,28 @@ public class OneToOneMeetingController {
 
     @ApiOperation("일대일 매칭의 종료")
     @DeleteMapping("/{meetingRoomSeq}")
-    public ResponseEntity<?> closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException {
+    public ResponseEntity<?> closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         oneToOneMeetingService.closeMatch(meetingRoomSeq);
+
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+    @ApiOperation("일대일 매칭 시작 -- ws 사용")
+    @MessageMapping("/one/{meetingRoomSeq}/start")
+    public void startOneToOneMatch(@PathVariable Long meetingRoomSeq) {
+        oneToOneMeetingService.startOneToOneMeeting(meetingRoomSeq);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 2 시작 - 선글라스 벗김 -- ws 사용")
+    @MessageMapping("/one/{meetingRoomSeq}/phase2")
+    public void deleteGlasses(@PathVariable Long meetingRoomSeq) {
+        oneToOneMeetingService.deleteGlasses(meetingRoomSeq);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/{meetingRoomSeq}/phase3")
+    public void deleteMasks(@PathVariable Long meetingRoomSeq) {
+        oneToOneMeetingService.deleteMasks(meetingRoomSeq);
+    }
+
 }
