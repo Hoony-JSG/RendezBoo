@@ -2,18 +2,20 @@ package com.ssafy.a107.api.response;
 
 
 import com.ssafy.a107.db.entity.MultiMeetingRoom;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class MultiMeetingRoomRes {
     private final String title;
-    private final int maleNum;
-    private final int femaleNum;
+    private final Long multiMeetingRoomSeq;
+    private final Long maleNum;
+    private final Long femaleNum;
 
-    public MultiMeetingRoomRes(MultiMeetingRoom roomEntity, int maleNum, int femaleNum){
+    @Builder
+    public MultiMeetingRoomRes(MultiMeetingRoom roomEntity, Long maleNum, Long femaleNum){
         this.title = roomEntity.getTitle();
+        this.multiMeetingRoomSeq = roomEntity.getSeq();
         this.maleNum = maleNum;
         this.femaleNum = femaleNum;
     }

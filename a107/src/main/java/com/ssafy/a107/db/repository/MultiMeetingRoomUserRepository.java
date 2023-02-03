@@ -9,4 +9,8 @@ public interface MultiMeetingRoomUserRepository extends JpaRepository<MultiMeeti
     @Modifying
     @Transactional
     void deleteByMultiMeetingRoomSeqAndUserSeq(Long multiMeetingRoomSeq, Long userSeq);
+
+    @Modifying
+    @Transactional
+    void deleteAllByMultiMeetingRoomSeq(Long multiMeetingRoomSeq);
 }

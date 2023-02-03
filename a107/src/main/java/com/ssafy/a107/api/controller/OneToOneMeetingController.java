@@ -8,7 +8,6 @@ import io.openvidu.java.client.OpenViduJavaClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/onetoone")
 public class OneToOneMeetingController {
 
+    /*
+     *   1. Session Initialization, 2. Connection Creation
+     * @return   MeetingRoomRes dto
+     * */
     private final OneToOneMeetingService oneToOneMeetingService;
 
     @ApiOperation("유저 시퀀스 기반으로 일대일 매칭을 신청하면 세션아이디와 토큰을 전달")

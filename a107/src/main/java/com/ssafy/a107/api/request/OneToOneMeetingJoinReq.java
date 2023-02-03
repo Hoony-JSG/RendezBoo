@@ -1,4 +1,4 @@
-package com.ssafy.a107.api.response;
+package com.ssafy.a107.api.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeetingRoomRes {
-    String token;
+@Builder
+public class OneToOneMeetingJoinReq {
+    Long multiMeetingRoomSeq;
 }
