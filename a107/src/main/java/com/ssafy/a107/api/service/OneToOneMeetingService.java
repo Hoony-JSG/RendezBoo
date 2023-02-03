@@ -15,5 +15,11 @@ public interface OneToOneMeetingService {
 
     List<OneToOneMeetingRoomRes> getOneToOneMeetingRooms(Byte status);
 
-    void closeMatch(Long meetingRoomSeq) throws NotFoundException;
+    void closeMatch(Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
+
+    void startOneToOneMeeting(Long meetingRoomSeq);
+
+    void deleteGlasses(Long meetingRoomSeq);
+
+    void deleteMasks(Long meetingRoomSeq);
 }
