@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.response.game;
 
+import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.db.entity.game.BR31;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class BR31Res {
+
+    private MultiChatFlag flag;
+
     private Long sessionId;
 
     private Long multiMeetingRoomSeq;
