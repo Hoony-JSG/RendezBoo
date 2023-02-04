@@ -50,7 +50,7 @@ spring:
 
 jwt:
   header: Authorization
-  secret: rendez-boo-secret-key-needs-very-long-secret-key-for-safety
+  secret: rendezboosecretkeyneedsverylongsecretkeyforsafety
   access-token-validity-milliseconds: 1800000
   refresh-token-validity-milliseconds: 259200000
 
