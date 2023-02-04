@@ -12,7 +12,7 @@ services:
     networks:
       - a107_network
       - front
-      - openvidu
+      - openvidu_default
 
   redis:
     container_name: redis
@@ -34,7 +34,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ssafy
       MONGO_INITDB_DATABASE: a107_mongodb
     volumes:
-      - ./mongodb:/data/db
+      - /data/mongodb:/data/db
     networks:
       - a107_network
 
@@ -62,6 +62,6 @@ networks:
   front:
     external:
       name: a107-app_default
-  openvidu:
+  openvidu_default:
     external:
       name: openvidu_default
