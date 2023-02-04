@@ -4,6 +4,7 @@ import com.ssafy.a107.api.request.MultiMeetingRoomCreationReq;
 import com.ssafy.a107.api.request.MultiMeetingRoomJoinReq;
 import com.ssafy.a107.api.request.MultiWebSocketReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
+import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.api.response.MultiWebSocketRes;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -153,19 +154,18 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
     }
 
-//    multimeetingroom 세션 참가 시 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
+    //    multimeetingroom 세션 참가 시 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
     @Override
     public void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
-        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+        if (!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
             throw new NotFoundException("Invalid multi meeting room sequence!");
-        else if(!userRepository.existsById(userSeq))
+        else if (!userRepository.existsById(userSeq))
             throw new NotFoundException("Invalid user sequence!");
 
         MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(userSeq)
                 .multiMeetingRoomSeq(multiMeetingRoomSeq)
-//                입장 플래그와 입장 메세지
-                .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
+                .flag(MultiChatFlag.JOIN)
                 .message("유저 " + userSeq + " 가 입장했습니다.")
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
@@ -176,20 +176,18 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + multiMeetingRoomSeq, res);
     }
 
-
-//    multimeetingroom 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
+    //    multimeetingroom 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
     @Override
-    public void sendToWebSocket (MultiWebSocketReq req) throws NotFoundException {
-        if(!multiMeetingRoomRepository.existsById(req.getMultiMeetingRoomSeq()))
+    public void sendToWebSocket(MultiWebSocketReq req) throws NotFoundException {
+        if (!multiMeetingRoomRepository.existsById(req.getMultiMeetingRoomSeq()))
             throw new NotFoundException("Invalid multi meeting room sequence!");
-        else if(!userRepository.existsById(req.getSenderSeq()))
+        else if (!userRepository.existsById(req.getSenderSeq()))
             throw new NotFoundException("Invalid user sequence!");
 
         MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(req.getSenderSeq())
                 .multiMeetingRoomSeq(req.getMultiMeetingRoomSeq())
-//                채팅 flag와 채팅 메세지
-                .flag(MultiWebSocketRes.MultiWebSocketFlag.CHAT)
+                .flag(MultiChatFlag.CHAT)
                 .message(req.getMessage())
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(req.getMultiMeetingRoomSeq(), true))
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(req.getMultiMeetingRoomSeq(), false))

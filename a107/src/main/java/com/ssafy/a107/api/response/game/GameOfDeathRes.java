@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.response.game;
 
 
+import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.db.entity.game.GameOfDeath;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,8 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class GameOfDeathRes {
+
+    private MultiChatFlag flag;
     private Long gameId;
 
     private Long multiMeetingRoomSeq;
@@ -27,12 +30,13 @@ public class GameOfDeathRes {
 
     private Integer count;
 
-    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> countingList, Long loseUserSeq) {
+    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> countingList, Long loseUserSeq, MultiChatFlag flag) {
         this.gameId = gameOfDeath.getGameId();
         this.multiMeetingRoomSeq = gameOfDeath.getMultiMeetingRoomSeq();
         this.targets = gameOfDeath.getTargets();
         this.countingList = countingList;
         this.loseUserSeq = loseUserSeq;
         this.count = gameOfDeath.getCount();
+        this.flag = flag;
     }
 }
