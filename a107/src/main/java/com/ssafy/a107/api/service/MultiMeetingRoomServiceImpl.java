@@ -200,6 +200,21 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
     @Override
     public void sendToWebSocketAtExit(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+        if(!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
+            throw new NotFoundException("Invalid multi meeting room sequence!");
+        else if(!userRepository.existsById(userSeq))
+            throw new NotFoundException("Invalid user sequence!");
 
+        MultiWebSocketRes res = MultiWebSocketRes.builder()
+                .senderSeq(userSeq)
+                .multiMeetingRoomSeq(multiMeetingRoomSeq)
+                .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
+                .message("유저 " + userSeq + " 가 퇴장했습니다.")
+                .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
+                .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        simpMessageSendingOperations.convertAndSend("/sub/" + multiMeetingRoomSeq, res);
     }
 }
