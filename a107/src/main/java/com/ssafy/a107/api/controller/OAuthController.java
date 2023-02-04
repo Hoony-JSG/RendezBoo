@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.response.JoinRes;
+import com.ssafy.a107.api.service.OAuthService;
 import com.ssafy.a107.api.service.UserService;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OAuthController {
 
     private final UserService userService;
+    private final OAuthService oAuthService;
 
     @GetMapping("/naver")
     @ApiOperation(value = "네이버 OAuth", notes = "유저의 네이버 이메일 제공, 이미 가입한 유저면 null")
@@ -33,11 +35,11 @@ public class OAuthController {
         log.debug("OAuth code: {}", code);
         log.debug("OAuth state: {}", state);
 
-        String accessToken = userService.extractAccessToken(userService.requestAccessToken(userService.generateAuthCodeRequest(code, state)).getBody());
+        String accessToken = oAuthService.extractAccessToken(oAuthService.requestAccessToken(oAuthService.generateAuthCodeRequest(code, state)).getBody());
 
         log.debug("accessToken: {}", accessToken);
 
-        String userEmail = userService.getNaverEmail(accessToken);
+        String userEmail = oAuthService.getNaverEmail(accessToken);
 
         userService.checkEmailDuplicate(userEmail);
 
@@ -51,11 +53,11 @@ public class OAuthController {
         log.debug("Kakao OAuth");
         log.debug("OAuth code: {}", code);
 
-        String accessToken = userService.getKakaoAccessToken(code);
+        String accessToken = oAuthService.getKakaoAccessToken(code);
 
         log.debug("accessToken: {}", accessToken);
 
-        String userEmail = userService.getKakaoEmail(accessToken);
+        String userEmail = oAuthService.getKakaoEmail(accessToken);
 
         userService.checkEmailDuplicate(userEmail);
 

@@ -3,6 +3,7 @@ package com.ssafy.a107.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.service.AuthService;
 import com.ssafy.a107.api.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ class UserControllerTest {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthService authService;
+
     @Test
     public void loginSuccessTest() throws Exception {
         //given
@@ -47,7 +51,7 @@ class UserControllerTest {
                 .build();
 
         //when
-        userService.createUser(joinReq);
+        authService.createUser(joinReq);
 
         //then
         mvc.perform(
@@ -79,7 +83,7 @@ class UserControllerTest {
                 .build();
 
         //when
-        userService.createUser(joinReq);
+        authService.createUser(joinReq);
 
         //then
         mvc.perform(
@@ -106,7 +110,7 @@ class UserControllerTest {
                 .build();
 
         //when
-        userService.createUser(joinReq);
+        authService.createUser(joinReq);
 
         //then
         mvc.perform(MockMvcRequestBuilders.get("/api/user/check/test@ssafy.com")
@@ -130,7 +134,7 @@ class UserControllerTest {
                 .build();
 
         //when
-        userService.createUser(joinReq);
+        authService.createUser(joinReq);
 
         //then
         mvc.perform(MockMvcRequestBuilders.get("/api/user/check/ssafykim@ssafy.com")

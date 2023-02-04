@@ -1,6 +1,7 @@
 package com.ssafy.a107.service;
 
 import com.ssafy.a107.api.request.JoinReq;
+import com.ssafy.a107.api.service.AuthService;
 import com.ssafy.a107.api.service.UserServiceImpl;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
@@ -8,7 +9,6 @@ import com.ssafy.a107.db.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,9 @@ public class UserServiceTest {
 
     @Autowired
     UserServiceImpl userService;
+
+    @Autowired
+    AuthService authService;
 
     @Test
     @DisplayName("유저 조회 테스트")
@@ -61,7 +64,7 @@ public class UserServiceTest {
                 .build();
 
         //when
-        Long savedUser = userService.createUser(joinReq);
+        Long savedUser = authService.createUser(joinReq);
         
         //then
         Assertions.assertEquals(userService.getUserBySeq(savedUser).getEmail(), joinReq.getEmail());
