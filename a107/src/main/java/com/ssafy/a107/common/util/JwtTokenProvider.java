@@ -1,10 +1,12 @@
 package com.ssafy.a107.common.util;
 
 import com.ssafy.a107.common.auth.CustomUserDetails;
+import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.db.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +23,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * access-token만 만들고
- * -----refresh-token 만들어야함-----
- */
 @Slf4j
 @Component
 public class JwtTokenProvider {
@@ -93,5 +91,26 @@ public class JwtTokenProvider {
     public Boolean validateToken(String token, CustomUserDetails userDetails) {
         String userEmail = getUserEmail(token);
         return userEmail.equals(userDetails.getUser().getEmail()) && !isTokenExpired(token);
+    }
+
+    public Claims parseClaimsFromRefreshToken(String refreshToken) throws JwtInvalidException {
+        Claims claims;
+
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+        } catch (SignatureException signatureException) {
+            throw new JwtInvalidException("잘못된 secretKey", signatureException);
+        } catch (ExpiredJwtException expiredJwtException) {
+            throw new JwtInvalidException("만료된 토큰", expiredJwtException);
+        } catch (MalformedJwtException malformedJwtException) {
+            throw new JwtInvalidException("잘못된 토큰", malformedJwtException);
+        } catch (IllegalArgumentException illegalArgumentException) {
+            throw new JwtInvalidException("잘못된 인수 사용", illegalArgumentException);
+        }
+
+        return claims;
     }
 }
