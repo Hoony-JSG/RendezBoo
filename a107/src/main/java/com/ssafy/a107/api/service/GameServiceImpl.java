@@ -5,11 +5,12 @@ import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.common.exception.NotFoundException;
-import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.entity.game.BR31;
+import com.ssafy.a107.db.entity.game.FastClick;
 import com.ssafy.a107.db.entity.game.GameOfDeath;
 import com.ssafy.a107.db.repository.MultiMeetingRoomRepository;
 import com.ssafy.a107.db.repository.game.BR31Repository;
+import com.ssafy.a107.db.repository.game.FastClickRepository;
 import com.ssafy.a107.db.repository.game.GameOfDeathRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,9 @@ public class GameServiceImpl implements GameService {
 
     private final GameOfDeathRepository gameOfDeathRepository;
 
-    private final MultiMeetingRoomRepository multiMeetingRoomRepository;
+    private final FastClickRepository fastClickRepository;
 
+    private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     /**
      * 새로운 배스킨라빈스게임 세션 생성 --- 미완성
      *
@@ -138,11 +140,21 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) throws NotFoundException {
-        return null;
+        List<Long> userSeqList = multiMeetingRoomRepository.findUserSequencesByMultiMeetingRoomSeq(fastClickCreateReq.getMultiMeetingRoomSeq());
+        FastClick fastClick = FastClick.builder().sessionId(System.currentTimeMillis())
+                .multiMeetingRoomSeq(fastClickCreateReq.getMultiMeetingRoomSeq())
+                .users(userSeqList)
+                .build();
+        fastClickRepository.save(fastClick);
+
+        return new FastClickRes();
     }
 
     @Override
     public FastClickRes runFastClickSession(FastClickReq fastClickReq) throws NotFoundException {
+        //get all scores from 6 users
+
+
         return null;
     }
 }
