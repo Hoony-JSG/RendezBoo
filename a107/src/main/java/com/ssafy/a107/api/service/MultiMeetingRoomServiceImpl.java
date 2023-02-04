@@ -52,12 +52,12 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     /*
-     *   1. Session Initialization, 2. Connection Creation
+     *   1. Session Initialization, 2. create multimeetingroom
      * @return   MeetingRoomRes dto
      * */
     @Transactional
     @Override
-    public MeetingRoomRes initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+    public Long initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         User user = userRepository.findById(multiMeetingRoomCreationReq.getUserSeq())
                 .orElseThrow(() -> new NotFoundException("Invalid User sequence!"));
         //세션 만들기
@@ -76,13 +76,12 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .user(user)
                 .multiMeetingRoom(multiMeetingRoom).build());
 
-        // 만들어진 세션에 connect
-        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
-        Connection connection = session.createConnection(connectionProperties);
-        String token = connection.getToken();
-        //initialize session은 원래 세션 아이디만을 리턴하지만
-        //미팅방을 만든 유저 connect까지 해줬으므로 토큰 정보까지 리턴
-        return new MeetingRoomRes(roomSeq, token);
+        // connect는 6명이 들어왔을 때 해줌 (처음에는 세션 생성만 하고 연결은 x)
+//        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
+//        Connection connection = session.createConnection(connectionProperties);
+//        String token = connection.getToken();
+
+        return roomSeq;
     }
 
     @Transactional
@@ -165,6 +164,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(userSeq)
                 .multiMeetingRoomSeq(multiMeetingRoomSeq)
+//                입장 플래그와 입장 메세지
                 .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
                 .message("유저 " + userSeq + " 가 입장했습니다.")
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
@@ -173,8 +173,9 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .build();
 
 //        미팅 룸 번호 구독 주소에 메세지 보냄
-        simpMessageSendingOperations.convertAndSend("/sub/" + multiMeetingRoomSeq, res);
+        simpMessageSendingOperations.convertAndSend("/sub/multi/" + multiMeetingRoomSeq, res);
     }
+
 
 //    multimeetingroom 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
     @Override
@@ -187,6 +188,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(req.getSenderSeq())
                 .multiMeetingRoomSeq(req.getMultiMeetingRoomSeq())
+//                채팅 flag와 채팅 메세지
                 .flag(MultiWebSocketRes.MultiWebSocketFlag.CHAT)
                 .message(req.getMessage())
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(req.getMultiMeetingRoomSeq(), true))
@@ -195,7 +197,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .build();
 
 //        미팅 룸 번호 구독 주소에 메세지 보냄
-        simpMessageSendingOperations.convertAndSend("/sub/" + req.getMultiMeetingRoomSeq(), res);
+        simpMessageSendingOperations.convertAndSend("/sub/multi/" + req.getMultiMeetingRoomSeq(), res);
     }
 
     @Override
@@ -208,13 +210,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         MultiWebSocketRes res = MultiWebSocketRes.builder()
                 .senderSeq(userSeq)
                 .multiMeetingRoomSeq(multiMeetingRoomSeq)
-                .flag(MultiWebSocketRes.MultiWebSocketFlag.JOIN)
+//                퇴장 flag와 퇴장 메세지
+                .flag(MultiWebSocketRes.MultiWebSocketFlag.EXIT)
                 .message("유저 " + userSeq + " 가 퇴장했습니다.")
                 .maleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true))
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        simpMessageSendingOperations.convertAndSend("/sub/" + multiMeetingRoomSeq, res);
+        simpMessageSendingOperations.convertAndSend("/sub/multi/" + multiMeetingRoomSeq, res);
     }
 }
