@@ -1,6 +1,7 @@
 package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.game.*;
+import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
@@ -30,8 +31,9 @@ public class GameServiceImpl implements GameService {
     private final FastClickRepository fastClickRepository;
 
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
+
     /**
-     * 새로운 배스킨라빈스게임 세션 생성 --- 미완성
+     * 새로운 배스킨라빈스게임 세션 생성
      *
      * @param br31CreateReq
      * @return
@@ -40,9 +42,8 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public BR31Res createBRGameSession(BR31CreateReq br31CreateReq) throws NotFoundException {
-        List<Long> userSeqList = null;
-//        List<Long> userSeqList = multiMeetingRoomRepository.findById(br31CreateReq.getMultiMeetingRoomSeq())
-//                .orElseThrow(() -> new NotFoundException("Wrong MeetingRoom!")).get;
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(br31CreateReq.getMultiMeetingRoomSeq());
         BR31 br31 = BR31.builder().sessionId(System.currentTimeMillis())
                 .multiMeetingRoomSeq(br31CreateReq.getMultiMeetingRoomSeq())
                 .users(userSeqList)
@@ -51,11 +52,11 @@ public class GameServiceImpl implements GameService {
                 .build();
         br31Repository.save(br31);
 
-        return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!!!", br31.getNowUser());
+        return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!!!", br31.getNowUser(), MultiChatFlag.SYSTEM);
     }
 
     /**
-     * 배스킨 라빈스 게임을 진행 --- 미완성
+     * 배스킨 라빈스 게임을 진행
      *
      * @param br31Req
      * @return
@@ -79,15 +80,15 @@ public class GameServiceImpl implements GameService {
         if (br31.getPoint() == 30) {
             //게임이 끝난 경우
             String msg = "30을 말하셔서 다음 분이 패배하셨습니다.";
-            return new BR31Res(br31, msg, br31.getNowUser());
+            return new BR31Res(br31, msg, br31.getNowUser(), MultiChatFlag.SYSTEM);
         } else if (br31.getPoint() >= 31) {
             // 게임이 끝난 경우 2
             String msg = "31을 말하셔서 패배하셨습니다.";
-            return new BR31Res(br31, msg, br31Req.getUserSeq());
+            return new BR31Res(br31, msg, br31Req.getUserSeq(), MultiChatFlag.SYSTEM);
         } else {
             // 게임이 지속될 경우
             String msg = "다음 분의 차례입니다.";
-            return new BR31Res(br31, msg, br31.getNowUser());
+            return new BR31Res(br31, msg, br31.getNowUser(), MultiChatFlag.GAME);
         }
 
     }
@@ -107,7 +108,7 @@ public class GameServiceImpl implements GameService {
                 .targets(Map.of())
                 .build();
         gameOfDeathRepository.save(gameOfDeath);
-        GameOfDeathRes gameOfDeathRes = new GameOfDeathRes(gameOfDeath, List.of(), 0L);
+        GameOfDeathRes gameOfDeathRes = new GameOfDeathRes(gameOfDeath, List.of(), 0L, MultiChatFlag.SYSTEM);
         return gameOfDeathRes;
     }
 
@@ -132,10 +133,10 @@ public class GameServiceImpl implements GameService {
                 countingList.add(loseUserSeq);
             }
 
-            return new GameOfDeathRes(gameOfDeath, countingList, loseUserSeq);
+            return new GameOfDeathRes(gameOfDeath, countingList, loseUserSeq, MultiChatFlag.SYSTEM);
         }
 
-        return new GameOfDeathRes(gameOfDeath, List.of(), 0L);
+        return new GameOfDeathRes(gameOfDeath, List.of(), 0L, MultiChatFlag.GAME);
     }
 
     @Override

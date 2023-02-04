@@ -30,12 +30,13 @@ public class GameOfDeathRes {
 
     private Integer count;
 
-    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> countingList, Long loseUserSeq) {
+    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> countingList, Long loseUserSeq, MultiChatFlag flag) {
         this.gameId = gameOfDeath.getGameId();
         this.multiMeetingRoomSeq = gameOfDeath.getMultiMeetingRoomSeq();
         this.targets = gameOfDeath.getTargets();
         this.countingList = countingList;
         this.loseUserSeq = loseUserSeq;
         this.count = gameOfDeath.getCount();
+        this.flag = flag;
     }
 }
