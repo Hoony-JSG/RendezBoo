@@ -16,4 +16,4 @@ services:
 networks:
   default:
     external:
-      name: master-dependencies_a107_network
+      name: ubuntu_a107_network

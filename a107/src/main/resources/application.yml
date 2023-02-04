@@ -55,7 +55,7 @@ jwt:
   refresh-token-validity-milliseconds: 259200000
 
 openvidu:
-#  url: http://i8a107.p.ssafy.io:4443/
+  #  url: http://i8a107.p.ssafy.io:4443/
   url: https://52.78.60.53:4443/
   secret: thisisrendezbooopenviduserversecretkey
 #openvidu:
@@ -129,7 +129,7 @@ jwt:
 
 #https로 요청 보내야함(http로 요청보낼시 https로 리다이렉트하고 301응답함)
 openvidu:
-  url: https://52.78.60.53:4443/
+  url: https://i8a107.p.ssafy.io/
   secret: thisisrendezbooopenviduserversecretkey
 
 cloud:
