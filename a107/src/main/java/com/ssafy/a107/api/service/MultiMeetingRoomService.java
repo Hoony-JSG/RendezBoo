@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface MultiMeetingRoomService {
 
-    MeetingRoomRes initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
+    Long initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
     MeetingRoomRes createConnection(MultiMeetingRoomJoinReq multiMeetingRoomJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException;
     void deleteMultiMeetingRoom(Long meetingRoomSeq) throws NotFoundException;
 
