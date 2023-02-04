@@ -10,19 +10,13 @@ import java.time.LocalDateTime;
 @Builder
 public class MultiWebSocketRes {
 
-    public enum MultiWebSocketFlag {
-        JOIN, CHAT, EXIT
-
-    }
-    private MultiWebSocketFlag flag;
+    private MultiChatFlag flag;
     private Long maleNum;
     private Long femaleNum;
     private String message;
     private Long multiMeetingRoomSeq;
     private Long senderSeq;
     private LocalDateTime createdAt;
-
-
 
 
 }
