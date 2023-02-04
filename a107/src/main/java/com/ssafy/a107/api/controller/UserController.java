@@ -4,16 +4,16 @@ import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
 import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.api.response.UserRes;
+import com.ssafy.a107.api.service.AuthService;
 import com.ssafy.a107.api.service.UserService;
 import com.ssafy.a107.common.exception.ConflictException;
+import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.common.exception.NotFoundException;
-import com.ssafy.a107.db.entity.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @Api(value = "유저 API", tags = {"User"})
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
@@ -39,7 +39,7 @@ public class UserController {
     public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, NotFoundException {
         userService.checkEmailDuplicate(joinReq.getEmail());
 
-        userService.createUser(joinReq);
+        authService.createUser(joinReq);
 
         // for test
         UserRes user = userService.getUserByEmail(joinReq.getEmail());
@@ -51,7 +51,15 @@ public class UserController {
     @PostMapping("/login")
     @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
     public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
-        TokenRes res = userService.login(loginReq);
+        TokenRes res = authService.login(loginReq);
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping("/reissue")
+    @ApiOperation(value = "JWT 토큰 재발급")
+    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException {
+        TokenRes res = authService.reissue(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
