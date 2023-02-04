@@ -25,12 +25,13 @@ public class BR31Res {
 
     private Long nextUser;
 
-    public BR31Res(BR31 br31, String message, Long nextUser) {
+    public BR31Res(BR31 br31, String message, Long nextUser, MultiChatFlag flag) {
         this.sessionId = br31.getSessionId();
         this.multiMeetingRoomSeq = br31.getMultiMeetingRoomSeq();
         this.point = br31.getPoint();
         this.nextUser = nextUser;
         this.message = message;
+        this.flag = flag;
     }
 
 }
