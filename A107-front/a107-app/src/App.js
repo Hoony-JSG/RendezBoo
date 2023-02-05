@@ -7,6 +7,7 @@ import Userinfo from './pages/Userinfo'
 import Inventory from './pages/Inventory'
 
 function App() {
+
   return (
     <div className="App">
       <div>

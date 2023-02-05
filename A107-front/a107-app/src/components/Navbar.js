@@ -10,7 +10,11 @@ const Navbar = () => {
         width: "100%",
         height: "90px",
         display: "flex",
-        border: "solid 2px",
+        // border: "solid 2px",
+        background: "rgba(23, 49, 71, 0.5)",
+        boxShadow: "0px 5px 5px rgba(0, 0, 0, 0.25)",
+        backdropFilter: "blur(2px)",
+        
     }
 
   const divStyle = {
@@ -28,12 +32,12 @@ const Navbar = () => {
     return (
       <nav style={navStyle}>
         <div style={divStyle}>
-          <NavLink to="/">
+          <NavLink to="/" style={{color: "white", fontFamliy: "KIMM_bold"}}>
             Rendezboo
           </NavLink>
         </div>
         <div style={divStyle}>
-          <NavLink to="/signal">
+          <NavLink to="/signal" style={{color: "white"}}>
             Signal
           </NavLink>
         </div>
@@ -41,12 +45,12 @@ const Navbar = () => {
             <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
         </div>
         <div style={divStyle}>
-          <NavLink to="/login">
+          <NavLink to="/login" style={{color: "white"}}>
             Login
           </NavLink>
         </div>
         <div style={divStyle}>
-          <NavLink to="/rocket/:userid">
+          <NavLink to="/rocket/:userid" style={{color: "white"}}>
             MyRocket
           </NavLink>
         </div>
