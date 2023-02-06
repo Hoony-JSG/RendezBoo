@@ -74,10 +74,19 @@ public class UserController {
     }
 
     // 아이디 중복체크
-    @GetMapping("/check/{email}")
+    @GetMapping("/check/email/{email}")
     @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복 체크")
     public ResponseEntity<?> checkEmail(@PathVariable String email) throws ConflictException {
         userService.checkEmailDuplicate(email);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    // 전화번호 중복체크
+    @GetMapping("/check/phone/{phoneNumber}")
+    @ApiOperation(value = "전화번호 중복체크", notes = "전화번호 중복 체크")
+    public ResponseEntity<?> checkPhoneNumber(@PathVariable String phoneNumber) throws ConflictException {
+        userService.checkPhoneNumberDuplicate(phoneNumber);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
