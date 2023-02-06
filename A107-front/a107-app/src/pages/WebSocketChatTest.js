@@ -1,4 +1,4 @@
-import {React, useRef, useState, useEffect} from 'react'
+import { React, useRef, useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import * as StompJs from '@stomp/stompjs'
 
@@ -49,14 +49,24 @@ const WebSocketChatTest = () => {
   const subscribe = () => {
     client.current.subscribe('/sub/chat/' + chatRoomSeq, (body) => {
       const json_body = JSON.parse(body.body)
-      console.log("메세지 받았당")
+      console.log('메세지 받았당')
       console.log(body.body)
-      setChatList((_chat_list) => [..._chat_list, json_body])
+      setChatList((_chat_list) => [
+        ..._chat_list,
+        json_body.senderSeq,
+        json_body.message,
+        json_body.createdAt,
+      ])
     })
   }
 
   const publish = (message) => {
     if (!client.current.connected) return
+
+    if (!message) {
+      alert('메세지 입력 해')
+      return
+    }
 
     // 메세지를 보낼 주소입니다.
     client.current.publish({
@@ -73,7 +83,7 @@ const WebSocketChatTest = () => {
   }
 
   const disconnect = () => {
-    console.log("연결이 끊어졌습니다")
+    console.log('연결이 끊어졌습니다')
     client.current.deactivate()
   }
 
@@ -91,7 +101,11 @@ const WebSocketChatTest = () => {
 
   return (
     <div>
-      <div className={'chat-list'}>{chatList}</div>
+      <div className={'chat-list'}>
+        {chatList.map((item, index) => {
+          return <div key={index}>{item}</div>
+        })}
+      </div>
       <form onSubmit={(event) => handleSubmit(event, message)}>
         <div>
           <input
