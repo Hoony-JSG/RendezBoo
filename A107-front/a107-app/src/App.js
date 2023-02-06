@@ -14,7 +14,7 @@ import {
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
-import WebSocketChatTest from './pages/WebSocketChatTest'
+import WebSocketChatTest from './modules/WebSocketChatTest'
 
 function App() {
 
