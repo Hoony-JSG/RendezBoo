@@ -59,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
         // 어드민이면
         if(user.getIsAdmin()) {
             user.addAuthority(Authority.ofAdmin(user));
+            user.addAuthority(Authority.ofUser(user));
         }
         else {
             user.addAuthority(Authority.ofUser(user));
