@@ -3,7 +3,6 @@ package com.ssafy.a107.common.auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.a107.db.entity.User;
 import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,21 +12,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- *  ---- userService 만든 후 다시 만들것 ----
- */
 public class CustomUserDetails implements UserDetails {
 
     private User user;
-
-    private boolean accountNonLocked;
-    private boolean emailVerified;
 
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
     public CustomUserDetails(User user) {
         this.user = user;
+        this.roles = user.getRoles();
     }
 
     public User getUser() {
