@@ -2,16 +2,20 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.request.LogoutReq;
+import com.ssafy.a107.api.request.ReissueReq;
 import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.AuthService;
 import com.ssafy.a107.api.service.UserService;
+import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -44,7 +49,7 @@ public class UserController {
         // for test
         UserRes user = userService.getUserByEmail(joinReq.getEmail());
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(joinReq.getEmail());
     }
 
     // 로그인
@@ -58,10 +63,20 @@ public class UserController {
 
     @PostMapping("/reissue")
     @ApiOperation(value = "JWT 토큰 재발급")
-    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException {
-        TokenRes res = authService.reissue(bearerToken);
+    public ResponseEntity<?> reissue(@RequestBody ReissueReq reissueReq) throws JwtInvalidException {
+        log.debug("bearerToken: {}", reissueReq.getBearerToken());
+
+        TokenRes res = authService.reissue(reissueReq.getBearerToken());
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "유저 로그아웃")
+    public ResponseEntity<?> logout(@RequestBody LogoutReq logoutReq) throws JwtInvalidException, BadRequestException {
+        authService.logout(logoutReq);
+
+        return ResponseEntity.status(HttpStatus.OK).body(logoutReq.getEmail());
     }
 
     // 아이디 중복체크

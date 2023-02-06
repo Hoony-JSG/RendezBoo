@@ -2,14 +2,18 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
+import com.ssafy.a107.api.request.LogoutReq;
 import com.ssafy.a107.api.response.TokenRes;
+import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.JwtTokenProvider;
 import com.ssafy.a107.db.entity.Authority;
+import com.ssafy.a107.db.entity.LogoutAccessToken;
 import com.ssafy.a107.db.entity.RefreshToken;
 import com.ssafy.a107.db.entity.User;
+import com.ssafy.a107.db.repository.LogoutAccessTokenRedisRepository;
 import com.ssafy.a107.db.repository.RefreshTokenRedisRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -30,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
+    private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Value("${jwt.refresh-token-validity-milliseconds}")
@@ -69,15 +74,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String resolveToken(String bearerToken) {
-        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-            return bearerToken.substring(7);
-        }
-
-        return null;
-    }
-
-    @Override
     public TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException {
         User user = userRepository.findByEmail(loginReq.getEmail())
                 .orElseThrow(() -> new NotFoundException("회원이 없습니다."));
@@ -99,21 +95,45 @@ public class AuthServiceImpl implements AuthService {
             throw new JwtInvalidException("잘못된 grant type");
         }
 
-        Claims claims = jwtTokenProvider.parseClaimsFromRefreshToken(curRefreshToken);
-
-        if(claims == null) {
-            throw new JwtInvalidException("토큰에 claim이 존재하지 않음");
-        }
-
-        log.debug("claims: {}", claims);
-
-        String userEmail = claims.get("email", String.class);
+        String userEmail = getEmailFromToken(curRefreshToken);
         log.debug("userEmail: {}", userEmail);
 
         String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
         RefreshToken refreshToken = saveRefreshToken(userEmail);
 
         return TokenRes.of(accessToken, refreshToken.getRefreshToken());
+    }
+
+    @Transactional
+    @Override
+    public void logout(LogoutReq logoutReq) throws JwtInvalidException, BadRequestException {
+        String accessToken = resolveToken(logoutReq.getBearerToken());
+
+        if(!validateToken(accessToken, logoutReq.getEmail())) {
+            throw new BadRequestException("잘못된 요청입니다.");
+        }
+
+        String userEmail = getEmailFromToken(accessToken);
+
+        if(refreshTokenRedisRepository.existsById(userEmail)) {
+            refreshTokenRedisRepository.deleteById(userEmail);
+        }
+
+        long expiration = jwtTokenProvider.getExpiration(accessToken);
+        logoutAccessTokenRedisRepository.save(LogoutAccessToken.of(accessToken,
+                userEmail, expiration));
+
+        log.debug("logout user \"{}\"", userEmail);
+        log.debug("accessToken expiration: {}ms", expiration);
+    }
+
+    @Override
+    public String resolveToken(String bearerToken) {
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
     }
 
     @Override
@@ -127,5 +147,25 @@ public class AuthServiceImpl implements AuthService {
     public RefreshToken saveRefreshToken(String userEmail) {
         return refreshTokenRedisRepository.save(RefreshToken.createRefreshToken(userEmail,
                 jwtTokenProvider.generateRefreshToken(userEmail), REFRESH_TOKEN_VALIDITY_MILLISECONDS));
+    }
+
+    @Override
+    public boolean validateToken(String accessToken, String userEmail) throws JwtInvalidException {
+        String emailFromToken = getEmailFromToken(accessToken);
+
+        return emailFromToken != null && emailFromToken.equals(userEmail) && !jwtTokenProvider.isTokenExpired(accessToken);
+    }
+
+    @Override
+    public String getEmailFromToken(String token) throws JwtInvalidException {
+        Claims claims = jwtTokenProvider.parseClaimsFromToken(token);
+
+        if(claims == null) {
+            throw new JwtInvalidException("토큰에 claim이 존재하지 않음");
+        }
+
+        log.debug("claims: {}", claims);
+
+        return claims.get("email", String.class);
     }
 }

@@ -2,26 +2,18 @@ package com.ssafy.a107.common.util;
 
 import com.ssafy.a107.common.auth.CustomUserDetails;
 import com.ssafy.a107.common.exception.JwtInvalidException;
-import com.ssafy.a107.db.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecurityException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.Map;
-import java.util.function.Function;
 
 @Slf4j
 @Component
@@ -93,13 +85,13 @@ public class JwtTokenProvider {
         return userEmail.equals(userDetails.getUser().getEmail()) && !isTokenExpired(token);
     }
 
-    public Claims parseClaimsFromRefreshToken(String refreshToken) throws JwtInvalidException {
+    public Claims parseClaimsFromToken(String token) throws JwtInvalidException {
         Claims claims;
 
         try {
             claims = Jwts.parser()
                     .setSigningKey(secretKey.getBytes())
-                    .parseClaimsJws(refreshToken)
+                    .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException signatureException) {
             throw new JwtInvalidException("잘못된 secretKey", signatureException);
@@ -112,5 +104,16 @@ public class JwtTokenProvider {
         }
 
         return claims;
+    }
+
+    public long getExpiration(String accessToken) {
+        Date expiration = Jwts.parserBuilder()
+                .setSigningKey(secretKey.getBytes())
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody().getExpiration();
+
+        long now = new Date().getTime();
+        return expiration.getTime() - now;
     }
 }
