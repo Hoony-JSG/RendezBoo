@@ -19,4 +19,10 @@ public class JoinReq {
     private String profileImagePath;
     private String mbti;
     private Boolean isAdmin;
+
+    public void parsePhoneNumber() {
+        if(this.phoneNumber.contains("-")) {
+            this.phoneNumber.replaceAll("-", "");
+        }
+    }
 }
