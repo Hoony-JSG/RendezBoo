@@ -52,7 +52,7 @@ jwt:
   header: Authorization
   secret: rendezboosecretkeyneedsverylongsecretkeyforsafety
   access-token-validity-milliseconds: 1800000
-  refresh-token-validity-milliseconds: 259200000
+  refresh-token-validity-milliseconds: 604800000
 
 openvidu:
   #  url: http://i8a107.p.ssafy.io:4443/
@@ -125,7 +125,7 @@ jwt:
   header: Authorization
   secret: rendez-boo-secret-key-needs-very-long-secret-key-for-safety
   access-token-validity-milliseconds: 1800000
-  refresh-token-validity-milliseconds: 259200000
+  refresh-token-validity-milliseconds: 604800000
 
 #https로 요청 보내야함(http로 요청보낼시 https로 리다이렉트하고 301응답함)
 openvidu:

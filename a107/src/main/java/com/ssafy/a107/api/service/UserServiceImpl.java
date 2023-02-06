@@ -64,10 +64,25 @@ public class UserServiceImpl implements UserService {
         }else throw new NotFoundException("Wrong User Seq!");
     }
 
+    @Transactional
     @Override
-    public void deleteUser(Long userSeq) throws NotFoundException{
-        User toBeDeleted = userRepository.findById(userSeq)
+    public void deleteUser(String email) throws NotFoundException, ConflictException {
+        checkLeavedUser(email);
+
+        User toBeDeleted = userRepository.findByEmail(email)
                 .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
+
         toBeDeleted.deleteUser();
+        userRepository.save(toBeDeleted);
+    }
+
+    @Override
+    public void checkLeavedUser(String email) throws NotFoundException, ConflictException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("Wrong user seq!"));
+
+        if(!user.getIsValid()) {
+            throw new ConflictException("User does not exist. (Leaved)");
+        }
     }
 }

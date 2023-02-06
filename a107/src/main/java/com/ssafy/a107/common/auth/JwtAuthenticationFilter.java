@@ -29,10 +29,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String accessToken = getToken(request);
+        log.debug("Access token from request: {}", accessToken);
 
         if(accessToken != null) {
             checkLogout(accessToken);
             String userEmail = jwtTokenProvider.getUserEmail(accessToken);
+            log.debug("User's email from access token: {}", userEmail);
 
             if(userEmail != null) {
                 CustomUserDetails userDetails = customUserDetailService.loadUserByUsername(userEmail);
@@ -66,7 +68,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void validateAccessToken(String accessToken, CustomUserDetails userDetails) {
         if(!jwtTokenProvider.validateToken(accessToken, userDetails)) {
-            throw new IllegalArgumentException("Invalid access token");
+            throw new IllegalArgumentException("Access token expired or invalid");
         }
     }
 
