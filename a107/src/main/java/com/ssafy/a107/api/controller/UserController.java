@@ -49,7 +49,7 @@ public class UserController {
     }
 
     // 로그인
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
     public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
         TokenRes res = authService.login(loginReq);
