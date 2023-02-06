@@ -14,11 +14,9 @@ import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -101,7 +99,12 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
             throw new NotFoundException("Wrong Session");
         }
         // 커넥션용 토큰 생성
-        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
+                .kurentoOptions(
+                        new KurentoOptions.Builder()
+                                .allowedFilters(new String[]{"FaceOverlayFilter"})
+                                .build()
+        ).build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
         return new MeetingRoomRes(onetoOneMeetingRoom.getSeq(), token);
