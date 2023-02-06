@@ -44,7 +44,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    private SimpMessageSendingOperations simpMessageSendingOperations;
+    private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     private final OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
 
