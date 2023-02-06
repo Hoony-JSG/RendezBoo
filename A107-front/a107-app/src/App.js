@@ -16,11 +16,12 @@ import Userinfo from './pages/Userinfo'
 import Inventory from './pages/Inventory'
 
 function App() {
+
   return (
     <div className="App">
       <div>
         <Navbar />
-        <Routes>
+        <Routes className="AppContainer">
           <Route path="/home" element={<Home />} />
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />

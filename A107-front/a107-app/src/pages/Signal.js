@@ -4,12 +4,15 @@ import axios from 'axios'
 // import { SignalList, SignalItem, SignalForm } from "../components"
 import SignalList from '../components/SignalList'
 import SignalSelected from '../components/SignalSelected'
-// import SignalForm from '../components/SignalForm'
+import { SiRocketdotchat } from 'react-icons/si'
 
 const Signal = () => {
   const userid = useParams().userid
-const { selected, setSelected } = useState(userid)
-  const selectChat = () => setSelected(this.chat_seq)
+  const { selected, setSelected } = useState('')
+
+  // useEffect(() => {
+  //   setSelected(userid)
+  // }, [])
 
   const [chatRoom, setChatRoom] = useState([
     {
@@ -141,33 +144,38 @@ const { selected, setSelected } = useState(userid)
 
   const windowStyle = {
     boxSizing: 'border-box',
-
+    display: 'flex',
+    flexDirection: 'row',
+    padding: '40px',
+    gap: '20px',
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     width: '80%',
     height: '80%',
     left: '160px',
     top: '120px',
-
     background:
       'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     border: '2px solid #FFFFFF',
-
     filter:
       'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
     borderRadius: '50px',
   }
   const asideStyle = {
     display: 'flex',
-    flexdirection: 'column',
-    alignitems: 'center',
+    width: '35%',
+    flexDirection: 'column',
     padding: '10px',
-    gap: '10px',
+    gap: '20px',
     justifyContent: 'center',
-    position: 'absolute',
-    width: '20%',
-    height: '80%',
-    left: '65px',
-    top: '45px',
+    alignItems: 'center',
+  }
+
+  const iconStyle = {
+    color: 'white',
+    width: '60px',
+    height: '60px',
   }
 
   return (
@@ -175,14 +183,24 @@ const { selected, setSelected } = useState(userid)
       {/* <h1>Signal</h1> */}
       <div className="window" style={windowStyle}>
         <div className="aside" style={asideStyle}>
-          <SignalList chatRoom={chatRoom} />
+          <SiRocketdotchat style={iconStyle} />
+          <h1>Signal</h1>
+          <div
+            className="SignalList"
+            style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%'}}
+          >
+            {chatRoom.map((chat) => (
+              <SignalList chat={chat} key={chat.chatRoomSeq} />
+            ))}
+          </div>
         </div>
-        <div className="content">
+        <div className="content" style={{width: '65%'}}>
           {userid ? (
             <SignalSelected content={chatRoom[userid].content} />
-            // <SignalForm />
           ) : (
-            <div></div>
+            <div>
+              <h1>메시지를 선택하세요.</h1>
+            </div>
           )}
         </div>
       </div>
