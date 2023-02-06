@@ -1,6 +1,6 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.service.UserFriendServiceImpl;
+import com.ssafy.a107.api.service.UserFriendService;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserFriendController {
 
-    private final UserFriendServiceImpl friendService;
+    private final UserFriendService friendService;
 
     /**
      * 친구 추가 api

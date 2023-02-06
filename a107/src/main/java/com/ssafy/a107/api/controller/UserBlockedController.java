@@ -1,6 +1,6 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.service.UserBlockedServiceImpl;
+import com.ssafy.a107.api.service.UserBlockedService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserBlockedController {
 
-    private final UserBlockedServiceImpl blockedUserService;
+    private final UserBlockedService blockedUserService;
 
     @PostMapping("/block/{userSeq}/{targetUserSeq}")
     @ApiOperation(value = "유저 차단", notes="나(userSeq)의 차단 목록에 상대방(targetUserSeq)을 추가")
