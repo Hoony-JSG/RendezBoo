@@ -52,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.DELETE, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
                 .antMatchers("/api/oauth/*", "/api/sms/*", "/api/user/check/**", "/api/user/join",
                         "/api/user/login", "/api/user/reissue").permitAll()
-                .anyRequest().hasRole("USER")
+//                .anyRequest().hasRole("USER")
+                .anyRequest().permitAll() // 로그인 완성 전까지 전부 허용
 
                 .and()
                 .exceptionHandling()
