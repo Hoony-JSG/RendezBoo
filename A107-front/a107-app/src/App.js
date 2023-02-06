@@ -8,12 +8,13 @@ import {
   Join,
   Rocket,
   Docking1,
+  Userinfo,
+  Inventory,
   Test,
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
-import Userinfo from './pages/Userinfo'
-import Inventory from './pages/Inventory'
+
 
 function App() {
 

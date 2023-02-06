@@ -8,11 +8,6 @@ import { SiRocketdotchat } from 'react-icons/si'
 
 const Signal = () => {
   const userid = useParams().userid
-  const { selected, setSelected } = useState('')
-
-  // useEffect(() => {
-  //   setSelected(userid)
-  // }, [])
 
   const [chatRoom, setChatRoom] = useState([
     {
@@ -133,14 +128,6 @@ const Signal = () => {
     },
   ])
 
-  //   const [data, setData] = useState(null)
-  //   useEffect(() => {
-  //     console.log({ data })
-  //     axios.get('http://i8a107.p.ssafy.io:8080/api/badges').then((response) => {
-  //       setData(response.data)
-  //       console.log({ data })
-  //     })
-  //   }, [])
 
   const windowStyle = {
     boxSizing: 'border-box',
@@ -180,7 +167,6 @@ const Signal = () => {
 
   return (
     <div>
-      {/* <h1>Signal</h1> */}
       <div className="window" style={windowStyle}>
         <div className="aside" style={asideStyle}>
           <SiRocketdotchat style={iconStyle} />

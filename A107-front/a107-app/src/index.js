@@ -1,16 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import Root from './Root'
+import App from './App'
 import reportWebVitals from './reportWebVitals'
+import { BrowserRouter } from 'react-router-dom'
 
-// ReactDOM.render(
+
+ReactDOM.render(
 //   <React.StrictMode>
-//     <App />
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
 //   </React.StrictMode>,
-//   document.getElementById('root')
-// );
-
-ReactDOM.render(<Root />, document.getElementById('root'))
+document.getElementById('root')
+)
 
 reportWebVitals()
