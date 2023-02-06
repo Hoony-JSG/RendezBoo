@@ -1,6 +1,15 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { Home, Rendezboo, Signal, Login, Join, Rocket, Docking1 } from './pages'
+import {
+  Home,
+  Rendezboo,
+  Signal,
+  Login,
+  Join,
+  Rocket,
+  Docking1,
+  Test,
+} from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
 import Userinfo from './pages/Userinfo'
@@ -22,6 +31,7 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
+          <Route path="/test" element={<Test />}></Route>;
         </Routes>
       </div>
     </div>
