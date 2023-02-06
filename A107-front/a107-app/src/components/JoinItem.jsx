@@ -1,17 +1,17 @@
 import { useState } from 'react'
-import JoinItem_1st_SocialJoin from './JoinItem_1st_SocialJoin'
-import JoinItem_2nd_PhoneNumber from './JoinItem_2nd_PhoneNumber'
-import JoinItem_3rd_RocketItem from './JoinItem_3rd_RocketItem'
-import JoinItem_4th_Likes from './JoinItem_4th_Likes'
+import JoinItem1st from './JoinItem1st'
+import JoinItem2nd from './JoinItem2nd'
+import JoinItem3rd from './JoinItem3rd'
+import JoinItem4rd from './JoinItem4rd'
 import { BiPlanet } from 'react-icons/bi'
 
 const JoinItem = () => {
   const ItemList = [
     '',
-    <JoinItem_1st_SocialJoin />,
-    <JoinItem_2nd_PhoneNumber />,
-    <JoinItem_3rd_RocketItem />,
-    <JoinItem_4th_Likes />,
+    <JoinItem1st />,
+    <JoinItem2nd />,
+    <JoinItem3rd />,
+    <JoinItem4rd />,
   ]
   const [order, setOrder] = useState(1, '')
 

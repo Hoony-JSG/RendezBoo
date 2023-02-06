@@ -1,4 +1,4 @@
-import JoinItem from '../components/JoinItem'
+import JoinItem from '../components/JoinItem.jsx'
 
 const Join = () => {
   console.log('조인 페이지')

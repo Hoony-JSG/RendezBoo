@@ -1,0 +1,13 @@
+.react-datepicker__tab-loop {
+  height: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.react-datepicker-popper {
+  position: inherit !important;
+  transform: translate3d(230px, 90px, 0px) !important;
+}
+.react-datepicker__triangle {
+  display: none !important;
+}

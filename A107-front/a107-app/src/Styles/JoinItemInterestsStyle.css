@@ -1,0 +1,55 @@
+.interest-selector {
+  padding: 16px;
+}
+
+.interest-selector ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.interest-selector li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  width: auto;
+}
+
+.interest-selector li label {
+  border: 2px solid lightblue;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  height: 25px;
+  width: 100px;
+}
+.checkbox {
+  display: none;
+}
+.checkbox + .checkbox-text::before {
+  content: '❌';
+  margin-right: 8px;
+}
+
+.checkbox:checked + .checkbox-text::before {
+  content: '✔️';
+}
+
+.interest-selector .glow {
+  animation: glowing 2s infinite;
+}
+
+@keyframes glowing {
+  0% {
+    background: white;
+    box-shadow: 0 0 10px white;
+  }
+  50% {
+    background: lightgreen;
+    box-shadow: 0 0 20px lightgreen;
+  }
+  100% {
+    background: white;
+    box-shadow: 0 0 10px white;
+  }
+}
