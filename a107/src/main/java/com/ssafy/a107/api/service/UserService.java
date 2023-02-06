@@ -14,5 +14,6 @@ public interface UserService {
     void checkPhoneNumberDuplicate(String phoneNumber) throws ConflictException;
     List<UserRes> getFriends(Long userSeq) throws NotFoundException;
     List<UserRes> getBlockeds(Long userSeq) throws NotFoundException;
-    void deleteUser(Long userSeq) throws NotFoundException;
+    void deleteUser(String email) throws NotFoundException, ConflictException;
+    void checkLeavedUser(String email) throws NotFoundException, ConflictException;
 }
