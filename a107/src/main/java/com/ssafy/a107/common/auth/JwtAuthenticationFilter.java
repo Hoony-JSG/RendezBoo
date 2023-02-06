@@ -54,19 +54,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void checkLogout(String accessToken) {
         if(logoutAccessTokenRedisRepository.existsById(accessToken)) {
-            throw new IllegalArgumentException("이미 로그아웃된 회원입니다.");
+            throw new IllegalArgumentException("User already logged out");
         }
     }
 
     private void isEmailFromTokenAndUserDetailsEqual(String emailFromToken, String emailFromUserDetails) {
         if(!emailFromUserDetails.equals(emailFromToken)) {
-            throw new IllegalArgumentException("이메일이 토큰과 맞지 않습니다.");
+            throw new IllegalArgumentException("Emails not match");
         }
     }
 
     private void validateAccessToken(String accessToken, CustomUserDetails userDetails) {
         if(!jwtTokenProvider.validateToken(accessToken, userDetails)) {
-            throw new IllegalArgumentException("토큰 검증 실패");
+            throw new IllegalArgumentException("Invalid access token");
         }
     }
 

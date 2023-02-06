@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -19,9 +18,6 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-
-
-    private final UserDetailsService userDetailsService;
     private final String secretKey;
     private final long ACCESS_TOKEN_VALID_MILISECOND;
     private final long REFRESH_TOKEN_VALID_MILISECOND;
@@ -29,13 +25,10 @@ public class JwtTokenProvider {
     @Autowired
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey,
                             @Value("${jwt.access-token-validity-milliseconds}") long ACCESS_TOKEN_VALID_MILISECOND,
-                            @Value("${jwt.refresh-token-validity-milliseconds}") long REFRESH_TOKEN_VALID_MILISECOND,
-                            UserDetailsService userDetailsService) {
+                            @Value("${jwt.refresh-token-validity-milliseconds}") long REFRESH_TOKEN_VALID_MILISECOND) {
         this.secretKey = secretKey;
         this.ACCESS_TOKEN_VALID_MILISECOND = ACCESS_TOKEN_VALID_MILISECOND;
         this.REFRESH_TOKEN_VALID_MILISECOND = REFRESH_TOKEN_VALID_MILISECOND;
-
-        this.userDetailsService = userDetailsService;
     }
 
     public Claims extractAllClaims(String token) {
@@ -94,13 +87,13 @@ public class JwtTokenProvider {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException signatureException) {
-            throw new JwtInvalidException("잘못된 secretKey", signatureException);
+            throw new JwtInvalidException("Wrong secretKey", signatureException);
         } catch (ExpiredJwtException expiredJwtException) {
-            throw new JwtInvalidException("만료된 토큰", expiredJwtException);
+            throw new JwtInvalidException("Expired token", expiredJwtException);
         } catch (MalformedJwtException malformedJwtException) {
-            throw new JwtInvalidException("잘못된 토큰", malformedJwtException);
+            throw new JwtInvalidException("Malformed token", malformedJwtException);
         } catch (IllegalArgumentException illegalArgumentException) {
-            throw new JwtInvalidException("잘못된 인수 사용", illegalArgumentException);
+            throw new JwtInvalidException("Illegal argument", illegalArgumentException);
         }
 
         return claims;
