@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api(value = "인증 API")
+@Api(value = "인증 API", tags = {"OAuth"})
 @RestController
 @RequestMapping("/api/oauth")
 @RequiredArgsConstructor
