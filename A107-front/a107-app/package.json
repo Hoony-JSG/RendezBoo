@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
+    "@stomp/stompjs": "^6.1.2",
     "@tensorflow-models/facemesh": "0.0.5",
     "@tensorflow/tfjs": "^4.2.0",
     "@testing-library/jest-dom": "^5.16.5",
