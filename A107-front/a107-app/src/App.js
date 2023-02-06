@@ -14,6 +14,7 @@ import Navbar from './components/Navbar'
 import './App.css'
 import Userinfo from './pages/Userinfo'
 import Inventory from './pages/Inventory'
+import WebSocketChatTest from './pages/WebSocketChatTest'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
           <Route path="/test" element={<Test />}></Route>;
+          <Route path="/websocketchattest" element={<WebSocketChatTest />}></Route>;
         </Routes>
       </div>
     </div>
