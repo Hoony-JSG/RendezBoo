@@ -2,7 +2,6 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
-import com.ssafy.a107.api.request.LogoutReq;
 import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
@@ -15,10 +14,10 @@ public interface AuthService {
     Long createUser(JoinReq joinReq);
     TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException;
     TokenRes reissue(String bearerToken) throws JwtInvalidException;
-    void logout(LogoutReq logoutReq) throws JwtInvalidException, BadRequestException;
+    String logout(String bearerToken) throws JwtInvalidException, BadRequestException;
     String resolveToken(String bearerToken);
     void checkPassword(String rawPassword, String findUserPassword) throws ConflictException;
     RefreshToken saveRefreshToken(String userEmail);
-    boolean validateToken(String accessToken, String userEmail) throws JwtInvalidException;
+    boolean validateToken(String accessToken) throws JwtInvalidException;
     String getEmailFromToken(String token) throws JwtInvalidException;
 }
