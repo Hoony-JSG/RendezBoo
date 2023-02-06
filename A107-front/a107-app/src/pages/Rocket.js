@@ -3,17 +3,19 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import RocketBadge from '../components/RocketBadge'
 import RocketItem from '../components/RocketItem'
+import RocketRadar from '../components/RocketRadar'
 
 const Rocket = () => {
   const Me = 'wjdgnsxhsl'
   const Inquire = useParams().userid
-  const Same = Me === Inquire ? true : false
+  const ver = Me === Inquire ? 'Me' : 'Other'
   const MeAndYou = {
     Me: Me,
     Inquire: Inquire,
-    Same: Same,
+    ver: ver,
     BadgeRep: 1,
   }
+  console.log(ver)
 
   return (
     <div>
@@ -25,7 +27,9 @@ const Rocket = () => {
       <div>
         <RocketBadge {...MeAndYou} />
       </div>
-      <div></div>
+      <div>
+        <RocketRadar />
+      </div>
     </div>
   )
 }

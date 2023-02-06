@@ -28,18 +28,16 @@ const LoginForm = () => {
     console.log(props)
     const idString = props.split('@', 1)
     console.log(idString)
-    navigate('/')
+    navigate('/rocket/' + idString)
   }
   const loginButtonStyle = {
-    margin: '10px 0 0 0',
+    margin: '10px',
     padding: '0',
     width: '100px',
     height: '30px',
-    border: 'none',
-    backgroundcolor: 'black',
-    color: 'white',
     fontsize: '17px',
     borderradius: '5px',
+    opacity: button ? 1 : 0.3,
   }
 
   return (
@@ -70,7 +68,6 @@ const LoginForm = () => {
         <button
           style={loginButtonStyle}
           type="button"
-          disabled={!button}
           onClick={(e) => {
             if (id === realId) {
               if (pw === realPw) {
@@ -81,7 +78,9 @@ const LoginForm = () => {
               alert('Wrong ID or PW')
             }
           }}
-        />
+        >
+          Login
+        </button>
       </div>
     </div>
   )

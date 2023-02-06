@@ -17,12 +17,18 @@ import Inventory from './pages/Inventory'
 import WebSocketChatTest from './pages/WebSocketChatTest'
 
 function App() {
+  const location = useLocation()
 
   return (
     <div className="App">
       <div>
-        <Navbar />
-        <Routes className="AppContainer">
+        {!(
+          location.pathname === '/home' ||
+          location.pathname === '/join' ||
+          location.pathname === '/login' ||
+          location.pathname === '/Login'
+        ) && <Navbar />}
+        <Routes>
           <Route path="/home" element={<Home />} />
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
@@ -35,7 +41,11 @@ function App() {
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
           <Route path="/test" element={<Test />}></Route>;
           {/* 웹소켓 테스트용 라우터 */}
-          <Route path="/websocketchattest" element={<WebSocketChatTest />}></Route>;
+          <Route
+            path="/websocketchattest"
+            element={<WebSocketChatTest />}
+          ></Route>
+          ;
         </Routes>
       </div>
     </div>

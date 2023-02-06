@@ -1,0 +1,85 @@
+.solar-system {
+  position: relative;
+  animation: rotate 20s linear infinite;
+}
+
+.sun {
+  /* border-radius: 50%; */
+  /* background-color: yellow; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.planet {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.planet1 {
+  animation: rotate-planet1 10s linear infinite;
+  transform: translate(-50%, -50%) rotate(60deg) translate(150px, 0);
+}
+
+.planet2 {
+  animation: rotate-planet2 15s linear infinite;
+  transform: translate(-50%, -50%) rotate(60deg) translate(250px, 0);
+}
+
+.planet3 {
+  animation: rotate-planet3 20s linear infinite;
+  transform: translate(-50%, -50%) rotate(60deg) translate(350px, 0);
+}
+
+.point {
+  width: 5px;
+  height: 5px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* @keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+
+@keyframes rotate-planet1 {
+  from {
+    transform: translate(-50%, -50%) rotate(60deg) translate(150px, 0);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(420deg) translate(150px, 0);
+  }
+}
+
+@keyframes rotate-planet2 {
+  from {
+    transform: translate(-50%, -50%) rotate(60deg) translate(250px, 0);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(540deg) translate(250px, 0);
+  }
+}
+
+@keyframes rotate-planet3 {
+  from {
+    transform: translate(-50%, -50%) rotate(60deg) translate(350px, 0);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(660deg) translate(350px, 0);
+  }
+}
