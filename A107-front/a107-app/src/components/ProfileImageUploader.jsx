@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 
 const ProfileImageUploader = ({ profileimage }) => {
   const [newImage, setNewImage] = useState(null)
-
   const handleImageUpload = (event) => {
     setNewImage(URL.createObjectURL(event.target.files[0]))
   }

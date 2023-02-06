@@ -2,67 +2,49 @@ import React, { useState } from 'react'
 import '../Styles/JoinItemInterestsStyle.css'
 const JoinItemInterests = () => {
   const [selectedInterests, setSelectedInterests] = useState([])
-  const [glow, setGlow] = useState(false)
-  const handleInterestToggle = (interest) => {
-    if (selectedInterests.includes(interest)) {
-      setSelectedInterests(selectedInterests.filter((i) => i !== interest))
-      setGlow(false)
-    } else {
-      setSelectedInterests([...selectedInterests, interest])
-      setGlow(true)
-    }
-  }
+  const interests = [
+    'Reading',
+    'Sports',
+    'Camping',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+  ]
 
   return (
     <div className="interest-selector">
       <h3>Select your interests:</h3>
       <ul>
-        <li>
-          <label
-            className={`interest ${
-              selectedInterests.includes('Reading') ? 'active' : ''
-            } ${glow ? 'glow' : ''}`}
-          >
-            <input
-              type="checkbox"
-              checked={selectedInterests.includes('Reading')}
-              onChange={() => handleInterestToggle('Reading')}
-              className="checkbox"
-            />
-            <span className="checkbox-text">Reading</span>
-          </label>
-        </li>
-        <li>
-          <label
-            className={`interest ${
-              selectedInterests.includes('Sports') ? 'active' : ''
-            } ${glow ? 'glow' : ''}`}
-          >
-            <input
-              type="checkbox"
-              checked={selectedInterests.includes('Sports')}
-              onChange={() => handleInterestToggle('Sports')}
-              className="checkbox"
-            />
-            <span className="checkbox-text">Sports</span>
-          </label>
-        </li>
-        <li>
-          <label
-            className={`interest ${
-              selectedInterests.includes('Camping') ? 'active' : ''
-            } ${glow ? 'glow' : ''}`}
-          >
-            <input
-              type="checkbox"
-              checked={selectedInterests.includes('Camping')}
-              onChange={() => handleInterestToggle('Camping')}
-              className="checkbox"
-            />
-            <span className="checkbox-text">Camping</span>
-          </label>
-        </li>
-        {/* Add more interests as needed */}
+        {interests.map((interest) => (
+          <li key={interest}>
+            <label
+              className={`interest ${
+                selectedInterests.includes(interest) ? 'active' : ''
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={selectedInterests.includes(interest)}
+                onChange={() =>
+                  setSelectedInterests(
+                    selectedInterests.includes(interest)
+                      ? selectedInterests.filter((i) => i !== interest)
+                      : [...selectedInterests, interest]
+                  )
+                }
+                className="checkbox"
+              />
+              <span className="checkbox-text">{interest}</span>
+            </label>
+          </li>
+        ))}
       </ul>
     </div>
   )

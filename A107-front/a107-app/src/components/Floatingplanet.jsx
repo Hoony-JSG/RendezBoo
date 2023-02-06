@@ -3,22 +3,22 @@ import '../Styles/FloatingPlanet.css'
 import { GiRingedPlanet } from 'react-icons/gi'
 const FloatingPlanet = () => {
   return (
-    <div class="solar-system">
-      <div class="sun">
+    <div className="solar-system">
+      <div className="sun">
         <h2>ME</h2>
       </div>
-      <div class="planet planet1">
-        <div class="point">
+      <div className="planet planet1">
+        <div className="point">
           <GiRingedPlanet size="50" />
         </div>
       </div>
-      <div class="planet planet2">
-        <div class="point">
+      <div className="planet planet2">
+        <div className="point">
           <GiRingedPlanet size="100" />
         </div>
       </div>
-      <div class="planet planet3">
-        <div class="point">
+      <div className="planet planet3">
+        <div className="point">
           <GiRingedPlanet size="80" />
         </div>
       </div>
