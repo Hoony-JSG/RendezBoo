@@ -4,6 +4,17 @@ import positionBufferData from '../lib/positionBufferData'
 import TRIANGULATION from '../lib/triangulation'
 
 export default class FacePaint {
+  _camera
+  _halfW
+  _halfH
+  _scene
+  _geometry
+  _textureLoader
+  _textureFilePath
+  _material
+  _mesh
+  _renderer
+
   static get EYE_VERTICES() {
     return [
       // LEFT EYE
@@ -45,17 +56,6 @@ export default class FacePaint {
 
   _addGeometry() {
     this._geometry = new THREE.BufferGeometry()
-    // const EV = FacePaint.EYE_VERTICES;
-    // for(let i = TRIANGULATION.length - 1; i > -1; i-=3) {
-    //   const a = TRIANGULATION[i];
-    //   const b = TRIANGULATION[i - 1];
-    //   const c = TRIANGULATION[i - 2];
-    //   if(EV.indexOf(a) !== -1 ||
-    //      EV.indexOf(b) !== -1 ||
-    //      EV.indexOf(c) !== -1) {
-    //     TRIANGULATION.splice(i - 2, 3);
-    //   }
-    // }
     this._geometry.setIndex(TRIANGULATION)
     this._geometry.setAttribute(
       'position',
@@ -94,24 +94,6 @@ export default class FacePaint {
     this._scene.add(this._mesh)
   }
 
-  async updateTexture(url, isVideo) {
-    let texture
-    if (this._video) {
-      this._video.pause()
-    }
-    if (isVideo) {
-      this._video = document.querySelector(`video[src="${url}"]`)
-      this._video.play()
-      texture = new THREE.VideoTexture(this._video)
-      texture.minFilter = THREE.LinearFilter
-      texture.magFilter = THREE.LinearFilter
-    } else {
-      texture = await this._textureLoader.loadAsync(url)
-    }
-
-    this._material.map = texture
-  }
-
   render(positionBufferData) {
     this._geometry.setAttribute(
       'position',
@@ -122,11 +104,11 @@ export default class FacePaint {
     this._renderer.render(this._scene, this._camera)
   }
 
-  constructor({ id, textureFilePath, w, h }) {
+  constructor({ canvas, textureFilePath, w, h }) {
     this._renderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
-      canvas: document.querySelector(`#${id}`),
+      canvas: canvas,
     })
     this._renderer.setPixelRatio(window.devicePixelRatio)
     this._renderer.setSize(w, h)
@@ -134,5 +116,6 @@ export default class FacePaint {
     this._halfH = h * 0.5
     this._textureFilePath = textureFilePath
     this._setupScene()
+    console.log('FacePaint created !!')
   }
 }
