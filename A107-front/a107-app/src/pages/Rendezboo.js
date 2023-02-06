@@ -22,6 +22,7 @@ const Rendezboo = () => {
     Inquire: id,
     Rendez: true,
     BadgeRep: 1,
+    ver: 'Me',
   }
   const doorIconStyle = {
     height: '100px',

@@ -16,6 +16,7 @@ const RocketBtn = (props) => {
         다르다
         <RocketBtn_Diff />
       </div>
+    )
   } else {
     return (
       <div>
@@ -23,6 +24,6 @@ const RocketBtn = (props) => {
       </div>
     )
   }
-  }
+}
 
 export default RocketBtn
