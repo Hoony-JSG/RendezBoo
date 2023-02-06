@@ -41,6 +41,8 @@ public class UserController {
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
     public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException {
         userService.checkEmailDuplicate(joinReq.getEmail());
+
+        joinReq.parsePhoneNumber();
         userService.checkPhoneNumberDuplicate(joinReq.getPhoneNumber());
 
         authService.createUser(joinReq);
@@ -59,7 +61,7 @@ public class UserController {
 
     @PostMapping("/reissue")
     @ApiOperation(value = "JWT 토큰 재발급", notes = "Bearer 리프레시 토큰 필요")
-    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException {
+    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException {
         TokenRes res = authService.reissue(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -67,7 +69,7 @@ public class UserController {
 
     @PostMapping("/logout")
     @ApiOperation(value = "유저 로그아웃", notes = "Bearer 엑세스 토큰 필요")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, BadRequestException {
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException {
         String userEmail = authService.logout(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(userEmail);
@@ -96,15 +98,20 @@ public class UserController {
     public ResponseEntity<?> getFriends(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getFriends(userSeq));
     }
+
     @GetMapping("/{userSeq}/blockeds")
     @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
     public ResponseEntity<?> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getBlockeds(userSeq));
     }
-    @DeleteMapping("/{userSeq}")
+
+    @DeleteMapping
     @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userSeq) throws NotFoundException{
-        userService.deleteUser(userSeq);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String bearerToken) throws NotFoundException, JwtInvalidException, ConflictException {
+        String userEmail = authService.getEmailFromToken(authService.resolveToken(bearerToken));
+
+        userService.deleteUser(userEmail);
+
+        return ResponseEntity.status(HttpStatus.OK).body("User " + userEmail + " deleted.");
     }
 }

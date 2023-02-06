@@ -13,8 +13,8 @@ public interface AuthService {
 
     Long createUser(JoinReq joinReq);
     TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException;
-    TokenRes reissue(String bearerToken) throws JwtInvalidException;
-    String logout(String bearerToken) throws JwtInvalidException, BadRequestException;
+    TokenRes reissue(String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException;
+    String logout(String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException;
     String resolveToken(String bearerToken);
     void checkPassword(String rawPassword, String findUserPassword) throws ConflictException;
     RefreshToken saveRefreshToken(String userEmail);

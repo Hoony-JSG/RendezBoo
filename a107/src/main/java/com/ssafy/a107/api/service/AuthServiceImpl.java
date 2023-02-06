@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
     private final LogoutAccessTokenRedisRepository logoutAccessTokenRedisRepository;
@@ -52,12 +53,12 @@ public class AuthServiceImpl implements AuthService {
                 .profileImagePath(joinReq.getProfileImagePath())
                 .mbti(joinReq.getMbti())
                 .point(0L)
-                .isAdmin(joinReq.getIsAdmin())
+                .isAdmin(joinReq.getIsAdmin() == null ? false : joinReq.getIsAdmin())
                 .isValid(true)
                 .build();
 
         // 어드민이면
-        if(user.getIsAdmin()) {
+        if(user.getIsAdmin() != null && user.getIsAdmin()) {
             user.addAuthority(Authority.ofAdmin(user));
             user.addAuthority(Authority.ofUser(user));
         }
@@ -80,6 +81,8 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(loginReq.getEmail())
                 .orElseThrow(() -> new NotFoundException("Wrong email!"));
 
+        userService.checkLeavedUser(user.getEmail());
+
         checkPassword(loginReq.getPassword(), user.getPassword());
 
         String userEmail = user.getEmail();
@@ -95,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public TokenRes reissue(String bearerToken) throws JwtInvalidException {
+    public TokenRes reissue(String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException {
         String curRefreshToken = resolveToken(bearerToken);
 
         if(!StringUtils.hasText(curRefreshToken)) {
@@ -103,6 +106,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String userEmail = getEmailFromToken(curRefreshToken);
+
+        userService.checkLeavedUser(userEmail);
 
         String refreshTokenFromRedis = refreshTokenRedisRepository.findById(userEmail)
                 .orElseThrow(() -> new JwtInvalidException("Refresh token expired!"))
@@ -124,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public String logout(String bearerToken) throws JwtInvalidException, BadRequestException {
+    public String logout(String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException {
         String accessToken = resolveToken(bearerToken);
 
         if(!validateToken(accessToken)) {
@@ -132,6 +137,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String userEmail = getEmailFromToken(accessToken);
+
+        userService.checkLeavedUser(userEmail);
 
         if(refreshTokenRedisRepository.existsById(userEmail)) {
             refreshTokenRedisRepository.deleteById(userEmail);
@@ -181,7 +188,7 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = jwtTokenProvider.parseClaimsFromToken(token);
 
         if(claims == null) {
-            throw new JwtInvalidException("Token not exist in claim");
+            throw new JwtInvalidException("Token does not exist in claim");
         }
 
         return claims.get("email", String.class);
