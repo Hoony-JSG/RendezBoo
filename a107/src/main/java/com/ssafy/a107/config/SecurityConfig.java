@@ -47,9 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.POST, "/api/badges", "/api/items").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.PUT, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
-                .mvcMatchers(HttpMethod.DELETE, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
+//                .mvcMatchers(HttpMethod.GET, "/api/onetoone/*").hasRole("ADMIN")
+//                .mvcMatchers(HttpMethod.POST, "/api/badges", "/api/items").hasRole("ADMIN")
+//                .mvcMatchers(HttpMethod.PUT, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
+//                .mvcMatchers(HttpMethod.DELETE, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
                 .antMatchers("/api/oauth/*", "/api/sms/*", "/api/user/check/**", "/api/user/join",
                         "/api/user/login", "/api/user/reissue").permitAll()
 //                .anyRequest().hasRole("USER")
