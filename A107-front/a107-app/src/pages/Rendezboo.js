@@ -11,7 +11,6 @@ const Rendezboo = () => {
     navigate('/' + props)
   }
   const Contents = {
-    border: '2px solid red',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
