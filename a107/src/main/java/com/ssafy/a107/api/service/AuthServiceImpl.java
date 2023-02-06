@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService {
         String userEmail = getEmailFromToken(curRefreshToken);
 
         String refreshTokenFromRedis = refreshTokenRedisRepository.findById(userEmail)
-                .orElseThrow(() -> new JwtInvalidException("Invalid refresh Token!"))
+                .orElseThrow(() -> new JwtInvalidException("Refresh token expired!"))
                 .getRefreshToken();
 
         if(!curRefreshToken.equals(refreshTokenFromRedis)) {
