@@ -14,7 +14,7 @@ import {
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
-
+import WebSocketChatTest from './pages/WebSocketChatTest'
 
 function App() {
 
@@ -34,6 +34,8 @@ function App() {
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
           <Route path="/test" element={<Test />}></Route>;
+          {/* 웹소켓 테스트용 라우터 */}
+          <Route path="/websocketchattest" element={<WebSocketChatTest />}></Route>;
         </Routes>
       </div>
     </div>
