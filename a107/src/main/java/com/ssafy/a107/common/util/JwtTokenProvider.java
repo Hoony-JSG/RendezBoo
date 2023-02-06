@@ -40,7 +40,7 @@ public class JwtTokenProvider {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -90,7 +90,7 @@ public class JwtTokenProvider {
 
         try {
             claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
+                    .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException signatureException) {
@@ -108,7 +108,7 @@ public class JwtTokenProvider {
 
     public long getExpiration(String accessToken) {
         Date expiration = Jwts.parserBuilder()
-                .setSigningKey(secretKey.getBytes())
+                .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(accessToken)
                 .getBody().getExpiration();
