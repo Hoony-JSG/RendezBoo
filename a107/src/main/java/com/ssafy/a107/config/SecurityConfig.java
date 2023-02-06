@@ -6,6 +6,7 @@ import com.ssafy.a107.common.auth.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -46,11 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/user/reissue").hasAuthority("ROLE_ADMIN")
-                .antMatchers("/api/user/logout").hasAuthority("ROLE_USER")
-                .antMatchers("/api/user/join", "/api/user/login").permitAll()
-//                .anyRequest().authenticated()
-                .anyRequest().permitAll()
+                .mvcMatchers(HttpMethod.POST, "/api/badges", "/api/items").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.PUT, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
+                .mvcMatchers(HttpMethod.DELETE, "/api/badges/*", "/api/items/*").hasRole("ADMIN")
+                .antMatchers("/api/oauth/*", "/api/sms/*", "/api/user/check/**", "/api/user/join",
+                        "/api/user/login", "/api/user/reissue").permitAll()
+                .anyRequest().hasRole("USER")
 
                 .and()
                 .exceptionHandling()

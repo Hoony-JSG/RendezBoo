@@ -1,6 +1,5 @@
 package com.ssafy.a107.db.entity;
 
-import com.ssafy.a107.api.request.JoinReq;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
