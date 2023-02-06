@@ -1,7 +1,7 @@
 package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.ChatRoomCreateReq;
-import com.ssafy.a107.api.service.ChatRoomServiceImpl;
+import com.ssafy.a107.api.service.ChatRoomService;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ChatRoomController {
 
-    private final ChatRoomServiceImpl chatRoomService;
+    private final ChatRoomService chatRoomService;
 
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저의 채팅방 정보 조회", notes = "유저의 채팅방 정보 조회")
