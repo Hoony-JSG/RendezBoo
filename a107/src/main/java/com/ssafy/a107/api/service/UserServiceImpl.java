@@ -35,14 +35,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void checkEmailDuplicate(String email) throws ConflictException {
         if(userRepository.existsByEmail(email)) {
-            throw new ConflictException("이미 등록된 유저입니다.");
+            throw new ConflictException("User already exist");
         }
     }
 
     @Override
     public void checkPhoneNumberDuplicate(String phoneNumber) throws ConflictException {
         if(userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new ConflictException("이미 등록된 유저입니다.");
+            throw new ConflictException("User already exist");
         }
     }
 

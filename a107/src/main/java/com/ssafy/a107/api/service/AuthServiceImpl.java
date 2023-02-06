@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException {
         User user = userRepository.findByEmail(loginReq.getEmail())
-                .orElseThrow(() -> new NotFoundException("회원이 없습니다."));
+                .orElseThrow(() -> new NotFoundException("Wrong email!"));
 
         checkPassword(loginReq.getPassword(), user.getPassword());
 
@@ -98,17 +98,17 @@ public class AuthServiceImpl implements AuthService {
         String curRefreshToken = resolveToken(bearerToken);
 
         if(!StringUtils.hasText(curRefreshToken)) {
-            throw new JwtInvalidException("잘못된 grant type");
+            throw new JwtInvalidException("Wrong grant type");
         }
 
         String userEmail = getEmailFromToken(curRefreshToken);
 
         String refreshTokenFromRedis = refreshTokenRedisRepository.findById(userEmail)
-                .orElseThrow(() -> new JwtInvalidException("Refresh Token 없음"))
+                .orElseThrow(() -> new JwtInvalidException("Invalid refresh Token!"))
                 .getRefreshToken();
 
         if(!curRefreshToken.equals(refreshTokenFromRedis)) {
-            throw new JwtInvalidException("Refresh Token 불일치");
+            throw new JwtInvalidException("Refresh Token not match");
         }
 
         String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
@@ -127,7 +127,7 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = resolveToken(bearerToken);
 
         if(!validateToken(accessToken)) {
-            throw new BadRequestException("잘못된 요청입니다.");
+            throw new BadRequestException("Invalid access token!");
         }
 
         String userEmail = getEmailFromToken(accessToken);
@@ -158,7 +158,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void checkPassword(String rawPassword, String findUserPassword) throws ConflictException {
         if(!passwordEncoder.matches(rawPassword, findUserPassword)) {
-            throw new ConflictException("비밀번호가 맞지 않습니다.");
+            throw new ConflictException("Wrong password!");
         }
     }
 
@@ -180,7 +180,7 @@ public class AuthServiceImpl implements AuthService {
         Claims claims = jwtTokenProvider.parseClaimsFromToken(token);
 
         if(claims == null) {
-            throw new JwtInvalidException("토큰에 claim이 존재하지 않음");
+            throw new JwtInvalidException("Token not exist in claim");
         }
 
         return claims.get("email", String.class);

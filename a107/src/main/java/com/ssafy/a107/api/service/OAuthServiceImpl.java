@@ -55,7 +55,7 @@ public class OAuthServiceImpl implements OAuthService {
         String accessToken = element.getAsJsonObject().get("access_token").getAsString();
 
         if(accessToken != null && !accessToken.equals("")) return accessToken;
-        else throw new TokenException("토큰 에러 발생");
+        else throw new TokenException("Token error!");
     }
 
     @Override
@@ -149,7 +149,7 @@ public class OAuthServiceImpl implements OAuthService {
             bw.close();
 
             if(accessToken == null || accessToken.equals("")) {
-                throw new TokenException("토큰 에러 발생");
+                throw new TokenException("Token error!");
             }
         }
         catch (IOException e) {
@@ -187,7 +187,7 @@ public class OAuthServiceImpl implements OAuthService {
             e.printStackTrace();
         }
 
-        if(res.length() == 0) throw new NotFoundException("카카오 이메일 불러오기 실패");
+        if(res.length() == 0) throw new NotFoundException("Failed to load kakao email");
 
         return res.toString();
     }

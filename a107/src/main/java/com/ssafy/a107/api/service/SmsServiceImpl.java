@@ -37,7 +37,7 @@ public class SmsServiceImpl implements SmsService {
     @Override
     public void matchCodes(String sentCode, String typedCode) throws ConflictException {
         if(!sentCode.equals(typedCode)) {
-            throw new ConflictException("인증번호가 일치하지 않습니다.");
+            throw new ConflictException("Auth code not match");
         }
     }
 
@@ -64,18 +64,18 @@ public class SmsServiceImpl implements SmsService {
         log.debug("response: {}", res);
 
         if(!res.getStatusCode().equals("2000")) {
-            throw new SmsException("SMS 전송 실패");
+            throw new SmsException("Failed to send SMS");
         }
     }
 
     @Override
     public void checkSmsReq(SmsReq smsReq) throws BadRequestException {
         if(smsReq.getPhoneNumber() == null || smsReq.getCode() != null) {
-            throw new BadRequestException("잘못된 요청입니다.");
+            throw new BadRequestException("Bad request");
         }
         // TODO: 정규표현식으로 변경
         else if(smsReq.getPhoneNumber().contains("-") || !smsReq.getPhoneNumber().startsWith("010")) {
-            throw new BadRequestException("잘못된 번호 양식입니다.");
+            throw new BadRequestException("Wrong number form");
         }
     }
 
@@ -83,10 +83,10 @@ public class SmsServiceImpl implements SmsService {
     public void checkCode(String code, String from) throws BadRequestException, SmsException {
         if(code == null) {
             if(from.equals("user")) {
-                throw new BadRequestException("잘못된 인증코드입니다.");
+                throw new BadRequestException("Wrong auth code");
             }
             else if(from.equals("redis")) {
-                throw new SmsException("시간 초과 혹은 서버 에러입니다.");
+                throw new SmsException("Timout or internal server error");
             }
         }
     }
