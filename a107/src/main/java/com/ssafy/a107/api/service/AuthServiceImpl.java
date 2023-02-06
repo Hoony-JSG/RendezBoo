@@ -2,7 +2,6 @@ package com.ssafy.a107.api.service;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
-import com.ssafy.a107.api.request.LogoutReq;
 import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
@@ -65,14 +64,16 @@ public class AuthServiceImpl implements AuthService {
             user.addAuthority(Authority.ofUser(user));
         }
 
-        log.debug("유저 Role: {}", user.getRoles());
-        log.debug("유저 이메일: {}", user.getEmail());
-
         User savedUser = userRepository.save(user);
+
+        log.debug("회원가입 이메일: {}", user.getEmail());
+        log.debug("유저 Role: {}", user.getRoles());
         log.debug("유저 seq: {}", user.getSeq());
+
         return savedUser.getSeq();
     }
 
+    @Transactional
     @Override
     public TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException {
         User user = userRepository.findByEmail(loginReq.getEmail())
@@ -84,9 +85,14 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
         RefreshToken refreshToken = saveRefreshToken(userEmail);
 
+        log.debug("로그인 이메일: {}", userEmail);
+        log.debug("발급된 AccessToken: {}", accessToken);
+        log.debug("발급된 RefreshToken: {}", refreshToken.getRefreshToken());
+
         return TokenRes.of(accessToken, refreshToken.getRefreshToken());
     }
 
+    @Transactional
     @Override
     public TokenRes reissue(String bearerToken) throws JwtInvalidException {
         String curRefreshToken = resolveToken(bearerToken);
@@ -96,20 +102,31 @@ public class AuthServiceImpl implements AuthService {
         }
 
         String userEmail = getEmailFromToken(curRefreshToken);
-        log.debug("userEmail: {}", userEmail);
+
+        String refreshTokenFromRedis = refreshTokenRedisRepository.findById(userEmail)
+                .orElseThrow(() -> new JwtInvalidException("Refresh Token 없음"))
+                .getRefreshToken();
+
+        if(!curRefreshToken.equals(refreshTokenFromRedis)) {
+            throw new JwtInvalidException("Refresh Token 불일치");
+        }
 
         String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
         RefreshToken refreshToken = saveRefreshToken(userEmail);
+
+        log.debug("재발급 이메일: {}", userEmail);
+        log.debug("발급된 AccessToken: {}", accessToken);
+        log.debug("발급된 RefreshToken: {}", refreshToken.getRefreshToken());
 
         return TokenRes.of(accessToken, refreshToken.getRefreshToken());
     }
 
     @Transactional
     @Override
-    public void logout(LogoutReq logoutReq) throws JwtInvalidException, BadRequestException {
-        String accessToken = resolveToken(logoutReq.getBearerToken());
+    public String logout(String bearerToken) throws JwtInvalidException, BadRequestException {
+        String accessToken = resolveToken(bearerToken);
 
-        if(!validateToken(accessToken, logoutReq.getEmail())) {
+        if(!validateToken(accessToken)) {
             throw new BadRequestException("잘못된 요청입니다.");
         }
 
@@ -123,8 +140,10 @@ public class AuthServiceImpl implements AuthService {
         logoutAccessTokenRedisRepository.save(LogoutAccessToken.of(accessToken,
                 userEmail, expiration));
 
-        log.debug("logout user \"{}\"", userEmail);
-        log.debug("accessToken expiration: {}ms", expiration);
+        log.debug("로그아웃 이메일: {}", userEmail);
+        log.debug("AccessToken expiration: {}ms", expiration);
+
+        return userEmail;
     }
 
     @Override
@@ -150,10 +169,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean validateToken(String accessToken, String userEmail) throws JwtInvalidException {
+    public boolean validateToken(String accessToken) throws JwtInvalidException {
         String emailFromToken = getEmailFromToken(accessToken);
 
-        return emailFromToken != null && emailFromToken.equals(userEmail) && !jwtTokenProvider.isTokenExpired(accessToken);
+        return emailFromToken != null && !jwtTokenProvider.isTokenExpired(accessToken);
     }
 
     @Override
@@ -163,8 +182,6 @@ public class AuthServiceImpl implements AuthService {
         if(claims == null) {
             throw new JwtInvalidException("토큰에 claim이 존재하지 않음");
         }
-
-        log.debug("claims: {}", claims);
 
         return claims.get("email", String.class);
     }

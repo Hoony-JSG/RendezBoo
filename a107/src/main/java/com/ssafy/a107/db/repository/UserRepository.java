@@ -11,6 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
+    Boolean existsByPhoneNumber(String phoneNumber);
 
     @Query("select u from UserFriend uf inner join User u on uf.user.seq = u.seq where uf.user.seq = ?1")
     List<User> findFriendByUserSeq(Long userSeq);

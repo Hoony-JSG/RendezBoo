@@ -40,6 +40,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void checkPhoneNumberDuplicate(String phoneNumber) throws ConflictException {
+        if(userRepository.existsByPhoneNumber(phoneNumber)) {
+            throw new ConflictException("이미 등록된 유저입니다.");
+        }
+    }
+
+    @Override
     public List<UserRes> getFriends(Long userSeq) throws NotFoundException{
         if(userRepository.existsById(userSeq)) {
             return userRepository.findFriendByUserSeq(userSeq).stream()

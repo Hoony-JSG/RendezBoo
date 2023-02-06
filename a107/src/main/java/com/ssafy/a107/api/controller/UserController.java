@@ -2,8 +2,6 @@ package com.ssafy.a107.api.controller;
 
 import com.ssafy.a107.api.request.JoinReq;
 import com.ssafy.a107.api.request.LoginReq;
-import com.ssafy.a107.api.request.LogoutReq;
-import com.ssafy.a107.api.request.ReissueReq;
 import com.ssafy.a107.api.response.TokenRes;
 import com.ssafy.a107.api.response.UserRes;
 import com.ssafy.a107.api.service.AuthService;
@@ -41,13 +39,11 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, NotFoundException {
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException {
         userService.checkEmailDuplicate(joinReq.getEmail());
+        userService.checkPhoneNumberDuplicate(joinReq.getPhoneNumber());
 
         authService.createUser(joinReq);
-
-        // for test
-        UserRes user = userService.getUserByEmail(joinReq.getEmail());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(joinReq.getEmail());
     }
@@ -62,21 +58,19 @@ public class UserController {
     }
 
     @PostMapping("/reissue")
-    @ApiOperation(value = "JWT 토큰 재발급")
-    public ResponseEntity<?> reissue(@RequestBody ReissueReq reissueReq) throws JwtInvalidException {
-        log.debug("bearerToken: {}", reissueReq.getBearerToken());
-
-        TokenRes res = authService.reissue(reissueReq.getBearerToken());
+    @ApiOperation(value = "JWT 토큰 재발급", notes = "Bearer 리프레시 토큰 필요")
+    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException {
+        TokenRes res = authService.reissue(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
     @PostMapping("/logout")
-    @ApiOperation(value = "유저 로그아웃")
-    public ResponseEntity<?> logout(@RequestBody LogoutReq logoutReq) throws JwtInvalidException, BadRequestException {
-        authService.logout(logoutReq);
+    @ApiOperation(value = "유저 로그아웃", notes = "Bearer 엑세스 토큰 필요")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, BadRequestException {
+        String userEmail = authService.logout(bearerToken);
 
-        return ResponseEntity.status(HttpStatus.OK).body(logoutReq.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(userEmail);
     }
 
     // 아이디 중복체크
