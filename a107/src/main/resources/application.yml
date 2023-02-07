@@ -141,3 +141,8 @@ cloud:
     stack:
       auto: false
     cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
+
+logging:
+  level:
+    root: info
+    com.ssafy: debug
