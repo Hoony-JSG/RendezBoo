@@ -1,13 +1,15 @@
-import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import KakaoLogin from './KakaoLogin'
 import NaverLogin from './NaverLogin'
-
+import '../Styles/SocialLoginButton.css'
 const AllSocialLogins = (props) => {
   return (
     <div>
-      <NaverLogin ver={props.ver} />
-      {/* <KakaoLogin /> */}
-      {/* <NewNaverLogin /> */}
+      <div className="SocialLoginButtonNaver">
+        <NaverLogin />
+      </div>
+      <div className="SocialLoginButtonKakao">
+        <KakaoLogin />
+      </div>
     </div>
   )
 }
