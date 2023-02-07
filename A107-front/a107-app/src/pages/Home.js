@@ -2,8 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import FloatingPlanet from '../components/Floatingplanet'
 
-const Home = () => {
-  console.log('처음 홈 화면')
+const Home = (setGetToken) => {
   return (
     <div>
       <div style={{ height: '100px' }}></div>
