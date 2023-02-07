@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import JoinItem1st from './JoinItem1st'
 import JoinItem2nd from './JoinItem2nd'
 import JoinItem3rd from './JoinItem3rd'
@@ -13,7 +13,7 @@ const JoinItem = () => {
     <JoinItem3rd />,
     <JoinItem4rd />,
   ]
-  const [order, setOrder] = useState(1, '')
+  const [order, setOrder] = useState(0, '')
 
   const handleSetNextNumber = () => {
     setOrder(order + 1)
@@ -23,17 +23,23 @@ const JoinItem = () => {
     setOrder(order - 1)
   }
   const renderThatComponent = () => {
-    for (let i = 1; i <= 4; i++) {
-      if (i === order) {
-        return <div>{ItemList[i]}</div>
-      }
-    }
+    return <div>{ItemList[order]}</div>
   }
+
+  useEffect(() => {
+    if (order === 0) {
+      setOrder(1)
+      console.log('000useEffect 페이지 : ' + order)
+    } else {
+      setOrder(2)
+      console.log('useEffect 페이지 : ' + order)
+    }
+  }, [])
 
   return (
     <div>
       <div>
-        <div>{renderThatComponent()}</div>
+        <div>{ItemList[order]}</div>
         <button
           type="button"
           disabled={order === 1}

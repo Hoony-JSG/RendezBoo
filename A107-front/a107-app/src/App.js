@@ -11,6 +11,7 @@ import {
   Docking1,
   Userinfo,
   Inventory,
+  Docking3,
   Test,
 } from './pages'
 import Navbar from './components/Navbar'
@@ -37,6 +38,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
+          <Route path="/docking3" element={<Docking3 />} />
+          <Route path="/docking3/:roomid" element={<Docking3 />} />
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;

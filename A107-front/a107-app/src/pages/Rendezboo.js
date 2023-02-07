@@ -16,6 +16,10 @@ const Rendezboo = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',
+    border: '1px solid white',
+    backdropFilter: 'blur(10px)',
+    margin: '30px',
+    height: 'auto',
   }
   const MeAndYou = {
     Me: id,
@@ -56,13 +60,18 @@ const Rendezboo = () => {
     width: '200px',
     height: '400px',
   }
+  const onThisButtonStyle = {
+    height: '500px',
+    display: 'flex',
+    alignItems: 'center',
+  }
   return (
     <div style={Contents}>
-      <div>
+      <div style={onThisButtonStyle}>
         <button
           type="button"
           onClick={(e) => {
-            goToPage('Docking1')
+            goToPage('docking1')
           }}
         >
           <div style={doorIconLayoutStyle}>
@@ -71,14 +80,16 @@ const Rendezboo = () => {
           Docking1
         </button>
       </div>
-      <div style={rocketItemSizeStyle}>
-        <RocketItem {...MeAndYou} />
+      <div style={onThisButtonStyle}>
+        <div style={rocketItemSizeStyle}>
+          <RocketItem {...MeAndYou} />
+        </div>
       </div>
-      <div>
+      <div style={onThisButtonStyle}>
         <button
           type="button"
           onClick={(e) => {
-            goToPage('Docking3')
+            goToPage('docking3')
           }}
         >
           <div style={doorTripleIconLayoutStyle}>

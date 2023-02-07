@@ -1,5 +1,5 @@
+import AllSocialLogins from './AllSocialLogins'
 import JoinItemSocialLoginButton from './JoinItemSocialLoginButton'
-import NaverLogin from './NaverLogin'
 
 const JoinItem1st = () => {
   return (
@@ -9,7 +9,7 @@ const JoinItem1st = () => {
         <JoinItemSocialLoginButton />
       </div>
       <div style={{ alignContent: 'center', display: 'inherit' }}>
-        <NaverLogin />
+        <AllSocialLogins ver="join" />
       </div>
     </div>
   )

@@ -4,20 +4,21 @@ import { VideoFilter } from '../modules/VideoFilter'
 
 export const FilteredVideo = ({ streamManager, maskPath, userSeq }) => {
   const canvasRef = useRef(null)
-  const videoRef = useRef(null)
-  // const { videoRef, speaking, micStatus, videoStatus } = useStream(streamManager)
-  useEffect(() => {
-    const getCamera = async () => {
-      const newStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      })
-      if (videoRef && videoRef.current && !videoRef.current.srcObject) {
-        videoRef.current.srcObject = newStream
-      }
-    }
-    getCamera()
-  }, [])
+  // const videoRef = useRef(null)
+  const { videoRef, speaking, micStatus, videoStatus } =
+    useStream(streamManager)
+  // useEffect(() => {
+  //   const getCamera = async () => {
+  //     const newStream = await navigator.mediaDevices.getUserMedia({
+  //       video: true,
+  //       audio: false,
+  //     })
+  //     if (videoRef && videoRef.current && !videoRef.current.srcObject) {
+  //       videoRef.current.srcObject = newStream
+  //     }
+  //   }
+  //   getCamera()
+  // }, [])
 
   VideoFilter(videoRef.current, canvasRef.current, maskPath)
 
