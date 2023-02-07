@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import '../styles/RocketItemButtonStyle.css'
+import '../Styles/RocketItemButtonStyle.css'
 const RocketBtn_Same = () => {
   const navigate = useNavigate()
   function edit() {
