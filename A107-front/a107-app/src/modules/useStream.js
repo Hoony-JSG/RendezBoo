@@ -3,9 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 export const useStream = (streamManager) => {
   const videoRef = useRef(null)
   const [speaking, setSpeaking] = useState(false)
-  // const [micStatus, setMicStatus] = useState(streamManager.stream.audioActive)
-  const [micStatus, setMicStatus] = useState(false)
-  // const [videoStatus, setVideoStatus] = useState(streamManager.stream.videoActive)
+  const [micStatus, setMicStatus] = useState(true)
   const [videoStatus, setVideoStatus] = useState(true)
 
   useEffect(() => {
