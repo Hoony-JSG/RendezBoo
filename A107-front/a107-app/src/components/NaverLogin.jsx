@@ -7,11 +7,12 @@ const NaverLogin = (props) => {
   const NAVER_CALLBACK_URL = 'http://localhost:3000/join'
 
   const initializeNaverLogin = () => {
+    // props.cameback = true
     const naverLogin = new naver.LoginWithNaverId({
       clientId: NAVER_CLIENT_ID,
       callbackUrl: NAVER_CALLBACK_URL,
       isPopup: false,
-      loginButton: { color: 'green', type: 1, height: 58 },
+      loginButton: { color: 'green', type: 1, height: 50 },
       callbackHandle: true,
     })
     naverLogin.init()

@@ -10,7 +10,7 @@ const Home = (setGetToken) => {
         <NavLink to="/login">로그인</NavLink>
       </div>
       <div>
-        <NavLink to="/join">조인</NavLink>
+        <NavLink to="/joinsocial">조인</NavLink>
       </div>
       <div style={{ height: '100px' }}></div>
       <FloatingPlanet />
