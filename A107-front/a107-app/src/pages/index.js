@@ -8,5 +8,6 @@ export { default as Userinfo } from './Userinfo'
 export { default as Inventory } from './Inventory'
 
 export { default as Docking1 } from './Docking1'
+export { default as Docking3 } from './Docking3'
 
 export { default as Test } from './Test'

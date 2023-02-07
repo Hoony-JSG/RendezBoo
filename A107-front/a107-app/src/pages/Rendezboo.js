@@ -62,7 +62,7 @@ const Rendezboo = () => {
         <button
           type="button"
           onClick={(e) => {
-            goToPage('Docking1')
+            goToPage('docking1')
           }}
         >
           <div style={doorIconLayoutStyle}>
@@ -78,7 +78,7 @@ const Rendezboo = () => {
         <button
           type="button"
           onClick={(e) => {
-            goToPage('Docking3')
+            goToPage('docking3')
           }}
         >
           <div style={doorTripleIconLayoutStyle}>
