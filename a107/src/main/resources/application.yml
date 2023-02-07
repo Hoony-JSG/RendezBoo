@@ -105,8 +105,8 @@ spring:
         max-active: 5
         max-idle: 5
         min-idle: 2
-      host: redis
-      port: 6379
+    host: redis
+    port: 6379
 
   data:
     mongodb:
