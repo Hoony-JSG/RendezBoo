@@ -10,7 +10,9 @@ async function getCamera() {
 
 const Test = () => {
   let [streamManager, setStreamManager] = useState('')
-  let [maskPath, setMaskPath] = useState('')
+  let [maskPath, setMaskPath] = useState(
+    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
+  )
   let [userSeq, setUserSeq] = useState(2)
 
   return (
