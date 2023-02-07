@@ -161,29 +161,57 @@ const Docking1 = (props) => {
         </div>
       ) : null}
       {session !== undefined ? (
-        <div className="video-container">
-          {publisher !== undefined ? (
-            <div>
-              <FilteredVideo
-                streamManager={publisher}
-                maskPath={
-                  'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                }
-                userSeq={userSeq}
-              />
-            </div>
-          ) : null}
-          {subscribers.map((sub, idx) => (
-            <div key={idx}>
-              <FilteredVideo
-                streamManager={sub.streamManager}
-                maskPath={
-                  'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                }
-                userSeq={2}
-              />
-            </div>
-          ))}
+        <div
+          className="video-container"
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            className="sub-container"
+            style={{
+              width: '960px',
+              height: '720px',
+            }}
+          >
+            {subscribers.map((sub, idx) => (
+              <div key={idx}>
+                <FilteredVideo
+                  streamManager={sub.streamManager}
+                  maskPath={
+                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
+                  }
+                  userSeq={2}
+                  width={'960px'}
+                  height={'720px'}
+                />
+              </div>
+            ))}
+          </div>
+          <div
+            className="pub-container"
+            style={{
+              width: '400px',
+              height: '720px',
+            }}
+          >
+            {publisher !== undefined ? (
+              <div>
+                <FilteredVideo
+                  streamManager={publisher}
+                  maskPath={
+                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
+                  }
+                  userSeq={userSeq}
+                  width={'320px'}
+                  height={'240px'}
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>
