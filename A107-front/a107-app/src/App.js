@@ -9,14 +9,14 @@ import {
   Join,
   Rocket,
   Docking1,
+  Userinfo,
+  Inventory,
   Docking3,
   Test,
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
-import Userinfo from './pages/Userinfo'
-import Inventory from './pages/Inventory'
-import WebSocketChatTest from './pages/WebSocketChatTest'
+import WebSocketChatTest from './modules/WebSocketChatTest'
 
 function App() {
   const location = useLocation()

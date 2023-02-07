@@ -2,7 +2,7 @@ import { useState } from 'react'
 // import ReactDatePicker from 'react-datepicker'
 
 // import 'react-datepicker/dist/react-datepicker.css'
-import '../Styles/DatePickerCenterStyle.css'
+import '../styles/DatePickerCenterStyle.css'
 
 const JoinItemBirth = () => {
   const [birth, setBirth] = useState(new Date())
