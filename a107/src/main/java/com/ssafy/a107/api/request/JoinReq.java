@@ -13,6 +13,7 @@ public class JoinReq {
     private String email;
     private String password;
     private String city;
+    private String birthday;
     private Boolean gender;
     private String phoneNumber;
     private String name;
