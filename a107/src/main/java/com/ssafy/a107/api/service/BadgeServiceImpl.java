@@ -31,7 +31,7 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public List<BadgeRes> getBadgeByUserSeq(Long userSeq) throws NotFoundException{
-        if(userRepository.existsById(userSeq)) throw new NotFoundException("Wrong User Seq!");
+        if(!userRepository.existsById(userSeq)) throw new NotFoundException("Wrong User Seq!");
         return badgeRepository.findBadgesByUserSeq(userSeq).stream()
                 .map(BadgeRes::new)
                 .collect(Collectors.toList());
