@@ -1,7 +1,7 @@
 FROM node:16.19.0-alpine as builder
 WORKDIR "/app"
 COPY package.json .
-RUN npm install --force
+RUN npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
