@@ -24,11 +24,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Slf4j
 public class AuthServiceImpl implements AuthService {
+
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     private final UserRepository userRepository;
     private final UserService userService;
@@ -42,12 +47,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public Long createUser(JoinReq joinReq) {
+    public Long createUser(JoinReq joinReq) throws ParseException {
         User user = User.builder()
                 .email(joinReq.getEmail())
                 .password(passwordEncoder.encode(joinReq.getPassword()))
                 .city(joinReq.getCity())
                 .gender(joinReq.getGender())
+                .birthday(format.parse(joinReq.getBirthday()))
                 .phoneNumber(joinReq.getPhoneNumber())
                 .name(joinReq.getName())
                 .profileImagePath(joinReq.getProfileImagePath())

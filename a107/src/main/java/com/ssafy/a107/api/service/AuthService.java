@@ -9,9 +9,11 @@ import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.RefreshToken;
 
+import java.text.ParseException;
+
 public interface AuthService {
 
-    Long createUser(JoinReq joinReq);
+    Long createUser(JoinReq joinReq) throws ParseException;
     TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException;
     TokenRes reissue(String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException;
     String logout(String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException;

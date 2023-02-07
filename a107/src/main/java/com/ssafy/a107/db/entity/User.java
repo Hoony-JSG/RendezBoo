@@ -7,10 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static javax.persistence.CascadeType.ALL;
@@ -31,6 +28,9 @@ public class User extends BaseEntity{
 
     @Column(nullable = false, length = 20)
     private String city;
+
+    @Column(nullable = false)
+    private Date birthday;
 
     /**
      * 남자: 1 여자: 0

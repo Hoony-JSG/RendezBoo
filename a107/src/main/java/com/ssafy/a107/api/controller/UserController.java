@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @Api(value = "유저 API", tags = {"User"})
 @RestController
 @RequestMapping("/api/user")
@@ -39,7 +41,7 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException {
+    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, ParseException {
         userService.checkEmailDuplicate(joinReq.getEmail());
 
         joinReq.parsePhoneNumber();
