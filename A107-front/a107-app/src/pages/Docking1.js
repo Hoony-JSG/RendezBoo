@@ -176,7 +176,7 @@ const Docking1 = (props) => {
           {subscribers.map((sub, idx) => (
             <div key={idx}>
               <FilteredVideo
-                streamManager={sub}
+                streamManager={sub.streamManager}
                 maskPath={
                   'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
                 }
