@@ -1,13 +1,13 @@
-import NaverLogin from './NaverLogin'
+import AllSocialLogins from './AllSocialLogins'
 
-const LoginSocial = () => {
+const LoginSocial = (props) => {
   console.log('로그인 소셜')
   return (
     <div>
       로그인 소셜
       <br />
       <div>
-        <NaverLogin />
+        <AllSocialLogins ver={props.ver} />
       </div>
     </div>
   )
