@@ -2,7 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useStream } from '../modules/useStream'
 import { VideoFilter } from '../modules/VideoFilter'
 
-export const FilteredVideo = ({ streamManager, maskPath, userSeq }) => {
+export const FilteredVideo = ({
+  streamManager,
+  maskPath,
+  userSeq,
+  width,
+  height,
+}) => {
   const canvasRef = useRef(null)
   // const videoRef = useRef(null)
   const { videoRef, speaking, micStatus, videoStatus } =
@@ -20,13 +26,13 @@ export const FilteredVideo = ({ streamManager, maskPath, userSeq }) => {
   //   getCamera()
   // }, [])
 
-  VideoFilter(videoRef.current, canvasRef.current, maskPath)
+  VideoFilter(videoRef.current, canvasRef.current, maskPath, width, height)
 
   return (
     <div
       style={{
-        width: '640px',
-        height: '480px',
+        width: width,
+        height: height,
         border: 'solid white 1px',
         position: 'relative',
       }}
