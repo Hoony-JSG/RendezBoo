@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import ReactDatePicker from 'react-datepicker'
-import { ko } from 'date-fns/esm/locale'
+// import ReactDatePicker from 'react-datepicker'
 
-import 'react-datepicker/dist/react-datepicker.css'
+// import 'react-datepicker/dist/react-datepicker.css'
 import '../Styles/DatePickerCenterStyle.css'
 
 const JoinItemBirth = () => {
@@ -14,16 +13,16 @@ const JoinItemBirth = () => {
     <div>
       생년월일
       <br />
-      <ReactDatePicker
+      {/* <ReactDatePicker
         showYearDropdown
         dropdownMode="select"
         showMonthDropdown
-        locale={ko}
+        locale="ko"
         selected={birth}
         onChange={(date) => setBirth(date)}
         maxDate={new Date()}
         dateFormat="yyyy년 MM월 dd일 (eee요일)"
-      />
+      /> */}
     </div>
   )
 }
