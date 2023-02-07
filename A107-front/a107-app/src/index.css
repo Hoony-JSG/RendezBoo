@@ -1,13 +1,50 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Gmarket_light";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: url('bg.png');
+  background-color: #173147;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white;
 }
+
+
+h1 {
+  font-family: "KIMM_light";
+  text-shadow: "0px 0px 2px rgba(255, 255, 255, 0.25), 0px 0px 5px rgba(0, 0, 0, 0.25)",
+}
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+@font-face {
+  font-family: "KIMM_light";
+  src: url("../src/static/한국기계연구원_Light.ttf");
+}
+
+@font-face {
+  font-family: "KIMM_bold";
+  src: url("../src/static/한국기계연구원_bold.ttf");
+}
+
+@font-face {
+  font-family: "Gmarket_bold";
+  src: url("../src/static/GmarketSansBold.otf");
+}
+
+@font-face {
+  font-family: "Gmarket_medium";
+  src: url("../src/static/GmarketSansMedium.otf");
+}
+
+@font-face {
+  font-family: "Gmarket_light";
+  src: url("../src/static/GmarketSansLight.otf");
 }
