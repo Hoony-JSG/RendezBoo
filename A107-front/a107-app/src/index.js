@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import { composeWithDevTools } from '@redux-devtools/extension'
 import './index.css'
@@ -9,7 +9,7 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import rootReducer from './modules'
 
-const store = createStore(rootReducer, composeWithDevTools())
+const store = configureStore({reducer:rootReducer}, composeWithDevTools())
 
 ReactDOM.render(
   //   <React.StrictMode>

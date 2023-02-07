@@ -1,18 +1,10 @@
-
-
-const INPUT_SIGNAL = 'signal/INPUT_SIGNAL'
-const SEND_SIGNAL = 'signal/SEND_SIGNAL'
+const ADD_SIGNAL = 'signal/ADD_SIGNAL'
 const RECEIVE_SIGNAL = 'signal/RECEIVE_SIGNAL'
 
-export const inputSignal = (input) => ({
-  type: INPUT_SIGNAL,
-  input,
-})
+let chat_seq = 15
 
-let chat_seq = 3
-
-export const sendSignal = (input) => ({
-  type: SEND_SIGNAL,
+export const addSignal = (input) => ({
+  type: ADD_SIGNAL,
   content: {
     chat_seq: chat_seq++,
     message: input,
@@ -62,19 +54,13 @@ const initialState = {
 
 function signal(state = initialState, action) {
   switch (action.type) {
-    case INPUT_SIGNAL:
+    case ADD_SIGNAL:
       return {
-        ...state,
-        input: action.input,
-      }
-    case SEND_SIGNAL:
-      return {
-        ...state,
-        content: state.content.concat(action.content)
+        content: state.content.concat(...state.content, action.content)
       }
     case RECEIVE_SIGNAL:
       return {
-        state
+        ...state
       }
     default:
       return state
