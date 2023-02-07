@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import '../Styles/RocketItemButtonStyle.css'
+import '../styles/RocketItemButtonStyle.css'
 const RocketBtn_Diff = () => {
   const navigate = useNavigate()
   function doSignal() {
