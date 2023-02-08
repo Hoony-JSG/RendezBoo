@@ -240,12 +240,15 @@ const Docking1 = (props) => {
             className="sub-container"
             style={{
               width: '60%',
-              height: '720px',
+              height: '840px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               alignItems: 'center',
-              border: 'solid white 2px',
+              borderRadius: '40px',
+              border: '2px solid #FFFFFF',
+              background: 'rgba(23, 49, 71, 0.8)',
+              filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
               position: 'relative',
             }}
           >
@@ -291,7 +294,7 @@ const Docking1 = (props) => {
               id="subscriber"
               style={{
                 width: '100%',
-                height: '720px',
+                height: '840px',
                 overflow: 'hidden',
                 borderRadius: '40px',
                 border: '2px solid #FFFFFF',
@@ -314,7 +317,7 @@ const Docking1 = (props) => {
             className="pub-container"
             style={{
               width: '30%',
-              height: '720px',
+              height: '840px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -325,7 +328,7 @@ const Docking1 = (props) => {
               <div
               style={{
                 width: '100%',
-                height: '320px',
+                height: '360px',
                 overflow: 'hidden',
                 borderRadius: '40px',
                 border: '2px solid #FFFFFF',

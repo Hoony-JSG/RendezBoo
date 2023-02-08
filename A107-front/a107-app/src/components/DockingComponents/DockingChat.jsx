@@ -4,7 +4,7 @@ import * as StompJs from '@stomp/stompjs'
 const DockingChat = () => {
     const chatStyle = {
         width: '100%',
-        height: '375px',
+        height: '450px',
         borderRadius: '40px',
         border: '2px solid #FFFFFF',
         background: 'rgba(23, 49, 71, 0.8)',

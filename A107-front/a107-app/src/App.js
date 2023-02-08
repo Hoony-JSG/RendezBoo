@@ -29,7 +29,8 @@ function App() {
           location.pathname === '/join' ||
           location.pathname === '/login' ||
           location.pathname === '/Login' ||
-          location.pathname === '/joinsocial'
+          location.pathname === '/joinsocial' ||
+          location.pathname === '/docking1'
         ) && <Navbar />}
         <Routes>
           <Route path="/home" element={<Home />} />

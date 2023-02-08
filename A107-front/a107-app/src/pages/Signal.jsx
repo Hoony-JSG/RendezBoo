@@ -15,8 +15,8 @@ const Signal = () => {
 
   useEffect( () => {
     axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
-      console.log(response.data)
       setChatRoom(response.data)
+      console.log(response.data)
     })
   }, [])
 
@@ -27,12 +27,10 @@ const Signal = () => {
     padding: '40px',
     gap: '20px',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     position: 'absolute',
     width: '80%',
     height: '80%',
-    left: '160px',
-    top: '120px',
     background:
       'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     border: '2px solid #FFFFFF',
@@ -57,7 +55,11 @@ const Signal = () => {
   }
 
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      margin: '20px',
+    }}>
       <div className="window" style={windowStyle}>
         <div className="aside" style={asideStyle}>
           <SiRocketdotchat style={iconStyle} />

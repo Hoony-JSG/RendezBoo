@@ -27,11 +27,11 @@ const SignalSelected = ({ userSeq, roomSeq }) => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
-                gap: '10px',
+                gap: '20px',
             }}
         >
             <img
-              src={userSeq.profileImagePath || {userLogo}}  
+              src={userSeq.profileImagePath || userLogo}  
               style={{ width: '75px', height: '75px' }}
               alt={userSeq}
             />

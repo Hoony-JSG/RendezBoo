@@ -17,26 +17,18 @@ export const FilteredVideo = ({
 
   const videoStyle = {
     width: '100%',
-    height: 'inherit',
-    position: 'absolute',
-    // top: 0,
-    // right: 0,
-    // left: 0,
-    // bottom: 0,
-    // objectFit: 'cover',
+    height: '100%',
+    position: 'relative',
+    objectFit: 'cover',
     zIndex: 10,
   }
   
   const canvasStyle = {
     width: '100%',
-    height: 'inherit',
-    // position: 'absolute',
-    // top: 0,
-    // right: 0,
-    // left: 0,
-    // bottom: 0,
-    // objectFit: 'cover',
-    zIndex: 10,
+    height: '100%',
+    position: 'absolute',
+    objectFit: 'cover',
+    zIndex: 12,
   }
   
   useEffect(() => {
