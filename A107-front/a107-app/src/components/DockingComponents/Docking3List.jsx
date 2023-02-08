@@ -1,14 +1,20 @@
+import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 const Docking3List = ({ docking3room }) => {
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
-  const goToPage = (props) => {
-    navigate('/' + props)
+  const enterMeetingRoom = (roomid) => {
+    var userseq = 1;
+    console.log('https://i8a107.p.ssafy.io/api/multi-meetings/'+roomid+'/'+userseq);
+    axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+roomid+'/'+userseq).then((response)=>{
+        console.log(response.data)
+    }, [])
+    navigate('/docking3/' + roomid)
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',
-    width: '100%',
+    width: '25%',
     background:
       'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     border: '2px solid #FFFFFF',
@@ -19,7 +25,7 @@ const Docking3List = ({ docking3room }) => {
   return (
     <div
       style={multiMeetingRoomListStyle}
-      onClick={() => goToPage('docking3/' + docking3room.multiMeetingRoomSeq)}
+      onClick={() => enterMeetingRoom(docking3room.multiMeetingRoomSeq)}
     >
       <div>
         <h3>제목: {title}</h3>
