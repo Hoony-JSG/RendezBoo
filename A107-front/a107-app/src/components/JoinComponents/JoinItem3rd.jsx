@@ -1,6 +1,6 @@
-import RocketItem from './RocketItem'
+import RocketItem from '../RocketComponents/RocketItem'
 
-import '../Styles/temp_border_style.css'
+import '../../Styles/temp_border_style.css'
 const JoinItem3rd = () => {
   return (
     <div className="temp_border_style">

@@ -1,4 +1,4 @@
-import '../Styles/temp_border_style.css'
+import '../../Styles/temp_border_style.css'
 import JoinItemBirth from './JoinItemBirth'
 import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'

@@ -1,6 +1,5 @@
 import RocketBadgeList from './RocketBadgeList'
 import RocketBadgeRep from './RocketBadgeRep'
-
 const RocketBadge = (props) => {
   console.log(props.ver === 'Me' ? '내꺼' : '다른사람꺼')
   const WholeFrame = {

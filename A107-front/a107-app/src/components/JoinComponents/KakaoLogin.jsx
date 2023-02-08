@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import kakaoLogo from '../Images/kakao-logo.png'
+import React from 'react'
+import kakaoLogo from '../../Images/kakao-logo.png'
 
 const KakaoLogin = () => {
   const handleKakaoLogin = () => {

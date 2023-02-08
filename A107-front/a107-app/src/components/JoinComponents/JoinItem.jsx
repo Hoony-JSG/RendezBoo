@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react'
-import JoinItem1st from './JoinItem1st'
+import { useState } from 'react'
+import { BiPlanet } from 'react-icons/bi'
 import JoinItem2nd from './JoinItem2nd'
 import JoinItem3rd from './JoinItem3rd'
 import JoinItem4rd from './JoinItem4rd'
-import { BiPlanet } from 'react-icons/bi'
-import { NavLink } from 'react-router-dom'
 
 const JoinItem = () => {
   const ItemList = ['', '', <JoinItem2nd />, <JoinItem3rd />, <JoinItem4rd />]

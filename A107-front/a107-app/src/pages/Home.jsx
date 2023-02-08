@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import FloatingPlanet from '../components/Floatingplanet'
+import FloatingPlanet from '../components/HomeComponents/Floatingplanet'
 
 const Home = (setGetToken) => {
   return (

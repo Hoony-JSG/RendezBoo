@@ -1,7 +1,4 @@
-import { useState } from 'react'
-
-import '../Styles/DatePickerCenterStyle.css'
-
+import '../../Styles/DatePickerCenterStyle.css'
 const JoinItemBirth = () => {
   return (
     <div>

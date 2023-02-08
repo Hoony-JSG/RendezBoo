@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { useParams } from 'react-router-dom'
-import RocketBadge from '../components/RocketBadge'
-import RocketItem from '../components/RocketItem'
-import RocketRadar from '../components/RocketRadar'
+import RocketBadge from '../components/RocketComponents/RocketBadge'
+import RocketItem from '../components/RocketComponents/RocketItem'
+import RocketRadar from '../components/RocketComponents/RocketRadar'
 
 const Rocket = () => {
   const Me = 'wjdgnsxhsl'

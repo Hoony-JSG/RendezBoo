@@ -2,7 +2,7 @@ import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { FilteredVideo } from '../components/FilteredVideo'
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as faceapi from 'face-api.js'
 
 const APPLICATION_SERVER_URL =

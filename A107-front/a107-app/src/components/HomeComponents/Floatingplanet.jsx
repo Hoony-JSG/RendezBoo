@@ -1,5 +1,5 @@
 import React from 'react'
-import '../Styles/FloatingPlanet.css'
+import '../../Styles/FloatingPlanet.css'
 import { GiRingedPlanet } from 'react-icons/gi'
 const FloatingPlanet = () => {
   return (

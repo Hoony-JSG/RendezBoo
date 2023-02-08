@@ -1,8 +1,7 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import RocketBtn from '../components/RocketBtn'
-import RocketItem from '../components/RocketItem'
 import { BsFillDoorClosedFill, BsFillDoorOpenFill } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
+import RocketItem from '../components/RocketComponents/RocketItem'
 const Rendezboo = () => {
   console.log('랑데부 페이지')
   const id = 'wjdgnsxhsl'
