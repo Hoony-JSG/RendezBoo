@@ -16,6 +16,7 @@ import {
 import Navbar from './components/Navbar'
 import './App.css'
 import WebSocketChatTest from './modules/WebSocketChatTest'
+import JoinSocial from './pages/JoinSocial'
 
 function App() {
   const location = useLocation()
@@ -27,7 +28,8 @@ function App() {
           location.pathname === '/home' ||
           location.pathname === '/join' ||
           location.pathname === '/login' ||
-          location.pathname === '/Login'
+          location.pathname === '/Login' ||
+          location.pathname === '/joinsocial'
         ) && <Navbar />}
         <Routes>
           <Route path="/home" element={<Home />} />
@@ -35,6 +37,7 @@ function App() {
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:userid" element={<Signal />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/joinsocial" element={<JoinSocial />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
           <Route path="/docking3" element={<Docking3 />} />

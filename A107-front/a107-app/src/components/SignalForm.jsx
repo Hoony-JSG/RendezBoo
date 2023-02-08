@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import { SiRocketdotchat } from 'react-icons/si'
+import { useDispatch, useSelector } from 'react-redux'
+import { addSignal, receiveSignal } from '../modules/signal'
 
 const SignalForm = () => {
+  const dispatch = useDispatch()
+  // const inputs = useSelector((state) => state.input);
+
   const [signal, setSignal] = useState('')
   const inputSignal = (e) => {
     setSignal(e.target.value)
+    console.log(e.target.value)
   }
   const sendSignal = (e) => {
     e.preventDefault()
+    dispatch(addSignal(signal))
     setSignal('')
   }
 
