@@ -2,8 +2,13 @@ import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+<<<<<<< HEAD
 import FilteredVideo from '../components/DockingComponents/FilteredVideo'
 import DockingChat from '../components/DockingComponents/DockingChat'
+=======
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
+import * as faceapi from 'face-api.js'
+>>>>>>> frontend
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -126,6 +131,32 @@ const Docking1 = (props) => {
     [publisher]
   )
 
+  async function useFaceAPI() {
+    const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
+    const videoEl = document.querySelector('#hidden-cam')
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+    videoEl.srcObject = stream
+    console.log("video loaded")
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
+    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
+    console.log("tinyFaceDetector loaded")
+    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+    console.log("faceEx loaded")
+    await onPlay()
+  }
+
+  async function onPlay() {
+    const videoEl = document.querySelector('#hidden-cam')
+
+    if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay())
+
+    const result = await faceapi.detectSingleFace(videoEl).withFaceExpressions()
+
+    console.log(result)
+
+    setTimeout(() => onPlay())
+  }
+
   // userSeq 기반으로 오픈비두 토큰 가져옴
   async function getDocking1Token(userSeq) {
     const response = await axios.post(
@@ -246,6 +277,10 @@ const Docking1 = (props) => {
           </div>
         </div>
       ) : null}
+      <div style={{ display: 'none' }}>
+        <video id="hidden-cam" autoPlay/>
+      </div>
+      <button onClick={useFaceAPI}>expressions</button>
     </div>
   )
 }
