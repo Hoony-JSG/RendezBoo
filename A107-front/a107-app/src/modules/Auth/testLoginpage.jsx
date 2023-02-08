@@ -1,4 +1,4 @@
-import {setRefreshToken, getRefreshTokenFromCookie, getAccessToken, getHeader, removeToken} from "./Jwt";
+import {setRefreshToken, getRefreshTokenFromCookie, getAccessToken, getHeader, removeToken, reissueAccessToken} from "./Jwt";
 import React, { useState } from 'react'
 import axios from "axios";
 
@@ -24,12 +24,12 @@ const LoginTest = () => {
         password,
       });
 
-      // Handle successful login
       setIsLoggedIn(true);
       console.log(response.data);
       // console.log(response.data.refreshToken)
       setRefreshToken(response.data.refreshToken)
       console.log(getRefreshTokenFromCookie())
+      console.lot(reissueAccessToken())
     } catch (error) {
       setError(error.message);
     }
