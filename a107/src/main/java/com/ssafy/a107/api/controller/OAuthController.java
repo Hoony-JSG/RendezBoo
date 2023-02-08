@@ -29,7 +29,7 @@ public class OAuthController {
 
     @GetMapping("/naver")
     @ApiOperation(value = "네이버 OAuth", notes = "유저의 네이버 이메일 제공, 이미 가입한 유저면 null")
-    public ResponseEntity<?> naverCallBack(@RequestParam String code, @RequestParam String state) throws TokenException, ConflictException {
+    public ResponseEntity<JoinRes> naverCallBack(@RequestParam String code, @RequestParam String state) throws TokenException, ConflictException {
 
         log.debug("Naver OAuth");
         log.debug("OAuth code: {}", code);
@@ -48,7 +48,7 @@ public class OAuthController {
 
     @GetMapping("/kakao")
     @ApiOperation(value = "카카오 OAuth", notes = "유저의 카카오 이메일 제공, 이미 가입한 유저면 null")
-    public ResponseEntity<?> kakaoCallBack(@RequestParam String code) throws TokenException, ConflictException, NotFoundException {
+    public ResponseEntity<JoinRes> kakaoCallBack(@RequestParam String code) throws TokenException, ConflictException, NotFoundException {
 
         log.debug("Kakao OAuth");
         log.debug("OAuth code: {}", code);

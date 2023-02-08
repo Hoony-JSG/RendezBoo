@@ -27,28 +27,28 @@ public class ItemController {
 
     @GetMapping
     @ApiOperation(value = "전체 아이템 리스트 조회")
-    public ResponseEntity<?> getAllItemList() {
+    public ResponseEntity<List<ItemRes>> getAllItemList() {
         List<ItemRes> items = itemService.getAllItems();
         return ResponseEntity.status(HttpStatus.OK).body(items);
     }
 
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "특정 유저의 아이템 리스트 조회", notes = "유저 시퀀스로 아이템 리스트 제공")
-    public ResponseEntity<?> getItemListByUserSeq(@PathVariable Long userSeq) throws NotFoundException {
+    public ResponseEntity<List<ItemRes>> getItemListByUserSeq(@PathVariable Long userSeq) throws NotFoundException {
         List<ItemRes> itemList = itemService.getItemByUserSeq(userSeq);
         return ResponseEntity.status(HttpStatus.OK).body(itemList);
     }
 
     @PostMapping("/userItem")
     @ApiOperation(value = "특정 유저에게 아이템을 생성함")
-    public ResponseEntity<?> addItemToUser(@RequestBody UserItemReq userItemReq) throws NotFoundException{
+    public ResponseEntity addItemToUser(@RequestBody UserItemReq userItemReq) throws NotFoundException{
         itemService.createUserItem(userItemReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping
     @ApiOperation(value = "새로운 아이템 생성 - 관리자만 사용 가능")
-    public ResponseEntity<?> createItem(@RequestPart MultipartFile multipartFile, @RequestParam Byte type, @RequestParam String name) throws IOException{
+    public ResponseEntity<Long> createItem(@RequestPart MultipartFile multipartFile, @RequestParam Byte type, @RequestParam String name) throws IOException{
         ItemCreateReq itemCreateReq = new ItemCreateReq(type, name, multipartFile);
         Long createdSeq = itemService.createItem(itemCreateReq);
 
@@ -58,7 +58,7 @@ public class ItemController {
 
     @PutMapping("/{itemSeq}")
     @ApiOperation(value = "아이템 업데이트 - 관리자만 사용 가능")
-    public ResponseEntity<?> updateItem(@PathVariable Long itemSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name) throws NotFoundException, IOException{
+    public ResponseEntity<Long> updateItem(@PathVariable Long itemSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name) throws NotFoundException, IOException{
         ItemUpdateReq itemUpdateReq = new ItemUpdateReq(itemSeq, name, multipartFile);
         Long updatedSeq = itemService.updateItem(itemUpdateReq);
 
@@ -67,8 +67,8 @@ public class ItemController {
 
     @DeleteMapping("/{itemSeq}")
     @ApiOperation(value = "아이템 삭제 - 관리자만 사용 가능")
-    public ResponseEntity<?> deleteItem(@PathVariable Long itemSeq) throws NotFoundException{
+    public ResponseEntity<Long> deleteItem(@PathVariable Long itemSeq) throws NotFoundException{
         itemService.deleteItem(itemSeq);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(itemSeq);
     }
 }

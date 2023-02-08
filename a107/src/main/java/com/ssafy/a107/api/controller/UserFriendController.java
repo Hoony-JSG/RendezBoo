@@ -25,7 +25,7 @@ public class UserFriendController {
      */
     @PostMapping("/{userSeq}/{otherUserSeq}")
     @ApiOperation(value = "친구 추가", notes="나(userSeq)와 상대방(otherUserSeq)가 친구를 맺는다.")
-    public ResponseEntity<?> addFriend(
+    public ResponseEntity<Long> addFriend(
             @PathVariable Long userSeq, @PathVariable Long otherUserSeq) throws NotFoundException {
         Long friendSeq = friendService.addFriend(userSeq, otherUserSeq);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendSeq);
@@ -39,8 +39,8 @@ public class UserFriendController {
      */
     @DeleteMapping("/{userSeq}/{otherUserSeq}")
     @ApiOperation(value = "친구 삭제", notes="나(userSeq)와 상대방(otherUserSeq)의 친구 관계 삭제.")
-    public ResponseEntity<?> deleteFriend(@PathVariable Long userSeq, @PathVariable Long otherUserSeq) throws NotFoundException{
+    public ResponseEntity deleteFriend(@PathVariable Long userSeq, @PathVariable Long otherUserSeq) throws NotFoundException{
         friendService.deleteFriend(userSeq, otherUserSeq);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

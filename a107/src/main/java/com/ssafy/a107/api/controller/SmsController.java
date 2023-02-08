@@ -27,7 +27,7 @@ public class SmsController {
 
     @ApiOperation(value = "사용자에게 인증번호 전송", notes = "번호는 01012345678 형태로 입력")
     @PostMapping("/send")
-    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
+    public ResponseEntity<SmsRes> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
 
         // 인증번호 보내기 전 smsReq가 유효한지, 이미 가입한 번호인지 확인
         smsService.checkSmsReq(smsReq);
@@ -53,7 +53,7 @@ public class SmsController {
 
     @ApiOperation(value = "인증번호가 일치하는지 확인")
     @PostMapping("/check")
-    public ResponseEntity<?> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
+    public ResponseEntity<SmsRes> checkCode(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
 
         // 잘못된 인증코드 체크
         smsService.checkCode(smsReq.getCode(), "user");

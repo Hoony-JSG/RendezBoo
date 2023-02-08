@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class OneToOneMeetingController {
      */
     @ApiOperation("유저 시퀀스 기반으로 일대일 매칭을 신청하면 토큰을 전달")
     @PostMapping("")
-    public ResponseEntity<?> joinMatch(@RequestBody OneToOneMeetingJoinReq oneToOneMeetingJoinReq) throws OpenViduJavaClientException, OpenViduHttpException, NotFoundException {
+    public ResponseEntity<MeetingRoomRes> joinMatch(@RequestBody OneToOneMeetingJoinReq oneToOneMeetingJoinReq) throws OpenViduJavaClientException, OpenViduHttpException, NotFoundException {
         MeetingRoomRes meetingRoomRes = oneToOneMeetingService.joinMatch(oneToOneMeetingJoinReq);
         return ResponseEntity.status(HttpStatus.OK).body(meetingRoomRes);
     }
@@ -41,7 +40,7 @@ public class OneToOneMeetingController {
 
     @ApiOperation("관리자 전용 -- 전체 일대일 미팅방 정보")
     @GetMapping("/{status}")
-    public ResponseEntity<?> getOneToOneMeetingRooms(@PathVariable Byte status) {
+    public ResponseEntity<List<OneToOneMeetingRoomRes>> getOneToOneMeetingRooms(@PathVariable Byte status) {
         List<OneToOneMeetingRoomRes> list = oneToOneMeetingService.getOneToOneMeetingRooms(status);
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
@@ -49,7 +48,7 @@ public class OneToOneMeetingController {
 
     @ApiOperation("일대일 매칭의 종료")
     @DeleteMapping("/{meetingRoomSeq}")
-    public ResponseEntity<?> closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         oneToOneMeetingService.closeMatch(meetingRoomSeq);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
