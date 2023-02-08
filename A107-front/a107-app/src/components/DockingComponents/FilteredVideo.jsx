@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useStream } from '../../modules/useStream'
 import { VideoFilter } from '../../modules/VideoFilter'
 
@@ -6,23 +6,12 @@ export const FilteredVideo = ({
   streamManager,
   maskPath,
   userSeq,
+  startFaceAPI,
 }) => {
   const canvasRef = useRef(null)
   // const videoRef = useRef(null)
   const { videoRef, speaking, micStatus, videoStatus } =
     useStream(streamManager)
-  // useEffect(() => {
-  //   const getCamera = async () => {
-  //     const newStream = await navigator.mediaDevices.getUserMedia({
-  //       video: true,
-  //       audio: false,
-  //     })
-  //     if (videoRef && videoRef.current && !videoRef.current.srcObject) {
-  //       videoRef.current.srcObject = newStream
-  //     }
-  //   }
-  //   getCamera()
-  // }, [])
 
   VideoFilter(videoRef.current, canvasRef.current, maskPath)
 
@@ -50,6 +39,9 @@ export const FilteredVideo = ({
     zIndex: 10,
   }
   
+  useEffect(() => {
+    startFaceAPI(document.querySelector('#streamVideo'))
+  }, [startFaceAPI])
 
   return (
     <div
