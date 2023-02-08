@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BR31Req {
 
-    private Long br31SessionId;
+    private Long multiMeetingRoomSeq;
     private Long userSeq;
     private Integer point;
-
 }

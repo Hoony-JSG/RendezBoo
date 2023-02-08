@@ -18,25 +18,23 @@ import java.util.Map;
 public class GameOfDeathRes {
 
     private MultiChatFlag flag;
-    private Long gameId;
 
     private Long multiMeetingRoomSeq;
 
-    private List<Long> countingList;
+    private List<Long> resultList;
 
     private Map<Long, Long> targets;
 
     private Long loseUserSeq;
 
-    private Integer count;
+    private String message;
 
-    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> countingList, Long loseUserSeq, MultiChatFlag flag) {
-        this.gameId = gameOfDeath.getGameId();
+    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> resultList, Long loseUserSeq, String message, MultiChatFlag flag) {
         this.multiMeetingRoomSeq = gameOfDeath.getMultiMeetingRoomSeq();
         this.targets = gameOfDeath.getTargets();
-        this.countingList = countingList;
+        this.resultList = resultList;
         this.loseUserSeq = loseUserSeq;
-        this.count = gameOfDeath.getCount();
+        this.message = message;
         this.flag = flag;
     }
 }

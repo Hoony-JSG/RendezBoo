@@ -15,8 +15,6 @@ public class BR31Res {
 
     private MultiChatFlag flag;
 
-    private Long sessionId;
-
     private Long multiMeetingRoomSeq;
 
     private String message;
@@ -26,7 +24,6 @@ public class BR31Res {
     private Long nextUser;
 
     public BR31Res(BR31 br31, String message, Long nextUser, MultiChatFlag flag) {
-        this.sessionId = br31.getSessionId();
         this.multiMeetingRoomSeq = br31.getMultiMeetingRoomSeq();
         this.point = br31.getPoint();
         this.nextUser = nextUser;
