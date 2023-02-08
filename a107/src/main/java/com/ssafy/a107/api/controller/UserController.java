@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Api(value = "유저 API", tags = {"User"})
 @RestController
@@ -33,7 +34,7 @@ public class UserController {
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 조회", notes = "Seq로 유저 정보 제공")
-    public ResponseEntity<?> getUserInfo(@PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity<UserRes> getUserInfo(@PathVariable Long userSeq) throws NotFoundException{
         UserRes user = userService.getUserBySeq(userSeq);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -41,7 +42,7 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<?> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, ParseException {
+    public ResponseEntity<String> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, ParseException {
         userService.checkEmailDuplicate(joinReq.getEmail());
 
         joinReq.parsePhoneNumber();
@@ -55,7 +56,7 @@ public class UserController {
     // 로그인
     @PostMapping(value = "/login")
     @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
-    public ResponseEntity<?> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
+    public ResponseEntity<TokenRes> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
         TokenRes res = authService.login(loginReq);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -63,7 +64,7 @@ public class UserController {
 
     @PostMapping("/reissue")
     @ApiOperation(value = "JWT 토큰 재발급", notes = "Bearer 리프레시 토큰 필요")
-    public ResponseEntity<?> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException {
+    public ResponseEntity<TokenRes> reissue(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException {
         TokenRes res = authService.reissue(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -71,7 +72,7 @@ public class UserController {
 
     @PostMapping("/logout")
     @ApiOperation(value = "유저 로그아웃", notes = "Bearer 엑세스 토큰 필요")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException {
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException {
         String userEmail = authService.logout(bearerToken);
 
         return ResponseEntity.status(HttpStatus.OK).body(userEmail);
@@ -80,7 +81,7 @@ public class UserController {
     // 아이디 중복체크
     @GetMapping("/check/email/{email}")
     @ApiOperation(value = "이메일 중복체크", notes = "이메일 중복 체크")
-    public ResponseEntity<?> checkEmail(@PathVariable String email) throws ConflictException {
+    public ResponseEntity checkEmail(@PathVariable String email) throws ConflictException {
         userService.checkEmailDuplicate(email);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -89,7 +90,7 @@ public class UserController {
     // 전화번호 중복체크
     @GetMapping("/check/phone/{phoneNumber}")
     @ApiOperation(value = "전화번호 중복체크", notes = "전화번호 중복 체크")
-    public ResponseEntity<?> checkPhoneNumber(@PathVariable String phoneNumber) throws ConflictException {
+    public ResponseEntity checkPhoneNumber(@PathVariable String phoneNumber) throws ConflictException {
         userService.checkPhoneNumberDuplicate(phoneNumber);
 
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -97,23 +98,23 @@ public class UserController {
 
     @GetMapping("/{userSeq}/friends")
     @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
-    public ResponseEntity<?> getFriends(@PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity<List<UserRes>> getFriends(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getFriends(userSeq));
     }
 
     @GetMapping("/{userSeq}/blockeds")
     @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
-    public ResponseEntity<?> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity<List<UserRes>> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.getBlockeds(userSeq));
     }
 
     @DeleteMapping
     @ApiOperation(value = "회원탈퇴", notes = "회원탈퇴")
-    public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String bearerToken) throws NotFoundException, JwtInvalidException, ConflictException {
+    public ResponseEntity<String> deleteUser(@RequestHeader("Authorization") String bearerToken) throws NotFoundException, JwtInvalidException, ConflictException {
         String userEmail = authService.getEmailFromToken(authService.resolveToken(bearerToken));
 
         userService.deleteUser(userEmail);
 
-        return ResponseEntity.status(HttpStatus.OK).body("User " + userEmail + " deleted.");
+        return ResponseEntity.status(HttpStatus.OK).body(userEmail);
     }
 }

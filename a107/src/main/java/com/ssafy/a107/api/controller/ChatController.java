@@ -26,14 +26,11 @@ import java.util.stream.Collectors;
 public class ChatController {
 
     private final ChatService chatService;
-
     private final SimpMessageSendingOperations sendingOperations;
-
-
 
     @MessageMapping("/send")
     @ApiOperation("채팅 생성(보내기) - stomp")
-    public ResponseEntity<?> sendChat(@RequestBody ChatReq req) throws NotFoundException{
+    public ResponseEntity<ChatRes> sendChat(@RequestBody ChatReq req) throws NotFoundException{
         log.debug("got message");
         log.debug("message: " + req.getMessage());
         log.debug("chatRoomSeq: " + req.getChatRoomSeq());
@@ -73,7 +70,7 @@ public class ChatController {
 
     @GetMapping("/api/chat/{chatRoomSeq}")
     @ApiOperation("해당 채팅 방의 채팅 내역 불러오기")
-    public ResponseEntity<?> getChatByChatRoomSeq(@PathVariable Long chatRoomSeq) throws NotFoundException{
+    public ResponseEntity<List<ChatRes>> getChatByChatRoomSeq(@PathVariable Long chatRoomSeq) throws NotFoundException{
         List<Chat> chatList = chatService.findByChatRoomSeqOrderByCreatedAtDesc(chatRoomSeq);
 
         List<ChatRes> chatResList = chatList.stream()
@@ -81,8 +78,5 @@ public class ChatController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(chatResList);
-
     }
-
-    
 }

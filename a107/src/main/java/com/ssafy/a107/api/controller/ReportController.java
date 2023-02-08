@@ -21,13 +21,13 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping()
-    public ResponseEntity<?> save(@RequestBody ReportReq req) throws NotFoundException {
+    public ResponseEntity<Long> save(@RequestBody ReportReq req) throws NotFoundException {
         Long reportSeq = reportService.save(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(reportSeq);
     }
 
     @GetMapping()
-    public ResponseEntity<?> findAll(){
+    public ResponseEntity<List<ReportRes>> findAll(){
         List<ReportRes> all = reportService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(all);
     }

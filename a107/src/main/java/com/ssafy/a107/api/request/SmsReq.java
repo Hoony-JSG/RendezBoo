@@ -13,4 +13,8 @@ public class SmsReq {
 
     private String phoneNumber;
     private String code;
+
+    public void parsePhoneNumber() {
+        this.phoneNumber.replaceAll("-", "");
+    }
 }
