@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import FacePaint from './FacePaint'
 import * as facemesh from '@tensorflow-models/facemesh'
-import * as tf from '@tensorflow/tfjs'
 
 export const VideoFilter = (videoElement, canvasElement, maskPath) => {
   const [model, setModel] = useState()
 
   useEffect(() => {
-    tf.env().set('WEBGL_CPU_FORWARD', false)
     if (model) {
       return
     }

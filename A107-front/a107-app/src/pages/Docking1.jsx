@@ -4,6 +4,8 @@ import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as faceapi from 'face-api.js'
+import * as tf from '@tensorflow/tfjs'
+import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -16,6 +18,37 @@ const Docking1 = (props) => {
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
+
+  const [phase, setPhase] = useState(0)
+  const [angryCnt, setAngryCnt] = useState(0)
+  const [disgustedCnt, setDisgustedCnt] = useState(0)
+  const [fearfulCnt, setFearfulCnt] = useState(0)
+  const [happyCnt, setHappyCnt] = useState(0)
+  const [sadCnt, setSadCnt] = useState(0)
+  const [surprisedCnt, setSurprisedCnt] = useState(0)
+
+  const [angry, setAngry] = useState(0)
+  const [disgusted, setDisgusted] = useState(0)
+  const [fearful, setFearful] = useState(0)
+  const [happy, setHappy] = useState(0)
+  const [sad, setSad] = useState(0)
+  const [surprised, setSurprised] = useState(0)
+
+  const [apiStarted, setApiStarted] = useState(false)
+
+  useEffect(() => {
+    tf.env().set('WEBGL_CPU_FORWARD', false)
+    loadModels()
+  }, [])
+
+  async function loadModels() {
+    const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
+    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
+    console.log('tinyFaceDetector loaded')
+    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+    console.log('faceEx loaded')
+  }
 
   // 세션 나가기
   const leaveSession = useCallback(() => {
@@ -126,30 +159,33 @@ const Docking1 = (props) => {
     [publisher]
   )
 
-  async function useFaceAPI() {
-    const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
-    const videoEl = document.querySelector('#hidden-cam')
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
-    videoEl.srcObject = stream
-    console.log("video loaded")
-    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
-    console.log("tinyFaceDetector loaded")
-    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-    console.log("faceEx loaded")
-    await onPlay()
+  async function startFaceAPI(videoEl) {
+    if (!apiStarted) {
+      setApiStarted(true)
+      console.log('video loaded')
+      await onPlay(videoEl)
+    }
   }
 
-  async function onPlay() {
-    const videoEl = document.querySelector('#hidden-cam')
+  async function onPlay(videoEl) {
+    if (!videoEl || videoEl.paused || videoEl.ended)
+      return setTimeout(() => onPlay(videoEl), 500)
 
-    if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay())
+    const predict = await faceapi
+      .detectSingleFace(videoEl)
+      .withFaceExpressions()
 
-    const result = await faceapi.detectSingleFace(videoEl).withFaceExpressions()
+    console.log(predict)
+    if (predict) {
+      setAngry(predict.expressions.angry)
+      setDisgusted(predict.expressions.disgusted)
+      setFearful(predict.expressions.fearful)
+      setHappy(predict.expressions.happy)
+      setSad(predict.expressions.sad)
+      setSurprised(predict.expressions.surprised)
+    }
 
-    console.log(result)
-
-    setTimeout(() => onPlay())
+    setTimeout(() => onPlay(videoEl), 500)
   }
 
   // userSeq 기반으로 오픈비두 토큰 가져옴
@@ -202,10 +238,48 @@ const Docking1 = (props) => {
             style={{
               width: '960px',
               height: '720px',
+              border: 'solid white 2px',
+              position: 'relative',
             }}
           >
+            <EmotionComponent
+              imgSrc={'../img/emo-angry.png'}
+              data={angry}
+              top={'40px'}
+              left={'40px'}
+            />
+            <EmotionComponent
+              imgSrc={'../img/emo-disgusted.png'}
+              data={disgusted}
+              top={'290px'}
+              left={'40px'}
+            />
+            <EmotionComponent
+              imgSrc={'../img/emo-fearful.png'}
+              data={fearful}
+              top={'540px'}
+              left={'40px'}
+            />
+            <EmotionComponent
+              imgSrc={'../img/emo-happy.png'}
+              data={happy}
+              top={'40px'}
+              left={'700px'}
+            />
+            <EmotionComponent
+              imgSrc={'../img/emo-sad.png'}
+              data={sad}
+              top={'290px'}
+              left={'700px'}
+            />
+            <EmotionComponent
+              imgSrc={'../img/emo-surprised.png'}
+              data={surprised}
+              top={'540px'}
+              left={'700px'}
+            />
             {subscribers.map((sub, idx) => (
-              <div key={idx}>
+              <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={
@@ -214,6 +288,7 @@ const Docking1 = (props) => {
                   userSeq={2}
                   width={'960px'}
                   height={'720px'}
+                  startFaceAPI={startFaceAPI}
                 />
               </div>
             ))}
@@ -235,16 +310,13 @@ const Docking1 = (props) => {
                   userSeq={userSeq}
                   width={'320px'}
                   height={'240px'}
+                  startFaceAPI={() => {}}
                 />
               </div>
             ) : null}
           </div>
         </div>
       ) : null}
-      <div style={{ display: 'none' }}>
-        <video id="hidden-cam" autoPlay/>
-      </div>
-      <button onClick={useFaceAPI}>expressions</button>
     </div>
   )
 }
