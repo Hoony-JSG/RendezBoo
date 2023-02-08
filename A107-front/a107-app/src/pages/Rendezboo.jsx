@@ -2,6 +2,8 @@ import React from 'react'
 import { BsFillDoorClosedFill, BsFillDoorOpenFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import RocketItem from '../components/RocketComponents/RocketItem'
+import '../Styles/Rendezboo.css'
+
 const Rendezboo = () => {
   console.log('랑데부 페이지')
   const id = 'wjdgnsxhsl'
@@ -15,10 +17,9 @@ const Rendezboo = () => {
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0px',
-    border: '1px solid white',
-    backdropFilter: 'blur(10px)',
     margin: '30px',
     height: 'auto',
+    gap: '50px'
   }
   const MeAndYou = {
     Me: id,
@@ -31,6 +32,7 @@ const Rendezboo = () => {
     height: '100px',
     width: '100px',
     display: 'flex',
+    fill: '#FFFFFF',
   }
   const doorIconLayoutStyle = {
     width: '400px',
@@ -64,11 +66,13 @@ const Rendezboo = () => {
     display: 'flex',
     alignItems: 'center',
   }
+
   return (
     <div style={Contents}>
       <div style={onThisButtonStyle}>
         <button
           type="button"
+          className='RendezbooBtn'
           onClick={(e) => {
             goToPage('docking1')
           }}
@@ -76,7 +80,7 @@ const Rendezboo = () => {
           <div style={doorIconLayoutStyle}>
             <BsFillDoorOpenFill style={doorIconStyle} />
           </div>
-          Docking1
+          <h3>1:1 Docking</h3>
         </button>
       </div>
       <div style={onThisButtonStyle}>
@@ -87,6 +91,7 @@ const Rendezboo = () => {
       <div style={onThisButtonStyle}>
         <button
           type="button"
+          className='RendezbooBtn'
           onClick={(e) => {
             goToPage('docking3')
           }}
@@ -96,7 +101,7 @@ const Rendezboo = () => {
             <BsFillDoorOpenFill style={doorIconStyle} />
             <BsFillDoorClosedFill style={doorIconStyle} />
           </div>
-          Docking3
+          <h3>3:3 Docking</h3>
         </button>
       </div>
     </div>

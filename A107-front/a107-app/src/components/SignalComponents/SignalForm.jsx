@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { SiRocketdotchat } from 'react-icons/si'
 import { useDispatch } from 'react-redux'
-import addSignal from '../../modules/signal'
+import axios from 'axios'
+import { SiRocketdotchat } from 'react-icons/si'
+// import addSignal from '../../modules/signal'
 
 const SignalForm = () => {
-  const dispatch = useDispatch()
-  // const inputs = useSelector((state) => state.input);
+  // const dispatch = useDispatch()
 
   const [signal, setSignal] = useState('')
   const inputSignal = (e) => {
@@ -14,7 +14,11 @@ const SignalForm = () => {
   }
   const sendSignal = (e) => {
     e.preventDefault()
-    if (signal.trim()) dispatch(addSignal(signal))
+    if (signal.trim()) {
+      axios.post().then((response) => {
+        console.log(response.data)
+      })
+    }
       setSignal('')
   }
 
@@ -57,7 +61,6 @@ const SignalForm = () => {
         <button
           type="submit"
           style={btnStyle}
-          // onClick
         >
           <SiRocketdotchat />
         </button>
