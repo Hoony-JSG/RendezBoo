@@ -3,6 +3,7 @@ import { OpenVidu } from 'openvidu-browser'
 import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FilteredVideo } from '../components/FilteredVideo'
+import * as faceapi from 'face-api.js'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -125,6 +126,27 @@ const Docking1 = (props) => {
     [publisher]
   )
 
+  async function useFaceAPI() {
+    const videoEl = document.querySelector('#hidden-cam')
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+    videoEl.srcObject = stream
+    await faceapi.nets.tinyFaceDetector.load()
+    await faceapi.loadFaceExpressionModel('/')
+    await onplay(videoEl)
+  }
+
+  async function onPlay(videoRef) {
+    const videoEl = videoRef
+
+    if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay())
+
+    const result = await faceapi.detectSingleFace(videoEl).withFaceExpressions()
+
+    console.log(result)
+
+    setTimeout(() => onPlay(videoRef))
+  }
+
   // userSeq 기반으로 오픈비두 토큰 가져옴
   async function getDocking1Token(userSeq) {
     const response = await axios.post(
@@ -214,6 +236,10 @@ const Docking1 = (props) => {
           </div>
         </div>
       ) : null}
+      <div style={{ display: 'none' }}>
+        <video id="hidden-cam" />
+      </div>
+      <button onClick={useFaceAPI}>expressions</button>
     </div>
   )
 }
