@@ -10,10 +10,10 @@ const Signal = () => {
   
   // 스토어에 저장된 userSeq가져오기
   // const userSeq = useSelector((state) => state.user.userSeq)
-  const userSeq = 2
+  const userSeq = 1
   const [chatRoom, setChatRoom] = useState([])
 
-  useEffect(() => {
+  useEffect( () => {
     axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
       console.log(response.data)
       setChatRoom(response.data)
@@ -73,7 +73,7 @@ const Signal = () => {
           >
             {chatRoom ? 
               (chatRoom.map((chat) => (
-                <SignalList chat={chat} key={chat.chatRoomSeq} />
+                <SignalList userSeq={userSeq} chat={chat} key={chat.chatRoomSeq} />
               ))
              ) : (
               <h1>주고받은 시그널이 없습니다.</h1>
@@ -82,7 +82,7 @@ const Signal = () => {
         </div>
         <div className="content" style={{ width: '65%' }}>
           {tmpChatRoomSeq ? (
-            <SignalSelected content={chatRoom[tmpChatRoomSeq].content} />
+            <SignalSelected userSeq={userSeq} roomSeq={tmpChatRoomSeq} />
           ) : (
             <div>
               <h1>메시지를 선택하세요.</h1>
