@@ -1,7 +1,7 @@
 import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
@@ -12,7 +12,7 @@ const APPLICATION_SERVER_URL =
 
 const Docking1 = (props) => {
   const [userSeq, setUserSeq] = useState(-1)
-  const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
+  // const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [token, setToken] = useState('')
   const [meetingRoomSeq, setMeetingRoomSeq] = useState(-1)
   const [subscribers, setSubscribers] = useState([])
@@ -20,6 +20,7 @@ const Docking1 = (props) => {
   const [session, setSession] = useState()
 
   const [phase, setPhase] = useState(0)
+
   const [angryCnt, setAngryCnt] = useState(0)
   const [disgustedCnt, setDisgustedCnt] = useState(0)
   const [fearfulCnt, setFearfulCnt] = useState(0)
@@ -36,11 +37,13 @@ const Docking1 = (props) => {
 
   const [apiStarted, setApiStarted] = useState(false)
 
+  // tf 세팅 및 모델 불러오기
   useEffect(() => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
     loadModels()
   }, [])
 
+  // faceapi 모델 불러오기
   async function loadModels() {
     const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
     await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
@@ -159,14 +162,17 @@ const Docking1 = (props) => {
     [publisher]
   )
 
+  // 감정 분석 시작
   async function startFaceAPI(videoEl) {
     if (!apiStarted) {
+      // 시작되었는지의 플래그
       setApiStarted(true)
       console.log('video loaded')
       await onPlay(videoEl)
     }
   }
 
+  // 감정 분석 1초에 2번
   async function onPlay(videoEl) {
     if (!videoEl || videoEl.paused || videoEl.ended)
       return setTimeout(() => onPlay(videoEl), 500)
@@ -178,11 +184,29 @@ const Docking1 = (props) => {
     console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
+      if (angry > 0.25) {
+        setAngryCnt(angryCnt + 1)
+      }
       setDisgusted(predict.expressions.disgusted)
+      if (disgusted > 0.25) {
+        setDisgustedCnt(disgustedCnt + 1)
+      }
       setFearful(predict.expressions.fearful)
+      if (fearful > 0.25) {
+        setFearfulCnt(fearfulCnt + 1)
+      }
       setHappy(predict.expressions.happy)
+      if (happy > 0.25) {
+        setHappyCnt(happyCnt + 1)
+      }
       setSad(predict.expressions.sad)
+      if (sad > 0.25) {
+        setSadCnt(sadCnt + 1)
+      }
       setSurprised(predict.expressions.surprised)
+      if (surprised > 0.25) {
+        setSurprisedCnt(surprisedCnt + 1)
+      }
     }
 
     setTimeout(() => onPlay(videoEl), 500)
