@@ -3,32 +3,30 @@ package com.ssafy.a107.api.controller;
 import com.ssafy.a107.api.request.BadgeCreateReq;
 import com.ssafy.a107.api.request.BadgeUpdateReq;
 import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.api.service.BadgeService;
 import com.ssafy.a107.common.exception.NotFoundException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Api(value = "뱃지 API", tags = {"Badge"})
 @RestController
 @RequestMapping("/api/badges")
+@RequiredArgsConstructor
 public class BadgeController {
-    BadgeService badgeService;
 
-    @Autowired
-    public BadgeController(BadgeService badgeService) {
-        this.badgeService = badgeService;
-    }
+    private final BadgeService badgeService;
 
     @GetMapping()
     @ApiOperation(value = "전체 뱃지 리스트 조회")
-    public ResponseEntity<?> getAllBadgeList() {
+    public ResponseEntity<List<BadgeRes>> getAllBadgeList() {
         return ResponseEntity.status(HttpStatus.OK).body(badgeService.getAllBadges());
     }
 
