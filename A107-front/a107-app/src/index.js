@@ -9,7 +9,7 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import rootReducer from './modules'
 
-const store = configureStore({reducer:rootReducer}, composeWithDevTools())
+const store = configureStore({ reducer: rootReducer }, composeWithDevTools())
 
 ReactDOM.render(
   //   <React.StrictMode>
