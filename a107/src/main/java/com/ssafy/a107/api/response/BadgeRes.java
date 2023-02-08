@@ -6,6 +6,7 @@ import lombok.*;
 @Getter
 @RequiredArgsConstructor
 public class BadgeRes {
+
     private final Long seq;
     private final String name;
     private final String url;
