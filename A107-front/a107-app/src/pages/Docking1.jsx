@@ -127,16 +127,21 @@ const Docking1 = (props) => {
   )
 
   async function useFaceAPI() {
+    const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
     const videoEl = document.querySelector('#hidden-cam')
     const stream = await navigator.mediaDevices.getUserMedia({ video: true })
     videoEl.srcObject = stream
-    await faceapi.nets.tinyFaceDetector.load()
-    await faceapi.loadFaceExpressionModel('/')
-    await onplay(videoEl)
+    console.log("video loaded")
+    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
+    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
+    console.log("tinyFaceDetector loaded")
+    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
+    console.log("faceEx loaded")
+    await onPlay()
   }
 
-  async function onPlay(videoRef) {
-    const videoEl = videoRef
+  async function onPlay() {
+    const videoEl = document.querySelector('#hidden-cam')
 
     if (videoEl.paused || videoEl.ended) return setTimeout(() => onPlay())
 
@@ -144,7 +149,7 @@ const Docking1 = (props) => {
 
     console.log(result)
 
-    setTimeout(() => onPlay(videoRef))
+    setTimeout(() => onPlay())
   }
 
   // userSeq 기반으로 오픈비두 토큰 가져옴
@@ -237,7 +242,7 @@ const Docking1 = (props) => {
         </div>
       ) : null}
       <div style={{ display: 'none' }}>
-        <video id="hidden-cam" />
+        <video id="hidden-cam" autoPlay/>
       </div>
       <button onClick={useFaceAPI}>expressions</button>
     </div>
