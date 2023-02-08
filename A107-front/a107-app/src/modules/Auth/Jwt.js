@@ -49,8 +49,8 @@ export const getRefreshTokenFromCookie = () => {
 }
 
 
-// getAccessToken: Refresh token을 이용해 access token 재발급(reissue) 요청
-export const getAccessToken = async () => {
+// reissueAccessToken: Refresh token을 이용해 access token 재발급(reissue) 요청
+export const reissueAccessToken = async () => {
 
   // 쿠키 가져오기
   const refreshToken = getRefreshTokenFromCookie()
@@ -64,10 +64,13 @@ export const getAccessToken = async () => {
   // access 토큰 발급 axios 요청
   try {
     const response = await axios.post(
-      'https:i8a107.p.ssafy.io/api/user/reissue',
+      'https://i8a107.p.ssafy.io/api/user/reissue',
+      {},
       // 헤더 부착
       {
-        Authorization: `Bearer ${refreshToken}`
+        headers: {
+          Authorization: `Bearer ${refreshToken}`
+        }
       }
     )
     
