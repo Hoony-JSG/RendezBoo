@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 // import { SignalList, SignalItem, SignalForm } from "../components"
 import SignalList from '../components/SignalList'
@@ -7,44 +8,171 @@ import SignalSelected from '../components/SignalSelected'
 import { SiRocketdotchat } from 'react-icons/si'
 
 const Signal = () => {
-  const userid = useParams().userid
+  const tmpChatRoomSeq = useParams().tmpChatRoomSeq
+
+  const newChat = useSelector((state) => state.signal.content)
+
+  useEffect(() => {
+    const tmpChatRoom = [
+      {
+        chatRoomSeq: 0,
+        userFemaleSeq: 'Nickname',
+        userMaleSeq: 'me',
+        content: newChat,
+        // content: [
+        //   //채팅방 시퀀스로 api 요청 보내서 받아옴
+        //   {
+        //     chat_seq: 11, //문자열로 들어옴 몽고디비
+        //     message: '여기서 역삼역 가려면 어디로 가야해요?',
+        //     created_at: 'YYYY-MM-DD',
+        //     senderSeq: 'Nickname',
+        //     receiverSeq: 'me',
+        //   },
+        //   {
+        //     chat_seq: 12,
+        //     message: '뉴진스 하입보이요',
+        //     created_at: 'YYYY-MM-DD',
+        //     senderSeq: 'me',
+        //     receiverSeq: 'Nickname',
+        //   },
+        //   {
+        //     chat_seq: 13,
+        //     message: '커즈아아아아ㅏ노왓츄라잌보이',
+        //     created_at: 'YYYY-MM-DD',
+        //     senderSeq: 'Nickname',
+        //     receiverSeq: 'me',
+        //   },
+        //   {
+        //     chat_seq: 14,
+        //     message: '요마아아아아ㅏ케미컬하입뽀이',
+        //     created_at: 'YYYY-MM-DD',
+        //     senderSeq: 'me',
+        //     receiverSeq: 'Nickname',
+        //   },
+        // ],
+        created_at: 'YYYY-MM-DD',
+      },
+      {
+        chatRoomSeq: 1,
+        userFemaleSeq: 'Nickname',
+        userMaleSeq: 'me',
+        content: [
+          {
+            chat_seq: 21,
+            message: '너는 별을 보자며 내 손을 끌어서',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'Nickname',
+            receiverSeq: 'me',
+          },
+          {
+            chat_seq: 22,
+            message: '저녁노을이 진 옥상에 걸터앉아',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'me',
+            receiverSeq: 'Nickname',
+          },
+          {
+            chat_seq: 23,
+            message: 'Every time I look up in the sky',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'Nickname',
+            receiverSeq: 'me',
+          },
+          {
+            chat_seq: 24,
+            message: '근데 단 한 개도 없는 Star',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'me',
+            receiverSeq: 'Nickname',
+          },
+          {
+            chat_seq: 25,
+            message: '괜찮아 네가 내 우주고 밝게 빛나 줘',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'Nickname',
+            receiverSeq: 'me',
+          },
+        ],
+        created_at: 'YYYY-MM-DD',
+      },
+      {
+        chatRoomSeq: 2,
+        userFemaleSeq: 'Nickname',
+        userMaleSeq: 'me',
+        content: [
+          {
+            chat_seq: 31,
+            message: 'ASAP 내 반쪽 아니 완전 Copy',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'Nickname',
+            receiverSeq: 'me',
+          },
+          {
+            chat_seq: 32,
+            message: '나와 똑같아 내 맘 잘 알아줄',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'me',
+            receiverSeq: 'Nickname',
+          },
+          {
+            chat_seq: 33,
+            message: 'ASAP 꼭 닮은 내 Decalcomanie',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'Nickname',
+            receiverSeq: 'me',
+          },
+          {
+            chat_seq: 34,
+            message: '눈앞에 나타나 줘',
+            created_at: 'YYYY-MM-DD',
+            senderSeq: 'me',
+            receiverSeq: 'Nickname',
+          },
+        ],
+        created_at: 'YYYY-MM-DD',
+      },
+    ]
+    setChatRoom(tmpChatRoom)
+    console.log(chatRoom[0])
+  }, [newChat])
 
   const [chatRoom, setChatRoom] = useState([
     {
       chatRoomSeq: 0,
       userFemaleSeq: 'Nickname',
       userMaleSeq: 'me',
-      content: [
-        //채팅방 시퀀스로 api 요청 보내서 받아옴
-        {
-          chat_seq: 11, //문자열로 들어옴 몽고디비
-          message: '여기서 역삼역 가려면 어디로 가야해요?',
-          created_at: 'YYYY-MM-DD',
-          senderSeq: 'Nickname',
-          receiverSeq: 'me',
-        },
-        {
-          chat_seq: 12,
-          message: '뉴진스 하입보이요',
-          created_at: 'YYYY-MM-DD',
-          senderSeq: 'me',
-          receiverSeq: 'Nickname',
-        },
-        {
-          chat_seq: 13,
-          message: '커즈아아아아ㅏ노왓츄라잌보이',
-          created_at: 'YYYY-MM-DD',
-          senderSeq: 'Nickname',
-          receiverSeq: 'me',
-        },
-        {
-          chat_seq: 14,
-          message: '요마아아아아ㅏ케미컬하입뽀이',
-          created_at: 'YYYY-MM-DD',
-          senderSeq: 'me',
-          receiverSeq: 'Nickname',
-        },
-      ],
+      content: newChat,
+      // content: [
+      //   //채팅방 시퀀스로 api 요청 보내서 받아옴
+      //   {
+      //     chat_seq: 11, //문자열로 들어옴 몽고디비
+      //     message: '여기서 역삼역 가려면 어디로 가야해요?',
+      //     created_at: 'YYYY-MM-DD',
+      //     senderSeq: 'Nickname',
+      //     receiverSeq: 'me',
+      //   },
+      //   {
+      //     chat_seq: 12,
+      //     message: '뉴진스 하입보이요',
+      //     created_at: 'YYYY-MM-DD',
+      //     senderSeq: 'me',
+      //     receiverSeq: 'Nickname',
+      //   },
+      //   {
+      //     chat_seq: 13,
+      //     message: '커즈아아아아ㅏ노왓츄라잌보이',
+      //     created_at: 'YYYY-MM-DD',
+      //     senderSeq: 'Nickname',
+      //     receiverSeq: 'me',
+      //   },
+      //   {
+      //     chat_seq: 14,
+      //     message: '요마아아아아ㅏ케미컬하입뽀이',
+      //     created_at: 'YYYY-MM-DD',
+      //     senderSeq: 'me',
+      //     receiverSeq: 'Nickname',
+      //   },
+      // ],
       created_at: 'YYYY-MM-DD',
     },
     {
@@ -128,6 +256,10 @@ const Signal = () => {
     },
   ])
 
+  // useEffect(() => {
+  //   const newChat = useSelector((state) => state.content);
+
+  // }, chatRoom[0])
 
   const windowStyle = {
     boxSizing: 'border-box',
@@ -173,16 +305,21 @@ const Signal = () => {
           <h1>Signal</h1>
           <div
             className="SignalList"
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%'}}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              width: '100%',
+            }}
           >
             {chatRoom.map((chat) => (
               <SignalList chat={chat} key={chat.chatRoomSeq} />
             ))}
           </div>
         </div>
-        <div className="content" style={{width: '65%'}}>
-          {userid ? (
-            <SignalSelected content={chatRoom[userid].content} />
+        <div className="content" style={{ width: '65%' }}>
+          {tmpChatRoomSeq ? (
+            <SignalSelected content={chatRoom[tmpChatRoomSeq].content} />
           ) : (
             <div>
               <h1>메시지를 선택하세요.</h1>

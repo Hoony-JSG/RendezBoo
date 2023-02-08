@@ -10,12 +10,12 @@ const SignalForm = () => {
   const [signal, setSignal] = useState('')
   const inputSignal = (e) => {
     setSignal(e.target.value)
-    console.log(e.target.value)
+    // console.log(e.target.value)
   }
   const sendSignal = (e) => {
     e.preventDefault()
-    dispatch(addSignal(signal))
-    setSignal('')
+    if (signal.trim()) dispatch(addSignal(signal))
+      setSignal('')
   }
 
   const formStyle = {

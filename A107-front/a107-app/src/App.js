@@ -34,7 +34,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
-          <Route path="/signal/:userid" element={<Signal />} />
+          <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
           <Route path="/login" element={<Login />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />

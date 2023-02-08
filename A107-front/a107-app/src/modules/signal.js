@@ -16,6 +16,7 @@ export const addSignal = (input) => ({
 
 export const receiveSignal = () => ({
   type: RECEIVE_SIGNAL,
+  content: [],
 })
 
 const initialState = {
@@ -56,7 +57,7 @@ function signal(state = initialState, action) {
   switch (action.type) {
     case ADD_SIGNAL:
       return {
-        content: state.content.concat(...state.content, action.content)
+        content: state.content.concat(action.content)
       }
     case RECEIVE_SIGNAL:
       return {
