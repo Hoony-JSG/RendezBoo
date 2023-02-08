@@ -74,8 +74,11 @@ public class SmsServiceImpl implements SmsService {
             throw new BadRequestException("Bad request");
         }
         // TODO: 정규표현식으로 변경
-        else if(smsReq.getPhoneNumber().contains("-") || !smsReq.getPhoneNumber().startsWith("010")) {
+        else if(!smsReq.getPhoneNumber().startsWith("010")) {
             throw new BadRequestException("Wrong number form");
+        }
+        else if(smsReq.getPhoneNumber().contains("-")) {
+            smsReq.parsePhoneNumber();
         }
     }
 
