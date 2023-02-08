@@ -4,30 +4,29 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-@Document(collection = "gameOfDeath")
 @Getter
+@RedisHash("god")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class GameOfDeath {
 
-    private Long gameId;
-
+    @Id
     private Long multiMeetingRoomSeq;
 
-    private Map<Long, Long> targets;
+    private Map<Long, Long> targets = new HashMap<>();
 
     private Long startUserSeq;
 
     private Integer count;
 
-    public void updateTargets(Map<Long, Long> targets) {
-        this.targets = targets;
-    }
-
+    @TimeToLive
+    private Long expiration;
 }

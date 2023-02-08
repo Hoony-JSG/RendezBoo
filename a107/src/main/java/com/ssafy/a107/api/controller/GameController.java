@@ -10,6 +10,7 @@ import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.api.service.GameService;
+import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +45,7 @@ public class GameController {
 
     @ApiOperation("새로운 더 게임 오브 데스 세션을 생성")
     @MessageMapping("/gameofdeath/start")
-    public void startGameOfDeath(@RequestBody GameOfDeathCreateReq gameOfDeathCreateReq) throws NotFoundException {
+    public void startGameOfDeath(@RequestBody GameOfDeathCreateReq gameOfDeathCreateReq) throws BadRequestException {
         GameOfDeathRes gameOfDeathRes = gameService.createGameOfDeathSession(gameOfDeathCreateReq);
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + gameOfDeathRes.getMultiMeetingRoomSeq(), gameOfDeathRes);
     }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,5 +16,5 @@ public class GameOfDeathCreateReq {
 
     private Long startUserSeq;
 
-    private Integer count;
+    private Map<Long, Long> targets;
 }

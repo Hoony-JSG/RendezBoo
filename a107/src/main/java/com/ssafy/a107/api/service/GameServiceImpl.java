@@ -4,7 +4,9 @@ import com.ssafy.a107.api.request.game.*;
 import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
+import com.ssafy.a107.api.response.game.GameOfDeathChooseRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
+import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.game.BR31;
 import com.ssafy.a107.db.entity.game.FastClick;
@@ -18,9 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public class GameServiceImpl implements GameService {
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
 
     private static final long redisGameExpiration = 1800000;
-
+    private static Random rd = new Random();
 
      // 새로운 배스킨라빈스게임 세션 생성
     @Override
@@ -110,48 +110,80 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public GameOfDeathRes createGameOfDeathSession(GameOfDeathCreateReq createReq) throws NotFoundException {
-        if (createReq.getCount() < 3 || createReq.getCount() > 20) {
-            throw new NotFoundException("Wrong Request");
+    public GameOfDeathRes createGameOfDeathSession(GameOfDeathCreateReq createReq) throws BadRequestException {
+        log.debug("************ GameOfDeath 게임 시작! 채팅방 번호: {} ************", createReq.getMultiMeetingRoomSeq());
+
+        if(createReq.getTargets() == null) {
+            throw new BadRequestException("No targets argument!");
+        }
+
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq());
+
+        // 시간초과로 targetSeq를 선택하지 않았을 경우 -> 랜덤으로 선택
+        for(int i = 0; i < userSeqList.size(); ++i) {
+            long curUser = userSeqList.get(i);
+
+            if(createReq.getTargets().get(curUser) == null) {
+                int randIdx = -1;
+
+                while(true) {
+                    randIdx = rd.nextInt(userSeqList.size());
+
+                    if(userSeqList.get(randIdx) != curUser) break;
+                }
+
+                log.debug("랜덤 선택");
+                log.debug("User {} --> User {}", curUser, userSeqList.get(randIdx));
+                createReq.getTargets().put(curUser, userSeqList.get(randIdx));
+            }
         }
 
         GameOfDeath gameOfDeath = GameOfDeath.builder()
-                .gameId(System.currentTimeMillis())
-                .count(createReq.getCount())
+                .targets(createReq.getTargets())
                 .startUserSeq(createReq.getStartUserSeq())
                 .multiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq())
-                .targets(Map.of())
                 .build();
+
         gameOfDeathRepository.save(gameOfDeath);
-        GameOfDeathRes gameOfDeathRes = new GameOfDeathRes(gameOfDeath, List.of(), 0L, MultiChatFlag.SYSTEM);
-        return gameOfDeathRes;
+
+        log.debug("참여자 명단: {}", userSeqList);
+        log.debug("지목 현황: {}", createReq.getTargets());
+
+        return new GameOfDeathRes(gameOfDeath, null, 0L, "GameOfDeath가 시작되었습니다.", MultiChatFlag.SYSTEM);
     }
 
     @Override
     @Transactional
     public GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException {
-        GameOfDeath gameOfDeath = gameOfDeathRepository.findById(gameOfDeathReq.getGameId())
-                .orElseThrow(() -> new NotFoundException("Wrong GameId"));
-        Map<Long, Long> targets = gameOfDeath.getTargets();
-        targets.put(gameOfDeathReq.getUserSeq(), gameOfDeathReq.getTargetSeq());
-        gameOfDeath.updateTargets(targets);
-        gameOfDeathRepository.save(gameOfDeath);
+        log.debug("************ GameOfDeath 게임 진행! 채팅방 번호: {} ************", gameOfDeathReq.getMultiMeetingRoomSeq());
 
-        // 게임이 종료된 경우
-        if (targets.size() == 6) {
-            List<Long> countingList = List.of();
-            Long loseUserSeq = targets.get(gameOfDeath.getStartUserSeq());
-            countingList.add(loseUserSeq);
-
-            for (int i = 1; i < gameOfDeath.getCount(); i++) {
-                loseUserSeq = targets.get(loseUserSeq);
-                countingList.add(loseUserSeq);
-            }
-
-            return new GameOfDeathRes(gameOfDeath, countingList, loseUserSeq, MultiChatFlag.SYSTEM);
+        if (gameOfDeathReq.getTurn() < 3 || gameOfDeathReq.getTurn() > 20) {
+            throw new NotFoundException("Wrong Request");
         }
 
-        return new GameOfDeathRes(gameOfDeath, List.of(), 0L, MultiChatFlag.GAME);
+        log.debug("선택한 Turn 수: {}", gameOfDeathReq.getTurn());
+
+        GameOfDeath gameOfDeath = gameOfDeathRepository.findById(gameOfDeathReq.getMultiMeetingRoomSeq())
+                .orElseThrow(() -> new NotFoundException("Wrong meeting room seq!"));
+
+        Map<Long, Long> targets = gameOfDeath.getTargets();
+        log.debug("지목 현황: {}", targets);
+
+        // 게임 진행
+        List<Long> resultList = new ArrayList<>();
+        int turn = gameOfDeathReq.getTurn();
+        long cur = gameOfDeath.getStartUserSeq();
+        resultList.add(cur);
+
+        while(turn-- > 0) {
+            cur = targets.get(cur);
+            resultList.add(cur);
+        }
+
+        log.debug("게임 기록: {}", resultList);
+        log.debug("User {} 패배!", cur);
+        return new GameOfDeathRes(gameOfDeath, resultList, cur, "GameOfDeath가 종료되었습니다.",MultiChatFlag.FIN);
     }
 
     @Override
