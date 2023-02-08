@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import '../Styles/JoinItemInterestsStyle.css'
+import '../../Styles/JoinItemInterestsStyle.css'
 const JoinItemInterests = () => {
   const [selectedInterests, setSelectedInterests] = useState([])
   const interests = [

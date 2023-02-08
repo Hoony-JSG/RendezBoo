@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import MBTISelector from './MBTISelector'
-import ProfileImageUploader from './ProfileImageUploader'
+import MBTISelector from '../JoinComponents/MBTISelector'
 
 const RocketBtn_Start = () => {
   const [NickName, setNickName] = useState('')

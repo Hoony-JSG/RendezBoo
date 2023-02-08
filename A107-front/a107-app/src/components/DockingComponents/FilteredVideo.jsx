@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useStream } from '../modules/useStream'
-import { VideoFilter } from '../modules/VideoFilter'
+import React, { useRef } from 'react'
+import { useStream } from '../../modules/useStream'
+import { VideoFilter } from '../../modules/VideoFilter'
 
 export const FilteredVideo = ({
   streamManager,

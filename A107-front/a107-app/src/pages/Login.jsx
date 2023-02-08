@@ -1,6 +1,4 @@
-import AllSocialLogins from '../components/AllSocialLogins'
-import LoginForm from '../components/LoginForm'
-import LoginSocial from '../components/LoginSocial'
+import LoginForm from '../components/JoinComponents/LoginForm'
 
 const Login = (props) => {
   console.log('로그인 화면')

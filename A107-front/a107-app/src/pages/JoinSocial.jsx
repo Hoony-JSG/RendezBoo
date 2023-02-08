@@ -1,4 +1,4 @@
-import JoinItem1st from '../components/JoinItem1st.jsx'
+import JoinItem1st from '../components/JoinComponents/JoinItem1st.jsx'
 
 const JoinSocial = () => {
   console.log('소셜 조인1 페이지')

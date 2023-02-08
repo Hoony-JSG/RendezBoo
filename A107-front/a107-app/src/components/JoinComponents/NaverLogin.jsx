@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 
 const NaverLogin = (props) => {
   const { naver } = window

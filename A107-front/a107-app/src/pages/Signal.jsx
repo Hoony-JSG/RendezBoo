@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import axios from 'axios'
 // import { SignalList, SignalItem, SignalForm } from "../components"
-import SignalList from '../components/SignalList'
-import SignalSelected from '../components/SignalSelected'
 import { SiRocketdotchat } from 'react-icons/si'
+import SignalList from '../components/SignalComponents/SignalList'
+import SignalSelected from '../components/SignalComponents/SignalSelected'
 
 const Signal = () => {
   const userid = useParams().userid
@@ -128,7 +127,6 @@ const Signal = () => {
     },
   ])
 
-
   const windowStyle = {
     boxSizing: 'border-box',
     display: 'flex',
@@ -173,14 +171,19 @@ const Signal = () => {
           <h1>Signal</h1>
           <div
             className="SignalList"
-            style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%'}}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              width: '100%',
+            }}
           >
             {chatRoom.map((chat) => (
               <SignalList chat={chat} key={chat.chatRoomSeq} />
             ))}
           </div>
         </div>
-        <div className="content" style={{width: '65%'}}>
+        <div className="content" style={{ width: '65%' }}>
           {userid ? (
             <SignalSelected content={chatRoom[userid].content} />
           ) : (

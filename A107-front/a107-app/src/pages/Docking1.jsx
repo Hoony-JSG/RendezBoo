@@ -2,8 +2,7 @@ import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { FilteredVideo } from '../components/FilteredVideo'
-
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
 
