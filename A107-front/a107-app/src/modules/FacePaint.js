@@ -40,10 +40,6 @@ export default class FacePaint {
     this._camera.lookAt(this._halfW, this._halfH, 0)
   }
 
-  set blendMode(val) {
-    this._renderer.domElement.style.mixBlendMode = val
-  }
-
   _addLights() {
     const light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.2)
     this._scene.add(light)
@@ -68,10 +64,8 @@ export default class FacePaint {
   _addMaterial() {
     this._textureLoader = new THREE.TextureLoader()
     const texture = this._textureLoader.load(this._textureFilePath)
-    // set the "color space" of the texture
     texture.encoding = THREE.sRGBEncoding
 
-    // reduce blurring at glancing angles
     texture.anisotropy = 16
     const alpha = 0.4
     const beta = 0.5
@@ -91,6 +85,7 @@ export default class FacePaint {
     this._addGeometry()
     this._addMaterial()
     this._mesh = new THREE.Mesh(this._geometry, this._material)
+    this._mesh.scale.multiplyScalar(this._halfW / 320)
     this._scene.add(this._mesh)
   }
 
@@ -110,12 +105,11 @@ export default class FacePaint {
       alpha: true,
       canvas: canvas,
     })
-    this._renderer.setPixelRatio(window.devicePixelRatio)
     this._renderer.setSize(w, h)
     this._halfW = w * 0.5
     this._halfH = h * 0.5
     this._textureFilePath = textureFilePath
     this._setupScene()
-    console.log('FacePaint created !!')
+    console.log('Face Paint Created!!')
   }
 }
