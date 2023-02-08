@@ -3,9 +3,9 @@ package com.ssafy.a107.api.controller;
 import com.ssafy.a107.api.request.SmsReq;
 import com.ssafy.a107.api.response.SmsRes;
 import com.ssafy.a107.api.service.SmsService;
+import com.ssafy.a107.api.service.UserService;
 import com.ssafy.a107.common.exception.BadRequestException;
 import com.ssafy.a107.common.exception.ConflictException;
-import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.exception.SmsException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,12 +23,15 @@ import org.springframework.web.bind.annotation.*;
 public class SmsController {
 
     private final SmsService smsService;
+    private final UserService userService;
 
     @ApiOperation(value = "사용자에게 인증번호 전송", notes = "번호는 01012345678 형태로 입력")
     @PostMapping("/send")
-    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException {
+    public ResponseEntity<?> sendOne(@RequestBody SmsReq smsReq) throws BadRequestException, SmsException, ConflictException {
 
+        // 인증번호 보내기 전 smsReq가 유효한지, 이미 가입한 번호인지 확인
         smsService.checkSmsReq(smsReq);
+        userService.checkPhoneNumberDuplicate(smsReq.getPhoneNumber());
 
         String code = smsService.makeRandomCode();
         log.debug("Generated code: {}", code);
