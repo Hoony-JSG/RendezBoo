@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BR31CreateReq {
+
     private Long multiMeetingRoomSeq;
-    private Long userSeq;
 }

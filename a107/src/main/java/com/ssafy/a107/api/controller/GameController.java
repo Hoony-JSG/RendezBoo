@@ -20,17 +20,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@Api("멀티 미팅방 게임 관련 컨트롤러 ---- 세션사용으로 바꿔야함")
+@Api(value = "멀티 미팅방 게임 관련 컨트롤러 ---- 세션사용으로 바꿔야함")
 @RequestMapping("/api/game")
 @RequiredArgsConstructor
 public class GameController {
-    private final GameService gameService;
 
+    private final GameService gameService;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     @ApiOperation("새로운 배스킨라빈스 게임 세션을 생성")
     @MessageMapping("/br31/start")
-    public void startBR31(@RequestBody BR31CreateReq br31CreateReq) throws NotFoundException {
+    public void startBR31(@RequestBody BR31CreateReq br31CreateReq) {
         BR31Res br31Res = gameService.createBRGameSession(br31CreateReq);
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + br31Res.getMultiMeetingRoomSeq(), br31Res);
     }

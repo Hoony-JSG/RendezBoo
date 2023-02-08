@@ -5,30 +5,29 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
+import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 import java.util.List;
 
-
-@Document(collection = "br31")
 @Getter
+@RedisHash("br31")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class BR31 {
-    @Id
-    @Field(value = "_id", targetType = FieldType.OBJECT_ID)
-    private Long sessionId;
 
+    @Id
     private Long multiMeetingRoomSeq;
 
-    private Integer point = 0;
+    private Integer point;
 
     private List<Long> users;
 
     private Long nowUser;
+
+    @TimeToLive
+    private Long expiration;
 
     public void addPoint(int point) {
         this.point += point;
