@@ -40,7 +40,7 @@ const VerificationCode = (props) => {
       setFixReadOnly(true)
       setShowCheckButton(false)
       setShowResendButton(false)
-      props.setHas(3, true)
+      props.setHas(2, true)
     } catch (error) {
       console.log('인증 코드 에러 발생')
       console.log('전송된 인증번호 : ' + VerificationCode)

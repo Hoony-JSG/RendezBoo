@@ -1,21 +1,22 @@
 import '../../Styles/temp_border_style.css'
-import JoinItemBirth from './JoinItemBirth'
+
 import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'
 import JoinItemGender from './JoinItemGender'
 import { useState } from 'react'
 import NextPageButton from './NextPageButton'
+import JoinPassword from './JoinPassword'
 
 const JoinItem2nd = (props) => {
   const [hasName, setHasName] = useState(true)
   const [hasGender, setHasGender] = useState(false)
-  const [hasBirth, setHasBirth] = useState(true)
   const [hasPhoneNumber, setHasPhoneNumber] = useState(true)
+  const [hasPW, setHasPW] = useState(false)
   const wholeHas = [
     [hasName, setHasName],
     [hasGender, setHasGender],
-    [hasBirth, setHasBirth],
     [hasPhoneNumber, setHasPhoneNumber],
+    [hasPW, setHasPW],
   ]
 
   const setWholeHas = (index, value) => {
@@ -26,17 +27,17 @@ const JoinItem2nd = (props) => {
     <div>
       J_2_휴대폰 인증 및 정보 가져오기
       <br />
-      {`hasName : ${hasName} // hasGender : ${hasGender} // hasBirht : ${hasBirth} // hasPhoneNumber : ${hasPhoneNumber}`}
+      {`hasName : ${hasName} // hasGender : ${hasGender} // hasPhoneNumber : ${hasPhoneNumber}`}
       <div>
         <div>
           <div className="temp_border_style">
             <JoinItemName setHas={setWholeHas} />
           </div>
           <div className="temp_border_style">
-            <JoinItemGender setHas={setWholeHas} />
+            <JoinPassword setHas={setWholeHas} />
           </div>
           <div className="temp_border_style">
-            <JoinItemBirth setHas={setWholeHas} />
+            <JoinItemGender setHas={setWholeHas} />
           </div>
           <div className="temp_border_style">
             <JoinItemPhoneNumber setHas={setWholeHas} />
@@ -46,7 +47,6 @@ const JoinItem2nd = (props) => {
           <NextPageButton
             hasName={hasName}
             hasGender={hasGender}
-            hasBirth={hasBirth}
             hasPhoneNumber={hasPhoneNumber}
             setNext={props.setNext}
           />
