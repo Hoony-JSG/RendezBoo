@@ -1,17 +1,19 @@
 import { useParams } from 'react-router-dom' 
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import Docking3List from '../components/DockingComponents/Docking3List'
-import Docking3Waiting from '../components/Docking3Waiting'
-import Docking3Meeting from '../components/Docking3Meeting'
+import Docking3List from '../components/DockingComponents/Docking3List' 
+import Docking3WaitingMeeting from '../components/Docking3WaitingMeeting'
 
 
 const Docking3 = ()=>{
-    const roomid = useParams().roomid
-    const [docking3List, setDocking3List] = useState([]);
-    const [completeFlag, setCompleteFlag] = useState(false);
+
+    const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'  
+
+    const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState(null)
+    const [docking3List, setDocking3List] = useState([])
     useEffect(()=>{
-        axios.get('http://localhost:8080/api/multi-meetings/').then((response)=>{
+        axios.get(APPLICATION_SERVER_URL + 'api/multi-meetings/').then((response)=>{
             setDocking3List(response.data)
             console.log(response.data)
         })
@@ -19,27 +21,19 @@ const Docking3 = ()=>{
     //DockingRoomList를 onclick -> docking3 미팅룸 시퀀스가 셋팅됨
     //셋팅 하기 전엔 null
 
-    const complete = () => {
-        setCompleteFlag(true)
-    }
-
     return(
         <div className='content'>
             {
-                roomid?(
-                    completeFlag?(
-                        <Docking3Meeting roomid={roomid}/>
-                    ):(
-                        <Docking3Waiting roomid={roomid} complete={complete}/>
-                    )
-                
+                multiMeetingRoomSeq?(
+                    <Docking3WaitingMeeting multiMeetingRoomSeq={multiMeetingRoomSeq} />    
                 ):(
                 <div className="content">
                     <h1>현재 운영중인 미팅방 리스트들입니다</h1>
                     {docking3List.map((docking3room) => (
                         <Docking3List
-                        docking3room={docking3room} key={docking3room.multiMeetingRoomSeq}
-                        />
+                        docking3room={docking3room}
+                        key={docking3room.multiMeetingRoomSeq}
+                        setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}/>
                     ))}
                 </div>
                 )

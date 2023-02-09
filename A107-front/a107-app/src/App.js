@@ -12,13 +12,13 @@ import {
   Userinfo,
   Inventory,
   Docking3,
+  Error,
   Docking3ing,
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
 import WebSocketChatTest from './modules/WebSocketChatTest'
 import JoinSocial from './pages/JoinSocial'
-import LoginTest from './modules/Auth/testLoginpage'
 
 function App() {
   const location = useLocation()
@@ -51,13 +51,13 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
+          <Route path="/*" element={<Error/>}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
             path="/websocketchattest"
             element={<WebSocketChatTest />}
           ></Route>
-          {/* 로그인 테스트용 라우터 */}
-          <Route path='/logintest' element={<LoginTest />}></Route>
+          ;
         </Routes>
       </div>
     </div>
