@@ -59,9 +59,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
      * */
     @Transactional
     @Override
-    public Long initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        User user = userRepository.findById(multiMeetingRoomCreationReq.getUserSeq())
-                .orElseThrow(() -> new NotFoundException("Invalid User sequence!"));
+    public Long initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws OpenViduJavaClientException, OpenViduHttpException {
         //세션 만들기
         Session session = openVidu.createSession();
         //멀티미팅방 데이터 생성
@@ -71,19 +69,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .sessionId(session.getSessionId())
                 .build();
         //만들어진 멀티미팅망을 multi_meeting_room테이블에 저장
-        Long roomSeq = multiMeetingRoomRepository.save(multiMeetingRoom).getSeq();
-
-        //유저가 미팅방에 들어가는 사실을 multi_meeting_room_user맵핑 테이블에 저장
-        multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
-                .user(user)
-                .multiMeetingRoom(multiMeetingRoom).build());
-
-        // connect는 6명이 들어왔을 때 해줌 (처음에는 세션 생성만 하고 연결은 x)
-//        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
-//        Connection connection = session.createConnection(connectionProperties);
-//        String token = connection.getToken();
-
-        return roomSeq;
+        return multiMeetingRoomRepository.save(multiMeetingRoom).getSeq();
     }
 
     @Transactional
