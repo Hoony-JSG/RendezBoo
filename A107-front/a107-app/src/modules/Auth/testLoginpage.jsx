@@ -1,8 +1,10 @@
-import {setRefreshToken, removeToken} from "./Jwt";
+import { setRefreshToken, removeToken } from './Jwt'
 import React, { useState } from 'react'
-import { SET_TOKEN, REMOVE_TOKEN } from "../../containers/AuthContainer";
-import { useDispatch } from "react-redux";
-import axios from "axios";
+import { SET_TOKEN, REMOVE_TOKEN } from '../../containers/JwtContainer'
+import { SET_USER_INFO, REMOVE_USER_INFO } from '../../containers/UserInfo'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import jwtDecode from 'jwt-decode'
 
 const BASE_URL = 'https://i8a107.p.ssafy.io'
 // const BASE_URL = 'http://localhost:8080'
@@ -11,51 +13,69 @@ const BASE_URL = 'https://i8a107.p.ssafy.io'
 // 1234
 
 const LoginTest = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userSeq, setUserSeq] = useState('')
+  const [userName, setUserName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
   const dispatch = useDispatch()
+  const accessToken = useSelector(
+    (state) => state.accessTokenReducer.accessToken
+  )
 
   const login = async (event) => {
-    event.preventDefault();
-    console.log(`${BASE_URL}/api/user/login`)
+    event.preventDefault()
 
     try {
       const response = await axios.post(`${BASE_URL}/api/user/login`, {
-        email,
-        password,
-      });
+        email: email,
+        password: password,
+      })
 
-      setIsLoggedIn(true);
       console.log(response.data);
-      // console.log(response.data.refreshToken)
       setRefreshToken(response.data.refreshToken)
-
-      // console.log(response.data.accessToken)
+      
+      const decode = jwtDecode(response.data.accessToken)
+      console.log(12)
+      console.log(decode)
+      dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-      // console.log(getRefreshTokenFromCookie())
-      // console.lot(reissueAccessToken())
+      
+      setIsLoggedIn(true);
+      setUserName(decode.name)
+      setUserSeq(decode.seq)
+      setEmail(decode.email)
+
+      // setUserSeq()
     } catch (error) {
-      setError(error.message);
+      setError(error.message)
     }
   }
 
-  const logout = () => {
-    removeToken()
-    dispatch(REMOVE_TOKEN())
+  // const logout = () => {
+  //   // const { accessToken } = selector(state => state.accessToken)
+  //   // console.log(selector(state => state.accessTokenReducer.accessToken))
 
-    setIsLoggedIn(false);
-  };
+  //   removeToken()
+  //   dispatch(REMOVE_TOKEN())
+  //   // dispatch(REMOVE_USER_INFO())
+
+  //   setIsLoggedIn(false);
+  // };
 
   return (
     <div>
       {isLoggedIn ? (
-        <button type="button" onClick={logout}>
-          Logout
-        </button>
+        <div>
+          <ul>
+          <li>username = {userName}</li>
+          <li>userSeq = {userSeq}</li>
+          <li>userEmail = {email}</li>
+          </ul>
+        </div>
       ) : (
         <form onSubmit={login}>
           <div>
@@ -81,7 +101,7 @@ const LoginTest = () => {
         </form>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default LoginTest;
+export default LoginTest

@@ -48,8 +48,8 @@ const Navbar = () => {
         <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
       </div>
       <div style={divStyle}>
-        <NavLink to="/login" style={{ color: 'white', textDecoration: 'none' }}>
-          Login
+        <NavLink to="/logout" style={{ color: 'white', textDecoration: 'none' }}>
+          Logout
         </NavLink>
       </div>
       <div style={divStyle}>

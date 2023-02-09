@@ -19,6 +19,8 @@ import Navbar from './components/Navbar'
 import './App.css'
 import WebSocketChatTest from './modules/WebSocketChatTest'
 import JoinSocial from './pages/JoinSocial'
+import LoginTest from './modules/Auth/testLoginpage'
+import Logout from './pages/Logout'
 
 function App() {
   const location = useLocation()
@@ -57,7 +59,9 @@ function App() {
             path="/websocketchattest"
             element={<WebSocketChatTest />}
           ></Route>
-          ;
+          {/* 로그인 테스트용 라우터 */}
+          <Route path='/logintest' element={<LoginTest />}></Route>
+          <Route path='/logout' element={<Logout />}></Route>
         </Routes>
       </div>
     </div>
