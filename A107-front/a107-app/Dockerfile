@@ -1,7 +1,11 @@
 FROM node:16.18.1-alpine as builder
 WORKDIR "/app"
 COPY package.json .
+<<<<<<< Updated upstream
 RUN npm install --legacy-peer-deps
+=======
+RUN npm install 
+>>>>>>> Stashed changes
 COPY . .
 RUN npm run build
 
