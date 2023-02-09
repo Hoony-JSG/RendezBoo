@@ -7,6 +7,7 @@ import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.api.response.MultiWebSocketRes;
+import com.ssafy.a107.common.exception.MeetingRoomAlreadyFullException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.MultiMeetingRoom;
 import com.ssafy.a107.db.entity.MultiMeetingRoomUser;
@@ -135,12 +136,21 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     //미팅방에 유저 더하기, 삭제하기
     @Transactional
     @Override
-    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException {
+        MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
+                .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!"));
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new NotFoundException("Invalid user sequence!"));
+        if(user.getGender()){
+            Long maleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true);
+            if(maleNum>=3) throw new MeetingRoomAlreadyFullException("Men are already full!");
+        }else{
+            Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
+            if(femaleNum>=3) throw new MeetingRoomAlreadyFullException("Women are already full!");
+        }
         return multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
-                .multiMeetingRoom(multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
-                        .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!")))
-                .user(userRepository.findById(userSeq)
-                        .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
+                .multiMeetingRoom(multiMeetingRoom)
+                .user(user)
                 .build()).getSeq();
     }
 

@@ -6,6 +6,7 @@ import com.ssafy.a107.api.request.MultiWebSocketReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.api.service.MultiMeetingRoomService;
+import com.ssafy.a107.common.exception.MeetingRoomAlreadyFullException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -72,7 +73,7 @@ public class MultiMeetingRoomController {
     //add/remove user to/from multiMeetingRoom
     @ApiOperation(value = "단체 미팅방에 유저 추가하기", notes = "단체 미팅방에 유저를 추가하면서 +  해당 미팅방에 속해있는 유저들한테 웹소켓으로 정보(인원, 입장) 보냄")
     @PostMapping("/{multiMeetingRoomSeq}/{userSeq}")
-    public ResponseEntity saveUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity saveUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException {
         multiMeetingRoomService.saveUserToMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
         multiMeetingRoomService.sendToWebSocketAtJoin(multiMeetingRoomSeq, userSeq);
         return ResponseEntity.status(HttpStatus.CREATED).build();
