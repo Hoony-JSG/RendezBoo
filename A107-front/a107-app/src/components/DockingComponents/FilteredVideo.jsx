@@ -16,18 +16,21 @@ export const FilteredVideo = ({
   VideoFilter(videoRef.current, canvasRef.current, maskPath)
 
   const videoStyle = {
+    left: '0px',
     width: '100%',
     height: '100%',
-    position: 'relative',
+    position: 'absolute',
     objectFit: 'cover',
     zIndex: 10,
   }
   
   const canvasStyle = {
+    left: '0px',
     width: '100%',
     height: '100%',
     position: 'absolute',
     objectFit: 'cover',
+    transform: 'rotateY(180deg)',
     zIndex: 12,
   }
   
@@ -38,6 +41,7 @@ export const FilteredVideo = ({
   return (
     <div
       style={{
+        position: 'relative',
         width: '100%',
         height: '100%',
       }}
