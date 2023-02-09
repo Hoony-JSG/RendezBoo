@@ -56,14 +56,20 @@ const Docking1 = (props) => {
   }
 
   // 세션 나가기
-  const leaveSession = useCallback(() => {
+  const leaveSession = useCallback(async () => {
     if (session) {
       session.disconnect()
     }
     setSession(null)
     setPublisher(null)
     setSubscribers([])
-  }, [session])
+    const response = await axios.delete(
+      APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
+      {},
+      {}
+    )
+    console.log(response.status)
+  }, [session, meetingRoomSeq])
 
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
   useEffect(() => {
