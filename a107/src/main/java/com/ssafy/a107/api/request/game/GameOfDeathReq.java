@@ -12,14 +12,7 @@ import lombok.NoArgsConstructor;
 public class GameOfDeathReq {
 
     private Long multiMeetingRoomSeq;
-
     private Long userSeq;
-
     private Long targetSeq;
-
     private Integer turn;
-
-    public void setTargetSeq(Long targetSeq) {
-        this.targetSeq = targetSeq;
-    }
 }
