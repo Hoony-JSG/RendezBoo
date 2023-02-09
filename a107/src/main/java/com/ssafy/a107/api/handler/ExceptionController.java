@@ -6,16 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.client.RestClientException;
 
 @ControllerAdvice
 @Slf4j
 public class ExceptionController {
-//    @org.springframework.web.bind.annotation.ExceptionHandler({
-//            //김명준 팀원이 추가 예정
-//    })
 
     //400 BAD REQUEST
     @ExceptionHandler({BadRequestException.class})
@@ -65,6 +60,13 @@ public class ExceptionController {
     // JwtInvalidException
     @ExceptionHandler(JwtInvalidException.class)
     public ResponseEntity<?> handleJwtInvalidException(final JwtInvalidException ex) {
+        log.info(ex.getClass().getName());
+        log.error("error", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(MeetingRoomAlreadyFullException.class)
+    public ResponseEntity<?> handleMeetingRoomAlreadyFullException(final MeetingRoomAlreadyFullException ex) {
         log.info(ex.getClass().getName());
         log.error("error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
