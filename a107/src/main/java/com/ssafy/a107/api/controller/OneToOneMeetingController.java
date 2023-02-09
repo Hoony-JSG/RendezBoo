@@ -1,5 +1,7 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.api.request.OneToOneChatReq;
+import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.OneToOneMeetingChatRes;
@@ -77,6 +79,27 @@ public class OneToOneMeetingController {
     public void deleteMasks(@PathVariable Long meetingRoomSeq) {
         OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.deleteMasks(meetingRoomSeq);
         simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/{meetingRoomSeq}/final")
+    public void startFinalChoice(@PathVariable Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.finalChoiceStart(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/choice")
+    public void finalChoice(@RequestBody OneToOneFinalChoiceReq oneToOneFinalChoiceReq) throws NotFoundException {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.finalChoice(oneToOneFinalChoiceReq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + oneToOneFinalChoiceReq.getMeetingRoomSeq(), oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/chat")
+    public void chatting(@RequestBody OneToOneChatReq oneToOneChatReq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.chatting(oneToOneChatReq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + oneToOneChatReq.getMeetingRoomSeq(), oneToOneMeetingChatRes);
     }
 
 }

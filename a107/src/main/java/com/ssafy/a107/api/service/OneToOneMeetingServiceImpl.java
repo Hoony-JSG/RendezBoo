@@ -1,5 +1,7 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.OneToOneChatReq;
+import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.OneToOneMeetingChatRes;
@@ -45,6 +47,8 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
     private final OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
 
     private final UserRepository userRepository;
+
+    private final UserFriendService userFriendService;
 
     /**
      * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와
@@ -184,6 +188,64 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .oneToOneMeetingRoomSeq(meetingRoomSeq)
                 .senderSeq(0L)
                 .message("3분이 지났습니다. 최종 선택을 시작합니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        return oneToOneMeetingChatRes;
+    }
+
+    @Override
+    @Transactional
+    public OneToOneMeetingChatRes finalChoice(OneToOneFinalChoiceReq choiceReq) throws NotFoundException {
+        OnetoOneMeetingRoom room = oneToOneMeetingRoomRepository.findById(choiceReq.getMeetingRoomSeq())
+                .orElseThrow(() -> new NotFoundException("Wrong Room Seq"));
+        if (room.getStatus() < 6) {
+            // 첫번째 요청에서 O일시
+            if (choiceReq.getWantDocking()) {
+                room.changeStatus((byte) 6);
+                // 첫번째 요청에서 X일시
+            } else {
+                room.changeStatus((byte) 7);
+            }
+            oneToOneMeetingRoomRepository.save(room);
+            OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                    .flag(OneToOneMeetingChatRes.OneToOneChatFlag.SYSTEM)
+                    .oneToOneMeetingRoomSeq(choiceReq.getMeetingRoomSeq())
+                    .senderSeq(0L)
+                    .message("한 분이 최종선택을 하셨습니다.")
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            return oneToOneMeetingChatRes;
+        } else if (room.getStatus().intValue() == 6 && choiceReq.getWantDocking()) {
+            // 첫번쨰 O 두번째 O일시 매칭성사
+            userFriendService.addFriend(room.getManSeq(), room.getWomanSeq());
+            OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                    .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
+                    .oneToOneMeetingRoomSeq(choiceReq.getMeetingRoomSeq())
+                    .senderSeq(0L)
+                    .message("친구추가가 완료되었습니다.")
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            return oneToOneMeetingChatRes;
+
+        }
+
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
+                .oneToOneMeetingRoomSeq(choiceReq.getMeetingRoomSeq())
+                .senderSeq(0L)
+                .message("친구추가가 실패하였습니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        return oneToOneMeetingChatRes;
+    }
+
+    @Override
+    public OneToOneMeetingChatRes chatting(OneToOneChatReq oneToOneChatReq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.CHAT)
+                .oneToOneMeetingRoomSeq(oneToOneChatReq.getMeetingRoomSeq())
+                .senderSeq(oneToOneChatReq.getUserSeq())
+                .message(oneToOneChatReq.getMessage())
                 .createdAt(LocalDateTime.now())
                 .build();
         return oneToOneMeetingChatRes;

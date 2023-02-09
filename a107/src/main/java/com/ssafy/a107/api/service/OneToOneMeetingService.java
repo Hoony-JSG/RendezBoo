@@ -1,5 +1,7 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.OneToOneChatReq;
+import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.OneToOneMeetingChatRes;
@@ -25,4 +27,8 @@ public interface OneToOneMeetingService {
     OneToOneMeetingChatRes deleteMasks(Long meetingRoomSeq);
 
     OneToOneMeetingChatRes finalChoiceStart(Long meetingRoomSeq);
+
+    OneToOneMeetingChatRes finalChoice(OneToOneFinalChoiceReq oneToOneFinalChoiceReq) throws NotFoundException;
+
+    OneToOneMeetingChatRes chatting(OneToOneChatReq oneToOneChatReq);
 }
