@@ -10,9 +10,11 @@ import { EmotionComponent } from '../components/DockingComponents/EmotionCompone
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
 
+const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
+
 const Docking1 = (props) => {
   const [userSeq, setUserSeq] = useState(-1)
-  // const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
+  const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [token, setToken] = useState('')
   const [meetingRoomSeq, setMeetingRoomSeq] = useState(-1)
   const [subscribers, setSubscribers] = useState([])
@@ -110,7 +112,7 @@ const Docking1 = (props) => {
     // 위에서 주입받은 토큰 사용 하여 세션에 연결
     getDocking1Token(userSeq).then((data) => {
       session
-        .connect(data.token, JSON.stringify({ clientData: userSeq }))
+        .connect(data.token, JSON.stringify({ clientData: myUserName }))
         .then(async () => {
           await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -306,9 +308,7 @@ const Docking1 = (props) => {
               <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
-                  maskPath={
-                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                  }
+                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={2}
                   width={'960px'}
                   height={'720px'}
@@ -328,9 +328,7 @@ const Docking1 = (props) => {
               <div>
                 <FilteredVideo
                   streamManager={publisher}
-                  maskPath={
-                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                  }
+                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={userSeq}
                   width={'320px'}
                   height={'240px'}
