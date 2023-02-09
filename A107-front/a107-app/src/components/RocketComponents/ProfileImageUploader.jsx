@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
-const ProfileImageUploader = ({ profileimage }) => {
+const ProfileImageUploader = (props) => {
   const [newImage, setNewImage] = useState(null)
-  const handleImageUpload = (event) => {
-    setNewImage(URL.createObjectURL(event.target.files[0]))
+  const handleImageUpload = (e) => {
+    console.log('새로운 이미지를 input함')
+    setNewImage(URL.createObjectURL(e.target.files[0]))
   }
 
   useEffect(() => {
-    profileimage(newImage)
-  }, [newImage, profileimage])
+    props.profileimage(newImage)
+  }, [newImage])
 
   return (
     <div className="ProfileImageUploader">
