@@ -74,7 +74,7 @@ const Signal = () => {
             }}
           >
             {chatRoom ? 
-              (chatRoom.map((chat) => (
+              (chatRoom.slice(0).reverse().map((chat) => (
                 <SignalList userSeq={userSeq} chat={chat} key={chat.chatRoomSeq} />
               ))
              ) : (
@@ -82,13 +82,11 @@ const Signal = () => {
             )}
           </div>
         </div>
-        <div className="content" style={{ width: '65%' }}>
+        <div className="content" style={{ width: '65%', alignSelf: 'center' }}>
           {tmpChatRoomSeq ? (
             <SignalSelected userSeq={userSeq} roomSeq={tmpChatRoomSeq} />
           ) : (
-            <div>
-              <h1>메시지를 선택하세요.</h1>
-            </div>
+            <h1>메시지를 선택하세요.</h1>
           )}
         </div>
       </div>
