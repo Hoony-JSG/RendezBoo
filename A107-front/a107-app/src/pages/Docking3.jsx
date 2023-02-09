@@ -8,7 +8,7 @@ import Docking3WaitingMeeting from '../components/Docking3WaitingMeeting'
 const Docking3 = ()=>{
 
     const APPLICATION_SERVER_URL =
-    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : '' 
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'  
 
     const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState(null)
     const [docking3List, setDocking3List] = useState([])

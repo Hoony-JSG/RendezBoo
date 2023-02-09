@@ -9,7 +9,7 @@ import * as tf from '@tensorflow/tfjs'
 const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
     const APPLICATION_SERVER_URL =
-    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : '' 
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/' 
     const WEBSOCKET_SERVER_URL = process.env.NODE_ENV === 'production' ?
     'wss://i8a107.p.ssafy.io/' : 'ws://localhost:8080/' 
     
