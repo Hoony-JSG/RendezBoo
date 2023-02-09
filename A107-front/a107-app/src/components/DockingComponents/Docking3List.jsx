@@ -5,15 +5,8 @@ const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
   const enterMeetingRoom = (multiMeetingRoomSeq) => {
-    var userseq = 1;
-    console.log('미팅방 입장하자');
-    axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+multiMeetingRoomSeq+'/'+userseq).then((response)=>{
-        navigate('/docking3/' + multiMeetingRoomSeq)
-    }, [])
-    .catch((e)=>{
-      console.log(e)
-    })
-    setMultiMeetingRoomSeq(multiMeetingRoomSeq)
+    setMultiMeetingRoomSeq(multiMeetingRoomSeq)  
+    navigate('/docking3/' + multiMeetingRoomSeq)
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',

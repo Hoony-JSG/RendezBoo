@@ -23,11 +23,11 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
     const [userSeq, setUserSeq] = useState(1)
     const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
-    const [token, setToken] = useState('')
     const [subscribers, setSubscribers] = useState([])
     const [publisher, setPublisher] = useState()
     const [session, setSession] = useState()
-
+    const [token, setToken] = useState('')
+    
     useEffect(()=>{
       console.log(APPLICATION_SERVER_URL)
       console.log(WEBSOCKET_SERVER_URL)
@@ -259,7 +259,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
       {}
     )
     setToken(response.data.token)
-    //alert('Get Token!!!' + token)
+    alert('Get Token!!!' + token)
     return response.data
   }
 
