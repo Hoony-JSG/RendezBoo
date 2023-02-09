@@ -1,8 +1,8 @@
 import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import FilteredVideo from '../components/DockingComponents/FilteredVideo'
+import React, { useCallback, useEffect, useState } from 'react'
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import DockingChat from '../components/DockingComponents/DockingChat'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
@@ -11,6 +11,8 @@ import '../Styles/Docking1.css'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
+
+const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
   const [userSeq, setUserSeq] = useState(-1)
@@ -22,6 +24,7 @@ const Docking1 = (props) => {
   const [session, setSession] = useState()
 
   const [phase, setPhase] = useState(0)
+
   const [angryCnt, setAngryCnt] = useState(0)
   const [disgustedCnt, setDisgustedCnt] = useState(0)
   const [fearfulCnt, setFearfulCnt] = useState(0)
@@ -38,11 +41,13 @@ const Docking1 = (props) => {
 
   const [apiStarted, setApiStarted] = useState(false)
 
+  // tf 세팅 및 모델 불러오기
   useEffect(() => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
     loadModels()
   }, [])
 
+  // faceapi 모델 불러오기
   async function loadModels() {
     const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
     await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
@@ -53,14 +58,20 @@ const Docking1 = (props) => {
   }
 
   // 세션 나가기
-  const leaveSession = useCallback(() => {
+  const leaveSession = useCallback(async () => {
     if (session) {
       session.disconnect()
     }
     setSession(null)
     setPublisher(null)
     setSubscribers([])
-  }, [session])
+    const response = await axios.delete(
+      APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
+      {},
+      {}
+    )
+    console.log(response.status)
+  }, [session, meetingRoomSeq])
 
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
   useEffect(() => {
@@ -109,7 +120,7 @@ const Docking1 = (props) => {
     // 위에서 주입받은 토큰 사용 하여 세션에 연결
     getDocking1Token(userSeq).then((data) => {
       session
-        .connect(data.token, JSON.stringify({ clientData: userSeq }))
+        .connect(data.token, JSON.stringify({ clientData: myUserName }))
         .then(async () => {
           await navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -161,14 +172,17 @@ const Docking1 = (props) => {
     [publisher]
   )
 
+  // 감정 분석 시작
   async function startFaceAPI(videoEl) {
     if (!apiStarted) {
+      // 시작되었는지의 플래그
       setApiStarted(true)
       console.log('video loaded')
       await onPlay(videoEl)
     }
   }
 
+  // 감정 분석 1초에 2번
   async function onPlay(videoEl) {
     if (!videoEl || videoEl.paused || videoEl.ended)
       return setTimeout(() => onPlay(videoEl), 500)
@@ -180,11 +194,29 @@ const Docking1 = (props) => {
     console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
+      if (angry > 0.25) {
+        setAngryCnt(angryCnt + 1)
+      }
       setDisgusted(predict.expressions.disgusted)
+      if (disgusted > 0.25) {
+        setDisgustedCnt(disgustedCnt + 1)
+      }
       setFearful(predict.expressions.fearful)
+      if (fearful > 0.25) {
+        setFearfulCnt(fearfulCnt + 1)
+      }
       setHappy(predict.expressions.happy)
+      if (happy > 0.25) {
+        setHappyCnt(happyCnt + 1)
+      }
       setSad(predict.expressions.sad)
+      if (sad > 0.25) {
+        setSadCnt(sadCnt + 1)
+      }
       setSurprised(predict.expressions.surprised)
+      if (surprised > 0.25) {
+        setSurprisedCnt(surprisedCnt + 1)
+      }
     }
 
     setTimeout(() => onPlay(videoEl), 500)
@@ -265,15 +297,10 @@ const Docking1 = (props) => {
               left={'700px'}
             />
             {subscribers.map((sub, idx) => (
-              <div
-                key={idx}
-                id="subscriber"
-              >
+              <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
-                  maskPath={
-                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                  }
+                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={2}
                   startFaceAPI={startFaceAPI}
                 />
@@ -285,18 +312,14 @@ const Docking1 = (props) => {
               <div className="me">
                 <FilteredVideo
                   streamManager={publisher}
-                  maskPath={
-                    'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                  }
+                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
               </div>
             ) : null}
             <DockingChat />
-            <div className='btn-group'>
-
-            </div>
+            <div className="btn-group"></div>
           </div>
         </div>
       ) : null}
