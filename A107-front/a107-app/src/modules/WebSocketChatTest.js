@@ -24,7 +24,7 @@ const WebSocketChatTest = () => {
     // stomp js client 객체 생성
     client.current = new StompJs.Client({
 
-      brokerURL: 'ws://localhost:8080/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+      brokerURL: 'ws://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
       // 연결 확인용 출력 문구
       debug: function (str) {
