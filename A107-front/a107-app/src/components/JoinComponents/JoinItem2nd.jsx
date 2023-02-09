@@ -4,6 +4,7 @@ import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'
 import JoinItemGender from './JoinItemGender'
 import { useState } from 'react'
+import NextPageButton from './NextPageButton'
 
 const JoinItem2nd = () => {
   const [hasName, setHasName] = useState(false)
@@ -27,17 +28,27 @@ const JoinItem2nd = () => {
       <br />
       {`hasName : ${hasName} // hasGender : ${hasGender} // hasBirht : ${hasBirth} // hasPhoneNumber : ${hasPhoneNumber}`}
       <div>
-        <div className="temp_border_style">
-          <JoinItemName setHas={setWholeHas} />
+        <div>
+          <div className="temp_border_style">
+            <JoinItemName setHas={setWholeHas} />
+          </div>
+          <div className="temp_border_style">
+            <JoinItemGender setHas={setWholeHas} />
+          </div>
+          <div className="temp_border_style">
+            <JoinItemBirth setHas={setWholeHas} />
+          </div>
+          <div className="temp_border_style">
+            <JoinItemPhoneNumber setHas={setWholeHas} />
+          </div>
         </div>
-        <div className="temp_border_style">
-          <JoinItemGender index={1} setHas={setWholeHas} />
-        </div>
-        <div className="temp_border_style">
-          <JoinItemBirth index={2} setHas={setWholeHas} />
-        </div>
-        <div className="temp_border_style">
-          <JoinItemPhoneNumber index={3} setHas={setWholeHas} />
+        <div>
+          <NextPageButton
+            hasName={hasName}
+            hasGender={hasGender}
+            hasBirth={hasBirth}
+            hasPhoneNumber={hasPhoneNumber}
+          />
         </div>
       </div>
     </div>

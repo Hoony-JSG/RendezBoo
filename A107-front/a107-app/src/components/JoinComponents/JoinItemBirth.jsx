@@ -1,63 +1,149 @@
 import { useEffect } from 'react'
-import moment from 'moment'
 import { useState } from 'react'
+import '../../Styles/BirthCalendarStyle.css'
 
-const JoinItemBirth = () => {
-  const [birthday, setBirthday] = useState({
-    year: '',
-    month: '',
-    day: '',
-  })
+const JoinItemBirth = (props) => {
+  const [selectedDate, setSelectedDate] = useState(new Date())
+  const [month, setMonth] = useState(selectedDate.getMonth())
+  const [year, setYear] = useState(selectedDate.getFullYear())
 
-  const [dayOfWeek, setDayOfWeek] = useState('')
-
-  const handleYearChange = (e) => {
-    setBirthday({ ...birthday, year: e.target.value })
+  const currentYear = new Date().getFullYear()
+  const currentMonth = new Date().getMonth()
+  const handlePrevMonth = () => {
+    setMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1))
+    if (month === 0) {
+      setYear((prevYear) => prevYear - 1)
+    }
   }
 
-  const handleMonthChange = (e) => {
-    setBirthday({ ...birthday, month: e.target.value })
+  const handleNextMonth = () => {
+    setMonth((prevMonth) => (prevMonth === 11 ? 0 : prevMonth + 1))
+    if (month === 11) {
+      setYear((prevYear) => prevYear + 1)
+    }
   }
 
-  const handleDayChange = (e) => {
-    setBirthday({ ...birthday, day: e.target.value })
+  const handleSelect = (day) => {
+    setSelectedDate(new Date(year, month, day))
+  }
+
+  const handleSelectYear = (e) => {
+    setYear(e.target.value)
+  }
+
+  const getDays = () => {
+    const firstDayOfMonth = new Date(year, month, 1)
+    const firstDayOfWeek = firstDayOfMonth.getDay()
+    const daysInMonth = new Date(year, month + 1, 0).getDate()
+    const days = []
+
+    for (let i = 0; i < firstDayOfWeek; i++) {
+      days.push(<div key={`empty-${i}`} className="empty"></div>)
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const date = new Date(year, month, i)
+      const isSelected = date.getTime() === selectedDate.getTime()
+
+      days.push(
+        <div
+          key={i}
+          className={`day ${isSelected ? 'selected' : ''}`}
+          onClick={() => handleSelect(i)}
+        >
+          {i}
+        </div>
+      )
+    }
+
+    return days
+  }
+
+  const getDaysOfWeek = () => {
+    const daysOfWeek = []
+    const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+    for (let i = 0; i < 7; i++) {
+      daysOfWeek.push(
+        <div key={i} className="day-of-week">
+          {weekdays[i]}
+        </div>
+      )
+    }
+
+    return daysOfWeek
   }
 
   useEffect(() => {
-    const date = moment(
-      `${birthday.year}-${birthday.month}-${birthday.day}`,
-      'YYYY-MM-DD'
+    const birthYear = selectedDate.getFullYear()
+    if (currentYear - birthYear >= 19) {
+      props.setHas(2, true)
+    } else {
+      props.setHas(2, false)
+    }
+    console.log(
+      '년도 : ' +
+        selectedDate.toLocaleDateString('default', { year: 'numeric' })
     )
-    setDayOfWeek(date.format('dddd'))
-  }, [birthday])
+    console.log(
+      '월 : ' + selectedDate.toLocaleDateString('default', { month: 'numeric' })
+    )
+    console.log(
+      '일 : ' + selectedDate.toLocaleDateString('default', { day: 'numeric' })
+    )
+  }, [selectedDate])
 
   return (
-    <div>
-      <select value={birthday.year} onChange={handleYearChange}>
-        <option value="">Year</option>
-        {Array.from({ length: 100 }, (_, i) => (
-          <option key={i} value={1920 + i}>
-            {1920 + i}
-          </option>
-        ))}
-      </select>
-      <select value={birthday.month} onChange={handleMonthChange}>
-        <option value="">Month</option>
-        {Array.from({ length: 12 }, (_, i) => (
-          <option key={i} value={i + 1}>
-            {i + 1}
-          </option>
-        ))}
-      </select>
-      <select value={birthday.day} onChange={handleDayChange}>
-        <option value="">Day</option>
-        {Array.from({ length: 31 }, (_, i) => (
-          <option key={i} value={i + 1}>
-            {i + 1}
-          </option>
-        ))}
-      </select>
-      {dayOfWeek && <div>Day of Week: {dayOfWeek}</div>}
+    <div className="date-picker">
+      <div className="header">
+        <div className="header-left-right">
+          <select
+            className="year-select"
+            value={year}
+            onChange={handleSelectYear}
+          >
+            {Array.from({ length: 90 }, (_, i) => (
+              <option key={i} value={currentYear - i}>
+                {currentYear - i} 년
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="select-month-withbuttons header-center">
+          <button
+            className="prev-month-btn"
+            onClick={handlePrevMonth}
+            disabled={year === currentYear - 89 && month === currentMonth}
+          >
+            {'<'}
+          </button>
+          <div className="month-year">
+            {new Date(Date.UTC(year, month)).toLocaleString('default', {
+              month: 'long',
+            })}{' '}
+          </div>
+          <div>
+            <button
+              className="next-month-btn"
+              onClick={handleNextMonth}
+              disabled={year === currentYear && month === currentMonth}
+            >
+              {'>'}
+            </button>
+          </div>
+        </div>
+        <div className="header-left-right"></div>
+      </div>
+      <div className="weekdays">{getDaysOfWeek()}</div>
+      <div className="days">{getDays().map((day) => day)}</div>
+      <div className="selected-date">
+        {selectedDate.toLocaleString('default', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'long',
+        })}
+      </div>
     </div>
   )
 }
