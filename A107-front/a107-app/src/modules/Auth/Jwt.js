@@ -77,8 +77,11 @@ export const reissueAccessToken = async () => {
     // 갱신 된 refresh token 저장
     setRefreshToken(response.data.refreshToken)
 
-    // access 토큰 반환
-    return response.data.getAccessToken
+    // access token store에 저장
+    // useDispatch(SET_TOKEN(response.data.accessToken))
+    // return response.data.getAccessToken
+
+    return response.data.accessToken
 
   } catch (e) {
     console.log(e)
@@ -86,8 +89,10 @@ export const reissueAccessToken = async () => {
 }
 
 
-// removeToken: (로그아웃 시) 쿠키에 저장된 토큰 제거
+// removeToken: (로그아웃 시) 토큰 제거
 export const removeToken = () => {
+  console.log(11)
+  // 쿠키에 저장된 refresh token 제거
   cookies.remove('refresh_token',
   {
     path: "/",
@@ -96,12 +101,15 @@ export const removeToken = () => {
     secure: true,
     maxAge: REFRESH_TOKEN_AGE
   })
+
+  // store에 저장된 access token 저장
+  // useDispatch(REMOVE_TOKEN())
 }
 
 
 // getHeader: 헤더에 토큰 부착해주기
-export const getHeader = (accessToekn) => {
+export const getHeader = (accessToken) => {
   return {
-    Authorization: `Bearer ${accessToekn}`
+    Authorization: `Bearer ${accessToken}`
   }
 }
