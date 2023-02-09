@@ -45,7 +45,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
       client.current = new StompJs.Client({
             
-        brokerURL: 'ws://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+        brokerURL: 'wss://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
         // 연결 확인용 출력 문구
         debug: function (str) {
