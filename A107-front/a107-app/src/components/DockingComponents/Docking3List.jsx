@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Docking3List = ({ docking3room, key, setMultiMeetingRoomSeq }) => {
+const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
   const enterMeetingRoom = (multiMeetingRoomSeq) => {
@@ -13,7 +13,7 @@ const Docking3List = ({ docking3room, key, setMultiMeetingRoomSeq }) => {
     .catch((e)=>{
       console.log(e)
     })
-    
+    setMultiMeetingRoomSeq(multiMeetingRoomSeq)
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',

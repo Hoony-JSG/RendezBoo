@@ -6,7 +6,7 @@ import Docking3WaitingMeeting from '../components/Docking3WaitingMeeting'
 
 
 const Docking3 = ()=>{
-    const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState()
+    const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState(null)
     const [docking3List, setDocking3List] = useState([])
     useEffect(()=>{
         axios.get('http://localhost:8080/api/multi-meetings/').then((response)=>{

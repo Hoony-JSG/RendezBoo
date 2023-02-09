@@ -3,11 +3,10 @@ import * as StompJs from '@stomp/stompjs'
 import axios from "axios"
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
-import * as faceapi from 'face-api.js'
+import DockingChat from '../components/DockingComponents/DockingChat'
 import * as tf from '@tensorflow/tfjs'
 
 const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
-    const userid = 1
     const usertoken = "$$$mytoken$$$"
 
     // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
@@ -16,7 +15,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     const [message, setMessage] = useState('')
     const [completeFlag, setCompleteFlag] = useState(false);
 
-    const [userSeq, setUserSeq] = useState(-1)
+    const [userSeq, setUserSeq] = useState(1)
     const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
     const [token, setToken] = useState('')
     const [subscribers, setSubscribers] = useState([])
@@ -34,16 +33,19 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
 //////////////////////////////////////////////////////////////////////////////////////
 //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
+    const handleUserSeq = (e) => {
+      setUserSeq(e.target.value)
+    }
     // connect: 웹소켓(stomp)연결
     const connect = () =>{
       console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-      axios.post("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userid).then((response)=>{
+      axios.post("https://i8a107.p.ssafy.io/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
           console.log(response.status)
       })
 
       client.current = new StompJs.Client({
             
-        brokerURL: 'ws://localhost:8080/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+        brokerURL: 'ws://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
         // 연결 확인용 출력 문구
         debug: function (str) {
@@ -106,45 +108,45 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     })
   }
 
-    // publish: 메세지 보내기
-    const publish = (message) => {
+  // publish: 메세지 보내기
+  const publish = (message) => {
 
-      // 연결이 안되어있을 경우
-      if (!client.current.connected) {
-        alert('연결이 안 되어있어')
-        return
-      }
-  
-      // 입력된 메세지가 없는 경우
-      if (!message) {
-        alert('메세지 입력 해')
-        return
-      }
-  
-      // 메세지를 보내기
-      client.current.publish({
-        
-        // destination: 보낼 주소
-        // (/pub: 웹소켓 공통 발신용 주소), (/send: 기능별 개별 발신용 주소)
-        destination: '/pub/send-multi',
-
-        // body: 보낼 메세지
-        body: JSON.stringify({
-          multiMeetingRoomSeq: multiMeetingRoomSeq,
-          message: message,
-          senderSeq: userSeq,
-        }),
-      })
-  
-      // 보내고 메세지 초기화
-      setMessage('')
+    // 연결이 안되어있을 경우
+    if (!client.current.connected) {
+      alert('연결이 안 되어있어')
+      return
     }
+
+    // 입력된 메세지가 없는 경우
+    if (!message) {
+      alert('메세지 입력 해')
+      return
+    }
+
+    // 메세지를 보내기
+    client.current.publish({
+      
+      // destination: 보낼 주소
+      // (/pub: 웹소켓 공통 발신용 주소), (/send: 기능별 개별 발신용 주소)
+      destination: '/pub/send-multi',
+
+      // body: 보낼 메세지
+      body: JSON.stringify({
+        multiMeetingRoomSeq: multiMeetingRoomSeq,
+        message: message,
+        senderSeq: userSeq,
+      }),
+    })
+
+    // 보내고 메세지 초기화
+    setMessage('')
+  }
   
   const disconnect = () => {
     console.log('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios.delete("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userid).then((response)=>{
+    axios.delete("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
         console.log(response.status)
     })
   }
@@ -163,12 +165,11 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //미팅방 기능: openvidu, filtered-video...
-    useEffect(()=>{
-    //미팅이 시작될 때 일어나야 하는 일들이 일어난다.
-      tf.env().set('WEBGL_CPU_FORWARD', false)
-    }, [completeFlag])
+  useEffect(()=>{
+  //미팅이 시작될 때 일어나야 하는 일들이 일어난다.
+    tf.env().set('WEBGL_CPU_FORWARD', false)
+  }, [completeFlag])
 
-  // 세션 시작
   const joinSession = () => {
     const openVidu = new OpenVidu()
     let session = openVidu.initSession()
@@ -188,19 +189,192 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
         ]
       })
     })
+
+    // On every Stream destroyed...
+    session.on('streamDestroyed', (event) => {
+      event.preventDefault()
+
+      const data = JSON.parse(event.stream.connection.data)
+      setSubscribers((prev) =>
+        prev.filter((it) => it.userSeq !== +data.userSeq)
+      )
+    })
+
+    // On every asynchronous exception...
+    session.on('exception', (exception) => {
+      console.warn(exception)
+    })
+
+    // 위에서 주입받은 토큰 사용 하여 세션에 연결
+    getDocking3Token(userSeq).then((data) => {
+      session
+        .connect(data.token, JSON.stringify({ clientData: userSeq }))
+        .then(async () => {
+          await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+          })
+          const devices = await openVidu.getDevices()
+          const videoDevices = devices.filter(
+            (device) => device.kind === 'videoinput'
+          )
+
+          const publisher = openVidu.initPublisher('', {
+            audioSource: undefined,
+            videoSource: videoDevices[0].deviceId,
+            publishAudio: true,
+            publishVideo: true,
+            resolution: '640x480',
+            frameRate: 30,
+            insertMode: 'APPEND',
+            mirror: false,
+          })
+
+          setPublisher(publisher)
+          session.publish(publisher)
+        })
+        .catch((error) => {
+          console.log(
+            'There was an error connecting to the session:',
+            error.code,
+            error.message
+          )
+        })
+    })
+    setSession(session)
   }
 
+  // userSeq 기반으로 오픈비두 토큰 가져옴
+  async function getDocking3Token(userSeq) {
+    const response = await axios.post(
+      APPLICATION_SERVER_URL + 'api/multi-meetings/join',
+      { userSeq: userSeq,
+        multiMeetingRoomSeq: multiMeetingRoomSeq
+      },
+      {}
+    )
+    setToken(response.data.token)
+    //alert('Get Token!!!' + token)
+    return response.data
+  }
+
+    
 
 
   return(
     completeFlag?(
-        <div>
-          <h1>미팅 진행중입니다</h1>
-        </div>
+      <div className="container">
+        {/* <h1>일대일 매칭 테스트 중</h1> */}
+        {session === undefined ? (
+          <div>
+            <button onClick={joinSession}>미팅방 입장하기</button>
+          </div>
+        ) : null}
+        {session !== undefined ? (
+          <div
+            className="video-container"
+            style={{
+              margin: '20px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '30px',
+            }}
+          >
+            <div
+              className="sub-container"
+              style={{
+                width: '60%',
+                height: '840px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderRadius: '40px',
+                border: '2px solid #FFFFFF',
+                background: 'rgba(23, 49, 71, 0.8)',
+                filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                position: 'relative',
+              }}
+            >
+              {subscribers.map((sub, idx) => (
+                <div 
+                key={idx}
+                id="subscriber"
+                style={{
+                  width: '100%',
+                  height: '840px',
+                  overflow: 'hidden',
+                  borderRadius: '40px',
+                  border: '2px solid #FFFFFF',
+                  background: 'rgba(23, 49, 71, 0.8)',
+                  filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                }}
+                >
+                  <FilteredVideo
+                    streamManager={sub.streamManager}
+                    maskPath={
+                      'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
+                    }
+                    userSeq={2}
+                    startFaceAPI={()=>{}}
+                  />
+                </div>
+              ))}
+            </div>
+            <div
+              className="pub-container"
+              style={{
+                width: '30%',
+                height: '840px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+              >
+              {publisher !== undefined ? (
+                <div
+                style={{
+                  width: '100%',
+                  height: '360px',
+                  overflow: 'hidden',
+                  borderRadius: '40px',
+                  border: '2px solid #FFFFFF',
+                  background: 'rgba(23, 49, 71, 0.8)',
+                  filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                }}
+                >
+                  <FilteredVideo
+                    streamManager={publisher}
+                    maskPath={
+                      'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
+                    }
+                    userSeq={userSeq}
+                    startFaceAPI={() => {}}
+                  />
+                </div>
+              ) : null}
+              <DockingChat />
+            </div>
+          </div>
+        ) : null}
+      </div>
     ):(
         <div>
+          <p>
+            <label>UserSeq: </label>
+            <input
+              type="number"
+              id="userSeq"
+              value={userSeq}
+              onChange={handleUserSeq}
+              required
+            />
+          </p>
           <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
-          <p>내 유저 시퀀스는 {userid}입니다.</p>
+          <p>내 유저 시퀀스는 {userSeq}입니다.</p>
           <p>내 토큰은 {usertoken}입니다.</p>
           <p>내 화면</p>
           <div className={'chat-list'}>
@@ -220,6 +394,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
           <input type={'submit'} value={'메세지 보내기'} />
         </form>
       </div>
+      
     )
     
   )

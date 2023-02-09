@@ -9,9 +9,6 @@ export { default as Inventory } from './Inventory'
 
 export { default as Docking1 } from './Docking1'
 export { default as Docking3 } from './Docking3'
-<<<<<<< HEAD
 
 export { default as Error } from './Error'
-=======
 export { default as Docking3ing } from './Docking3ing'
->>>>>>> frontend
