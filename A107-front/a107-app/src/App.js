@@ -12,6 +12,7 @@ import {
   Userinfo,
   Inventory,
   Docking3,
+  Error,
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
@@ -45,6 +46,7 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
+          <Route path="/*" element={<Error/>}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
             path="/websocketchattest"
