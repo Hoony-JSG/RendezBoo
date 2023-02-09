@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class OneToOneMeetingChatRes {
 
     public enum OneToOneChatFlag {
-        JOIN, EXIT, SYSTEM, CHAT, PHASE1, PHASE2, PHASE3
+        JOIN, EXIT, SYSTEM, CHAT, PHASE1, PHASE2, PHASE3, FINAL
     }
 
     private OneToOneChatFlag flag;

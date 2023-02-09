@@ -1,7 +1,10 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.api.request.OneToOneChatReq;
+import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
 import com.ssafy.a107.api.response.MeetingRoomRes;
+import com.ssafy.a107.api.response.OneToOneMeetingChatRes;
 import com.ssafy.a107.api.response.OneToOneMeetingRoomRes;
 import com.ssafy.a107.api.service.OneToOneMeetingService;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +28,8 @@ import java.util.List;
 public class OneToOneMeetingController {
 
     private final OneToOneMeetingService oneToOneMeetingService;
+
+    private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     /**
      * 1. Session Initialization, 2. Connection Creation
@@ -49,27 +55,51 @@ public class OneToOneMeetingController {
     @ApiOperation("일대일 매칭의 종료")
     @DeleteMapping("/{meetingRoomSeq}")
     public ResponseEntity closeMatch(@PathVariable Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        oneToOneMeetingService.closeMatch(meetingRoomSeq);
-
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.closeMatch(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @ApiOperation("일대일 매칭 시작 -- ws 사용")
     @MessageMapping("/one/{meetingRoomSeq}/start")
     public void startOneToOneMatch(@PathVariable Long meetingRoomSeq) {
-        oneToOneMeetingService.startOneToOneMeeting(meetingRoomSeq);
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.startOneToOneMeeting(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
     }
 
     @ApiOperation("일대일 매칭 페이즈 2 시작 - 선글라스 벗김 -- ws 사용")
     @MessageMapping("/one/{meetingRoomSeq}/phase2")
     public void deleteGlasses(@PathVariable Long meetingRoomSeq) {
-        oneToOneMeetingService.deleteGlasses(meetingRoomSeq);
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.deleteGlasses(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
     }
 
     @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
     @MessageMapping("/one/{meetingRoomSeq}/phase3")
     public void deleteMasks(@PathVariable Long meetingRoomSeq) {
-        oneToOneMeetingService.deleteMasks(meetingRoomSeq);
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.deleteMasks(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/{meetingRoomSeq}/final")
+    public void startFinalChoice(@PathVariable Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.finalChoiceStart(meetingRoomSeq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/choice")
+    public void finalChoice(@RequestBody OneToOneFinalChoiceReq oneToOneFinalChoiceReq) throws NotFoundException {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.finalChoice(oneToOneFinalChoiceReq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + oneToOneFinalChoiceReq.getMeetingRoomSeq(), oneToOneMeetingChatRes);
+    }
+
+    @ApiOperation("일대일 매칭 페이즈 3 시작 - 마스크 벗김 -- ws 사용")
+    @MessageMapping("/one/chat")
+    public void chatting(@RequestBody OneToOneChatReq oneToOneChatReq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = oneToOneMeetingService.chatting(oneToOneChatReq);
+        simpMessageSendingOperations.convertAndSend("/sub/one/" + oneToOneChatReq.getMeetingRoomSeq(), oneToOneMeetingChatRes);
     }
 
 }
