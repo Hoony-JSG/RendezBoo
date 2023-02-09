@@ -19,15 +19,15 @@ public class TestDbInit {
 
     private final TestDbInitService testDbInitService;
 
-    @PostConstruct
-    public void init() throws ParseException {
-        testDbInitService.userInit1();
-        testDbInitService.userInit2();
-        testDbInitService.userInit3();
-        testDbInitService.userInit4();
-        testDbInitService.userInit5();
-        testDbInitService.userInit6();
-    }
+//    @PostConstruct
+//    public void init() throws ParseException {
+//        testDbInitService.userInit1();
+//        testDbInitService.userInit2();
+//        testDbInitService.userInit3();
+//        testDbInitService.userInit4();
+//        testDbInitService.userInit5();
+//        testDbInitService.userInit6();
+//    }
 
     @Component
     @Transactional
