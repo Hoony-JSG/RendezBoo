@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../Styles/JoinItemInterestsStyle.css'
-const JoinItemInterests = () => {
+const JoinItemInterests = (props) => {
   const [selectedInterests, setSelectedInterests] = useState([])
   const [count, setCount] = useState(0)
   const interests = [
@@ -27,10 +27,19 @@ const JoinItemInterests = () => {
     )
     setCount(selectedInterests.includes(interest) ? count - 1 : count + 1)
   }
+  const checkCount = () => {
+    if (count >= 5) {
+      props.setTrue(true)
+    }
+  }
+
+  useEffect(() => {
+    checkCount()
+  }, [count])
 
   return (
     <div className="interest-selector">
-      <h3>Select your interests:</h3>
+      <h3>Select your interests: {count}</h3>
       <ul>
         {interests.map((interest) => (
           <li key={interest}>

@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { BiPlanet } from 'react-icons/bi'
 import JoinItem2nd from './JoinItem2nd'
 import JoinItem3rd from './JoinItem3rd'
 import JoinItem4rd from './JoinItem4rd'
 
 const JoinItem = () => {
   const setNext = () => {
-    setOrder(order + 1)
+    if (order === 4) {
+      window.location.href = '/'
+    } else {
+      setOrder(order + 1)
+    }
   }
   const ItemList = [
     '',

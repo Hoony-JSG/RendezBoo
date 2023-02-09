@@ -1,17 +1,19 @@
+import { useState } from 'react'
 import JoinItemInterests from './JoinItemInterests'
 import NextPageButton from './NextPageButton'
 
 const JoinItem4rd = (props) => {
+  const [hasInterests, setHasInterests] = useState(false)
   return (
     <div>
       <div>
         J_4_관심사
         <br />
         <div>
-          <JoinItemInterests />
+          <JoinItemInterests setTrue={setHasInterests} />
         </div>
       </div>
-      <NextPageButton setNext={props.setNext} />
+      <NextPageButton setTrue={hasInterests} setNext={props.setNext} />
     </div>
   )
 }
