@@ -1,12 +1,17 @@
 import { useNavigate } from 'react-router-dom'
+import userLogo from '../../Images/user-profile.png'
 
-const SignalList = ({ chat }) => {
-  const { userFemaleSeq, content } = chat
+const SignalList = ({ userSeq, chat }) => {
+  const { userFemale, userMale } = chat
   const navigate = useNavigate()
   const goToPage = (props) => {
     navigate('/' + props)
   }
   const chatListStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     boxSizing: 'border-box',
     width: '100%',
     background:
@@ -21,11 +26,25 @@ const SignalList = ({ chat }) => {
       style={chatListStyle}
       onClick={() => goToPage('signal/' + chat.chatRoomSeq)}
     >
-      <div>
-        <h3>{userFemaleSeq}</h3>
-        <p>{content[0].created_at}</p>
-      </div>
-      <p>{content[0].message}</p>
+        { userFemale.seq !== userSeq ? (
+          <div>
+            <img
+              src={userFemale.profileImagePath || {userLogo}}  
+              style={{ width: '75px', height: '75px' }}
+              alt={userFemale.name}
+            />
+            <h3>{userFemale.name}</h3>
+          </div>
+        ) : (
+          <div>
+            <img
+              src={userMale.profileImagePath || {userLogo}}  
+              style={{ width: '75px', height: '75px' }}
+              alt={userMale.name}
+            />
+            <h3>{userMale.name}</h3>
+          </div>
+        )}
     </div>
   )
 }
