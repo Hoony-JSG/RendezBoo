@@ -42,8 +42,6 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
         this.openVidu = new OpenVidu(OPENVIDU_URL, OPENVIDU_SECRET);
     }
 
-    private final SimpMessageSendingOperations simpMessageSendingOperations;
-
     private final OneToOneMeetingRoomRepository oneToOneMeetingRoomRepository;
 
     private final UserRepository userRepository;
@@ -104,7 +102,7 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                         new KurentoOptions.Builder()
                                 .allowedFilters(new String[]{"FaceOverlayFilter"})
                                 .build()
-        ).build();
+                ).build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
         return new MeetingRoomRes(onetoOneMeetingRoom.getSeq(), token);
@@ -119,10 +117,10 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
 
     @Override
     @Transactional
-    public void closeMatch(Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
+    public OneToOneMeetingChatRes closeMatch(Long meetingRoomSeq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
         OnetoOneMeetingRoom room = oneToOneMeetingRoomRepository.findById(meetingRoomSeq)
                 .orElseThrow(() -> new NotFoundException("Wrong Room Seq"));
-        room.changeStatus((byte) 2);
+        room.changeStatus((byte) 5);
         oneToOneMeetingRoomRepository.save(room);
         OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                 .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
@@ -131,13 +129,17 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .message("매칭이 종료되었습니다.")
                 .createdAt(LocalDateTime.now())
                 .build();
-        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+
         Session session = openVidu.getActiveSession(room.getSessionId());
-        session.close();
+        if (session != null) {
+            session.close();
+        }
+        return oneToOneMeetingChatRes;
     }
 
     @Override
-    public void startOneToOneMeeting(Long meetingRoomSeq) {
+    @Transactional
+    public OneToOneMeetingChatRes startOneToOneMeeting(Long meetingRoomSeq) {
         OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                 .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE1)
                 .oneToOneMeetingRoomSeq(meetingRoomSeq)
@@ -145,12 +147,13 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .message("미팅이 시작되었습니다.")
                 .createdAt(LocalDateTime.now())
                 .build();
-        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+        return oneToOneMeetingChatRes;
 
     }
 
     @Override
-    public void deleteGlasses(Long meetingRoomSeq) {
+    @Transactional
+    public OneToOneMeetingChatRes deleteGlasses(Long meetingRoomSeq) {
         OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                 .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE2)
                 .oneToOneMeetingRoomSeq(meetingRoomSeq)
@@ -158,11 +161,12 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .message("1분이 지났습니다. 눈을 공개합니다.")
                 .createdAt(LocalDateTime.now())
                 .build();
-        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+        return oneToOneMeetingChatRes;
     }
 
     @Override
-    public void deleteMasks(Long meetingRoomSeq) {
+    @Transactional
+    public OneToOneMeetingChatRes deleteMasks(Long meetingRoomSeq) {
         OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                 .flag(OneToOneMeetingChatRes.OneToOneChatFlag.PHASE3)
                 .oneToOneMeetingRoomSeq(meetingRoomSeq)
@@ -170,6 +174,18 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
                 .message("2분이 지났습니다. 얼굴을 공개합니다.")
                 .createdAt(LocalDateTime.now())
                 .build();
-        simpMessageSendingOperations.convertAndSend("/sub/one/" + meetingRoomSeq, oneToOneMeetingChatRes);
+        return oneToOneMeetingChatRes;
+    }
+
+    @Override
+    public OneToOneMeetingChatRes finalChoiceStart(Long meetingRoomSeq) {
+        OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
+                .flag(OneToOneMeetingChatRes.OneToOneChatFlag.FINAL)
+                .oneToOneMeetingRoomSeq(meetingRoomSeq)
+                .senderSeq(0L)
+                .message("3분이 지났습니다. 최종 선택을 시작합니다.")
+                .createdAt(LocalDateTime.now())
+                .build();
+        return oneToOneMeetingChatRes;
     }
 }
