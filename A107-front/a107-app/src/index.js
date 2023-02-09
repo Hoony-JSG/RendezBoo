@@ -9,15 +9,20 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import rootReducer from './modules'
 
+import { CookiesProvider } from 'react-cookie'
+
 const store = configureStore({ reducer: rootReducer }, composeWithDevTools())
 
 ReactDOM.render(
   //   <React.StrictMode>
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </CookiesProvider>,
+
   //   </React.StrictMode>,
   document.getElementById('root')
 )
