@@ -1,30 +1,43 @@
 import { React, useRef, useState, useEffect } from "react"
 import * as StompJs from '@stomp/stompjs'
 import axios from "axios"
+import { OpenVidu } from 'openvidu-browser'
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
+import * as faceapi from 'face-api.js'
+import * as tf from '@tensorflow/tfjs'
 
-const Docking3Waiting = ({roomid, complete}) => {
+const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     const userid = 1
     const usertoken = "$$$mytoken$$$"
 
     // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
-    const senderSeq = 1
-    const receiverSeq = 2
-
-
     const client = useRef({});
-    const [members, setMembers] = useState([])
     const [chatList, setChatList] = useState([])
     const [message, setMessage] = useState('')
+    const [completeFlag, setCompleteFlag] = useState(false);
+
+    const [userSeq, setUserSeq] = useState(-1)
+    const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
+    const [token, setToken] = useState('')
+    const [subscribers, setSubscribers] = useState([])
+    const [publisher, setPublisher] = useState()
+    const [session, setSession] = useState()
+
+    const APPLICATION_SERVER_URL =
+      process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
 
     useEffect(()=>{
         connect()
         
         return() => disconnect()
     },[])
+
+//////////////////////////////////////////////////////////////////////////////////////
+//대기방에서 필요한 일이다. 웹소켓 연결, 구독...
     // connect: 웹소켓(stomp)연결
     const connect = () =>{
       console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-      axios.post("http://localhost:8080/api/multi-meetings/"+roomid+'/'+userid).then((response)=>{
+      axios.post("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userid).then((response)=>{
           console.log(response.status)
       })
 
@@ -63,7 +76,7 @@ const Docking3Waiting = ({roomid, complete}) => {
 
     // 구독한 주소로 메세지 받을 시 이벤트 발생
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))    
-    client.current.subscribe('/sub/multi/'+roomid, (body) => {
+    client.current.subscribe('/sub/multi/'+multiMeetingRoomSeq, (body) => {
 
       // 받아온 제이슨 파싱
       const json_body = JSON.parse(body.body) 
@@ -76,8 +89,6 @@ const Docking3Waiting = ({roomid, complete}) => {
       // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
       setChatList((_chat_list) => [
         ..._chat_list,
-        // json_body.maleNum,
-        // json_body.femaleNum,
         json_body.message,
         json_body.createdAt,
       ])
@@ -88,7 +99,7 @@ const Docking3Waiting = ({roomid, complete}) => {
         console.log('malenum: '+maleNum)
         console.log('femalenum: '+femaleNum)
         if(maleNum+femaleNum==6){
-          complete()
+          setCompleteFlag(true)
         }
       }
 
@@ -119,9 +130,9 @@ const Docking3Waiting = ({roomid, complete}) => {
 
         // body: 보낼 메세지
         body: JSON.stringify({
-          multiMeetingRoomSeq: roomid,
+          multiMeetingRoomSeq: multiMeetingRoomSeq,
           message: message,
-          senderSeq: senderSeq,
+          senderSeq: userSeq,
         }),
       })
   
@@ -133,7 +144,7 @@ const Docking3Waiting = ({roomid, complete}) => {
     console.log('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios.delete("http://localhost:8080/api/multi-meetings/"+roomid+'/'+userid).then((response)=>{
+    axios.delete("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userid).then((response)=>{
         console.log(response.status)
     })
   }
@@ -150,33 +161,68 @@ const Docking3Waiting = ({roomid, complete}) => {
     publish(message)
   }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//미팅방 기능: openvidu, filtered-video...
+    useEffect(()=>{
+    //미팅이 시작될 때 일어나야 하는 일들이 일어난다.
+      tf.env().set('WEBGL_CPU_FORWARD', false)
+    }, [completeFlag])
+
+  // 세션 시작
+  const joinSession = () => {
+    const openVidu = new OpenVidu()
+    let session = openVidu.initSession()
+
+    // On every new Stream received...
+    session.on('streamCreated', (event) => {
+      const subscriber = session.subscribe(event.stream, '')
+      const data = JSON.parse(event.stream.connection.data)
+      setSubscribers((prev) => {
+        return [
+          ...prev.filter((it) => it.userSeq !== +data.userSeq),
+          {
+            streamManager: subscriber,
+            userSeq: +data.userSeq,
+            gender: data.gender,
+          },
+        ]
+      })
+    })
+  }
 
 
 
   return(
-    <div>
-        <h1>단체 미팅방 {roomid}의 대기방입니다.</h1>
-        <p>내 유저 시퀀스는 {userid}입니다.</p>
-        <p>내 토큰은 {usertoken}입니다.</p>
-        <p>내 화면</p>
-        <div className={'chat-list'}>
-        {chatList.map((item, index) => {
-          return <div key={index}>{item}</div>
-        })}
-      </div>
-      <form onSubmit={(event) => handleSubmit(event, message)}>
+    completeFlag?(
         <div>
-          <input
-            type={'text'}
-            name={'chatInput'}
-            onChange={handleChange}
-            value={message}
-          />
+          <h1>미팅 진행중입니다</h1>
         </div>
-        <input type={'submit'} value={'메세지 보내기'} />
-      </form>
-    </div>
+    ):(
+        <div>
+          <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
+          <p>내 유저 시퀀스는 {userid}입니다.</p>
+          <p>내 토큰은 {usertoken}입니다.</p>
+          <p>내 화면</p>
+          <div className={'chat-list'}>
+          {chatList.map((item, index) => {
+            return <div key={index}>{item}</div>
+          })}
+        </div>
+        <form onSubmit={(event) => handleSubmit(event, message)}>
+          <div>
+            <input
+              type={'text'}
+              name={'chatInput'}
+              onChange={handleChange}
+              value={message}
+            />
+          </div>
+          <input type={'submit'} value={'메세지 보내기'} />
+        </form>
+      </div>
+    )
+    
   )
 
 }
-export default Docking3Waiting;
+export default Docking3WaitingMeeting;

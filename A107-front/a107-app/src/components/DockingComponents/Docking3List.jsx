@@ -1,16 +1,19 @@
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Docking3List = ({ docking3room }) => {
+const Docking3List = ({ docking3room, key, setMultiMeetingRoomSeq }) => {
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
-  const enterMeetingRoom = (roomid) => {
+  const enterMeetingRoom = (multiMeetingRoomSeq) => {
     var userseq = 1;
-    console.log('https://i8a107.p.ssafy.io/api/multi-meetings/'+roomid+'/'+userseq);
-    axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+roomid+'/'+userseq).then((response)=>{
-        console.log(response.data)
+    console.log('미팅방 입장하자');
+    axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+multiMeetingRoomSeq+'/'+userseq).then((response)=>{
+        navigate('/docking3/' + multiMeetingRoomSeq)
     }, [])
-    navigate('/docking3/' + roomid)
+    .catch((e)=>{
+      console.log(e)
+    })
+    
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',

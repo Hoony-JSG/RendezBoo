@@ -85,7 +85,7 @@ export default class FacePaint {
     this._addGeometry()
     this._addMaterial()
     this._mesh = new THREE.Mesh(this._geometry, this._material)
-    this._mesh.scale.multiplyScalar(this._halfW / 320)
+    this._mesh.scale.multiplyScalar(this._halfW / 320)  // 이거 건드려라ㅏㅏㅏㅏ
     this._scene.add(this._mesh)
   }
 
