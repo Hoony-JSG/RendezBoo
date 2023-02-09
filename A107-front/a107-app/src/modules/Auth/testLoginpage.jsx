@@ -1,5 +1,7 @@
-import {setRefreshToken, getRefreshTokenFromCookie, getAccessToken, getHeader, removeToken, reissueAccessToken} from "./Jwt";
+import {setRefreshToken, removeToken} from "./Jwt";
 import React, { useState } from 'react'
+import { SET_TOKEN, REMOVE_TOKEN } from "../../containers/AuthContainer";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 const BASE_URL = 'https://i8a107.p.ssafy.io'
@@ -13,6 +15,8 @@ const LoginTest = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const dispatch = useDispatch()
 
   const login = async (event) => {
     event.preventDefault();
@@ -28,8 +32,12 @@ const LoginTest = () => {
       console.log(response.data);
       // console.log(response.data.refreshToken)
       setRefreshToken(response.data.refreshToken)
-      console.log(getRefreshTokenFromCookie())
-      console.lot(reissueAccessToken())
+
+      // console.log(response.data.accessToken)
+      dispatch(SET_TOKEN(response.data.accessToken))
+
+      // console.log(getRefreshTokenFromCookie())
+      // console.lot(reissueAccessToken())
     } catch (error) {
       setError(error.message);
     }
@@ -37,6 +45,8 @@ const LoginTest = () => {
 
   const logout = () => {
     removeToken()
+    dispatch(REMOVE_TOKEN())
+
     setIsLoggedIn(false);
   };
 
