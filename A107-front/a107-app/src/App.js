@@ -12,6 +12,7 @@ import {
   Userinfo,
   Inventory,
   Docking3,
+  Error,
   Docking3ing,
 } from './pages'
 import Navbar from './components/Navbar'
@@ -34,6 +35,7 @@ function App() {
           location.pathname === '/Login' ||
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
+          location.pathname === '/Docking1' ||
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>
@@ -51,6 +53,7 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
+          <Route path="/*" element={<Error/>}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
             path="/websocketchattest"
