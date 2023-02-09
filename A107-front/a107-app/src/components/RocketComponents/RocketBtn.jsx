@@ -1,6 +1,6 @@
 import RocketBtn_Diff from './RocketBtn_Diff'
 import RocketBtn_Same from './RocketBtn_Same'
-import RocketBtn_Start from './RocketBtn_Start'
+import MBTISelector from '../JoinComponents/MBTISelector'
 
 const RocketBtn = (props) => {
   if (props.ver === 'Me') {
@@ -20,7 +20,7 @@ const RocketBtn = (props) => {
   } else {
     return (
       <div>
-        <RocketBtn_Start />
+        <MBTISelector />
       </div>
     )
   }
