@@ -10,7 +10,11 @@ const SignalListItem = ({ chat, userSeq, you }) => {
       ) : null }
       <div>
         <p>{message}</p>
-        <p>{createdAt[3]}-{createdAt[4]}</p>
+        { createdAt[3] > 12 ? (
+          <p>{createdAt[3]-12}:{createdAt[4]} PM</p>
+        ) : (
+          <p>{createdAt[3]}:{createdAt[4]} AM</p>
+        )}
       </div>
     </div>
   )
