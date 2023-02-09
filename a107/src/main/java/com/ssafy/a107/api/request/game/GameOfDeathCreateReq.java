@@ -12,9 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class GameOfDeathCreateReq {
+
     private Long multiMeetingRoomSeq;
-
     private Long startUserSeq;
-
-    private Map<Long, Long> targets;
 }

@@ -27,6 +27,16 @@ public class GameOfDeath {
 
     private Integer count;
 
+    private Integer turn;
+
     @TimeToLive
     private Long expiration;
+
+    public void setTurn(Integer turn) {
+        this.turn = turn;
+    }
+
+    public void addCount() {
+        this.count++;
+    }
 }
