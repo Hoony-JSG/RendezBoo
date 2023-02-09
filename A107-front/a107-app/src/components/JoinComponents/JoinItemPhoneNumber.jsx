@@ -6,14 +6,21 @@ const JoinItemPhoneNumber = () => {
   const [DisableButton, setDisableButton] = useState(true)
 
   const checkPhoneNumberLength = () => {
-    const indexL = PhoneNumber.indexOf('-')
-    const indexR = PhoneNumber.indexOf('-', 4)
-    PhoneNumber.length === 13 &&
-    indexL === 3 &&
-    indexR === 8 &&
-    PhoneNumber.includes('010')
+    PhoneNumber.length === 11 && PhoneNumber.includes('010')
       ? setDisableButton(false)
       : setDisableButton(true)
+  }
+
+  const sesndFirstSMS = async () =>{
+    try {
+      let response = await axios.post('http://52.78.60.53:8080/api/sms/send', {
+        phoneNumber: props.PhoneNumber,
+      })
+    } catch (error) {
+      console.log('인증코드 전송 에러 발생')
+      console.error(error)
+    }
+  }
   }
   return (
     <div>
@@ -21,15 +28,15 @@ const JoinItemPhoneNumber = () => {
         휴대폰 번호 입력 : <br />
       </span>
       <input
-        placeholder="휴대폰 번호 (010-XXXX-XXXX)"
+        placeholder="휴대폰 번호 (- 제외)"
         onChange={(e) => {
           setPhoneNumber(e.target.value)
         }}
         onKeyUp={checkPhoneNumberLength}
       />
       <br />
-      <button type="button" disabled={DisableButton}>
-        인증 버튼
+      <button type="button" disabled={DisableButton} onClick={sesndFirstSMS}>
+        send Code
       </button>
     </div>
   )
