@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../../Styles/JoinItemInterestsStyle.css'
 const JoinItemInterests = () => {
   const [selectedInterests, setSelectedInterests] = useState([])
+  const [count, setCount] = useState(0)
   const interests = [
     'Reading',
     'Sports',
@@ -18,6 +19,15 @@ const JoinItemInterests = () => {
     '10',
   ]
 
+  const handleInterestChange = (interest) => {
+    setSelectedInterests(
+      selectedInterests.includes(interest)
+        ? selectedInterests.filter((i) => i !== interest)
+        : [...selectedInterests, interest]
+    )
+    setCount(selectedInterests.includes(interest) ? count - 1 : count + 1)
+  }
+
   return (
     <div className="interest-selector">
       <h3>Select your interests:</h3>
@@ -32,13 +42,7 @@ const JoinItemInterests = () => {
               <input
                 type="checkbox"
                 checked={selectedInterests.includes(interest)}
-                onChange={() =>
-                  setSelectedInterests(
-                    selectedInterests.includes(interest)
-                      ? selectedInterests.filter((i) => i !== interest)
-                      : [...selectedInterests, interest]
-                  )
-                }
+                onChange={() => handleInterestChange(interest)}
                 className="checkbox"
               />
               <span className="checkbox-text">{interest}</span>

@@ -6,22 +6,22 @@ import JoinItemGender from './JoinItemGender'
 import { useState } from 'react'
 import NextPageButton from './NextPageButton'
 
-const JoinItem2nd = () => {
-  const [hasName, setHasName] = useState(false)
+const JoinItem2nd = (props) => {
+  const [hasName, setHasName] = useState(true)
   const [hasGender, setHasGender] = useState(false)
-  const [hasBirth, setHasBirth] = useState(false)
-  const [hasPhoneNumber, setHasPhoneNumber] = useState(false)
+  const [hasBirth, setHasBirth] = useState(true)
+  const [hasPhoneNumber, setHasPhoneNumber] = useState(true)
   const wholeHas = [
     [hasName, setHasName],
     [hasGender, setHasGender],
     [hasBirth, setHasBirth],
     [hasPhoneNumber, setHasPhoneNumber],
   ]
+
   const setWholeHas = (index, value) => {
     console.log(index, value)
     wholeHas[index][1](value)
   }
-
   return (
     <div>
       J_2_휴대폰 인증 및 정보 가져오기
@@ -48,6 +48,7 @@ const JoinItem2nd = () => {
             hasGender={hasGender}
             hasBirth={hasBirth}
             hasPhoneNumber={hasPhoneNumber}
+            setNext={props.setNext}
           />
         </div>
       </div>

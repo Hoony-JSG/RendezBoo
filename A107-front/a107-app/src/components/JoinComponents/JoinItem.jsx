@@ -5,9 +5,17 @@ import JoinItem3rd from './JoinItem3rd'
 import JoinItem4rd from './JoinItem4rd'
 
 const JoinItem = () => {
-  const ItemList = ['', '', <JoinItem2nd />, <JoinItem3rd />, <JoinItem4rd />]
+  const setNext = () => {
+    setOrder(order + 1)
+  }
+  const ItemList = [
+    '',
+    '',
+    <JoinItem2nd setNext={setNext} />,
+    <JoinItem3rd setNext={setNext} />,
+    <JoinItem4rd setNext={setNext} />,
+  ]
   const [order, setOrder] = useState(2, '')
-
   return (
     <div>
       <div>
