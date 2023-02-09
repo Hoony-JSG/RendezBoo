@@ -142,6 +142,7 @@ public class GameServiceImpl implements GameService {
                 .targets(createReq.getTargets())
                 .startUserSeq(createReq.getStartUserSeq())
                 .multiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq())
+                .expiration(redisGameExpiration) // 30분 뒤 캐시 삭제
                 .build();
 
         gameOfDeathRepository.save(gameOfDeath);
@@ -186,22 +187,88 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) throws NotFoundException {
-        List<Long> userSeqList = multiMeetingRoomRepository.findUserSequencesByMultiMeetingRoomSeq(fastClickCreateReq.getMultiMeetingRoomSeq());
-        FastClick fastClick = FastClick.builder().sessionId(System.currentTimeMillis())
+    @Transactional
+    public FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) {
+        log.debug("************ FastClick 게임 시작! 채팅방 번호: {} ************", fastClickCreateReq.getMultiMeetingRoomSeq());
+
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(fastClickCreateReq.getMultiMeetingRoomSeq());
+
+        log.debug("참여자 명단: {}", userSeqList);
+
+        FastClick fastClick = FastClick.builder()
                 .multiMeetingRoomSeq(fastClickCreateReq.getMultiMeetingRoomSeq())
                 .users(userSeqList)
+                .expiration(redisGameExpiration) // 30분 뒤 캐시 삭제
                 .build();
+
         fastClickRepository.save(fastClick);
 
-        return new FastClickRes();
+        return FastClickRes.builder()
+                .multiMeetingRoomSeq(fastClick.getMultiMeetingRoomSeq())
+                .message("FastClick이 시작되었습니다.")
+                .flag(MultiChatFlag.SYSTEM)
+                .build();
     }
 
     @Override
     public FastClickRes runFastClickSession(FastClickReq fastClickReq) throws NotFoundException {
-        //get all scores from 6 users
+        log.debug("************ FastClick 게임 결과 수합, 채팅방 번호: {} ************", fastClickReq.getMultiMeetingRoomSeq());
+        log.debug("User {}, 클릭 횟수: {}", fastClickReq.getUserSeq(), fastClickReq.getScore());
 
+        FastClick fastClick = fastClickRepository.findById(fastClickReq.getMultiMeetingRoomSeq())
+                .orElseThrow(() -> new NotFoundException("No game session!"));
 
-        return null;
+        Map<Long, Integer> scores = fastClick.getScores();
+        if(scores == null) scores = new HashMap<>();
+
+        scores.put(fastClickReq.getUserSeq(), fastClickReq.getScore());
+        fastClick.addCount();
+
+        log.debug("점수 현황: {}", scores);
+        log.debug("count: {}", fastClick.getCount());
+
+        fastClickRepository.save(fastClick);
+
+        // 게임 종료
+        if(fastClick.getCount() == 6) {
+            List<Long> userSeqList = multiMeetingRoomRepository
+                    .findUserSequencesByMultiMeetingRoomSeq(fastClickReq.getMultiMeetingRoomSeq());
+
+            int min = Integer.MAX_VALUE;
+            List<Long> minUsers = new ArrayList<>();
+
+            for(long userSeq: userSeqList) {
+                int score = fastClick.getScores().get(userSeq);
+
+                if(score < min) {
+                    min = score;
+                    minUsers.clear();
+                    minUsers.add(userSeq);
+                }
+                else if (score == min) {
+                    minUsers.add(userSeq);
+                }
+            }
+
+            // 최저 점수가 여러명이면 랜덤으로 패배 유저 선정
+            if(minUsers.size() > 1) {
+                log.debug("동점자 목록: {}", minUsers);
+                Collections.shuffle(minUsers);
+                Long loseUserSeq = minUsers.get(0);
+                log.debug("패배 유저 랜덤 선택: User {}", loseUserSeq);
+
+                return new FastClickRes(fastClick, loseUserSeq, "게임 종료: 동점자 중 패배 유저를 랜덤으로 선택하였습니다.", MultiChatFlag.FIN);
+            }
+            // 한명이면
+            else {
+                log.debug("패배 유저: User {}", minUsers.get(0));
+
+                return new FastClickRes(fastClick, minUsers.get(0), "게임 종료!", MultiChatFlag.FIN);
+            }
+        }
+        else {
+            return new FastClickRes(fastClick, null, "게임 진행", MultiChatFlag.GAME);
+        }
     }
 }

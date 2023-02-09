@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FastClickCreateReq {
+
     Long multiMeetingRoomSeq;
-    Long userSeq;
 }

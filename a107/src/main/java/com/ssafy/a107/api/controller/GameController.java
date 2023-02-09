@@ -59,13 +59,15 @@ public class GameController {
 
     @ApiOperation("새로운 누가누가 빨리 클릭하나 세션을 생성")
     @MessageMapping("/fastclick/start")
-    public void startRastClick(@RequestBody FastClickCreateReq fastClickCreateReq) throws NotFoundException {
+    public void startFastClick(@RequestBody FastClickCreateReq fastClickCreateReq) {
         FastClickRes fastClickRes = gameService.createFastClickSession(fastClickCreateReq);
+        simpMessageSendingOperations.convertAndSend("/sub/multi/" + fastClickRes.getMultiMeetingRoomSeq(), fastClickRes);
     }
 
     @ApiOperation("누가누가 빨리 클릭하나 게임 진행")
     @MessageMapping("/fastclick")
     public void runFastClick(@RequestBody FastClickReq fastClickReq) throws NotFoundException {
         FastClickRes fastClickRes = gameService.runFastClickSession(fastClickReq);
+        simpMessageSendingOperations.convertAndSend("/sub/multi/" + fastClickRes.getMultiMeetingRoomSeq(), fastClickRes);
     }
 }

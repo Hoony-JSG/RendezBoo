@@ -16,7 +16,7 @@ public interface GameService {
 
     GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException;
 
-    FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) throws NotFoundException;
+    FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq);
 
     FastClickRes runFastClickSession(FastClickReq fastClickReq) throws NotFoundException;
 }
