@@ -6,10 +6,14 @@ import Docking3WaitingMeeting from '../components/Docking3WaitingMeeting'
 
 
 const Docking3 = ()=>{
+
+    const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'  
+
     const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState(null)
     const [docking3List, setDocking3List] = useState([])
     useEffect(()=>{
-        axios.get('http://localhost:8080/api/multi-meetings/').then((response)=>{
+        axios.get(APPLICATION_SERVER_URL + 'api/multi-meetings/').then((response)=>{
             setDocking3List(response.data)
             console.log(response.data)
         })

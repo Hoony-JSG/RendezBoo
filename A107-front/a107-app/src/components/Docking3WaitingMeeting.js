@@ -7,6 +7,12 @@ import DockingChat from '../components/DockingComponents/DockingChat'
 import * as tf from '@tensorflow/tfjs'
 
 const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
+
+    const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/' 
+    const WEBSOCKET_SERVER_URL = process.env.NODE_ENV === 'production' ?
+    'wss://i8a107.p.ssafy.io/' : 'ws://localhost:8080/' 
+    
     const usertoken = "$$$mytoken$$$"
 
     // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
@@ -22,10 +28,9 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     const [publisher, setPublisher] = useState()
     const [session, setSession] = useState()
 
-    const APPLICATION_SERVER_URL =
-      process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
-
     useEffect(()=>{
+      console.log(APPLICATION_SERVER_URL)
+      console.log(WEBSOCKET_SERVER_URL)
         connect()
         
         return() => disconnect()
@@ -39,13 +44,13 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     // connect: 웹소켓(stomp)연결
     const connect = () =>{
       console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-      axios.post("https://i8a107.p.ssafy.io/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
+      axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
           console.log(response.status)
       })
 
       client.current = new StompJs.Client({
             
-        brokerURL: 'ws://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+        brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
         // 연결 확인용 출력 문구
         debug: function (str) {
@@ -146,7 +151,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     console.log('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios.delete("http://localhost:8080/api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
+    axios.delete(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
         console.log(response.status)
     })
   }

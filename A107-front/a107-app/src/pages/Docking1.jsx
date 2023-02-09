@@ -7,6 +7,7 @@ import DockingChat from '../components/DockingComponents/DockingChat'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
+import '../Styles/Docking1.css'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -138,7 +139,7 @@ const Docking1 = (props) => {
             resolution: '640x480',
             frameRate: 30,
             insertMode: 'APPEND',
-            mirror: false,
+            mirror: true,
           })
 
           setPublisher(publisher)
@@ -257,34 +258,8 @@ const Docking1 = (props) => {
         </div>
       ) : null}
       {session !== undefined ? (
-        <div
-          className="video-container"
-          style={{
-            margin: '20px',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            gap: '30px',
-          }}
-        >
-          <div
-            className="sub-container"
-            style={{
-              width: '60%',
-              height: '840px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderRadius: '40px',
-              border: '2px solid #FFFFFF',
-              background: 'rgba(23, 49, 71, 0.8)',
-              filter:
-                'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-              position: 'relative',
-            }}
-          >
+        <div className="video-container">
+          <div className="sub-container">
             <EmotionComponent
               imgSrc={'../img/emo-angry.png'}
               data={angry}
@@ -322,20 +297,7 @@ const Docking1 = (props) => {
               left={'700px'}
             />
             {subscribers.map((sub, idx) => (
-              <div
-                key={idx}
-                id="subscriber"
-                style={{
-                  width: '100%',
-                  height: '840px',
-                  overflow: 'hidden',
-                  borderRadius: '40px',
-                  border: '2px solid #FFFFFF',
-                  background: 'rgba(23, 49, 71, 0.8)',
-                  filter:
-                    'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                }}
-              >
+              <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
@@ -345,30 +307,9 @@ const Docking1 = (props) => {
               </div>
             ))}
           </div>
-          <div
-            className="pub-container"
-            style={{
-              width: '30%',
-              height: '840px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <div className="pub-container">
             {publisher !== undefined ? (
-              <div
-                style={{
-                  width: '100%',
-                  height: '360px',
-                  overflow: 'hidden',
-                  borderRadius: '40px',
-                  border: '2px solid #FFFFFF',
-                  background: 'rgba(23, 49, 71, 0.8)',
-                  filter:
-                    'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                }}
-              >
+              <div className="me">
                 <FilteredVideo
                   streamManager={publisher}
                   maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
@@ -378,6 +319,7 @@ const Docking1 = (props) => {
               </div>
             ) : null}
             <DockingChat />
+            <div className="btn-group"></div>
           </div>
         </div>
       ) : null}
