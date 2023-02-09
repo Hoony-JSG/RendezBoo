@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
-import login from './login'
+import signal from './signal'
+import { accessTokenReducer } from '../containers/AuthContainer'
 
 const rootReducer = combineReducers({
-  login,
+  signal, accessTokenReducer
 })
 
 export default rootReducer
