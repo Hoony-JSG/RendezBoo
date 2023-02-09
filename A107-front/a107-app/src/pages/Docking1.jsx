@@ -3,6 +3,7 @@ import { OpenVidu } from 'openvidu-browser'
 import axios from 'axios'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
+import DockingChat from '../components/DockingComponents/DockingChat'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
@@ -239,7 +240,7 @@ const Docking1 = (props) => {
 
   return (
     <div className="container">
-      <h1>일대일 매칭 테스트 중</h1>
+      {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div>
           <p>
@@ -259,18 +260,28 @@ const Docking1 = (props) => {
         <div
           className="video-container"
           style={{
+            margin: '20px',
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
-            alignItems: 'center',
+            alignItems: 'flex-start',
+            gap: '30px',
           }}
         >
           <div
             className="sub-container"
             style={{
-              width: '960px',
-              height: '720px',
-              border: 'solid white 2px',
+              width: '60%',
+              height: '840px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderRadius: '40px',
+              border: '2px solid #FFFFFF',
+              background: 'rgba(23, 49, 71, 0.8)',
+              filter:
+                'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
               position: 'relative',
             }}
           >
@@ -311,13 +322,24 @@ const Docking1 = (props) => {
               left={'700px'}
             />
             {subscribers.map((sub, idx) => (
-              <div key={idx} id="subscriber">
+              <div
+                key={idx}
+                id="subscriber"
+                style={{
+                  width: '100%',
+                  height: '840px',
+                  overflow: 'hidden',
+                  borderRadius: '40px',
+                  border: '2px solid #FFFFFF',
+                  background: 'rgba(23, 49, 71, 0.8)',
+                  filter:
+                    'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                }}
+              >
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={2}
-                  width={'960px'}
-                  height={'720px'}
                   startFaceAPI={startFaceAPI}
                 />
               </div>
@@ -326,22 +348,36 @@ const Docking1 = (props) => {
           <div
             className="pub-container"
             style={{
-              width: '400px',
-              height: '720px',
+              width: '30%',
+              height: '840px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
             {publisher !== undefined ? (
-              <div>
+              <div
+                style={{
+                  width: '100%',
+                  height: '360px',
+                  overflow: 'hidden',
+                  borderRadius: '40px',
+                  border: '2px solid #FFFFFF',
+                  background: 'rgba(23, 49, 71, 0.8)',
+                  filter:
+                    'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                }}
+              >
                 <FilteredVideo
                   streamManager={publisher}
                   maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
                   userSeq={userSeq}
-                  width={'320px'}
-                  height={'240px'}
                   startFaceAPI={() => {}}
                 />
               </div>
             ) : null}
+            <DockingChat />
           </div>
         </div>
       ) : null}

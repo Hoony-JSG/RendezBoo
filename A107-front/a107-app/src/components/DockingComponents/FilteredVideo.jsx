@@ -6,8 +6,6 @@ export const FilteredVideo = ({
   streamManager,
   maskPath,
   userSeq,
-  width,
-  height,
   startFaceAPI,
 }) => {
   const canvasRef = useRef(null)
@@ -16,6 +14,23 @@ export const FilteredVideo = ({
     useStream(streamManager)
 
   VideoFilter(videoRef.current, canvasRef.current, maskPath)
+
+  const videoStyle = {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    objectFit: 'cover',
+    zIndex: 10,
+  }
+  
+  const canvasStyle = {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    objectFit: 'cover',
+    zIndex: 12,
+  }
+  
   useEffect(() => {
     startFaceAPI(document.querySelector('#streamVideo'))
   }, [startFaceAPI])
@@ -23,43 +38,23 @@ export const FilteredVideo = ({
   return (
     <div
       style={{
-        width: width,
-        height: height,
-        border: 'solid white 1px',
-        position: 'relative',
+        width: '100%',
+        height: '100%',
       }}
     >
       <video
         id="streamVideo"
         ref={videoRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          left: 0,
-          bottom: 0,
-          objectFit: 'cover',
-          zIndex: 10,
-        }}
+        style={videoStyle}
         autoPlay={true}
       />
       <canvas
         id="faceCanvas"
         ref={canvasRef}
-        style={{
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          left: 0,
-          bottom: 0,
-          objectFit: 'cover',
-          zIndex: 12,
-        }}
+        style={canvasStyle}
       />
     </div>
   )
 }
+
+export default FilteredVideo
