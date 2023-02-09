@@ -2,6 +2,7 @@ package com.ssafy.a107.common.util;
 
 import com.ssafy.a107.common.auth.CustomUserDetails;
 import com.ssafy.a107.common.exception.JwtInvalidException;
+import com.ssafy.a107.db.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -53,17 +54,19 @@ public class JwtTokenProvider {
         return expiration.before(new Date());
     }
 
-    public String generateAccessToken(String userEmail) {
-        return doGenerateToken(userEmail, ACCESS_TOKEN_VALID_MILISECOND);
+    public String generateAccessToken(User user) {
+        return doGenerateToken(user, ACCESS_TOKEN_VALID_MILISECOND);
     }
 
-    public String generateRefreshToken(String userEmail) {
-        return doGenerateToken(userEmail, REFRESH_TOKEN_VALID_MILISECOND);
+    public String generateRefreshToken(User user) {
+        return doGenerateToken(user, REFRESH_TOKEN_VALID_MILISECOND);
     }
 
-    private String doGenerateToken(String userEmail, long expTime) {
+    private String doGenerateToken(User user, long expTime) {
         Claims claims = Jwts.claims();
-        claims.put("email", userEmail);
+        claims.put("email", user.getEmail());
+        claims.put("seq", user.getSeq());
+        claims.put("name", user.getName());
 
         return Jwts.builder()
                 .setClaims(claims)

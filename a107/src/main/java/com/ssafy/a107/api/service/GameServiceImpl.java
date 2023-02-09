@@ -114,25 +114,6 @@ public class GameServiceImpl implements GameService {
         List<Long> userSeqList = multiMeetingRoomRepository
                 .findUserSequencesByMultiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq());
 
-//        // 시간초과로 targetSeq를 선택하지 않았을 경우 -> 랜덤으로 선택
-//        for(int i = 0; i < userSeqList.size(); ++i) {
-//            long curUser = userSeqList.get(i);
-//
-//            if(createReq.getTargets().get(curUser) == null) {
-//                int randIdx = -1;
-//
-//                while(true) {
-//                    randIdx = rd.nextInt(userSeqList.size());
-//
-//                    if(userSeqList.get(randIdx) != curUser) break;
-//                }
-//
-//                log.debug("랜덤 선택");
-//                log.debug("User {} --> User {}", curUser, userSeqList.get(randIdx));
-//                createReq.getTargets().put(curUser, userSeqList.get(randIdx));
-//            }
-//        }
-
         GameOfDeath gameOfDeath = GameOfDeath.builder()
                 .startUserSeq(createReq.getStartUserSeq())
                 .multiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq())
