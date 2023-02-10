@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useStream } from '../../modules/useStream'
 import { VideoFilter } from '../../modules/VideoFilter'
 

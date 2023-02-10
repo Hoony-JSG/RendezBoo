@@ -4,11 +4,11 @@ const RocketBtn_Same = () => {
   const navigate = useNavigate()
   function edit() {
     console.log('정보 수정')
-    navigate('/Userinfo/:userid')
+    navigate('/userinfo/:userid')
   }
   function itemBox() {
     console.log('아이템 상자')
-    navigate('/Inventory/:userid')
+    navigate('/inventory/:userid')
   }
   return (
     <div>

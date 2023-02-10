@@ -1,17 +1,30 @@
 const SignalListItem = ({ chat, userSeq, you }) => {
   const { message, createdAt, senderSeq } = chat
 
+
+
   return (
     <div>
       { senderSeq !== userSeq ? (
-        <div>
+        <div className="your-signal">
           <p>{you.yourname}</p>
+          <p>{message}</p>
+          { createdAt[3] > 12 ? (
+            <p id='time'>{createdAt[3]-12}:{createdAt[4]} PM</p>
+          ) : (
+          <p id='time'>{createdAt[3]}:{createdAt[4]} AM</p>
+          )}
         </div>
-      ) : null }
-      <div>
+      ) : (
+      <div className="my-signal">
+          { createdAt[3] > 12 ? (
+            <p id='time'>{createdAt[3]-12}:{createdAt[4]} PM</p>
+          ) : (
+          <p id='time'>{createdAt[3]}:{createdAt[4]} AM</p>
+          )}
         <p>{message}</p>
-        <p>{createdAt[3]}-{createdAt[4]}</p>
       </div>
+      )}
     </div>
   )
 }

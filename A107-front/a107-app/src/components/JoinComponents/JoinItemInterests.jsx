@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../../Styles/JoinItemInterestsStyle.css'
 const JoinItemInterests = (props) => {
   const [selectedInterests, setSelectedInterests] = useState([])

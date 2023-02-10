@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const EmotionComponent = (props) => {
   const { imgSrc, data, top, left } = props
   let h = data > 0.5 ? '162px' : '81px'

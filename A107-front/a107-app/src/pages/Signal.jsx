@@ -65,7 +65,6 @@ const Signal = () => {
           <SiRocketdotchat style={iconStyle} />
           <h1>Signal</h1>
           <div
-            className="SignalList"
             style={{
               display: 'flex',
               flexDirection: 'column',
@@ -74,15 +73,15 @@ const Signal = () => {
             }}
           >
             {chatRoom ? 
-              (chatRoom.slice(0).reverse().map((chat) => (
-                <SignalList userSeq={userSeq} chat={chat} key={chat.chatRoomSeq} />
+              (chatRoom.map((chat) => (
+                <SignalList userSeq={userSeq} chat={chat} key={chat.seq} />
               ))
              ) : (
               <h1>주고받은 시그널이 없습니다.</h1>
             )}
           </div>
         </div>
-        <div className="content" style={{ width: '65%', alignSelf: 'center' }}>
+        <div style={{ width: '65%', alignSelf: 'center' }}>
           {tmpChatRoomSeq ? (
             <SignalSelected userSeq={userSeq} roomSeq={tmpChatRoomSeq} />
           ) : (

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 
 import {
   Home,
   Rendezboo,
   Signal,
   Login,
+  LoginNew,
   Join,
   Rocket,
   Docking1,
@@ -19,7 +20,7 @@ import Navbar from './components/Navbar'
 import './App.css'
 import WebSocketChatTest from './modules/WebSocketChatTest'
 import JoinSocial from './pages/JoinSocial'
-import LoginTest from './modules/Auth/testLoginpage'
+import LoginTest from './pages/LoginNew'
 import Logout from './pages/Logout'
 import {
   getRefreshTokenFromCookie,
@@ -31,18 +32,38 @@ import { SET_TOKEN } from './containers/JwtContainer'
 function App() {
   const location = useLocation()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const refreshToken = getRefreshTokenFromCookie()
+  const allowedPaths = ['/loginnew', '/home', '/join', '/joinsocial'];
+  const isAllowedPath = allowedPaths.includes(location.pathname);
 
   useEffect(async () => {
-    console.log('refresh')
-    const refreshToken = await getRefreshTokenFromCookie()
-    if (refreshToken) {
-      console.log('토큰이 있습니다')
-      const accessToken =  await reissueAccessToken(refreshToken)
-      dispatch(SET_TOKEN(accessToken))
+    if (!refreshToken && !isAllowedPath) {
+      alert('로그인이 필요합니다')
+      console.log('토큰 업슴')
+      navigate('/home')
     } else {
-      console.log('토큰이 없습니다')
+      const accessToken = await reissueAccessToken(refreshToken)
+      dispatch(SET_TOKEN(accessToken))
     }
-  }, [])
+  }, [location.pathname, refreshToken]
+  )
+
+  // useEffect(async () => {
+  //   console.log('refresh')
+  //   const refreshToken = await getRefreshTokenFromCookie()
+  //   if (refreshToken) {
+  //     console.log('토큰이 있습니다')
+  //     const accessToken =  await reissueAccessToken(refreshToken)
+  //     dispatch(SET_TOKEN(accessToken))
+  //   } else {
+  //     alert('로그인이 필요합니다')
+  //     console.log('토큰이 없습니다')
+  //     navigate('/logintest')
+  //   }
+  // }, [])
+  
 
   return (
     <div className="App">
@@ -51,10 +72,8 @@ function App() {
           location.pathname === '/home' ||
           location.pathname === '/join' ||
           location.pathname === '/login' ||
-          location.pathname === '/Login' ||
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
-          location.pathname === '/Docking1' ||
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>
@@ -62,7 +81,10 @@ function App() {
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
+
           <Route path="/login" element={<Login />} />
+          <Route path="/loginnew" element={<LoginNew />}></Route>;
+
           <Route path="/joinsocial" element={<JoinSocial />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
@@ -72,6 +94,8 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
+
+
           <Route path="/*" element={<Error />}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
