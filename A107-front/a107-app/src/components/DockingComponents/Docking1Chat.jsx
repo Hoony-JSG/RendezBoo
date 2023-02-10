@@ -1,13 +1,23 @@
 import { React, useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
 
-const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
+const Docking1Chat = ({
+  meetingRoomSeq,
+  userSeq,
+  handleSystem,
+  handleExit,
+  handlePhase1,
+  handlePhase2,
+  handlePhase3,
+  handleFinal,
+}) => {
   const chatStyle = {
     width: '100%',
-    height: '450px',
+    height: '200px',
     borderRadius: '40px',
     border: '2px solid #FFFFFF',
-    background: 'rgba(23, 49, 71, 0.8)',
+    background:
+      'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     filter:
       'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
   }
@@ -20,7 +30,7 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
   const connect = () => {
     // stomp js client 객체 생성
     client.current = new StompJs.Client({
-      brokerURL: 'wss://i8a107.p.ssafy.io/ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+      brokerURL: 'wss://i8a107.p.ssafy.io/ws-stomp',
 
       // 연결 확인용 출력 문구
       debug: function (str) {
@@ -35,7 +45,9 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
       // 연결 시
       onConnect: () => {
         console.log('success')
-        subscribe() // 메세지(채팅)을 받을 주소를 구독합니다.
+        if (meetingRoomSeq > 0) {
+          subscribe() // 메세지(채팅)을 받을 주소를 구독합니다.
+        }
       },
 
       // 에러 발생 시 로그 출력
@@ -55,16 +67,35 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
     client.current.subscribe('/sub/one/' + meetingRoomSeq, (body) => {
       // 받아온 제이슨 파싱
       const json_body = JSON.parse(body.body)
+      const flag = json_body.flag
+      console.log(json_body)
 
-      console.log(body.body)
-
-      // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
-      setChatList((_chat_list) => [
-        ..._chat_list,
-        json_body.senderSeq,
-        json_body.message,
-        json_body.createdAt,
-      ])
+      if (json_body.flag === 'CHAT') {
+        setChatList((_chat_list) => [
+          ..._chat_list,
+          json_body.senderSeq,
+          json_body.message,
+          json_body.createdAt,
+        ])
+      } else if (flag === 'SYSTEM') {
+        console.log(json_body.message)
+        handleSystem(json_body)
+      } else if (flag === 'EXIT') {
+        console.log(json_body.message)
+        handleExit(json_body)
+      } else if (flag === 'PHASE1') {
+        console.log(json_body.message)
+        handlePhase1(json_body)
+      } else if (flag === 'PHASE2') {
+        console.log(json_body.message)
+        handlePhase2(json_body)
+      } else if (flag === 'PHASE3') {
+        console.log(json_body.message)
+        handlePhase3(json_body)
+      } else if (flag === 'FINAL') {
+        console.log(json_body.message)
+        handleFinal(json_body)
+      }
     })
   }
 
@@ -87,6 +118,7 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
       meetingRoomSeq: meetingRoomSeq,
       userSeq: userSeq,
     })
+    console.log(body)
 
     // 메세지를 보내기
     client.current.publish({
@@ -122,7 +154,7 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
     connect()
 
     return () => disconnect()
-  }, [])
+  }, [meetingRoomSeq])
 
   return (
     <div style={chatStyle}>
@@ -132,14 +164,12 @@ const Docking1Chat = ({ meetingRoomSeq, userSeq }) => {
         })}
       </div>
       <form onSubmit={(event) => handleSubmit(event, message)}>
-        <div>
-          <input
-            type={'text'}
-            name={'chatInput'}
-            onChange={handleChange}
-            value={message}
-          />
-        </div>
+        <input
+          type={'text'}
+          name={'chatInput'}
+          onChange={handleChange}
+          value={message}
+        />
         <input type={'submit'} value={'메세지 보내기'} />
       </form>
     </div>

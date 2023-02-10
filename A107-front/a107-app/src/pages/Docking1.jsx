@@ -3,11 +3,13 @@ import { OpenVidu } from 'openvidu-browser'
 import axios from 'axios'
 import React, { useCallback, useEffect, useState } from 'react'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
-import DockingChat from '../components/DockingComponents/DockingChat'
+import Docking1Chat from '../components/DockingComponents/Docking1Chat'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -15,7 +17,10 @@ const APPLICATION_SERVER_URL =
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const [userSeq, setUserSeq] = useState(-1)
+  const navigate = useNavigate()
+
+  const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [token, setToken] = useState('')
   const [meetingRoomSeq, setMeetingRoomSeq] = useState(-1)
@@ -71,7 +76,8 @@ const Docking1 = (props) => {
       {}
     )
     console.log(response.status)
-  }, [session, meetingRoomSeq])
+    navigate('/')
+  }, [session, meetingRoomSeq, navigate])
 
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
   useEffect(() => {
@@ -92,10 +98,10 @@ const Docking1 = (props) => {
       const data = JSON.parse(event.stream.connection.data)
       setSubscribers((prev) => {
         return [
-          ...prev.filter((it) => it.userSeq !== +data.userSeq),
+          ...prev.filter((it) => it.userSeq !== data.userSeq),
           {
             streamManager: subscriber,
-            userSeq: +data.userSeq,
+            userSeq: data.userSeq,
             gender: data.gender,
           },
         ]
@@ -139,7 +145,7 @@ const Docking1 = (props) => {
             resolution: '640x480',
             frameRate: 30,
             insertMode: 'APPEND',
-            mirror: true,
+            mirror: false,
           })
 
           setPublisher(publisher)
@@ -191,7 +197,7 @@ const Docking1 = (props) => {
       .detectSingleFace(videoEl)
       .withFaceExpressions()
 
-    console.log(predict)
+    // console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
       if (angry > 0.25) {
@@ -235,8 +241,76 @@ const Docking1 = (props) => {
     return response.data
   }
 
-  const handleUserSeq = (e) => {
-    setUserSeq(e.target.value)
+  const [maskPath, setMaskPath] = useState(
+    CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
+  )
+
+  useEffect(() => {
+    if (userSeq === 4 && subscribers.length > 0) {
+      alert('미팅 시작')
+      setTimeout(
+        axios.post(
+          APPLICATION_SERVER_URL +
+            'api/onetoone/one/' +
+            meetingRoomSeq +
+            '/start'
+        ),
+        10000
+      )
+    }
+  }, [subscribers, meetingRoomSeq, userSeq])
+
+  async function handleSystem(json_body) {}
+  async function handleExit(json_body) {
+    // flag EXIT 이면 내보내기
+    leaveSession()
+  }
+  async function handlePhase1(json_body) {
+    // 미팅 시작 - 타이머 돌릴것
+    setTimeout(
+      axios.post(
+        APPLICATION_SERVER_URL +
+          'api/onetoone/one/' +
+          meetingRoomSeq +
+          '/phase2',
+        {},
+        {}
+      ),
+      10000
+    )
+  }
+  async function handlePhase2(json_body) {
+    // 선글라스 벗기고 타이머 돌릴것
+    setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-1.png')
+    setTimeout(
+      axios.post(
+        APPLICATION_SERVER_URL +
+          'api/onetoone/one/' +
+          meetingRoomSeq +
+          '/phase3',
+        {},
+        {}
+      ),
+      10000
+    )
+  }
+  async function handlePhase3(json_body) {
+    // 마스크도 벗기고 타이머 돌릴것
+    setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-0.png')
+    setTimeout(
+      axios.post(
+        APPLICATION_SERVER_URL +
+          'api/onetoone/one/' +
+          meetingRoomSeq +
+          '/final',
+        {},
+        {}
+      ),
+      10000
+    )
+  }
+  async function handleFinal(json_body) {
+    // 최종선택 - 모달창 등을 띄울것
   }
 
   return (
@@ -244,16 +318,6 @@ const Docking1 = (props) => {
       {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div>
-          <p>
-            <label>UserSeq: </label>
-            <input
-              type="number"
-              id="userSeq"
-              value={userSeq}
-              onChange={handleUserSeq}
-              required
-            />
-          </p>
           <button onClick={joinSession}>준비 완료</button>
         </div>
       ) : null}
@@ -300,7 +364,7 @@ const Docking1 = (props) => {
               <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
-                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
+                  maskPath={maskPath}
                   userSeq={2}
                   startFaceAPI={startFaceAPI}
                 />
@@ -312,13 +376,22 @@ const Docking1 = (props) => {
               <div className="me">
                 <FilteredVideo
                   streamManager={publisher}
-                  maskPath={CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'}
+                  maskPath={maskPath}
                   userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
               </div>
             ) : null}
-            <DockingChat />
+            <Docking1Chat
+              meetingRoomSeq={meetingRoomSeq}
+              userSeq={userSeq}
+              handleSystem={handleSystem}
+              handleExit={handleExit}
+              handlePhase1={handlePhase1}
+              handlePhase2={handlePhase2}
+              handlePhase3={handlePhase3}
+              handleFinal={handleFinal}
+            />
             <div className="btn-group"></div>
           </div>
         </div>
