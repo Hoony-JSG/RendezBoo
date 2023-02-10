@@ -67,7 +67,7 @@ public class ExceptionController {
     public ResponseEntity<?> handleJwtInvalidException(final JwtInvalidException ex) {
         log.info(ex.getClass().getName());
         log.error("error", ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
     // 500 INTERNAL_SERVER_ERROR
