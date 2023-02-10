@@ -9,7 +9,6 @@ import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
 import { useSelector } from 'react-redux'
-import { redirect, useNavigate } from 'react-router-dom'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -17,8 +16,6 @@ const APPLICATION_SERVER_URL =
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const navigate = useNavigate()
-
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
 
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
@@ -46,6 +43,8 @@ const Docking1 = (props) => {
 
   const [apiStarted, setApiStarted] = useState(false)
 
+  const [finished, setFinished] = useState(false)
+
   // tf 세팅 및 모델 불러오기
   useEffect(() => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
@@ -67,20 +66,32 @@ const Docking1 = (props) => {
     if (session) {
       session.disconnect()
     }
-    setSession(null)
-    setPublisher(null)
-    setSubscribers([])
     const response = await axios.delete(
       APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
       {},
       {}
     )
     console.log(response.status)
+    setSession(null)
+    setPublisher(null)
+    setSubscribers([])
     // navigate('/')
-    alert('미팅이 종료되었습니다!!!!')
-    window.location.href = '/'
   }, [session, meetingRoomSeq])
 
+  const leaveSessionWithAlert = () => {
+    if (!finished) {
+      setFinished(true)
+      axios
+        .delete(
+          APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
+          {},
+          {}
+        )
+        .then(() => {
+          window.location.href = '/'
+        })
+    }
+  }
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
   useEffect(() => {
     window.addEventListener('beforeunload', () => leaveSession())
@@ -98,7 +109,7 @@ const Docking1 = (props) => {
     session.on('streamCreated', (event) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
-      console.log('here',subscriber)
+      console.log('here', subscriber)
       console.log(data)
       setSubscribers((prev) => {
         return [
@@ -241,7 +252,10 @@ const Docking1 = (props) => {
     )
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
-    alert('Get Token!!!' + token)
+    console.log('Get Token!!!' + token)
+    if (response.status !== 200) {
+      alert('매칭 실패!')
+    }
     return response.data
   }
 
@@ -266,7 +280,10 @@ const Docking1 = (props) => {
   async function handleSystem(json_body) {}
   async function handleExit(json_body) {
     // flag EXIT 이면 내보내기
-    leaveSession()
+    setFinished(true)
+    if (!finished) {
+      leaveSessionWithAlert()
+    }
   }
   async function handlePhase1(json_body) {
     // 미팅 시작 - 타이머 돌릴것
@@ -402,7 +419,10 @@ const Docking1 = (props) => {
               handleFinal={handleFinal}
             />
             <div className="btn-group">
-              <button onClick={leaveSession}>나가기</button>
+              <p>
+                Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+              </p>
+              <button onClick={leaveSessionWithAlert}>나가기</button>
             </div>
           </div>
         </div>
