@@ -30,10 +30,7 @@ export const FilteredVideo = ({
     height: '100%',
     position: 'absolute',
     objectFit: 'cover',
-<<<<<<< Updated upstream
-=======
     // transform: 'rotateY(180deg)',
->>>>>>> Stashed changes
     zIndex: 12,
   }
 
