@@ -1,6 +1,5 @@
-package com.ssafy.a107.db.entity.game;
+package com.ssafy.a107.db.entity;
 
-import com.ssafy.a107.api.request.game.FastClickReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,23 +9,24 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@RedisHash("fastclick")
+@RedisHash("stick")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FastClick {
+public class Stick {
 
     @Id
     private Long multiMeetingRoomSeq;
 
-    private List<Long> users;
-
-    private Map<Long, Integer> scores = new HashMap<>();
+    private Map<Long, Long> targets = new HashMap<>();
 
     @TimeToLive
     private Long expiration;
+
+    public void setTargets(Map<Long, Long> targets) {
+        this.targets = targets;
+    }
 }

@@ -338,18 +338,36 @@ public class GameServiceImpl implements GameService {
         if(scores == null) scores = new HashMap<>();
 
         scores.put(fastClickReq.getUserSeq(), fastClickReq.getScore());
-        fastClick.addCount();
+
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(fastClickReq.getMultiMeetingRoomSeq());
+
+        Set<Long> userSeqSet = new HashSet<>();
+        for(Long seq: userSeqList) {
+            userSeqSet.add(seq);
+        }
+
+        Set<Long> deleteSet = new HashSet<>();
+
+        for(Map.Entry<Long, Integer> entry: scores.entrySet()) {
+            // 유저가 중간에 나간 경우
+            if(!userSeqSet.contains(entry.getKey())) {
+                log.debug("유저 {} 탈주", entry.getKey());
+                deleteSet.add(entry.getKey());
+            }
+        }
+
+        for(Long seq: deleteSet) {
+            scores.remove(seq);
+        }
 
         log.debug("점수 현황: {}", scores);
-        log.debug("count: {}", fastClick.getCount());
+        log.debug("점수가 수합된 유저 수: {}", scores.size());
 
         fastClickRepository.save(fastClick);
 
         // 게임 종료
-        if(fastClick.getCount() == 6) {
-            List<Long> userSeqList = multiMeetingRoomRepository
-                    .findUserSequencesByMultiMeetingRoomSeq(fastClickReq.getMultiMeetingRoomSeq());
-
+        if(scores.size() == userSeqList.size()) {
             int min = Integer.MAX_VALUE;
             List<Long> minUsers = new ArrayList<>();
 
