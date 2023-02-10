@@ -15,4 +15,8 @@ public class GameOfDeathReq {
     private Long userSeq;
     private Long targetSeq;
     private Integer turn;
+
+    public void setTurn(Integer turn) {
+        this.turn = turn;
+    }
 }

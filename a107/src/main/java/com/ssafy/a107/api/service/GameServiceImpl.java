@@ -5,6 +5,7 @@ import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.game.BR31;
 import com.ssafy.a107.db.entity.game.FastClick;
@@ -48,7 +49,7 @@ public class GameServiceImpl implements GameService {
 
         BR31 br31 = BR31.builder()
                 .multiMeetingRoomSeq(br31CreateReq.getMultiMeetingRoomSeq())
-                .users(userSeqList)
+                .order(userSeqList)
                 .nowUser(firstTurn)
                 .point(0)
                 .expiration(redisGameExpiration) // 30분 뒤 캐시 삭제
@@ -66,7 +67,7 @@ public class GameServiceImpl implements GameService {
      // 배스킨 라빈스 게임을 진행
     @Override
     @Transactional
-    public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException {
+    public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException, ConflictException {
         BR31 br31 = br31Repository.findById(br31Req.getMultiMeetingRoomSeq())
                 .orElseThrow(() -> new NotFoundException("No game Session!"));
 
@@ -74,16 +75,86 @@ public class GameServiceImpl implements GameService {
             throw new NotFoundException("Wrong Request!");
         }
 
+        // 나간 유저 체크
+        List<Long> newOrder = new ArrayList<>();
+        List<Long> curOrder = br31.getOrder();
+        boolean isCurUserExist = true;
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(br31Req.getMultiMeetingRoomSeq());
+
+        // 현재 채팅방에 있는 유저 set
+        Set<Long> userSeqSet = new HashSet<>();
+        for(Long userSeq: userSeqList) {
+            userSeqSet.add(userSeq);
+        }
+
+        // 채팅방 유저 수와 순서 리스트의 사이즈가 다르면 -> 누군가 나갔음
+        if(userSeqList.size() != curOrder.size()) {
+            log.debug("유저 중도 퇴장(유저 수: {} -> {})", curOrder.size(), userSeqList.size());
+
+            for(Long userSeq: br31.getOrder()) {
+                newOrder.add(userSeq);
+            }
+
+            for(int i = newOrder.size()-1; i >= 0; --i) {
+                Long curSeq = newOrder.get(i);
+
+                if(!userSeqSet.contains(curSeq)) {
+                    // 현재 차례 유저가 숫자를 고르고 나간 경우
+                    if(curSeq == br31Req.getUserSeq()) {
+                        isCurUserExist = false;
+                    }
+
+                    newOrder.remove(i);
+                }
+            }
+        }
+
         log.debug("************ BR31 게임 진행, 채팅방 번호: {} ************", br31Req.getMultiMeetingRoomSeq());
         log.debug("숫자: {}, 유저: {}, 선택한 숫자: {}", br31.getPoint(), br31Req.getUserSeq(), br31Req.getPoint());
 
-        br31.addPoint(br31Req.getPoint());
+        Long nextUserSeq = 0L;
 
-        log.debug("더한 후 숫자: {}", br31.getPoint());
+        // 누군가 나갔으면
+        if(userSeqList.size() != curOrder.size()) {
+            if(newOrder.size() == 1) {
+                log.debug("유저가 한 명 남아서 게임 종료");
+                throw new ConflictException("Cannot continue game: only one user exists.");
+            }
 
-        int nextUserSeqIndex = (br31.getUsers().indexOf(br31Req.getUserSeq()) + 1) % 6;
-        Long nextUserSeq = br31.getUsers().get(nextUserSeqIndex);
-        br31.setNextUser(nextUserSeq);
+            int nextIdx = curOrder.indexOf(br31Req.getUserSeq()) + 1;
+
+            while(!userSeqSet.contains(curOrder.get(nextIdx))) {
+                nextIdx = (nextIdx + 1) % curOrder.size();
+            }
+
+            br31.setOrder(newOrder);
+            nextUserSeq = curOrder.get(nextIdx);
+            br31.setNextUser(nextUserSeq);
+
+            // 나간 유저가 현재 유저가 아니면
+            if(isCurUserExist) {
+                log.debug("현재 유저가 아닌 다른 유저가 퇴장");
+
+                br31.addPoint(br31Req.getPoint());
+                log.debug("더한 후 숫자: {}", br31.getPoint());
+            }
+            // 현재 유저가 숫자를 고르고 나갔으면
+            else {
+                log.debug("현재 유저가 숫자를 고르고 퇴장");
+                log.debug("다음 차례로 진행");
+            }
+        }
+        // 아무도 안 나갔으면
+        else {
+            int curIdx = curOrder.indexOf(br31Req.getUserSeq());
+            int nextIdx = (curIdx + 1) % curOrder.size();
+            nextUserSeq = curOrder.get(nextIdx);
+            br31.setNextUser(nextUserSeq);
+
+            br31.addPoint(br31Req.getPoint());
+            log.debug("더한 후 숫자: {}", br31.getPoint());
+        }
 
         if (br31.getPoint() == 30) {
             //게임이 끝난 경우
@@ -118,19 +189,18 @@ public class GameServiceImpl implements GameService {
                 .startUserSeq(createReq.getStartUserSeq())
                 .multiMeetingRoomSeq(createReq.getMultiMeetingRoomSeq())
                 .expiration(redisGameExpiration) // 30분 뒤 캐시 삭제
-                .count(0)
                 .build();
 
         gameOfDeathRepository.save(gameOfDeath);
 
         log.debug("참여자 명단: {}", userSeqList);
 
-        return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath가 시작되었습니다.", MultiChatFlag.START);
+        return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath가 시작되었습니다.", MultiChatFlag.START, null);
     }
 
     @Override
     @Transactional
-    public GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException {
+    public GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException, ConflictException {
         log.debug("************ GameOfDeath 지목 정보, 채팅방 번호: {} ************", gameOfDeathReq.getMultiMeetingRoomSeq());
         Long userSeq = gameOfDeathReq.getUserSeq();
         Long targetSeq = gameOfDeathReq.getTargetSeq();
@@ -138,9 +208,17 @@ public class GameServiceImpl implements GameService {
         GameOfDeath gameOfDeath = gameOfDeathRepository.findById(gameOfDeathReq.getMultiMeetingRoomSeq())
                 .orElseThrow(() -> new NotFoundException("Wrong meeting room seq!"));
 
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(gameOfDeathReq.getMultiMeetingRoomSeq());
+        log.debug("채팅방 유저 현황: {}", userSeqList);
+
         // 시작하는 유저이면 turn 수 저장
-        if(userSeq == gameOfDeath.getStartUserSeq()) {
-            if (gameOfDeathReq.getTurn() == null || gameOfDeathReq.getTurn() < 3 || gameOfDeathReq.getTurn() > 20) {
+        if(userSeq == gameOfDeath.getStartUserSeq() && (gameOfDeath.getTurn() == null || gameOfDeath.getTurn() == 0)) {
+            if(gameOfDeathReq.getTurn() == null) {
+                gameOfDeathReq.setTurn(rd.nextInt(17)+3);
+                log.debug("시작 유저가 turn 수를 지정하지 않아 랜덤 선택, turn: {}", gameOfDeathReq.getTurn());
+            }
+            else if (gameOfDeathReq.getTurn() < 3 || gameOfDeathReq.getTurn() > 20) {
                 throw new NotFoundException("Wrong Request");
             }
 
@@ -151,14 +229,39 @@ public class GameServiceImpl implements GameService {
         Map<Long, Long> targets = gameOfDeath.getTargets();
         if(targets == null) targets = new HashMap<>();
 
+        Set<Long> userSeqSet = new HashSet<>();
+        for(Long seq: userSeqList) {
+            userSeqSet.add(seq);
+        }
+
+        if(targetSeq != null && !userSeqSet.contains(targetSeq)) {
+            throw new ConflictException("Target user does not exist in the meeting room. Choose again.");
+        }
+
+        Set<Long> deleteSet = new HashSet<>();
+        Set<Long> rechoiceSet = new HashSet<>();
+
+        for(Map.Entry<Long, Long> entry: targets.entrySet()) {
+            if(!userSeqSet.contains(entry.getKey())) {
+                deleteSet.add(entry.getKey());
+            }
+            else if(!userSeqSet.contains(entry.getValue())) {
+                rechoiceSet.add(entry.getKey());
+            }
+        }
+
+        for(Long seq: deleteSet) {
+            targets.remove(seq);
+        }
+
+        for(Long seq: rechoiceSet) {
+            if(targets.containsKey(seq)) targets.remove(seq);
+        }
+
         // 시간초과로 targetSeq를 선택하지 않았을 경우 -> 랜덤으로 선택
         if(targetSeq == null) {
-            List<Long> userSeqList = multiMeetingRoomRepository
-                    .findUserSequencesByMultiMeetingRoomSeq(gameOfDeathReq.getMultiMeetingRoomSeq());
-            int randIdx = -1;
-
             while (true) {
-                randIdx = rd.nextInt(userSeqList.size());
+                int randIdx = rd.nextInt(userSeqList.size());
                 targetSeq = userSeqList.get(randIdx);
 
                 if (targetSeq != userSeq) break;
@@ -171,10 +274,9 @@ public class GameServiceImpl implements GameService {
         targets.put(userSeq, targetSeq);
 
         log.debug("지목 현황: {}", targets);
-        gameOfDeath.addCount();
 
-        // 6명의 지목 현황을 모두 받았으면 게임 진행
-        if(gameOfDeath.getCount() == 6) {
+        // 지목 현황을 모두 받았으면 게임 진행
+        if(targets.size() == userSeqList.size()) {
             List<Long> resultList = new ArrayList<>();
             int turn = gameOfDeath.getTurn();
             long cur = gameOfDeath.getStartUserSeq();
@@ -188,13 +290,14 @@ public class GameServiceImpl implements GameService {
             log.debug("게임 기록: {}", resultList);
             log.debug("User {} 패배!", cur);
 
-            return new GameOfDeathRes(gameOfDeath, resultList, cur, "GameOfDeath가 종료되었습니다.",MultiChatFlag.FIN);
+            return new GameOfDeathRes(gameOfDeath, resultList, cur, "GameOfDeath가 종료되었습니다.",MultiChatFlag.FIN, null);
         }
         else {
             gameOfDeathRepository.save(gameOfDeath);
-            log.debug("count: {}", gameOfDeath.getCount());
+            log.debug("지목을 완료한 유저 수: {}", targets.size());
+            if(rechoiceSet.size() != 0) log.debug("선택을 다시 해야하는 유저 목록: {}", rechoiceSet);
 
-            return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath 진행", MultiChatFlag.GAME);
+            return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath 진행", MultiChatFlag.GAME, rechoiceSet);
         }
     }
 

@@ -25,8 +25,6 @@ public class GameOfDeath {
 
     private Long startUserSeq;
 
-    private Integer count;
-
     private Integer turn;
 
     @TimeToLive
@@ -34,9 +32,5 @@ public class GameOfDeath {
 
     public void setTurn(Integer turn) {
         this.turn = turn;
-    }
-
-    public void addCount() {
-        this.count++;
     }
 }
