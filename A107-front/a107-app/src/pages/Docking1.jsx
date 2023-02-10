@@ -9,6 +9,8 @@ import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
 import { useSelector } from 'react-redux'
+import { useMemo } from 'react'
+import { useNavigate } from 'react-router'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -16,7 +18,10 @@ const APPLICATION_SERVER_URL =
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
+  const minute = 5000
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+  const userGender = useSelector((state) => state.userInfoReducer.userGender)
+  const navigate = useNavigate()
 
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [token, setToken] = useState('')
@@ -44,6 +49,10 @@ const Docking1 = (props) => {
   const [apiStarted, setApiStarted] = useState(false)
 
   const [finished, setFinished] = useState(false)
+
+  const [maskPath, setMaskPath] = useState(
+    CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
+  )
 
   // tf 세팅 및 모델 불러오기
   useEffect(() => {
@@ -259,21 +268,19 @@ const Docking1 = (props) => {
     return response.data
   }
 
-  const [maskPath, setMaskPath] = useState(
-    CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
-  )
-
   useEffect(() => {
     if (phase < 0 && subscribers.length > 0) {
       setPhase(0)
-      setTimeout(() => {
-        axios.post(
-          APPLICATION_SERVER_URL +
-            'api/onetoone/one/' +
-            meetingRoomSeq +
-            '/start'
-        )
-      }, 10000)
+      if (userGender) {
+        setTimeout(() => {
+          axios.post(
+            APPLICATION_SERVER_URL +
+              'api/onetoone/one/' +
+              meetingRoomSeq +
+              '/start'
+          )
+        }, 10000)
+      }
     }
   }, [subscribers])
 
@@ -289,16 +296,18 @@ const Docking1 = (props) => {
     // 미팅 시작 - 타이머 돌릴것
     if (phase < 1) {
       setPhase(1)
-      setTimeout(() => {
-        axios.post(
-          APPLICATION_SERVER_URL +
-            'api/onetoone/one/' +
-            meetingRoomSeq +
-            '/phase2',
-          {},
-          {}
-        )
-      }, 60000)
+      if (userGender) {
+        setTimeout(() => {
+          axios.post(
+            APPLICATION_SERVER_URL +
+              'api/onetoone/one/' +
+              meetingRoomSeq +
+              '/phase2',
+            {},
+            {}
+          )
+        }, minute)
+      }
     }
   }
   async function handlePhase2(json_body) {
@@ -306,16 +315,18 @@ const Docking1 = (props) => {
     if (phase < 2) {
       setPhase(2)
       setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-1.png')
-      setTimeout(() => {
-        axios.post(
-          APPLICATION_SERVER_URL +
-            'api/onetoone/one/' +
-            meetingRoomSeq +
-            '/phase3',
-          {},
-          {}
-        )
-      }, 60000)
+      if (userGender) {
+        setTimeout(() => {
+          axios.post(
+            APPLICATION_SERVER_URL +
+              'api/onetoone/one/' +
+              meetingRoomSeq +
+              '/phase3',
+            {},
+            {}
+          )
+        }, minute)
+      }
     }
   }
   async function handlePhase3(json_body) {
@@ -323,31 +334,101 @@ const Docking1 = (props) => {
     if (phase < 3) {
       setPhase(3)
       setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-0.png')
-      setTimeout(() => {
-        axios.post(
-          APPLICATION_SERVER_URL +
-            'api/onetoone/one/' +
-            meetingRoomSeq +
-            '/final',
-          {},
-          {}
-        )
-      }, 60000)
+      if (userGender) {
+        setTimeout(() => {
+          axios.post(
+            APPLICATION_SERVER_URL +
+              'api/onetoone/one/' +
+              meetingRoomSeq +
+              '/final',
+            {},
+            {}
+          )
+        }, minute)
+      }
     }
   }
   async function handleFinal(json_body) {
+    setPhase(4)
     // 최종선택 - 모달창 등을 띄울것
   }
+
+  async function choiceYes() {
+    setPhase(5)
+    axios
+      .post(
+        APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
+        {
+          meetingRoomSeq: meetingRoomSeq,
+          userSeq: userSeq,
+          wantDocking: true,
+        },
+        {}
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  }
+
+  async function choiceNo() {
+    setPhase(5)
+    await axios
+      .post(
+        APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
+        {
+          meetingRoomSeq: meetingRoomSeq,
+          userSeq: userSeq,
+          wantDocking: false,
+        },
+        {}
+      )
+      .then((res) => {
+        console.log(res)
+      })
+  }
+
+  const videoBackStyle = useMemo(() => {
+    return {
+      width: '100%',
+      height: '100%',
+      top: 0,
+      left: 0,
+      position: 'absolute',
+      zIndex: 16,
+      display: phase >= 1 ? 'none' : 'box',
+      backgroundColor: 'rgb(23, 49, 71)',
+      color: 'rgb(123,159,181)',
+      textAlign: 'center',
+      paddingTop: '45%',
+      fontSize: '2rem',
+    }
+  }, [phase])
 
   return (
     <div className="container">
       {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div>
-          <button onClick={joinSession}>준비 완료</button>
+          <div style={{ height: '400px' }}></div>
+          <button
+            style={{
+              height: '200px',
+              width: '400px',
+            }}
+            onClick={joinSession}
+          >
+            준비 완료
+          </button>
+          <button
+            onClick={() => {
+              navigate('/')
+            }}
+          >
+            돌아가기
+          </button>
         </div>
       ) : null}
-      {session !== undefined ? (
+      {session !== undefined && !finished ? (
         <div className="video-container">
           <div className="sub-container">
             <EmotionComponent
@@ -372,20 +453,23 @@ const Docking1 = (props) => {
               imgSrc={'../img/emo-happy.png'}
               data={happy}
               top={'40px'}
-              left={'700px'}
+              left={'750px'}
             />
             <EmotionComponent
               imgSrc={'../img/emo-sad.png'}
               data={sad}
               top={'290px'}
-              left={'700px'}
+              left={'750px'}
             />
             <EmotionComponent
               imgSrc={'../img/emo-surprised.png'}
               data={surprised}
               top={'540px'}
-              left={'700px'}
+              left={'750px'}
             />
+            <div className="video-back" style={videoBackStyle}>
+              미팅 준비중입니다.
+            </div>
             {subscribers.map((sub, idx) => (
               <div key={idx} id="subscriber">
                 <FilteredVideo
@@ -424,6 +508,27 @@ const Docking1 = (props) => {
               </p>
               <button onClick={leaveSessionWithAlert}>나가기</button>
             </div>
+          </div>
+        </div>
+      ) : null}
+      {finished ? (
+        // 미팅 종료 문구
+        <div style={{ fontSize: '3rem' }}>
+          <div style={{ height: '400px' }}></div> 미팅이 종료되었습니다.
+        </div>
+      ) : null}
+      {phase === 4 && !finished ? (
+        // 친구 추가 모달
+        <div id={'final-choice-modal'}>
+          <div style={{ height: '200px' }}></div>
+          <p style={{ fontSize: '2.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
+          <div>
+            <button className="choice-btn" onClick={choiceYes}>
+              O
+            </button>
+            <button className="choice-btn" onClick={choiceNo}>
+              X
+            </button>
           </div>
         </div>
       ) : null}
