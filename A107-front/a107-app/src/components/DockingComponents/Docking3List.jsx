@@ -1,29 +1,24 @@
-import axios from 'axios'
 import { useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
+  const userGender = useSelector(
+    (state) => state.userInfoReducer.userGender
+  )
   const userSeq = useSelector(
     (state) => state.userInfoReducer.userSeq
   )
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
   const enterMeetingRoom = (multiMeetingRoomSeq) => {
-    console.log(typeof(userSeq))
-    console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-    axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq)
-    .then((response)=>{
-      console.log(response.data)
-      setMultiMeetingRoomSeq(multiMeetingRoomSeq)  
+      if((userGender==true && maleNum>=3) || (userGender==false && femaleNum>=3)){
+        console.log("이 성별은 너무 많아요")
+      }else{
+        setMultiMeetingRoomSeq(multiMeetingRoomSeq)  
       navigate('/docking3/' + multiMeetingRoomSeq)
-    })
-    .catch((e)=>{
-        console.log(e.message)
-        navigate('/error')
-    })
-    
+      }
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',

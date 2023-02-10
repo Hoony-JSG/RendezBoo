@@ -2,6 +2,7 @@ import { React, useRef, useState, useEffect } from "react"
 import { useSelector} from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from "axios"
+import { useNavigate } from 'react-router-dom'
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import DockingChat from '../components/DockingComponents/DockingChat'
@@ -13,7 +14,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
     process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/' 
     const WEBSOCKET_SERVER_URL = process.env.NODE_ENV === 'production' ?
     'wss://i8a107.p.ssafy.io/' : 'ws://localhost:8080/' 
-    
+    const navigate = useNavigate()
     const usertoken = "$$$mytoken$$$"
 
     // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
@@ -33,7 +34,16 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
     
     useEffect(()=>{
         connect()
-        
+        console.log(typeof(userSeq))
+        console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
+        axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq)
+        .then((response)=>{
+          console.log(response.data)
+        })
+        .catch((e)=>{
+            console.log(e.message)
+            navigate('/error')
+        })
         return() => disconnect()
     },[])
 

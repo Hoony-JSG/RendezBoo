@@ -9,10 +9,7 @@ import jwtDecode from 'jwt-decode'
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
 
-// test@gmail.com
-// 1234
-
-const LoginTest = () => {
+  const LoginTest = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSeq, setUserSeq] = useState('')
   const [userName, setUserName] = useState('')
