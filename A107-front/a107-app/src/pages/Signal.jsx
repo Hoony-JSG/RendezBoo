@@ -29,8 +29,8 @@ const Signal = () => {
     justifyContent: 'center',
     alignItems: 'flex-start',
     position: 'absolute',
-    width: '80%',
-    height: '80%',
+    width: '1600px',
+    height: '800px',
     background:
       'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     border: '2px solid #FFFFFF',

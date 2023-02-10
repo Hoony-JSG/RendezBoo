@@ -96,6 +96,8 @@ const Docking1 = (props) => {
     session.on('streamCreated', (event) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
+      console.log('here',subscriber)
+      console.log(data)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
