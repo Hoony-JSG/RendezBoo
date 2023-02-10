@@ -1,7 +1,7 @@
 import { setRefreshToken, removeToken } from './Jwt'
 import React, { useState } from 'react'
 import { SET_TOKEN, REMOVE_TOKEN } from '../../containers/JwtContainer'
-import { SET_USER_INFO, REMOVE_USER_INFO } from '../../containers/UserInfo'
+import { SET_USER_INFO, REMOVE_USER_INFO } from '../../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
@@ -43,7 +43,7 @@ const LoginTest = () => {
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-      
+
       setIsLoggedIn(true);
       setUserName(decode.name)
       setUserSeq(decode.seq)
