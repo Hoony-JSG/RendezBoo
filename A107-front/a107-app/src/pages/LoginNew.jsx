@@ -1,29 +1,36 @@
-import { setRefreshToken, removeToken } from './Jwt'
+import { setRefreshToken, removeToken } from '../modules/Auth/Jwt'
 import React, { useState } from 'react'
-import { SET_TOKEN, REMOVE_TOKEN } from '../../containers/JwtContainer'
-import { SET_USER_INFO, REMOVE_USER_INFO } from '../../containers/UserInfoContainer'
+import { SET_TOKEN, REMOVE_TOKEN } from '../containers/JwtContainer'
+import {
+  SET_USER_INFO,
+  REMOVE_USER_INFO,
+} from '../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
+import { useNavigate } from 'react-router'
 
-const BASE_URL = 'https://i8a107.p.ssafy.io'
 // const BASE_URL = 'http://localhost:8080'
 
 // test@gmail.com
 // 1234
 
-const LoginTest = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const LoginNew = () => {
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSeq, setUserSeq] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
+  const BASE_URL = 'https://i8a107.p.ssafy.io'
+
   const dispatch = useDispatch()
   const accessToken = useSelector(
     (state) => state.accessTokenReducer.accessToken
   )
+
+  const navigate = useNavigate()
 
   const login = async (event) => {
     event.preventDefault()
@@ -34,21 +41,21 @@ const LoginTest = () => {
         password: password,
       })
 
-      console.log(response.data);
+      console.log(response.data)
       setRefreshToken(response.data.refreshToken)
-      
+
       const decode = jwtDecode(response.data.accessToken)
       console.log(12)
       console.log(decode)
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-
-      setIsLoggedIn(true);
+      // setIsLoggedIn(true);
       setUserName(decode.name)
       setUserSeq(decode.seq)
       setEmail(decode.email)
 
+      navigate('/')
       // setUserSeq()
     } catch (error) {
       setError(error.message)
@@ -68,40 +75,30 @@ const LoginTest = () => {
 
   return (
     <div>
-      {isLoggedIn ? (
+      <form onSubmit={login}>
         <div>
-          <ul>
-          <li>username = {userName}</li>
-          <li>userSeq = {userSeq}</li>
-          <li>userEmail = {email}</li>
-          </ul>
+          <label htmlFor="email">email:</label>
+          <input
+            type="text"
+            id="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
         </div>
-      ) : (
-        <form onSubmit={login}>
-          <div>
-            <label htmlFor="email">email:</label>
-            <input
-              type="text"
-              id="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-            />
-          </div>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          <button type="submit">Login</button>
-        </form>
-      )}
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button type="submit">Login</button>
+      </form>
     </div>
   )
 }
 
-export default LoginTest
+export default LoginNew
