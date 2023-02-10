@@ -1,6 +1,6 @@
 import { removeToken } from '../modules/Auth/Jwt'
 import { REMOVE_TOKEN } from '../containers/JwtContainer'
-import { REMOVE_USER_INFO } from '../containers/UserInfo'
+import { REMOVE_USER_INFO } from '../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import axios from 'axios'
@@ -21,6 +21,7 @@ const Logout = () => {
   )
 
   const logout = async () => {
+    console.log(accessToken)
     try {
       const response = await axios.post(
         `${BASE_URL}/api/user/logout`,

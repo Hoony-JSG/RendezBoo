@@ -30,6 +30,7 @@ export const FilteredVideo = ({
     height: '100%',
     position: 'absolute',
     objectFit: 'cover',
+    // transform: 'rotateY(180deg)',
     zIndex: 12,
   }
 

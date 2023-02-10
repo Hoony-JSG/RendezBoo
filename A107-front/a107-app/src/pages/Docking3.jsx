@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 import Docking3List from '../components/DockingComponents/Docking3List' 
 import Docking3WaitingMeeting from '../components/Docking3WaitingMeeting'
+import Docking3Room from '../components/DockingComponents/Docking3Room'
 
 
 const Docking3 = ()=>{
@@ -27,6 +28,7 @@ const Docking3 = ()=>{
                     <Docking3WaitingMeeting multiMeetingRoomSeq={multiMeetingRoomSeq} setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}/>    
                 ):(
                 <div className="content">
+                    <Docking3Room />
                     <h1>현재 운영중인 미팅방 리스트들입니다</h1>
                     {docking3List.map((docking3room) => (
                         <Docking3List
