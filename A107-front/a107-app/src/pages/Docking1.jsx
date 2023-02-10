@@ -9,7 +9,6 @@ import * as tf from '@tensorflow/tfjs'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
@@ -17,8 +16,6 @@ const APPLICATION_SERVER_URL =
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const navigate = useNavigate()
-
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
 
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
@@ -28,7 +25,7 @@ const Docking1 = (props) => {
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
 
-  const [phase, setPhase] = useState(0)
+  const [phase, setPhase] = useState(-1)
 
   const [angryCnt, setAngryCnt] = useState(0)
   const [disgustedCnt, setDisgustedCnt] = useState(0)
@@ -45,6 +42,8 @@ const Docking1 = (props) => {
   const [surprised, setSurprised] = useState(0)
 
   const [apiStarted, setApiStarted] = useState(false)
+
+  const [finished, setFinished] = useState(false)
 
   // tf 세팅 및 모델 불러오기
   useEffect(() => {
@@ -67,18 +66,32 @@ const Docking1 = (props) => {
     if (session) {
       session.disconnect()
     }
-    setSession(null)
-    setPublisher(null)
-    setSubscribers([])
     const response = await axios.delete(
       APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
       {},
       {}
     )
     console.log(response.status)
-    navigate('/')
-  }, [session, meetingRoomSeq, navigate])
+    setSession(null)
+    setPublisher(null)
+    setSubscribers([])
+    // navigate('/')
+  }, [session, meetingRoomSeq])
 
+  const leaveSessionWithAlert = () => {
+    if (!finished) {
+      setFinished(true)
+      axios
+        .delete(
+          APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
+          {},
+          {}
+        )
+        .then(() => {
+          window.location.href = '/'
+        })
+    }
+  }
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
   useEffect(() => {
     window.addEventListener('beforeunload', () => leaveSession())
@@ -96,7 +109,7 @@ const Docking1 = (props) => {
     session.on('streamCreated', (event) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
-      console.log('here',subscriber)
+      console.log('here', subscriber)
       console.log(data)
       setSubscribers((prev) => {
         return [
@@ -239,7 +252,10 @@ const Docking1 = (props) => {
     )
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
-    alert('Get Token!!!' + token)
+    console.log('Get Token!!!' + token)
+    if (response.status !== 200) {
+      alert('매칭 실패!')
+    }
     return response.data
   }
 
@@ -248,68 +264,76 @@ const Docking1 = (props) => {
   )
 
   useEffect(() => {
-    if (userSeq === 4 && subscribers.length > 0) {
-      alert('미팅 시작')
-      setTimeout(
+    if (phase < 0 && subscribers.length > 0) {
+      setPhase(0)
+      setTimeout(() => {
         axios.post(
           APPLICATION_SERVER_URL +
             'api/onetoone/one/' +
             meetingRoomSeq +
             '/start'
-        ),
-        10000
-      )
+        )
+      }, 10000)
     }
-  }, [subscribers, meetingRoomSeq, userSeq])
+  }, [subscribers])
 
   async function handleSystem(json_body) {}
   async function handleExit(json_body) {
     // flag EXIT 이면 내보내기
-    leaveSession()
+    setFinished(true)
+    if (!finished) {
+      leaveSessionWithAlert()
+    }
   }
   async function handlePhase1(json_body) {
     // 미팅 시작 - 타이머 돌릴것
-    setTimeout(
-      axios.post(
-        APPLICATION_SERVER_URL +
-          'api/onetoone/one/' +
-          meetingRoomSeq +
-          '/phase2',
-        {},
-        {}
-      ),
-      10000
-    )
+    if (phase < 1) {
+      setPhase(1)
+      setTimeout(() => {
+        axios.post(
+          APPLICATION_SERVER_URL +
+            'api/onetoone/one/' +
+            meetingRoomSeq +
+            '/phase2',
+          {},
+          {}
+        )
+      }, 60000)
+    }
   }
   async function handlePhase2(json_body) {
     // 선글라스 벗기고 타이머 돌릴것
-    setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-1.png')
-    setTimeout(
-      axios.post(
-        APPLICATION_SERVER_URL +
-          'api/onetoone/one/' +
-          meetingRoomSeq +
-          '/phase3',
-        {},
-        {}
-      ),
-      10000
-    )
+    if (phase < 2) {
+      setPhase(2)
+      setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-1.png')
+      setTimeout(() => {
+        axios.post(
+          APPLICATION_SERVER_URL +
+            'api/onetoone/one/' +
+            meetingRoomSeq +
+            '/phase3',
+          {},
+          {}
+        )
+      }, 60000)
+    }
   }
   async function handlePhase3(json_body) {
     // 마스크도 벗기고 타이머 돌릴것
-    setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-0.png')
-    setTimeout(
-      axios.post(
-        APPLICATION_SERVER_URL +
-          'api/onetoone/one/' +
-          meetingRoomSeq +
-          '/final',
-        {},
-        {}
-      ),
-      10000
-    )
+    if (phase < 3) {
+      setPhase(3)
+      setMaskPath(CLOUD_FRONT_URL + 'images/glass-0-mask-0.png')
+      setTimeout(() => {
+        axios.post(
+          APPLICATION_SERVER_URL +
+            'api/onetoone/one/' +
+            meetingRoomSeq +
+            '/final',
+          {},
+          {}
+        )
+      }, 60000)
+    }
   }
   async function handleFinal(json_body) {
     // 최종선택 - 모달창 등을 띄울것
@@ -394,7 +418,12 @@ const Docking1 = (props) => {
               handlePhase3={handlePhase3}
               handleFinal={handleFinal}
             />
-            <div className="btn-group"></div>
+            <div className="btn-group">
+              <p>
+                Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+              </p>
+              <button onClick={leaveSessionWithAlert}>나가기</button>
+            </div>
           </div>
         </div>
       ) : null}

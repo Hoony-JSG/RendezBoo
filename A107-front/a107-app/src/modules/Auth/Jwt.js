@@ -50,10 +50,10 @@ export const getRefreshTokenFromCookie = () => {
 
 
 // reissueAccessToken: Refresh token을 이용해 access token 재발급(reissue) 요청
-export const reissueAccessToken = async () => {
+export const reissueAccessToken = async (refreshToken) => {
 
   // 쿠키 가져오기
-  const refreshToken = getRefreshTokenFromCookie()
+  // const refreshToken = getRefreshTokenFromCookie()
 
   // 쿠키가 없을 경우
   if (!refreshToken) {
@@ -80,7 +80,6 @@ export const reissueAccessToken = async () => {
     // access token store에 저장
     // useDispatch(SET_TOKEN(response.data.accessToken))
     // return response.data.getAccessToken
-
     return response.data.accessToken
 
   } catch (e) {

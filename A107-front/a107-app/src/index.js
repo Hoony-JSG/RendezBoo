@@ -10,16 +10,29 @@ import { BrowserRouter } from 'react-router-dom'
 import rootReducer from './modules'
 
 import { CookiesProvider } from 'react-cookie'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+// import store from './modules'
+import persistedReducer from './modules'
+import thunk from 'redux-thunk'
 
-const store = configureStore({ reducer: rootReducer }, composeWithDevTools())
+const store = configureStore({ 
+  reducer: persistedReducer,
+  middleware: [thunk] 
+}, composeWithDevTools())
+
+
+const persistor = persistStore(store)
 
 ReactDOM.render(
   //   <React.StrictMode>
   <CookiesProvider>
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
+      </PersistGate>
     </Provider>
   </CookiesProvider>,
 
