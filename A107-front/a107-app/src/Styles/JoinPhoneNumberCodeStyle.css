@@ -75,45 +75,50 @@
   cursor: default;
   color: gray;
 }
-.Code_filling-background {
-  height: 50px;
-  width: 100%;
-  border: 1px solid blue;
-}
-.Code_bottom-items {
-  border: 1px solid white;
-}
+
 .Code_resend-btn {
   height: 50px;
   width: 100%;
-  font-size: 17px;
-  background-color: rgba(82, 82, 82, 0.285);
-  color: white;
-  border: 2px solid white;
   border-radius: 10px;
+  border: 2px solid white;
+  margin: 5px 0px;
+  position: relative;
+  background-color: rgba(241, 59, 59, 0.001);
+  font-size: 17px;
+  color: white;
   cursor: pointer;
-  padding: 0px 10px;
   outline: none;
   align-items: center;
-  margin: 5px 0px;
+  z-index: 1;
 }
-
+.Code_bottom-items {
+  border: 1px solid white;
+  position: relative;
+  width: 100%;
+}
 .Code_resend-btn:disabled {
   cursor: not-allowed;
 }
 
-.Code_resend-filling {
-  cursor: pointer;
+.Code_filling-background {
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+  margin: 5px 0px;
+  position: absolute;
+  border: none;
+}
+.Code_resend-filling-animation {
   animation: Code_resend-fill-background 10s linear forwards;
 }
 
 @keyframes Code_resend-fill-background {
   0% {
-    color: rgba(128, 128, 128, 0);
-    background-color: rgba(82, 82, 82, 0);
+    background-color: rgba(255, 255, 255, 0);
+    width: 0px;
   }
   100% {
-    color: gray;
-    background-color: rgba(82, 82, 82, 0.285);
+    background-color: rgba(126, 148, 234, 0.504);
+    width: 100%;
   }
 }

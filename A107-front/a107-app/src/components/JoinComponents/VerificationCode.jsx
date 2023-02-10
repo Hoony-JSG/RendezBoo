@@ -116,15 +116,17 @@ const VerificationCode = (props) => {
           </div>
         </div>
         <div className="Code_bottom-items">
-          <div className="Code_filling-background"></div>
           <button
             className={`
           ${
             fillingBtn
-              ? 'Code_resend-filling Code_resend-btn'
-              : 'Code_resend-btn'
+              ? 'Code_resend-filling-animation Code_filling-background'
+              : 'Code_filling-background'
           }
           `}
+          ></button>
+          <button
+            className="Code_resend-btn"
             disabled={!showResendButton}
             type="button"
             onClick={resendSMS}
