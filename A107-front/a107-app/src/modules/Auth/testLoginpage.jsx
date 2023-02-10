@@ -1,13 +1,15 @@
 import { setRefreshToken, removeToken } from './Jwt'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { SET_TOKEN, REMOVE_TOKEN } from '../../containers/JwtContainer'
 import { SET_USER_INFO, REMOVE_USER_INFO } from '../../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
+const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/' 
+
+// const APPLICATION_SERVER_URL =
+//   process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
 
   const LoginTest = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

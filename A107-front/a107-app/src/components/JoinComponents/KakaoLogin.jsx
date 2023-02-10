@@ -1,4 +1,3 @@
-import React from 'react'
 import kakaoLogo from '../../Images/kakao-logo.png'
 
 const KakaoLogin = () => {

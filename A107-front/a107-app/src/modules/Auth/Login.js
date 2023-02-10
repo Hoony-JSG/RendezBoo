@@ -1,5 +1,5 @@
 import {setRefreshToken, removeToken} from "./Jwt";
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { SET_TOKEN, REMOVE_TOKEN } from "../../containers/JwtContainer";
 // import { SET_USER_INFO, REMOVE_USER_INFO } from "../../containers/UserInfo";
 import { useDispatch, useSelector } from "react-redux";

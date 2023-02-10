@@ -1,7 +1,7 @@
 import { OpenVidu } from 'openvidu-browser'
 
 import axios from 'axios'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import Docking1Chat from '../components/DockingComponents/Docking1Chat'
 import * as faceapi from 'face-api.js'

@@ -1,4 +1,4 @@
-import { React, useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
