@@ -12,11 +12,11 @@ public interface GameService {
 
     BR31Res setBR31point(BR31Req br31Req) throws NotFoundException;
 
-    GameOfDeathRes createGameOfDeathSession(GameOfDeathCreateReq gameOfDeathCreateReq) throws BadRequestException;
+    GameOfDeathRes createGameOfDeathSession(GameOfDeathCreateReq gameOfDeathCreateReq);
 
     GameOfDeathRes runGameOfDeathSession(GameOfDeathReq gameOfDeathReq) throws NotFoundException;
 
-    FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq) throws NotFoundException;
+    FastClickRes createFastClickSession(FastClickCreateReq fastClickCreateReq);
 
     FastClickRes runFastClickSession(FastClickReq fastClickReq) throws NotFoundException;
 }

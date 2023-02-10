@@ -1,7 +1,7 @@
 package com.ssafy.a107.db.repository.game;
 
 import com.ssafy.a107.db.entity.game.FastClick;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface FastClickRepository extends MongoRepository<FastClick, Long> {
+public interface FastClickRepository extends CrudRepository<FastClick, Long> {
 }

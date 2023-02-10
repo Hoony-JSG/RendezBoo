@@ -91,11 +91,10 @@ public class AuthServiceImpl implements AuthService {
 
         checkPassword(loginReq.getPassword(), user.getPassword());
 
-        String userEmail = user.getEmail();
-        String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
-        RefreshToken refreshToken = saveRefreshToken(userEmail);
+        String accessToken = jwtTokenProvider.generateAccessToken(user);
+        RefreshToken refreshToken = saveRefreshToken(user);
 
-        log.debug("로그인 이메일: {}", userEmail);
+        log.debug("로그인 이메일: {}", user.getEmail());
         log.debug("발급된 AccessToken: {}", accessToken);
         log.debug("발급된 RefreshToken: {}", refreshToken.getRefreshToken());
 
@@ -111,11 +110,14 @@ public class AuthServiceImpl implements AuthService {
             throw new JwtInvalidException("Wrong grant type");
         }
 
-        String userEmail = getEmailFromToken(curRefreshToken);
+        Long userSeq = getSeqFromToken(curRefreshToken);
 
-        userService.checkLeavedUser(userEmail);
+        User user = userRepository.findById(userSeq)
+                        .orElseThrow(() -> new NotFoundException("Wrong user seq!"));
 
-        String refreshTokenFromRedis = refreshTokenRedisRepository.findById(userEmail)
+        userService.checkLeavedUser(user.getEmail());
+
+        String refreshTokenFromRedis = refreshTokenRedisRepository.findById(user.getEmail())
                 .orElseThrow(() -> new JwtInvalidException("Refresh token expired!"))
                 .getRefreshToken();
 
@@ -123,10 +125,10 @@ public class AuthServiceImpl implements AuthService {
             throw new JwtInvalidException("Refresh Token not match");
         }
 
-        String accessToken = jwtTokenProvider.generateAccessToken(userEmail);
-        RefreshToken refreshToken = saveRefreshToken(userEmail);
+        String accessToken = jwtTokenProvider.generateAccessToken(user);
+        RefreshToken refreshToken = saveRefreshToken(user);
 
-        log.debug("재발급 이메일: {}", userEmail);
+        log.debug("재발급 이메일: {}", user.getEmail());
         log.debug("발급된 AccessToken: {}", accessToken);
         log.debug("발급된 RefreshToken: {}", refreshToken.getRefreshToken());
 
@@ -177,9 +179,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RefreshToken saveRefreshToken(String userEmail) {
-        return refreshTokenRedisRepository.save(RefreshToken.createRefreshToken(userEmail,
-                jwtTokenProvider.generateRefreshToken(userEmail), REFRESH_TOKEN_VALIDITY_MILLISECONDS));
+    public RefreshToken saveRefreshToken(User user) {
+        return refreshTokenRedisRepository.save(RefreshToken.createRefreshToken(user.getEmail(),
+                jwtTokenProvider.generateRefreshToken(user), REFRESH_TOKEN_VALIDITY_MILLISECONDS));
     }
 
     @Override
@@ -198,5 +200,16 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return claims.get("email", String.class);
+    }
+
+    @Override
+    public Long getSeqFromToken(String token) throws JwtInvalidException {
+        Claims claims = jwtTokenProvider.parseClaimsFromToken(token);
+
+        if(claims == null) {
+            throw new JwtInvalidException("Token does not exist in claim");
+        }
+
+        return claims.get("seq", Long.class);
     }
 }
