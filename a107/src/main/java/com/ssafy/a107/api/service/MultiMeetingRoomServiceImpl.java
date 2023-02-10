@@ -61,7 +61,9 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     @Override
     public Long initializeSession(MultiMeetingRoomCreationReq multiMeetingRoomCreationReq) throws OpenViduJavaClientException, OpenViduHttpException {
         //세션 만들기
-        Session session = openVidu.createSession();
+        Map<String, Object> params = Map.of();
+        SessionProperties properties = SessionProperties.fromJson(params).build();
+        Session session = openVidu.createSession(properties);
         //멀티미팅방 데이터 생성
         MultiMeetingRoom multiMeetingRoom = MultiMeetingRoom.builder()
                 .title(multiMeetingRoomCreationReq.getTitle())
@@ -75,11 +77,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     @Transactional
     @Override
     public MeetingRoomRes createConnection(MultiMeetingRoomJoinReq multiMeetingRoomJoinReq) throws NotFoundException, OpenViduJavaClientException, OpenViduHttpException {
-        String sessionId = multiMeetingRoomRepository.findById(multiMeetingRoomJoinReq.getMultiMeetingRoomSeq())
-                .orElseThrow(() -> new NotFoundException("Invalid multi meeting sequence!")).getSessionId();
+        MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(multiMeetingRoomJoinReq.getMultiMeetingRoomSeq())
+                .orElseThrow(() -> new NotFoundException("Invalid multi meeting sequence!"));
+        String sessionId = multiMeetingRoom.getSessionId();
         Session session = openVidu.getActiveSession(sessionId);
-
-        ConnectionProperties connectionProperties = ConnectionProperties.fromJson(Map.of()).build();
+        if(session == null){
+            throw new NotFoundException("session Id failed to connect to its session");
+        }
+        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().build();
         Connection connection = session.createConnection(connectionProperties);
         String token = connection.getToken();
         return new MeetingRoomRes(multiMeetingRoomJoinReq.getMultiMeetingRoomSeq(), token);
