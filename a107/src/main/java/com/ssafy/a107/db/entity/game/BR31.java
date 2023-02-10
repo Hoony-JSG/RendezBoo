@@ -22,7 +22,7 @@ public class BR31 {
 
     private Integer point;
 
-    private List<Long> users;
+    private List<Long> order;
 
     private Long nowUser;
 
@@ -37,4 +37,7 @@ public class BR31 {
         this.nowUser = userSeq;
     }
 
+    public void setOrder(List<Long> order) {
+        this.order = order;
+    }
 }

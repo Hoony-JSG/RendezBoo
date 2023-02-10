@@ -5,6 +5,7 @@ import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.game.BR31;
 import com.ssafy.a107.db.entity.game.FastClick;
@@ -48,7 +49,7 @@ public class GameServiceImpl implements GameService {
 
         BR31 br31 = BR31.builder()
                 .multiMeetingRoomSeq(br31CreateReq.getMultiMeetingRoomSeq())
-                .users(userSeqList)
+                .order(userSeqList)
                 .nowUser(firstTurn)
                 .point(0)
                 .expiration(redisGameExpiration) // 30분 뒤 캐시 삭제
@@ -66,7 +67,7 @@ public class GameServiceImpl implements GameService {
      // 배스킨 라빈스 게임을 진행
     @Override
     @Transactional
-    public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException {
+    public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException, ConflictException {
         BR31 br31 = br31Repository.findById(br31Req.getMultiMeetingRoomSeq())
                 .orElseThrow(() -> new NotFoundException("No game Session!"));
 
@@ -74,16 +75,86 @@ public class GameServiceImpl implements GameService {
             throw new NotFoundException("Wrong Request!");
         }
 
+        // 나간 유저 체크
+        List<Long> newOrder = new ArrayList<>();
+        List<Long> curOrder = br31.getOrder();
+        boolean isCurUserExist = true;
+        List<Long> userSeqList = multiMeetingRoomRepository
+                .findUserSequencesByMultiMeetingRoomSeq(br31Req.getMultiMeetingRoomSeq());
+
+        // 현재 채팅방에 있는 유저 set
+        Set<Long> userSeqSet = new HashSet<>();
+        for(Long userSeq: userSeqList) {
+            userSeqSet.add(userSeq);
+        }
+
+        // 채팅방 유저 수와 순서 리스트의 사이즈가 다르면 -> 누군가 나갔음
+        if(userSeqList.size() != curOrder.size()) {
+            log.debug("유저 중도 퇴장(유저 수: {} -> {})", curOrder.size(), userSeqList.size());
+
+            for(Long userSeq: br31.getOrder()) {
+                newOrder.add(userSeq);
+            }
+
+            for(int i = newOrder.size()-1; i >= 0; --i) {
+                Long curSeq = newOrder.get(i);
+
+                if(!userSeqSet.contains(curSeq)) {
+                    // 현재 차례 유저가 숫자를 고르고 나간 경우
+                    if(curSeq == br31Req.getUserSeq()) {
+                        isCurUserExist = false;
+                    }
+
+                    newOrder.remove(i);
+                }
+            }
+        }
+
         log.debug("************ BR31 게임 진행, 채팅방 번호: {} ************", br31Req.getMultiMeetingRoomSeq());
         log.debug("숫자: {}, 유저: {}, 선택한 숫자: {}", br31.getPoint(), br31Req.getUserSeq(), br31Req.getPoint());
 
-        br31.addPoint(br31Req.getPoint());
+        Long nextUserSeq = 0L;
 
-        log.debug("더한 후 숫자: {}", br31.getPoint());
+        // 누군가 나갔으면
+        if(userSeqList.size() != curOrder.size()) {
+            if(newOrder.size() == 1) {
+                log.debug("유저가 한 명 남아서 게임 종료");
+                throw new ConflictException("Cannot continue game: only one user exists.");
+            }
 
-        int nextUserSeqIndex = (br31.getUsers().indexOf(br31Req.getUserSeq()) + 1) % 6;
-        Long nextUserSeq = br31.getUsers().get(nextUserSeqIndex);
-        br31.setNextUser(nextUserSeq);
+            int nextIdx = curOrder.indexOf(br31Req.getUserSeq()) + 1;
+
+            while(!userSeqSet.contains(curOrder.get(nextIdx))) {
+                nextIdx = (nextIdx + 1) % curOrder.size();
+            }
+
+            br31.setOrder(newOrder);
+            nextUserSeq = curOrder.get(nextIdx);
+            br31.setNextUser(nextUserSeq);
+
+            // 나간 유저가 현재 유저가 아니면
+            if(isCurUserExist) {
+                log.debug("현재 유저가 아닌 다른 유저가 퇴장");
+
+                br31.addPoint(br31Req.getPoint());
+                log.debug("더한 후 숫자: {}", br31.getPoint());
+            }
+            // 현재 유저가 숫자를 고르고 나갔으면
+            else {
+                log.debug("현재 유저가 숫자를 고르고 퇴장");
+                log.debug("다음 차례로 진행");
+            }
+        }
+        // 아무도 안 나갔으면
+        else {
+            int curIdx = curOrder.indexOf(br31Req.getUserSeq());
+            int nextIdx = (curIdx + 1) % curOrder.size();
+            nextUserSeq = curOrder.get(nextIdx);
+            br31.setNextUser(nextUserSeq);
+
+            br31.addPoint(br31Req.getPoint());
+            log.debug("더한 후 숫자: {}", br31.getPoint());
+        }
 
         if (br31.getPoint() == 30) {
             //게임이 끝난 경우

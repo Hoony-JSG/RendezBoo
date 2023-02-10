@@ -11,6 +11,7 @@ import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
 import com.ssafy.a107.api.service.GameService;
 import com.ssafy.a107.common.exception.BadRequestException;
+import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,7 +39,7 @@ public class GameController {
 
     @ApiOperation("배스킨 라빈스 게임 진행")
     @MessageMapping("/br31")
-    public void setBR31point(@RequestBody BR31Req br31Req) throws NotFoundException {
+    public void setBR31point(@RequestBody BR31Req br31Req) throws NotFoundException, ConflictException {
         BR31Res br31Res = gameService.setBR31point(br31Req);
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + br31Res.getMultiMeetingRoomSeq(), br31Res);
     }
