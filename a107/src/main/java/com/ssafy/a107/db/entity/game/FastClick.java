@@ -27,12 +27,6 @@ public class FastClick {
 
     private Map<Long, Integer> scores = new HashMap<>();
 
-    private Integer count = 0;
-
     @TimeToLive
     private Long expiration;
-
-    public void addCount() {
-        this.count++;
-    }
 }
