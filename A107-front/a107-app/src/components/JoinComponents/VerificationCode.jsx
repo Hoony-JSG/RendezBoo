@@ -115,16 +115,23 @@ const VerificationCode = (props) => {
             남은 시간 ({timeFormatter(remainThreeMinutes)})
           </div>
         </div>
-        <button
-          className={
-            'Code_resend-btn ' /*  + fillingBtn ? 'Code_resend-btn-filling' : '' */
+        <div className="Code_bottom-items">
+          <div className="Code_filling-background"></div>
+          <button
+            className={`
+          ${
+            fillingBtn
+              ? 'Code_resend-filling Code_resend-btn'
+              : 'Code_resend-btn'
           }
-          disabled={!showResendButton}
-          type="button"
-          onClick={resendSMS}
-        >
-          재전송 ({timeLeft})
-        </button>
+          `}
+            disabled={!showResendButton}
+            type="button"
+            onClick={resendSMS}
+          >
+            재전송 ({timeLeft})
+          </button>
+        </div>
       </div>
     </div>
   )

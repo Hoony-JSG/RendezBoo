@@ -53,7 +53,7 @@
   width: 40%;
   height: 50px;
   font-size: 18px;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.361);
   background-color: rgba(46, 183, 36, 0.338);
   color: white;
@@ -75,48 +75,45 @@
   cursor: default;
   color: gray;
 }
-
-.Code_resend-btn {
-  width: 100%;
+.Code_filling-background {
   height: 50px;
-  font-size: 18px;
-  border-radius: 5px;
-  border: 2px solid rgba(255, 255, 255, 0.361);
-  background-color: rgba(46, 183, 36, 0.338);
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  margin: 10px 0px;
-}
-/* .Code_resend-btn {
   width: 100%;
-  height: 40px;
-  border: 1px solid black;
+  border: 1px solid blue;
+}
+.Code_bottom-items {
+  border: 1px solid white;
+}
+.Code_resend-btn {
+  height: 50px;
+  width: 100%;
+  font-size: 17px;
+  background-color: rgba(82, 82, 82, 0.285);
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0px 10px;
   outline: none;
-  border-radius: 5px;
-  color: black;
-  font-size: 16px;
-  transition: none;
+  align-items: center;
   margin: 5px 0px;
-} */
+}
 
 .Code_resend-btn:disabled {
-  background-color: lightgray;
-  color: gray;
   cursor: not-allowed;
 }
 
-.Code_resend-btn-filling {
+.Code_resend-filling {
   cursor: pointer;
   animation: Code_resend-fill-background 10s linear forwards;
-  background-color: white;
 }
 
-@keyframes fill-background {
+@keyframes Code_resend-fill-background {
   0% {
-    background-color: white;
+    color: rgba(128, 128, 128, 0);
+    background-color: rgba(82, 82, 82, 0);
   }
   100% {
-    background-color: #55acee;
+    color: gray;
+    background-color: rgba(82, 82, 82, 0.285);
   }
 }
