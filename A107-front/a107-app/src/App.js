@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 
 import {
@@ -21,9 +21,28 @@ import WebSocketChatTest from './modules/WebSocketChatTest'
 import JoinSocial from './pages/JoinSocial'
 import LoginTest from './modules/Auth/testLoginpage'
 import Logout from './pages/Logout'
+import {
+  getRefreshTokenFromCookie,
+  reissueAccessToken,
+} from './modules/Auth/Jwt'
+import { useDispatch } from 'react-redux'
+import { SET_TOKEN } from './containers/JwtContainer'
 
 function App() {
   const location = useLocation()
+  const dispatch = useDispatch()
+
+  useEffect(async () => {
+    console.log('refresh')
+    const refreshToken = await getRefreshTokenFromCookie()
+    if (refreshToken) {
+      console.log('토큰이 있습니다')
+      const accessToken =  await reissueAccessToken(refreshToken)
+      dispatch(SET_TOKEN(accessToken))
+    } else {
+      console.log('토큰이 없습니다')
+    }
+  }, [])
 
   return (
     <div className="App">
@@ -53,15 +72,15 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
-          <Route path="/*" element={<Error/>}></Route>
+          <Route path="/*" element={<Error />}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
             path="/websocketchattest"
             element={<WebSocketChatTest />}
           ></Route>
           {/* 로그인 테스트용 라우터 */}
-          <Route path='/logintest' element={<LoginTest />}></Route>
-          <Route path='/logout' element={<Logout />}></Route>
+          <Route path="/logintest" element={<LoginTest />}></Route>
+          <Route path="/logout" element={<Logout />}></Route>
         </Routes>
       </div>
     </div>
