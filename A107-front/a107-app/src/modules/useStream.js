@@ -7,33 +7,35 @@ export const useStream = (streamManager) => {
   const [videoStatus, setVideoStatus] = useState(true)
 
   useEffect(() => {
-    streamManager.addVideoElement(videoRef.current)
+    if (streamManager) {
+      streamManager.addVideoElement(videoRef.current)
 
-    streamManager.on('publisherStartSpeaking', (event) => {
-      if (event.streamId !== streamManager.stream.streamId) {
-        return
-      }
-      setSpeaking(true)
-    })
+      streamManager.on('publisherStartSpeaking', (event) => {
+        if (event.streamId !== streamManager.stream.streamId) {
+          return
+        }
+        setSpeaking(true)
+      })
 
-    streamManager.on('publisherStopSpeaking', (event) => {
-      if (event.streamId !== streamManager.stream.streamId) {
-        return
-      }
-      setSpeaking(false)
-    })
+      streamManager.on('publisherStopSpeaking', (event) => {
+        if (event.streamId !== streamManager.stream.streamId) {
+          return
+        }
+        setSpeaking(false)
+      })
 
-    streamManager.on('streamPropertyChanged', (event) => {
-      if (event.stream.streamId !== streamManager.stream.streamId) {
-        return
-      }
+      streamManager.on('streamPropertyChanged', (event) => {
+        if (event.stream.streamId !== streamManager.stream.streamId) {
+          return
+        }
 
-      if (event.changedProperty === 'videoActive') {
-        setVideoStatus(event.newValue)
-      } else if (event.changedProperty === 'audioActive') {
-        setMicStatus(event.newValue)
-      }
-    })
+        if (event.changedProperty === 'videoActive') {
+          setVideoStatus(event.newValue)
+        } else if (event.changedProperty === 'audioActive') {
+          setMicStatus(event.newValue)
+        }
+      })
+    }
   })
 
   return {

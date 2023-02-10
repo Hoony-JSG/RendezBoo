@@ -72,10 +72,8 @@ function App() {
           location.pathname === '/home' ||
           location.pathname === '/join' ||
           location.pathname === '/login' ||
-          location.pathname === '/Login' ||
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
-          location.pathname === '/Docking1' ||
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>

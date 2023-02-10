@@ -1,19 +1,24 @@
-import axios from 'axios'
+import { useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
+  const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
+  const userGender = useSelector(
+    (state) => state.userInfoReducer.userGender
+  )
+  const userSeq = useSelector(
+    (state) => state.userInfoReducer.userSeq
+  )
   const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
   const enterMeetingRoom = (multiMeetingRoomSeq) => {
-    var userseq = 1;
-    console.log('미팅방 입장하자');
-    axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+multiMeetingRoomSeq+'/'+userseq).then((response)=>{
-        navigate('/docking3/' + multiMeetingRoomSeq)
-    }, [])
-    .catch((e)=>{
-      console.log(e)
-    })
-    setMultiMeetingRoomSeq(multiMeetingRoomSeq)
+      if((userGender==true && maleNum>=3) || (userGender==false && femaleNum>=3)){
+        console.log("이 성별은 너무 많아요")
+      }else{
+        setMultiMeetingRoomSeq(multiMeetingRoomSeq)  
+      navigate('/docking3/' + multiMeetingRoomSeq)
+      }
   }
   const multiMeetingRoomListStyle = {
     boxSizing: 'border-box',

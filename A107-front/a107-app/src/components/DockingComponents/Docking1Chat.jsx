@@ -1,17 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
+import { useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
-import SignalForm from './SignalForm'
-import SignalSelectedItem from './SignalSelectedItem'
-import userLogo from '../../Images/user-profile.png'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
 
-
-const SignalSelected = ({
-  userSeq, 
-  roomSeq,
+const Docking1Chat = ({
   meetingRoomSeq,
+  userSeq,
   handleSystem,
   handleExit,
   handlePhase1,
@@ -21,49 +15,9 @@ const SignalSelected = ({
 }) => {
   const client = useRef({})
 
-  const [signal, setSignal] = useState('')
   const [chatList, setChatList] = useState([])
-  const [you, setYou] = useState({
-    yourname: '',
-    yourpImg: '',
-  })
+  const [message, setMessage] = useState('')
 
-  useEffect(() => {
-    const getChatList = async () => {
-      const chats = await axios.get(
-        'https://i8a107.p.ssafy.io/api/chat/' + userSeq
-      )
-      setChatList(chats.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-    }
-    getChatList()
-    .then(() => {
-    // axios
-    //   .get('https://i8a107.p.ssafy.io/api/chat/' + userSeq)
-    //   .then((response) => {
-    //     console.log(response.data)
-    //     setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-        if (chatList[0].senderSeq == userSeq) {
-          axios.get('https://i8a107.p.ssafy.io/api/user/'+ chatList[0].receiverSeq)
-          .then((response)=>{
-            console.log(response.data)
-            setYou({
-              yourname: response.data.name,
-              yourpImg: response.data.profileImagePath,
-            })
-          })
-        } else {
-          axios.get('https://i8a107.p.ssafy.io/api/user/'+ chatList[0].senderSeq)
-          .then((response)=>{
-            console.log(response.data)
-            setYou({
-              yourname: response.data.name,
-              yourpImg: response.data.profileImagePath,
-            })
-          })
-        }
-      })
-  }, [])
-  
   const connect = () => {
     // stomp js client 객체 생성
     client.current = new StompJs.Client({
@@ -166,7 +120,7 @@ const SignalSelected = ({
     })
 
     // 보내고 메세지 초기화
-    setSignal('')
+    setMessage('')
   }
 
   // disconnect: 웹소켓 연결 끊기
@@ -175,12 +129,15 @@ const SignalSelected = ({
     client.current.deactivate()
   }
 
-  const inputSignal = (e) => {
-    setSignal(e.target.value)
+  // handleChage: 채팅 입력 시 state에 값 설정
+  const inputChat = (e) => {
+    setMessage(e.target.value)
   }
-  const sendSignal = (e) => {
+
+  // handleSubmit: 보내기 버튼 눌렀을 때 보내기(publish 실행)
+  const sendChat = (e, message) => {
     e.preventDefault()
-    if (signal.trim()) publish(signal)
+    if (message.trim()) publish(message)
   }
 
   useEffect(() => {
@@ -189,48 +146,27 @@ const SignalSelected = ({
     return () => disconnect()
   }, [meetingRoomSeq])
 
-  
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      gap: '20px',
-    }}>
-        <div
-            style={{
-                textAlign: 'left',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                gap: '20px',
-            }}
-        >
-            <img
-              src={you.yourpImg || userLogo}  
-              style={{ width: '75px', height: '75px' }}
-              alt={userSeq}
-            />
-            <h1>{you.yourname}</h1>
-        </div>
-      <div className='signal-selected' style={{ height: '500px' }}>
-        {chatList.map((chat) => (
-          <SignalSelectedItem chat={chat} key={chat.seq} userSeq={userSeq} you={you}/>
-        ))}
+    <div className={'signal-container'} style={{ height: '300px' }}>
+      <div className={'signal-selected'}>
+        {chatList.map((item, index) => {
+          return <div key={index}>{item}</div>
+        })}
       </div>
-      <form onSubmit={sendSignal} className={"signal-form"}>
-      <input
-        placeholder={"메시지를 입력하세요"}
-        value={signal}
-        onChange={inputSignal}
-      />
-      <button type={"submit"}>
-        <SiRocketdotchat />
-      </button>
-    </form>
+      <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
+        <input
+          type={'text'}
+          name={'chatInput'}
+          placeholder={'메시지를 입력하세요'}
+          onChange={inputChat}
+          value={message}
+        />
+        <button type="submit">
+          <SiRocketdotchat />
+        </button>
+      </form>
     </div>
   )
 }
 
-export default SignalSelected
+export default Docking1Chat

@@ -72,9 +72,10 @@ export default class FacePaint {
     this._material = new THREE.MeshPhongMaterial({
       map: texture,
       color: new THREE.Color(0xffffff),
-      specular: new THREE.Color(beta * 0.2, beta * 0.2, beta * 0.2),
+      specular: new THREE.Color(beta * 0.2, beta * 0.2, beta * 0.2, 0),
       reflectivity: beta,
       shininess: Math.pow(2, alpha * 10),
+      transparent: true,
     })
   }
 
@@ -97,6 +98,11 @@ export default class FacePaint {
     this._geometry.attributes.position.needsUpdate = true
 
     this._renderer.render(this._scene, this._camera)
+  }
+
+  async updateTexture(url) {
+    let texture = await this._textureLoader.loadAsync(url)
+    this._material.map = texture
   }
 
   constructor({ canvas, textureFilePath, w, h }) {

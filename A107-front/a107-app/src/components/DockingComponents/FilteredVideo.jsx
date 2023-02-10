@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useStream } from '../../modules/useStream'
 import { VideoFilter } from '../../modules/VideoFilter'
 
@@ -23,17 +23,17 @@ export const FilteredVideo = ({
     objectFit: 'cover',
     zIndex: 10,
   }
-  
+
   const canvasStyle = {
     left: '0px',
     width: '100%',
     height: '100%',
     position: 'absolute',
     objectFit: 'cover',
-    transform: 'rotateY(180deg)',
+    // transform: 'rotateY(180deg)',
     zIndex: 12,
   }
-  
+
   useEffect(() => {
     startFaceAPI(document.querySelector('#streamVideo'))
   }, [startFaceAPI])
@@ -52,11 +52,7 @@ export const FilteredVideo = ({
         style={videoStyle}
         autoPlay={true}
       />
-      <canvas
-        id="faceCanvas"
-        ref={canvasRef}
-        style={canvasStyle}
-      />
+      <canvas id="faceCanvas" ref={canvasRef} style={canvasStyle} />
     </div>
   )
 }

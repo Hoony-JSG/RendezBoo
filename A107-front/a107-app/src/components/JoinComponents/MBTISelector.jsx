@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import '../../Styles/MBTISelectorStyle.css'
 const MBTISelector = () => {
   const [MBTI, setMBTI] = useState({

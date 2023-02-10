@@ -66,4 +66,10 @@ export const VideoFilter = (videoElement, canvasElement, maskPath) => {
 
     return () => cancelAnimationFrame(requestRef.current)
   }, [animate])
+
+  useEffect(() => {
+    if (faceCanvas) {
+      faceCanvas.updateTexture(maskPath)
+    }
+  }, [maskPath, faceCanvas])
 }
