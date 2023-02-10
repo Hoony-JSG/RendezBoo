@@ -1,5 +1,7 @@
 import { React, useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
+import { SiRocketdotchat } from 'react-icons/si'
+import '../../Styles/SignalSelected.css'
 
 const Docking1Chat = ({
   meetingRoomSeq,
@@ -11,17 +13,6 @@ const Docking1Chat = ({
   handlePhase3,
   handleFinal,
 }) => {
-  const chatStyle = {
-    width: '100%',
-    height: '200px',
-    borderRadius: '40px',
-    border: '2px solid #FFFFFF',
-    background:
-      'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
-    filter:
-      'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-  }
-
   const client = useRef({})
 
   const [chatList, setChatList] = useState([])
@@ -103,15 +94,15 @@ const Docking1Chat = ({
   const publish = (message) => {
     // 연결이 안되어있을 경우
     if (!client.current.connected) {
-      alert('연결이 안 되어있어')
+      alert('연결 상태를 확인해주세요.')
       return
     }
 
-    // 입력된 메세지가 없는 경우
-    if (!message) {
-      alert('메세지 입력 해')
-      return
-    }
+    // // 입력된 메세지가 없는 경우
+    // if (!message) {
+    //   alert('메세지 입력 해')
+    //   return
+    // }
 
     let body = JSON.stringify({
       message: message,
@@ -139,15 +130,14 @@ const Docking1Chat = ({
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
-  const handleChange = (event) => {
-    setMessage(event.target.value)
+  const inputChat = (e) => {
+    setMessage(e.target.value)
   }
 
   // handleSubmit: 보내기 버튼 눌렀을 때 보내기(publish 실행)
-  const handleSubmit = (event, message) => {
-    event.preventDefault()
-
-    publish(message)
+  const sendChat = (e, message) => {
+    e.preventDefault()
+    if (message.trim()) publish(message)
   }
 
   useEffect(() => {
@@ -157,20 +147,23 @@ const Docking1Chat = ({
   }, [meetingRoomSeq])
 
   return (
-    <div style={chatStyle}>
-      <div className={'chat-list'}>
+    <div className={'signal-container'} style={{ height: '300px' }}>
+      <div className={'signal-selected'}>
         {chatList.map((item, index) => {
           return <div key={index}>{item}</div>
         })}
       </div>
-      <form onSubmit={(event) => handleSubmit(event, message)}>
+      <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
         <input
           type={'text'}
           name={'chatInput'}
-          onChange={handleChange}
+          placeholder={'메시지를 입력하세요'}
+          onChange={inputChat}
           value={message}
         />
-        <input type={'submit'} value={'메세지 보내기'} />
+        <button type="submit">
+          <SiRocketdotchat />
+        </button>
       </form>
     </div>
   )
