@@ -1,5 +1,5 @@
 import { removeToken, getRefreshTokenFromCookie } from './Jwt'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router';
 import { SET_TOKEN, REMOVE_TOKEN } from '../../containers/JwtContainer'
 import { SET_USER_INFO, REMOVE_USER_INFO } from "../../containers/UserInfo";
