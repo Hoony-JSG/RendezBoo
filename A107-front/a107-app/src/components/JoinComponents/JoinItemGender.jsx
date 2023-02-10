@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import '../../Styles/JoinGenderStyle.css'
+
 const JoinItemGender = (props) => {
   const [gender, setGender] = useState(null)
 
@@ -15,24 +17,10 @@ const JoinItemGender = (props) => {
 
   return (
     <div>
-      <button
-        onClick={handleMale}
-        style={
-          gender === 'Male'
-            ? { backgroundColor: 'lightblue' }
-            : { backgroundColor: 'white' }
-        }
-      >
+      <button onClick={handleMale} className={'gender-select'}>
         Male
       </button>
-      <button
-        onClick={handleFemale}
-        style={
-          gender === 'Female'
-            ? { backgroundColor: 'lightpink' }
-            : { backgroundColor: 'white' }
-        }
-      >
+      <button onClick={handleFemale} className={'gender-select'}>
         Female
       </button>
       <p>Selected Gender: {gender}</p>

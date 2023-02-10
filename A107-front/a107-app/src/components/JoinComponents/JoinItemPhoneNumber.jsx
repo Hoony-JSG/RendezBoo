@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import axios from 'axios'
 import VerificationCode from './VerificationCode'
-
+import '../../Styles/JoinPhoneNumberStyle.css'
 const JoinItemPhoneNumber = (props) => {
   const [PhoneNumber, setPhoneNumber] = useState()
   const [showSendButton, setShowSendButton] = useState(false)
   const [showCheckComponent, setShowCheckComponent] = useState(false)
-
+  const [showPNInput, setShowPNInput] = useState(true)
   const checkPhoneNumberLength = () => {
     PhoneNumber.length === 11 && PhoneNumber.includes('010')
       ? setShowSendButton(true)
@@ -26,36 +26,49 @@ const JoinItemPhoneNumber = (props) => {
       setShowCheckComponent(false)
     }
   }
+
+  const fixPhoneNumber = (index, value) => {
+    props.setHas(index, value)
+    if (value === true) {
+      setShowPNInput(false)
+    } else {
+      setShowPNInput(true)
+    }
+  }
   return (
-    <div>
-      <div>
-        <span>
-          휴대폰 번호 입력 : <br />
-        </span>
-        <input
-          placeholder="휴대폰 번호 (- 제외)"
-          onChange={(e) => {
-            setPhoneNumber(e.target.value)
-          }}
-          onKeyUp={checkPhoneNumberLength}
-        />
-        <br />
-        <button
-          type="button"
-          disabled={!showSendButton || showCheckComponent}
-          onClick={sendFirstSMS}
-        >
-          send Code
-        </button>
+    <div className="JoinPhoneNumber_container">
+      <div className="JoinPhoneNumber_box-discribe">
+        휴대폰 번호를 인증해주세요.
       </div>
-      <div>
-        {showCheckComponent && (
-          <VerificationCode
-            PhoneNumber={PhoneNumber}
-            setHas={props.setHas}
-            sendSMS={sendFirstSMS}
+      <div className="JoinPhoneNumber_box-input">
+        <div className="JoinPhoneNumber_pn-input-container">
+          <input
+            className="JoinPhoneNumber_pn-input"
+            placeholder="휴대폰 번호 (- 제외)"
+            disabled={!showPNInput}
+            onChange={(e) => {
+              setPhoneNumber(e.target.value)
+            }}
+            onKeyUp={checkPhoneNumberLength}
           />
-        )}
+          <button
+            className="JoinPhoneNumber_send-code-button"
+            type="button"
+            disabled={!showSendButton || showCheckComponent}
+            onClick={sendFirstSMS}
+          >
+            Send Code
+          </button>
+        </div>
+        <div clasName="JoinPhoneNumber_code-input-container">
+          {showCheckComponent && (
+            <VerificationCode
+              PhoneNumber={PhoneNumber}
+              setHas={fixPhoneNumber}
+              sendSMS={sendFirstSMS}
+            />
+          )}
+        </div>
       </div>
     </div>
   )
