@@ -1,4 +1,5 @@
 import { React, useRef, useState, useEffect } from "react"
+import { useSelector} from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from "axios"
 import { OpenVidu } from 'openvidu-browser'
@@ -6,7 +7,7 @@ import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import DockingChat from '../components/DockingComponents/DockingChat'
 import * as tf from '@tensorflow/tfjs'
 
-const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
+const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) => {
 
     const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/' 
@@ -21,7 +22,9 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     const [message, setMessage] = useState('')
     const [completeFlag, setCompleteFlag] = useState(false);
 
-    const [userSeq, setUserSeq] = useState(1)
+    const userSeq = useSelector(
+      (state) => state.userInfoReducer.userSeq
+    )
     const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
     const [subscribers, setSubscribers] = useState([])
     const [publisher, setPublisher] = useState()
@@ -29,8 +32,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     const [token, setToken] = useState('')
     
     useEffect(()=>{
-      console.log(APPLICATION_SERVER_URL)
-      console.log(WEBSOCKET_SERVER_URL)
         connect()
         
         return() => disconnect()
@@ -38,15 +39,9 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
 //////////////////////////////////////////////////////////////////////////////////////
 //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
-    const handleUserSeq = (e) => {
-      setUserSeq(e.target.value)
-    }
     // connect: 웹소켓(stomp)연결
     const connect = () =>{
-      console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-      axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
-          console.log(response.status)
-      })
+      
 
       client.current = new StompJs.Client({
             
@@ -154,6 +149,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     axios.delete(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
         console.log(response.status)
     })
+    setMultiMeetingRoomSeq(null)
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
@@ -368,16 +364,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
       </div>
     ):(
         <div>
-          <p>
-            <label>UserSeq: </label>
-            <input
-              type="number"
-              id="userSeq"
-              value={userSeq}
-              onChange={handleUserSeq}
-              required
-            />
-          </p>
           <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
           <p>내 유저 시퀀스는 {userSeq}입니다.</p>
           <p>내 토큰은 {usertoken}입니다.</p>

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   userEmail: null,
-  userSeq: null,
+  userSeq: -1,
   userName: null
 }
 
@@ -19,7 +19,7 @@ export const userInfoSlice = createSlice({
     },
     REMOVE_USER_INFO: (state) => {
       state.userEmail = null
-      state.userSeq = null
+      state.userSeq = -1
       state.userName = null
     }
   }

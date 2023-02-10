@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 
-const BASE_URL = 'https://i8a107.p.ssafy.io'
-// const BASE_URL = 'http://localhost:8080'
+const APPLICATION_SERVER_URL =
+  process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
 
 // test@gmail.com
 // 1234
@@ -29,7 +29,7 @@ const LoginTest = () => {
     event.preventDefault()
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/user/login`, {
+      const response = await axios.post(APPLICATION_SERVER_URL + `api/user/login`, {
         email: email,
         password: password,
       })

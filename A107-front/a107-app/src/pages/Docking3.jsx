@@ -25,7 +25,7 @@ const Docking3 = ()=>{
         <div className='content'>
             {
                 multiMeetingRoomSeq?(
-                    <Docking3WaitingMeeting multiMeetingRoomSeq={multiMeetingRoomSeq} />    
+                    <Docking3WaitingMeeting multiMeetingRoomSeq={multiMeetingRoomSeq} setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}/>    
                 ):(
                 <div className="content">
                     <h1>현재 운영중인 미팅방 리스트들입니다</h1>
