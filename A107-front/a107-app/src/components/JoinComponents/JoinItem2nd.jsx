@@ -1,4 +1,5 @@
 import '../../Styles/temp_border_style.css'
+import '../../Styles/JoinItem2Style.css'
 
 import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'
@@ -8,7 +9,7 @@ import NextPageButton from './NextPageButton'
 import JoinPassword from './JoinPassword'
 
 const JoinItem2nd = (props) => {
-  const [hasName, setHasName] = useState(true)
+  const [hasName, setHasName] = useState(false)
   const [hasGender, setHasGender] = useState(false)
   const [hasPhoneNumber, setHasPhoneNumber] = useState(true)
   const [hasPW, setHasPW] = useState(false)
@@ -24,30 +25,49 @@ const JoinItem2nd = (props) => {
     wholeHas[index][1](value)
   }
   return (
-    <div>
-      J_2_휴대폰 인증 및 정보 가져오기
-      <br />
-      {`hasName : ${hasName} // hasGender : ${hasGender} // hasPhoneNumber : ${hasPhoneNumber}`}
-      <div>
-        <div>
-          <div className="temp_border_style">
-            <JoinItemName setHas={setWholeHas} />
+    <div className="display">
+      <div className="whole-block">
+        <h2>Let's Build Your Own Rocket (1/3)</h2>
+        {`hasName : ${hasName}`}
+        <div className="whole-items">
+          <div className="left-items">
+            <div
+              className={
+                'each-items name-item ' + (hasName ? 'border-glow' : '')
+              }
+            >
+              <JoinItemName setHas={setWholeHas} />
+            </div>
+            <div
+              className={'each-items pw-item ' + (hasPW ? 'border-glow' : '')}
+            >
+              <JoinPassword setHas={setWholeHas} />
+            </div>
           </div>
-          <div className="temp_border_style">
-            <JoinPassword setHas={setWholeHas} />
-          </div>
-          <div className="temp_border_style">
-            <JoinItemGender setHas={setWholeHas} />
-          </div>
-          <div className="temp_border_style">
-            <JoinItemPhoneNumber setHas={setWholeHas} />
+          <div className="right-items">
+            <div
+              className={
+                'each-items phonenumber-item ' +
+                (hasPhoneNumber ? 'border-glow' : '')
+              }
+            >
+              <JoinItemPhoneNumber setHas={setWholeHas} />
+            </div>
+            <div
+              className={
+                'each-items gender-item ' + (hasGender ? 'border-glow' : '')
+              }
+            >
+              <JoinItemGender setHas={setWholeHas} />
+            </div>
           </div>
         </div>
-        <div>
+        <div className="next-button">
           <NextPageButton
             hasName={hasName}
             hasGender={hasGender}
             hasPhoneNumber={hasPhoneNumber}
+            hasPW={hasPW}
             setNext={props.setNext}
           />
         </div>

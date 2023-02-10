@@ -1,0 +1,119 @@
+.Code-container {
+  height: max-content;
+  border: 1px solid yellow;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
+.Code_two-btn-container {
+  border: 1px solid green;
+  display: flex;
+  width: 400px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+}
+.Code_code-input[readonly] {
+  color: rgb(77, 77, 77);
+  text-decoration: line-through;
+  opacity: 0.5;
+  background-color: lightgray;
+}
+
+.Code_code-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  width: 50%;
+  height: 40px;
+  font-size: 30px;
+  text-align: center;
+  margin: 10px;
+}
+.Code_up-items {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+}
+
+.Code_remain-time {
+  width: 60%;
+  border: 1px solid red;
+  display: flex;
+  padding: 15px;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 18px;
+}
+
+.Code_check-btn {
+  width: 40%;
+  height: 50px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.361);
+  background-color: rgba(46, 183, 36, 0.338);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  margin: 10px 0px;
+}
+
+.Code_check-btn:hover {
+  background-color: rgba(46, 183, 36, 0.637);
+}
+
+.Code_check-btn:active {
+  transform: translateY(2px);
+}
+
+.Code_check-btn:disabled {
+  background-color: #8b008b10;
+  cursor: default;
+  color: gray;
+}
+.Code_filling-background {
+  height: 50px;
+  width: 100%;
+  border: 1px solid blue;
+}
+.Code_bottom-items {
+  border: 1px solid white;
+}
+.Code_resend-btn {
+  height: 50px;
+  width: 100%;
+  font-size: 17px;
+  background-color: rgba(82, 82, 82, 0.285);
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0px 10px;
+  outline: none;
+  align-items: center;
+  margin: 5px 0px;
+}
+
+.Code_resend-btn:disabled {
+  cursor: not-allowed;
+}
+
+.Code_resend-filling {
+  cursor: pointer;
+  animation: Code_resend-fill-background 10s linear forwards;
+}
+
+@keyframes Code_resend-fill-background {
+  0% {
+    color: rgba(128, 128, 128, 0);
+    background-color: rgba(82, 82, 82, 0);
+  }
+  100% {
+    color: gray;
+    background-color: rgba(82, 82, 82, 0.285);
+  }
+}

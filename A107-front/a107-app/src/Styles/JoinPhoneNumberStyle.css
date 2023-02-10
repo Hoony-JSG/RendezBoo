@@ -1,0 +1,79 @@
+.JoinPhoneNumber_container {
+  padding: 20px 0px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 90%;
+}
+
+.JoinPhoneNumber_box-discribe {
+  box-sizing: border-box;
+  padding: 30px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  text-align: center;
+  padding-inline: 10px;
+}
+
+.JoinPhoneNumber_box-input {
+  border: 1px solid green;
+  height: 100%;
+}
+.JoinPhoneNumber_pn-input-container {
+  height: 40%;
+  width: 100%;
+  border: 1px solid blue;
+  display: flex;
+  align-content: space-between;
+  flex-direction: row;
+  align-items: center;
+}
+
+.JoinPhoneNumber_code-input-container {
+  border: 1px solid red;
+}
+.JoinPhoneNumber_pn-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  width: 70%;
+  height: 40px;
+  font-size: 30px;
+  text-align: center;
+  margin: 10px;
+}
+
+.JoinPhoneNumber_send-code-button {
+  height: 50px;
+  font-size: 17px;
+  background-color: rgba(82, 82, 82, 0.285);
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0px 10px;
+  outline: none;
+  align-items: center;
+  margin: 10px;
+}
+
+.JoinPhoneNumber_send-code-button:hover {
+  background-color: rgba(0, 0, 0, 0.407);
+}
+
+.JoinPhoneNumber_send-code-button:active {
+  transform: translateY(2px);
+}
+.JoinPhoneNumber_send-code-button:disabled {
+  cursor: not-allowed;
+  background-color: rgba(211, 211, 211, 0.048);
+  color: rgba(128, 128, 128, 0.509);
+  border-color: rgba(128, 128, 128, 0.509);
+  pointer-events: none;
+}
