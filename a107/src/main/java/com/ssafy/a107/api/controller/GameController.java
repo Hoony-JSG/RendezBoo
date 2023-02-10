@@ -53,7 +53,7 @@ public class GameController {
 
     @ApiOperation("더 게임 오브 데스 진행")
     @MessageMapping("/gameofdeath")
-    public void runGameOfDeath(@RequestBody GameOfDeathReq gameOfDeathReq) throws NotFoundException {
+    public void runGameOfDeath(@RequestBody GameOfDeathReq gameOfDeathReq) throws NotFoundException, ConflictException {
         GameOfDeathRes gameOfDeathRes = gameService.runGameOfDeathSession(gameOfDeathReq);
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + gameOfDeathRes.getMultiMeetingRoomSeq(), gameOfDeathRes);
     }

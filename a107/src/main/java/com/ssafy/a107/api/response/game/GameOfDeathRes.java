@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -29,12 +30,15 @@ public class GameOfDeathRes {
 
     private String message;
 
-    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> resultList, Long loseUserSeq, String message, MultiChatFlag flag) {
+    private Set<Long> rechoiceSet;
+
+    public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> resultList, Long loseUserSeq, String message, MultiChatFlag flag, Set<Long> rechoiceSet) {
         this.multiMeetingRoomSeq = gameOfDeath.getMultiMeetingRoomSeq();
         this.targets = gameOfDeath.getTargets();
         this.resultList = resultList;
         this.loseUserSeq = loseUserSeq;
         this.message = message;
         this.flag = flag;
+        this.rechoiceSet = rechoiceSet;
     }
 }
