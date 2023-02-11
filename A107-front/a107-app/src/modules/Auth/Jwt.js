@@ -18,7 +18,7 @@ const cookies = new Cookies()
 
 
 // setRefreshToken: 발급 받은 Refresh token 쿠키에 저장
-export const setRefreshToken = (refreshToken) => {
+export const setRefreshToken = async (refreshToken) => {
 
   cookies.set(
     'refresh_token', // 이름

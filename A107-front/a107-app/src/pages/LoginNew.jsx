@@ -42,7 +42,7 @@ const LoginNew = () => {
       })
 
       console.log(response.data)
-      setRefreshToken(response.data.refreshToken)
+      await setRefreshToken(response.data.refreshToken)
 
       const decode = jwtDecode(response.data.accessToken)
       console.log(12)
