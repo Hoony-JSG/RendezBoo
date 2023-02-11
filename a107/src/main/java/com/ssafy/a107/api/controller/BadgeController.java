@@ -1,8 +1,10 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.api.request.BadgeCheckReq;
 import com.ssafy.a107.api.request.BadgeCreateReq;
 import com.ssafy.a107.api.request.BadgeUpdateReq;
 import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.response.BadgeCheckRes;
 import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.api.service.BadgeService;
 import com.ssafy.a107.common.exception.NotFoundException;
@@ -62,5 +64,12 @@ public class BadgeController {
     public ResponseEntity<Long> deleteBadge(@PathVariable Long badgeSeq) throws NotFoundException {
         badgeService.deleteBadge(badgeSeq);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(badgeSeq);
+    }
+
+    @PostMapping("/check/{userSeq}")
+    @ApiOperation("특정 유저가 뱃지 획득 조건을 만족하는지 확인")
+    public ResponseEntity<?> checkBadge(@PathVariable Long userSeq, @RequestBody BadgeCheckReq badgeCheckReq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadge(userSeq, badgeCheckReq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
     }
 }

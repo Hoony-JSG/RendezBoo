@@ -8,10 +8,8 @@ import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.JwtInvalidException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.common.util.JwtTokenProvider;
-import com.ssafy.a107.db.entity.Authority;
-import com.ssafy.a107.db.entity.LogoutAccessToken;
-import com.ssafy.a107.db.entity.RefreshToken;
-import com.ssafy.a107.db.entity.User;
+import com.ssafy.a107.db.entity.*;
+import com.ssafy.a107.db.repository.BadgeConditionRepository;
 import com.ssafy.a107.db.repository.LogoutAccessTokenRedisRepository;
 import com.ssafy.a107.db.repository.RefreshTokenRedisRepository;
 import com.ssafy.a107.db.repository.UserRepository;
@@ -36,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     private final UserRepository userRepository;
+    private final BadgeConditionRepository badgeConditionRepository;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRedisRepository refreshTokenRedisRepository;
@@ -77,6 +76,9 @@ public class AuthServiceImpl implements AuthService {
         log.debug("회원가입 이메일: {}", user.getEmail());
         log.debug("유저 Role: {}", user.getRoles());
         log.debug("유저 seq: {}", user.getSeq());
+
+        BadgeCondition badgeCondition = new BadgeCondition(savedUser.getSeq());
+        badgeConditionRepository.save(badgeCondition);
 
         return savedUser.getSeq();
     }
