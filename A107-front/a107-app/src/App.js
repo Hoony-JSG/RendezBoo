@@ -33,22 +33,24 @@ function App() {
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
   const refreshToken = getRefreshTokenFromCookie()
-  const allowedPaths = ['/loginnew', '/home', '/join', '/joinsocial'];
-  const isAllowedPath = allowedPaths.includes(location.pathname);
 
-  useEffect(async () => {
-    if (!refreshToken && !isAllowedPath) {
-      alert('로그인이 필요합니다')
-      console.log('토큰 업슴')
-      navigate('/home')
-    } else {
-      const accessToken = await reissueAccessToken(refreshToken)
-      dispatch(SET_TOKEN(accessToken))
-    }
-  }, [location.pathname, refreshToken]
-  )
+  const allowedPaths = ['/loginnew', '/home', '/join', '/joinsocial']
+  const isAllowedPath = allowedPaths.includes(location.pathname)
+  
+  
+  useEffect(() => {
+    (async () => {
+      if (!refreshToken && !isAllowedPath) {
+        navigate('/home')
+        // alert('로그인이 필요합니다')
+        console.log('토큰 업슴')
+      } else {
+        const accessToken = await reissueAccessToken(refreshToken)
+        dispatch(SET_TOKEN(accessToken))
+      }
+    })()
+  }, [location.pathname, refreshToken])
 
   // useEffect(async () => {
   //   console.log('refresh')
@@ -63,7 +65,6 @@ function App() {
   //     navigate('/logintest')
   //   }
   // }, [])
-  
 
   return (
     <div className="App">
@@ -81,10 +82,8 @@ function App() {
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/loginnew" element={<LoginNew />}></Route>;
-
           <Route path="/joinsocial" element={<JoinSocial />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
@@ -94,8 +93,6 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
-
-
           <Route path="/*" element={<Error />}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route
