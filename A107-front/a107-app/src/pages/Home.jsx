@@ -6,7 +6,8 @@ const Home = (setGetToken) => {
     <div>
       <div style={{ height: '100px' }}></div>
       <div>
-        <NavLink to="/login">로그인</NavLink>
+        {/* <NavLink to="/login">로그인</NavLink> */}
+        <NavLink to="/loginnew">로그인</NavLink>
       </div>
       <div>
         <NavLink to="/joinsocial">조인</NavLink>
