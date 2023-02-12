@@ -1,14 +1,13 @@
-import { OpenVidu } from 'openvidu-browser'
-
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
-import Docking1Chat from '../components/DockingComponents/Docking1Chat'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import { OpenVidu } from 'openvidu-browser'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
+import Docking1Chat from '../components/DockingComponents/Docking1Chat'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
-import { useSelector } from 'react-redux'
 
 const APPLICATION_SERVER_URL =
   process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'

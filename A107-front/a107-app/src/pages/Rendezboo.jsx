@@ -1,10 +1,13 @@
-import React from 'react'
 import { BsFillDoorClosedFill, BsFillDoorOpenFill } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import RocketItem from '../components/RocketComponents/RocketItem'
 import '../Styles/Rendezboo.css'
 
 const Rendezboo = () => {
+
+  const userid = useSelector((state) => state.userInfoReducer.userEmail)
+
   console.log('랑데부 페이지')
   const id = 'wjdgnsxhsl'
   const navigate = useNavigate()
@@ -22,8 +25,8 @@ const Rendezboo = () => {
     gap: '50px'
   }
   const MeAndYou = {
-    Me: id,
-    Inquire: id,
+    Me: userid,
+    Inquire: userid,
     Rendez: true,
     BadgeRep: 1,
     ver: 'Me',

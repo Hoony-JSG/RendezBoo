@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import * as StompJs from '@stomp/stompjs'
-import SignalForm from './SignalForm'
+// import SignalForm from './SignalForm'
 import SignalSelectedItem from './SignalSelectedItem'
 import userLogo from '../../Images/user-profile.png'
 import { SiRocketdotchat } from 'react-icons/si'
@@ -21,6 +22,8 @@ const SignalSelected = ({
 }) => {
   const client = useRef({})
 
+  const me = useSelector((state) => state.userInfoReducer.userSeq)
+
   const [signal, setSignal] = useState('')
   const [chatList, setChatList] = useState([])
   const [you, setYou] = useState({
@@ -29,20 +32,27 @@ const SignalSelected = ({
   })
 
   useEffect(() => {
-    const getChatList = async () => {
-      const chats = await axios.get(
-        'https://i8a107.p.ssafy.io/api/chat/' + userSeq
-      )
-      setChatList(chats.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-    }
-    getChatList()
+    // const getChatList = async () => {
+    //   const chats = await axios.get(
+    //     'https://i8a107.p.ssafy.io/api/chat/' + userSeq
+    //   )
+    //   setChatList(chats.data.filter((chat) => chat.chatRoomSeq == roomSeq))
+    // }
+    // getChatList()
+    axios
+      .get('https://i8a107.p.ssafy.io/api/chat/' + 1)
+      .then((response) => {
+        console.log(response.data)
+        setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
+      })
+
     .then(() => {
     // axios
     //   .get('https://i8a107.p.ssafy.io/api/chat/' + userSeq)
     //   .then((response) => {
     //     console.log(response.data)
     //     setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-        if (chatList[0].senderSeq == userSeq) {
+        if (chatList[0].senderSeq == me) {
           axios.get('https://i8a107.p.ssafy.io/api/user/'+ chatList[0].receiverSeq)
           .then((response)=>{
             console.log(response.data)
