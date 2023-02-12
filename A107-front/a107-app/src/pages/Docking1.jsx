@@ -1,14 +1,13 @@
-import { OpenVidu } from 'openvidu-browser'
-
-import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
-import Docking1Chat from '../components/DockingComponents/Docking1Chat'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import { OpenVidu } from 'openvidu-browser'
 import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
+import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
+import Docking1Chat from '../components/DockingComponents/Docking1Chat'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
 import '../Styles/Docking1.css'
-import { useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { getHeader } from '../modules/Auth/Jwt'
@@ -519,8 +518,23 @@ const Docking1 = (props) => {
                   userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
+                <div className="btn-group">
+                  <p>
+                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+                  </p>
+                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="me">
+                <div className="btn-group">
+                  <p>
+                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+                  </p>
+                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                </div>
+              </div>
+            )}
             <Docking1Chat
               meetingRoomSeq={meetingRoomSeq}
               userSeq={userSeq}
@@ -531,12 +545,6 @@ const Docking1 = (props) => {
               handlePhase3={handlePhase3}
               handleFinal={handleFinal}
             />
-            <div className="btn-group">
-              <p>
-                Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
-              </p>
-              <button onClick={leaveSessionWithAlert}>나가기</button>
-            </div>
           </div>
         </div>
       ) : null}

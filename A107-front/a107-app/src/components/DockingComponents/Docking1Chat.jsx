@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
+import DockingChatSelectedItem from './DockingChatSelectedItem'
 
 const Docking1Chat = ({
   meetingRoomSeq,
@@ -62,11 +63,14 @@ const Docking1Chat = ({
       console.log(json_body)
 
       if (json_body.flag === 'CHAT') {
+        console.log(chatList)
         setChatList((_chat_list) => [
+          {
+            senderSeq: json_body.senderSeq,
+            message: json_body.message,
+            createdAt: json_body.createdAt,
+          },
           ..._chat_list,
-          json_body.senderSeq,
-          json_body.message,
-          json_body.createdAt,
         ])
       } else if (flag === 'SYSTEM') {
         console.log(json_body.message)
@@ -149,9 +153,13 @@ const Docking1Chat = ({
   return (
     <div className={'signal-container'} style={{ height: '300px' }}>
       <div className={'signal-selected'}>
-        {chatList.map((item, index) => {
-          return <div key={index}>{item}</div>
-        })}
+        {chatList.map((chat, index) => 
+          <DockingChatSelectedItem chat={chat} key={index}/>
+          // {
+          // console.log(chat)
+          // return <div key={index}>{chat.message}</div>
+        // }
+        )}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
         <input
