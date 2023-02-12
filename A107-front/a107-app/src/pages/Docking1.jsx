@@ -518,8 +518,23 @@ const Docking1 = (props) => {
                   userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
+                <div className="btn-group">
+                  <p>
+                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+                  </p>
+                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="me">
+                <div className="btn-group">
+                  <p>
+                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
+                  </p>
+                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                </div>
+              </div>
+            )}
             <Docking1Chat
               meetingRoomSeq={meetingRoomSeq}
               userSeq={userSeq}
@@ -530,12 +545,6 @@ const Docking1 = (props) => {
               handlePhase3={handlePhase3}
               handleFinal={handleFinal}
             />
-            <div className="btn-group">
-              <p>
-                Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
-              </p>
-              <button onClick={leaveSessionWithAlert}>나가기</button>
-            </div>
           </div>
         </div>
       ) : null}

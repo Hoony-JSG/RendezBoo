@@ -13,11 +13,17 @@ const Signal = () => {
   const userSeq = 1
   const [chatRoom, setChatRoom] = useState([])
 
+  const getChatRoom = () => axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
+    setChatRoom(response.data)
+    console.log(response.data)
+  })
+
   useEffect( () => {
-    axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
-      setChatRoom(response.data)
-      console.log(response.data)
-    })
+    getChatRoom()
+    // axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
+    //   setChatRoom(response.data)
+    //   console.log(response.data)
+    // })
   }, [])
 
   const windowStyle = {

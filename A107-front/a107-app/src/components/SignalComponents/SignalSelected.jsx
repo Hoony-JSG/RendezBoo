@@ -31,27 +31,27 @@ const SignalSelected = ({
     yourpImg: '',
   })
 
+  const getChatList = async () => {
+    const chats = await axios.get(
+      'https://i8a107.p.ssafy.io/api/chat/' + userSeq
+    )
+    setChatList(chats.data.filter((chat) => chat.chatRoomSeq == roomSeq))
+  }
   useEffect(() => {
-    // const getChatList = async () => {
-    //   const chats = await axios.get(
-    //     'https://i8a107.p.ssafy.io/api/chat/' + userSeq
-    //   )
-    //   setChatList(chats.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-    // }
-    // getChatList()
-    axios
-      .get('https://i8a107.p.ssafy.io/api/chat/' + 1)
-      .then((response) => {
-        console.log(response.data)
-        setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
-      })
-
-    .then(() => {
+    getChatList()
     // axios
-    //   .get('https://i8a107.p.ssafy.io/api/chat/' + userSeq)
+    //   .get('https://i8a107.p.ssafy.io/api/chat/' + 1)
     //   .then((response) => {
     //     console.log(response.data)
     //     setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
+    //   })
+
+    // .then(() => {
+    axios
+      .get('https://i8a107.p.ssafy.io/api/chat/' + userSeq)
+      .then((response) => {
+        console.log(response.data)
+        setChatList(response.data.filter((chat) => chat.chatRoomSeq == roomSeq))
         if (chatList[0].senderSeq == me) {
           axios.get('https://i8a107.p.ssafy.io/api/user/'+ chatList[0].receiverSeq)
           .then((response)=>{
@@ -72,10 +72,10 @@ const SignalSelected = ({
           })
         }
       })
-  }, [])
+  }, [chatList])
   
   const connect = () => {
-    // stomp js client 객체 생성
+    // stomp js client 객체 생성31
     client.current = new StompJs.Client({
       brokerURL: 'wss://i8a107.p.ssafy.io/ws-stomp',
 

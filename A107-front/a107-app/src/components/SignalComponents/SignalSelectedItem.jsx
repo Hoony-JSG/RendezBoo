@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
-const SignalListItem = ({ chat, userSeq, you }) => {
+const SignalListItem = ({ chat, you }) => {
   const { message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
 
-  useEffect(() => {
-    console.log('me', me)
-    console.log('senderSeq', senderSeq)
-    console.log('you', you)
-  }, [])
+  // useEffect(() => {
+  //   console.log('me', me)
+  //   console.log('senderSeq', senderSeq)
+  //   console.log('you', you)
+  // }, [])
 
   return (
     <div>

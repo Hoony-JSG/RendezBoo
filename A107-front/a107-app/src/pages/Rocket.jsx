@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React from 'react'
-import { useSelector } from 'react-redux'
-=======
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
->>>>>>> frontend
 import { useParams } from 'react-router-dom'
 import RocketBadge from '../components/RocketComponents/RocketBadge'
 import RocketItem from '../components/RocketComponents/RocketItem'
