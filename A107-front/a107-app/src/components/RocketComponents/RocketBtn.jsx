@@ -7,14 +7,14 @@ const RocketBtn = (props) => {
     return (
       <div>
         헉 같다
-        <RocketBtn_Same />
+        <RocketBtn_Same {...props} />
       </div>
     )
   } else if (props.ver === 'Other') {
     return (
       <div>
         다르다
-        <RocketBtn_Diff />
+        <RocketBtn_Diff {...props} />
       </div>
     )
   } else {

@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import '../../Styles/RocketItemButtonStyle.css'
-const RocketBtn_Same = () => {
+const RocketBtn_Same = (props) => {
   const navigate = useNavigate()
+  const { Inquire } = props
   function edit() {
     console.log('정보 수정')
-    navigate('/userinfo/:userid')
+    navigate('/userinfo/' + Inquire)
   }
   function itemBox() {
     console.log('아이템 상자')
-    navigate('/inventory/:userid')
+    navigate('/inventory/' + Inquire)
   }
   return (
     <div>
