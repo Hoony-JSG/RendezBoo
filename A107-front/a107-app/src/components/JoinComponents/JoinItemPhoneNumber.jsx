@@ -60,7 +60,7 @@ const JoinItemPhoneNumber = (props) => {
             Send Code
           </button>
         </div>
-        <div clasName="JoinPhoneNumber_code-input-container">
+        <div className="JoinPhoneNumber_code-input-container">
           {showCheckComponent && (
             <VerificationCode
               PhoneNumber={PhoneNumber}

@@ -20,13 +20,13 @@
 }
 
 .JoinPhoneNumber_box-input {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   height: 100%;
 }
 .JoinPhoneNumber_pn-input-container {
   height: 40%;
   width: 100%;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
   display: flex;
   align-content: space-between;
   flex-direction: row;
@@ -34,7 +34,8 @@
 }
 
 .JoinPhoneNumber_code-input-container {
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  margin-top: 20px;
 }
 .JoinPhoneNumber_pn-input {
   background-color: rgba(0, 0, 0, 0.3);
