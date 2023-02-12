@@ -1,8 +1,10 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.BadgeCheckReq;
 import com.ssafy.a107.api.request.BadgeCreateReq;
 import com.ssafy.a107.api.request.BadgeUpdateReq;
 import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.response.BadgeCheckRes;
 import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 
@@ -22,4 +24,5 @@ public interface BadgeService {
 
     void deleteBadge(Long seq) throws NotFoundException;
 
+    BadgeCheckRes checkBadge(Long userSeq, BadgeCheckReq badgeCheckReq) throws NotFoundException;
 }
