@@ -136,7 +136,7 @@
   font-size: 18px;
   border-radius: 10px;
   border: 2px solid rgba(255, 255, 255, 0.361);
-  background-color: rgba(46, 183, 36, 0.338);
+  background-color: rgba(36, 70, 183, 0.492);
   color: white;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -144,7 +144,7 @@
 }
 
 .Code_check-btn:hover {
-  background-color: rgba(46, 183, 36, 0.637);
+  background-color: rgba(36, 70, 183, 0.637);
 }
 
 .Code_check-btn:active {

@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import FloatingPlanet from '../components/HomeComponents/Floatingplanet'
+import SpaceShip from '../components/HomeComponents/SpaceShip'
 
 const Home = (setGetToken) => {
   return (
@@ -13,7 +14,8 @@ const Home = (setGetToken) => {
         <NavLink to="/joinsocial">조인</NavLink>
       </div>
       <div style={{ height: '100px' }}></div>
-      <FloatingPlanet />
+      {/* <FloatingPlanet /> */}
+      <SpaceShip />
     </div>
   )
 }

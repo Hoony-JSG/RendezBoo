@@ -41,7 +41,11 @@ const JoinItemPhoneNumber = (props) => {
         휴대폰 번호를 인증해주세요.
       </div>
       <div className="JoinPhoneNumber_box-input">
-        <div className="JoinPhoneNumber_pn-input-container">
+        <div
+          className={`JoinPhoneNumber_pn-input-container ${
+            showCheckComponent ? 'slide-up' : ''
+          }`}
+        >
           <input
             className="JoinPhoneNumber_pn-input"
             placeholder="휴대폰 번호 (- 제외)"
@@ -60,17 +64,20 @@ const JoinItemPhoneNumber = (props) => {
             Send Code
           </button>
         </div>
-        <div className="JoinPhoneNumber_code-input-container">
-          {showCheckComponent && (
-            <div className="JoinPhoneNumber_VerificationCode-comp">
+        <div
+          className={`JoinPhoneNumber_code-input-container ${
+            showCheckComponent ? 'show' : ''
+          }`}
+        >
+          <div className="JoinPhoneNumber_VerificationCode-comp">
+            {showCheckComponent && (
               <VerificationCode
                 PhoneNumber={PhoneNumber}
                 setHas={fixPhoneNumber}
                 sendSMS={sendFirstSMS}
-                className="JoinPhoneNumber_VerificationCode-comp"
               />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
