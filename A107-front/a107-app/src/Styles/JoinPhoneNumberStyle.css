@@ -36,7 +36,28 @@
 .JoinPhoneNumber_code-input-container {
   /* border: 1px solid red; */
   margin-top: 20px;
+  height: 0;
+  position: relative;
 }
+.JoinPhoneNumber_code-input-container .JoinPhoneNumber_VerificationCode-comp {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  animation: slide-down 0.5s ease-in-out forwards;
+}
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    top: -100%;
+  }
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
 .JoinPhoneNumber_pn-input {
   background-color: rgba(0, 0, 0, 0.3);
   border: 1px solid lightgray;
