@@ -7,9 +7,18 @@ const RocketItem = (props) => {
   const Me = props.Me
   const Inquire = props.Inquire
   const ver = props.ver
+
+  const MeAndYou = {
+    Me: Me,
+    Inquire: Inquire,
+    ver: ver,
+    BadgeRep: 1,
+  }
+
   const setTempBorder = {
     border: '1px solid black',
   }
+
   const [profileimage, setprofileimage] = useState(MangleGom)
   const changeImage = (image) => {
     if (image !== null) {
@@ -33,7 +42,7 @@ const RocketItem = (props) => {
       <h3>Me = {Me}</h3>
       <h5>Inquire = {Inquire}</h5>
 
-      <RocketBtn ver={ver} />
+      <RocketBtn {...MeAndYou} />
     </div>
   )
 }

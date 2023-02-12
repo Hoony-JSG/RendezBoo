@@ -11,14 +11,16 @@ import '../Styles/Docking1.css'
 import { useSelector } from 'react-redux'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
+import { getHeader } from '../modules/Auth/Jwt'
 
-const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? '' : 'https://i8a107.p.ssafy.io/'
+const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
   const minute = 5000
+  const REQUEST_HEADER = getHeader()
+
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const userGender = useSelector((state) => state.userInfoReducer.userGender)
   const navigate = useNavigate()
@@ -78,7 +80,7 @@ const Docking1 = (props) => {
     const response = await axios.delete(
       APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
       {},
-      {}
+      REQUEST_HEADER
     )
     console.log(response.status)
     setSession(null)
@@ -94,7 +96,7 @@ const Docking1 = (props) => {
         .delete(
           APPLICATION_SERVER_URL + 'api/onetoone/' + meetingRoomSeq,
           {},
-          {}
+          REQUEST_HEADER
         )
         .then(() => {
           window.location.href = '/'
@@ -257,7 +259,7 @@ const Docking1 = (props) => {
     const response = await axios.post(
       APPLICATION_SERVER_URL + 'api/onetoone',
       { userSeq: userSeq },
-      {}
+      REQUEST_HEADER
     )
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
@@ -277,7 +279,9 @@ const Docking1 = (props) => {
             APPLICATION_SERVER_URL +
               'api/onetoone/one/' +
               meetingRoomSeq +
-              '/start'
+              '/start',
+            {},
+            REQUEST_HEADER
           )
         }, 10000)
       }
@@ -293,6 +297,12 @@ const Docking1 = (props) => {
     }
   }
   async function handlePhase1(json_body) {
+    setAngryCnt(0)
+    setDisgustedCnt(0)
+    setHappyCnt(0)
+    setFearfulCnt(0)
+    setSadCnt(0)
+    setSurprisedCnt(0)
     // 미팅 시작 - 타이머 돌릴것
     if (phase < 1) {
       setPhase(1)
@@ -304,7 +314,7 @@ const Docking1 = (props) => {
               meetingRoomSeq +
               '/phase2',
             {},
-            {}
+            REQUEST_HEADER
           )
         }, minute)
       }
@@ -323,7 +333,7 @@ const Docking1 = (props) => {
               meetingRoomSeq +
               '/phase3',
             {},
-            {}
+            REQUEST_HEADER
           )
         }, minute)
       }
@@ -342,14 +352,33 @@ const Docking1 = (props) => {
               meetingRoomSeq +
               '/final',
             {},
-            {}
+            REQUEST_HEADER
           )
         }, minute)
       }
     }
   }
   async function handleFinal(json_body) {
-    setPhase(4)
+    if (phase < 4) {
+      setPhase(4)
+
+      await axios.post(
+        APPLICATION_SERVER_URL + 'api/emotion/',
+        {
+          anger: angryCnt,
+          contempt: 0,
+          disgust: disgustedCnt,
+          fear: fearfulCnt,
+          happiness: happyCnt,
+          meeting_room_seq: meetingRoomSeq,
+          neutral: 0,
+          sadness: sadCnt,
+          surprise: surprisedCnt,
+          user_seq: userSeq,
+        },
+        REQUEST_HEADER
+      )
+    }
     // 최종선택 - 모달창 등을 띄울것
   }
 
@@ -363,7 +392,7 @@ const Docking1 = (props) => {
           userSeq: userSeq,
           wantDocking: true,
         },
-        {}
+        REQUEST_HEADER
       )
       .then((res) => {
         console.log(res)
@@ -380,7 +409,7 @@ const Docking1 = (props) => {
           userSeq: userSeq,
           wantDocking: false,
         },
-        {}
+        REQUEST_HEADER
       )
       .then((res) => {
         console.log(res)
