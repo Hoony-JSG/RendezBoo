@@ -1,8 +1,11 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import logo from '../logo.png'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
+  const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+
   const navStyle = {
     position: 'absolute fixed',
     top: 0,
@@ -48,13 +51,16 @@ const Navbar = () => {
         <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
       </div>
       <div style={divStyle}>
-        <NavLink to="/logout" style={{ color: 'white', textDecoration: 'none' }}>
+        <NavLink
+          to="/logout"
+          style={{ color: 'white', textDecoration: 'none' }}
+        >
           Logout
         </NavLink>
       </div>
       <div style={divStyle}>
         <NavLink
-          to="/rocket/:userid"
+          to={'/rocket/' + userSeq}
           style={{ color: 'white', textDecoration: 'none' }}
         >
           MyRocket

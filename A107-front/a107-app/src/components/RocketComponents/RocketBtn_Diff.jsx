@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import '../../Styles/RocketItemButtonStyle.css'
-const RocketBtn_Diff = () => {
+const RocketBtn_Diff = (props) => {
   const navigate = useNavigate()
   function doSignal() {
     console.log('메세지창')
