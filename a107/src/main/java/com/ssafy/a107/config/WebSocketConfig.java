@@ -17,7 +17,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //                .withSockJS(); // 테스트 시 문제 있어서 주석처리 이후 클라이언트 연결 시 필요하면 활성화
     }
 
-//    다른 stomp 연결과 구분 지을 수도 있어서 일단 chat으로 이름 지음
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/sub");

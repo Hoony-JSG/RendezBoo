@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.api.request.FriendReq;
 import com.ssafy.a107.api.service.UserFriendService;
 import com.ssafy.a107.common.exception.NotFoundException;
 import io.swagger.annotations.Api;
@@ -19,28 +20,21 @@ public class UserFriendController {
 
     /**
      * 친구 추가 api
-     * @param userSeq: 추가하는 유저(나)의 userSeq
-     * @param otherUserSeq: 친구로 추가할 유저(상대방)의 userSeq
-     * @return http status 반환
      */
-    @PostMapping("/{userSeq}/{otherUserSeq}")
-    @ApiOperation(value = "친구 추가", notes="나(userSeq)와 상대방(otherUserSeq)가 친구를 맺는다.")
-    public ResponseEntity<Long> addFriend(
-            @PathVariable Long userSeq, @PathVariable Long otherUserSeq) throws NotFoundException {
-        Long friendSeq = friendService.addFriend(userSeq, otherUserSeq);
+    @PostMapping("")
+    @ApiOperation(value = "친구 추가", notes="여자와 남자 유저 번호를 받으면 친구를 맺어줍니다")
+    public ResponseEntity<Long> addFriend(FriendReq req) throws NotFoundException {
+        Long friendSeq = friendService.addFriend(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendSeq);
     }
 
     /**
      * 친구 삭제 api
-     * @param userSeq: 유저(나)의 userSeq
-     * @param otherUserSeq: 친구에서 삭제할 유저(상대방)의 userSeq
-     * @return http status 반환
      */
-    @DeleteMapping("/{userSeq}/{otherUserSeq}")
-    @ApiOperation(value = "친구 삭제", notes="나(userSeq)와 상대방(otherUserSeq)의 친구 관계 삭제.")
-    public ResponseEntity deleteFriend(@PathVariable Long userSeq, @PathVariable Long otherUserSeq) throws NotFoundException{
-        friendService.deleteFriend(userSeq, otherUserSeq);
+    @DeleteMapping("")
+    @ApiOperation(value = "친구 삭제", notes="여자와 남자 유저 번호를 받으면 친구 관계를 끊어줍니다")
+    public ResponseEntity deleteFriend(FriendReq req) throws NotFoundException{
+        friendService.deleteFriend(req);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
