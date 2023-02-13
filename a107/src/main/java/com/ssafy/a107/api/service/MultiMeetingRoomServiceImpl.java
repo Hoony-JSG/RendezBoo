@@ -158,7 +158,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         Long maleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true);
         Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
         if(maleNum==0 && femaleNum==0){
-            multiMeetingRoomUserRepository.deleteById(multiMeetingRoomSeq);
+            multiMeetingRoomRepository.deleteById(multiMeetingRoomSeq);
         }
     }
 
