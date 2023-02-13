@@ -399,7 +399,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
         ) : (
           <div className="video-container cam-group">
             <div className="sub-container">
->>>>>>> Stashed changes
               {subscribers.map((sub, idx) => (
                 <div key={idx} id="subscriber" className="cam">
                   <FilteredVideo
