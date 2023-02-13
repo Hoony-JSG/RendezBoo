@@ -89,7 +89,7 @@ const Docking1Chat = ({
         handlePhase3(json_body)
       } else if (flag === 'FINAL') {
         console.log(json_body.message)
-        handleFinal(json_body)
+        handleFinal()
       }
     })
   }
@@ -153,12 +153,14 @@ const Docking1Chat = ({
   return (
     <div className={'signal-container'} style={{ height: '300px' }}>
       <div className={'signal-selected'}>
-        {chatList.map((chat, index) => 
-          <DockingChatSelectedItem chat={chat} key={index}/>
+        {chatList.map(
+          (chat, index) => (
+            <DockingChatSelectedItem chat={chat} key={index} />
+          )
           // {
           // console.log(chat)
           // return <div key={index}>{chat.message}</div>
-        // }
+          // }
         )}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
