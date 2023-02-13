@@ -152,7 +152,14 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
             throw new NotFoundException("Invalid multi meeting room sequence!");
         else if (!userRepository.existsById(userSeq))
             throw new NotFoundException("Invalid user sequence!");
+
         multiMeetingRoomUserRepository.deleteByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq);
+
+        Long maleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true);
+        Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
+        if(maleNum==0 && femaleNum==0){
+            multiMeetingRoomUserRepository.deleteById(multiMeetingRoomSeq);
+        }
     }
 
     //    multimeetingroom 세션 참가 시 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
