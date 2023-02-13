@@ -39,96 +39,130 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
   )
 
-  useEffect(() => { 
-    connect()
-    console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-    axios
-      .post(
-        APPLICATION_SERVER_URL +
-          'api/multi-meetings/' +
-          multiMeetingRoomSeq +
-          '/' +
-          userSeq
-      )
-      .then((response) => {
-        console.log(response.data)
-        const openVidu = new OpenVidu()
-        let session = openVidu.initSession()
+  useEffect(() => {
+      //////////////////////////////////////////////////////////////////////////////////////
+    //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
+    // connect: 웹소켓(stomp)연결
+    const connect = async () => {
+      client.current = new StompJs.Client({
+        brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
-        // On every new Stream received...
-        session.on('streamCreated', (event) => {
-          const subscriber = session.subscribe(event.stream, '')
-          const data = JSON.parse(event.stream.connection.data)
-          setSubscribers((prev) => {
-            return [
-              ...prev.filter((it) => it.userSeq !== +data.userSeq),
-              {
-                streamManager: subscriber,
-                userSeq: +data.userSeq,
-                gender: data.gender,
-              },
-            ]
+        // 연결 확인용 출력 문구
+        debug: function (str) {
+          console.log(str)
+        },
+
+        // 에러 발생 시 재연결 시도 딜레이
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+
+        // 연결 시
+        onConnect: () => {
+          console.log('success')
+          subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
+        },
+
+        // 에러 발생 시 로그 출력
+        onStompError: (frame) => {
+          console.log(frame)
+        },
+      })
+
+      // client 객체 활성화
+      await client.current.activate()
+      alert("connect()가 되었다")
+    }
+
+    connect().then(()=>{
+      alert('나를 이 미팅방-유저 테이블에 추가하고 웹소켓으로 보낸다.')
+      axios.post(
+          APPLICATION_SERVER_URL +
+            'api/multi-meetings/' +
+            multiMeetingRoomSeq +
+            '/' +
+            userSeq
+        )
+        .then((response) => {
+          console.log(response.data)
+          const openVidu = new OpenVidu()
+          let session = openVidu.initSession()
+          // On every new Stream received...
+          session.on('streamCreated', (event) => {
+            const subscriber = session.subscribe(event.stream, '')
+            const data = JSON.parse(event.stream.connection.data)
+            setSubscribers((prev) => {
+              return [
+                ...prev.filter((it) => it.userSeq !== +data.userSeq),
+                {
+                  streamManager: subscriber,
+                  userSeq: +data.userSeq,
+                  gender: data.gender,
+                },
+              ]
+            })
           })
-        })
 
-        // On every Stream destroyed...
-        session.on('streamDestroyed', (event) => {
-          event.preventDefault()
+          // On every Stream destroyed...
+          session.on('streamDestroyed', (event) => {
+            event.preventDefault()
 
-          const data = JSON.parse(event.stream.connection.data)
-          setSubscribers((prev) =>
-            prev.filter((it) => it.userSeq !== +data.userSeq)
-          )
-        })
+            const data = JSON.parse(event.stream.connection.data)
+            setSubscribers((prev) =>
+              prev.filter((it) => it.userSeq !== +data.userSeq)
+            )
+          })
 
-        // On every asynchronous exception...
-        session.on('exception', (exception) => {
-          console.warn(exception)
-        })
+          // On every asynchronous exception...
+          session.on('exception', (exception) => {
+            console.warn(exception)
+          })
 
-        // 위에서 주입받은 토큰 사용 하여 세션에 연결
-        getDocking3Token(userSeq).then((data) => {
-          session
-            .connect(data.token, JSON.stringify({ clientData: userSeq }))
-            .then(async () => {
-              await navigator.mediaDevices.getUserMedia({
-                audio: true,
-                video: true,
+          // 위에서 주입받은 토큰 사용 하여 세션에 연결
+          getDocking3Token(userSeq).then((data) => {
+            session
+              .connect(data.token, JSON.stringify({ clientData: userSeq }))
+              .then(async () => {
+                await navigator.mediaDevices.getUserMedia({
+                  audio: true,
+                  video: true,
+                })
+                const devices = await openVidu.getDevices()
+                const videoDevices = devices.filter(
+                  (device) => device.kind === 'videoinput'
+                )
+
+                const publisher = openVidu.initPublisher('', {
+                  audioSource: undefined,
+                  videoSource: videoDevices[0].deviceId,
+                  publishAudio: true,
+                  publishVideo: true,
+                  resolution: '640x480',
+                  frameRate: 30,
+                  insertMode: 'APPEND',
+                  mirror: false,
+                })
+
+                setPublisher(publisher)
+                session.publish(publisher)
               })
-              const devices = await openVidu.getDevices()
-              const videoDevices = devices.filter(
-                (device) => device.kind === 'videoinput'
-              )
-
-              const publisher = openVidu.initPublisher('', {
-                audioSource: undefined,
-                videoSource: videoDevices[0].deviceId,
-                publishAudio: true,
-                publishVideo: true,
-                resolution: '640x480',
-                frameRate: 30,
-                insertMode: 'APPEND',
-                mirror: false,
+              .catch((error) => {
+                console.log(
+                  'There was an error connecting to the session:',
+                  error.code,
+                  error.message
+                )
               })
-
-              setPublisher(publisher)
-              session.publish(publisher)
-            })
-            .catch((error) => {
-              console.log(
-                'There was an error connecting to the session:',
-                error.code,
-                error.message
-              )
-            })
+          })
+          setSession(session)
         })
-        setSession(session)
-      })
-      .catch((e) => {
-        console.log(e.message)
-        navigate('/error')
-      })
+        .catch((e) => {
+          console.log(e.message)
+          navigate('/error')
+        })
+      }
 
+    )
     return () => disconnect()
   }, [])
 
@@ -145,38 +179,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     }
   }, [])
 
-  //////////////////////////////////////////////////////////////////////////////////////
-  //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
-  // connect: 웹소켓(stomp)연결
-  const connect = () => {
-    client.current = new StompJs.Client({
-      brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
-      // 연결 확인용 출력 문구
-      debug: function (str) {
-        console.log(str)
-      },
-
-      // 에러 발생 시 재연결 시도 딜레이
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-
-      // 연결 시
-      onConnect: () => {
-        console.log('success')
-        subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
-      },
-
-      // 에러 발생 시 로그 출력
-      onStompError: (frame) => {
-        console.log(frame)
-      },
-    })
-
-    // client 객체 활성화
-    client.current.activate()
-  }
 
   // subscribe: 메세지 받을 주소 구독
   const subscribeMulti = () => {
@@ -242,20 +245,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     setMessage('')
   }
 
-  const disconnect = async () => {
-    console.log('disconnect(): 대기방 연결을 해제합니다.')
+  const disconnect = () => {
+    alert('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    await axios
-      .delete(
-        APPLICATION_SERVER_URL +
-          'api/multi-meetings/' +
-          multiMeetingRoomSeq +
-          '/' +
-          userSeq
-      )
-    navigate('/docking3')
-
+    axios.delete(APPLICATION_SERVER_URL +'api/multi-meetings/' +multiMeetingRoomSeq +'/' +userSeq)
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
