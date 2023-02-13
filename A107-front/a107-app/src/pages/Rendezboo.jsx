@@ -13,9 +13,6 @@ const Rendezboo = () => {
   const goToPage = (props) => {
     navigate('/' + props)
   }
-<<<<<<< Updated upstream
-
-=======
   const Contents = {
     display: 'flex',
     flexDirection: 'row',
@@ -26,7 +23,6 @@ const Rendezboo = () => {
     height: 'auto',
     gap: '50px',
   }
->>>>>>> Stashed changes
   const MeAndYou = {
     Me: userid,
     Inquire: userid,
