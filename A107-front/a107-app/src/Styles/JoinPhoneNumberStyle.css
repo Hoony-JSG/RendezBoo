@@ -1,0 +1,150 @@
+.JoinPhoneNumber_container {
+  padding: 20px 0px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 90%;
+}
+
+.JoinPhoneNumber_box-discribe {
+  box-sizing: border-box;
+  padding: 30px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  text-align: center;
+  padding-inline: 10px;
+}
+
+.JoinPhoneNumber_box-input {
+  height: 100%;
+
+  /* border: 1px solid green; */
+  position: relative;
+}
+.JoinPhoneNumber_pn-input-container {
+  height: 40%;
+  width: 100%;
+  display: flex;
+  align-content: space-between;
+  flex-direction: row;
+  align-items: center;
+
+  /* border: 1px solid blue; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease-in-out;
+}
+
+.JoinPhoneNumber_pn-input-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 1s ease-in-out;
+}
+
+.JoinPhoneNumber_pn-input-container.center {
+  justify-content: center;
+}
+
+.JoinPhoneNumber_pn-input-container.slide-up {
+  /* margin-top: -100%; */
+  /*  */
+  margin-top: 20px;
+  top: 0;
+  transform: translate(-50%, 0);
+}
+
+/* .JoinPhoneNumber_code-input-container {
+  margin-top: 20px;
+  height: 0;
+  position: relative;
+} */
+.JoinPhoneNumber_code-input-container {
+  margin-top: 10px;
+  height: 0;
+  position: relative;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
+.JoinPhoneNumber_code-input-container.show {
+  opacity: 1;
+  top: 0;
+  animation: slide-down 1s ease-in-out forwards;
+}
+
+.JoinPhoneNumber_code-input-container .JoinPhoneNumber_VerificationCode-comp {
+  border: 2px solid rgba(255, 255, 255, 0.281);
+  border-radius: 10px;
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+}
+.JoinPhoneNumber_code-input-container.show
+  .JoinPhoneNumber_VerificationCode-comp {
+  opacity: 1;
+  animation: slide-down 1s ease-in-out forwards;
+}
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    top: -30%;
+  }
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
+.JoinPhoneNumber_pn-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  width: 70%;
+  height: 40px;
+  font-size: 30px;
+  text-align: center;
+  margin: 10px;
+}
+
+.JoinPhoneNumber_send-code-button {
+  height: 50px;
+  font-size: 17px;
+  background-color: rgba(82, 82, 82, 0.285);
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0px 10px;
+  outline: none;
+  align-items: center;
+  margin: 10px;
+}
+
+.JoinPhoneNumber_send-code-button:hover {
+  background-color: rgba(0, 0, 0, 0.407);
+}
+
+.JoinPhoneNumber_send-code-button:active {
+  transform: translateY(2px);
+}
+.JoinPhoneNumber_send-code-button:disabled {
+  cursor: not-allowed;
+  background-color: rgba(211, 211, 211, 0.048);
+  color: rgba(128, 128, 128, 0.509);
+  border-color: rgba(128, 128, 128, 0.509);
+  pointer-events: none;
+}
