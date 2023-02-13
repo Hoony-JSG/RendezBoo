@@ -100,6 +100,9 @@ const Docking1 = (props) => {
         .then(() => {
           window.location.href = '/'
         })
+        .catch(() => {
+          window.location.href = '/'
+        })
     }
   }
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
@@ -225,28 +228,46 @@ const Docking1 = (props) => {
     // console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
-      if (angry > 0.25) {
-        setAngryCnt(angryCnt + 1)
+      if (predict.expressions.angry > 0.25) {
+        setAngryCnt((prev) => {
+          console.log('angryCnt =' + prev)
+          return prev + 1
+        })
       }
       setDisgusted(predict.expressions.disgusted)
-      if (disgusted > 0.25) {
-        setDisgustedCnt(disgustedCnt + 1)
+      if (predict.expressions.disgusted > 0.25) {
+        setDisgustedCnt((prev) => {
+          console.log('disgustCnt =' + prev)
+          return prev + 1
+        })
       }
       setFearful(predict.expressions.fearful)
-      if (fearful > 0.25) {
-        setFearfulCnt(fearfulCnt + 1)
+      if (predict.expressions.fearful > 0.25) {
+        setFearfulCnt((prev) => {
+          console.log('fearCnt =' + prev)
+          return prev + 1
+        })
       }
       setHappy(predict.expressions.happy)
-      if (happy > 0.25) {
-        setHappyCnt(happyCnt + 1)
+      if (predict.expressions.happy > 0.25) {
+        setHappyCnt((prev) => {
+          console.log('happyCnt =' + prev)
+          return prev + 1
+        })
       }
       setSad(predict.expressions.sad)
-      if (sad > 0.25) {
-        setSadCnt(sadCnt + 1)
+      if (predict.expressions.sad > 0.25) {
+        setSadCnt((prev) => {
+          console.log('sadCnt =' + prev)
+          return prev + 1
+        })
       }
       setSurprised(predict.expressions.surprised)
-      if (surprised > 0.25) {
-        setSurprisedCnt(surprisedCnt + 1)
+      if (predict.expressions.surprised > 0.25) {
+        setSurprisedCnt((prev) => {
+          console.log('surprisedCnt =' + prev)
+          return prev + 1
+        })
       }
     }
 
@@ -296,14 +317,14 @@ const Docking1 = (props) => {
     }
   }
   async function handlePhase1(json_body) {
-    setAngryCnt(0)
-    setDisgustedCnt(0)
-    setHappyCnt(0)
-    setFearfulCnt(0)
-    setSadCnt(0)
-    setSurprisedCnt(0)
     // 미팅 시작 - 타이머 돌릴것
     if (phase < 1) {
+      setAngryCnt(0)
+      setDisgustedCnt(0)
+      setHappyCnt(0)
+      setFearfulCnt(0)
+      setSadCnt(0)
+      setSurprisedCnt(0)
       setPhase(1)
       if (userGender) {
         setTimeout(() => {
@@ -357,33 +378,35 @@ const Docking1 = (props) => {
       }
     }
   }
-  async function handleFinal(json_body) {
+  const handleFinal = useCallback(async () => {
     if (phase < 4) {
       setPhase(4)
-
-      await axios.post(
-        APPLICATION_SERVER_URL + 'api/emotion/',
-        {
-          anger: angryCnt,
-          contempt: 0,
-          disgust: disgustedCnt,
-          fear: fearfulCnt,
-          happiness: happyCnt,
-          meeting_room_seq: meetingRoomSeq,
-          neutral: 0,
-          sadness: sadCnt,
-          surprise: surprisedCnt,
-          user_seq: userSeq,
-        },
-        REQUEST_HEADER
-      )
     }
     // 최종선택 - 모달창 등을 띄울것
-  }
+  }, [phase])
 
   async function choiceYes() {
     setPhase(5)
-    axios
+    let emotion_body = {
+      anger: angryCnt,
+      contempt: 0,
+      disgust: disgustedCnt,
+      fear: fearfulCnt,
+      happiness: happyCnt,
+      meeting_room_seq: meetingRoomSeq,
+      neutral: 0,
+      sadness: sadCnt,
+      surprise: surprisedCnt,
+      user_seq: userSeq,
+    }
+
+    console.log(emotion_body)
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
+    await axios
       .post(
         APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
         {
@@ -400,6 +423,25 @@ const Docking1 = (props) => {
 
   async function choiceNo() {
     setPhase(5)
+    let emotion_body = {
+      anger: angryCnt,
+      contempt: 0,
+      disgust: disgustedCnt,
+      fear: fearfulCnt,
+      happiness: happyCnt,
+      meeting_room_seq: meetingRoomSeq,
+      neutral: 0,
+      sadness: sadCnt,
+      surprise: surprisedCnt,
+      user_seq: userSeq,
+    }
+
+    console.log(emotion_body)
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
     await axios
       .post(
         APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
@@ -559,6 +601,7 @@ const Docking1 = (props) => {
         <div id={'final-choice-modal'}>
           <div style={{ height: '200px' }}></div>
           <p style={{ fontSize: '2.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
+          <p>{happyCnt}</p>
           <div>
             <button className="choice-btn" onClick={choiceYes}>
               O
