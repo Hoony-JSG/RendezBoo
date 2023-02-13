@@ -48,8 +48,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserRes> getFriends(Long userSeq) throws NotFoundException{
+
         if(userRepository.existsById(userSeq)) {
-            return userRepository.findFriendsByUserSeq(userSeq).stream()
+            List<Long> friendSeqs = userRepository.findFriendsByUserSeq(userSeq);
+            return userRepository.findAllById(friendSeqs).stream()
                     .map(UserRes::new)
                     .collect(Collectors.toList());
         }else throw new NotFoundException("Wrong User Seq!");
