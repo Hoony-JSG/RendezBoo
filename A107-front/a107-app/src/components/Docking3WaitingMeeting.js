@@ -58,9 +58,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         heartbeatOutgoing: 4000,
 
         // 연결 시
-        onConnect: async () => {
+        onConnect: () => {
           console.log('success')
-          await subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
+          subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
         },
 
         // 에러 발생 시 로그 출력
