@@ -23,8 +23,12 @@ public class BadgeCondition extends BaseEntity {
     private Long userSeq;
 
     @Column
-    @JoinColumn(name = "fin_count")
-    private Integer finCount;
+    @JoinColumn(name = "one_to_one_fin_count")
+    private Integer oneToOneFinCount;
+
+    @Column
+    @JoinColumn(name = "many_to_many_fin_count")
+    private Integer manyToManyFinCount;
 
     @Column
     @JoinColumn(name = "item_count")
@@ -33,10 +37,6 @@ public class BadgeCondition extends BaseEntity {
     @Column
     @JoinColumn(name = "anger_count")
     private Integer angerCount;
-
-    @Column
-    @JoinColumn(name = "contempt_count")
-    private Integer contemptCount;
 
     @Column
     @JoinColumn(name = "disgust_count")
@@ -49,10 +49,6 @@ public class BadgeCondition extends BaseEntity {
     @Column
     @JoinColumn(name = "happiness_count")
     private Integer happinessCount;
-
-    @Column
-    @JoinColumn(name = "neutral_count")
-    private Integer neutralCount;
 
     @Column
     @JoinColumn(name = "sadness_count")
@@ -72,24 +68,33 @@ public class BadgeCondition extends BaseEntity {
 
     public BadgeCondition(Long userSeq) {
         this.userSeq = userSeq;
-        finCount = itemCount = angerCount = contemptCount = disgustCount = fearCount = happinessCount
-                = neutralCount = sadnessCount = surpriseCount = 0;
+        oneToOneFinCount = manyToManyFinCount = itemCount = angerCount = disgustCount = fearCount
+                = happinessCount = sadnessCount = surpriseCount = 0;
     }
 
-    public Integer addFinCount() {
-        return ++finCount;
+    public Integer addOneToOneFinCount() {
+        return ++oneToOneFinCount;
+    }
+
+    public Integer addManyToManyFinCount() {
+        return ++manyToManyFinCount;
     }
 
     public Integer addItemCount() {
         return ++itemCount;
     }
 
-    public Integer addAngerCount() {
-        return ++angerCount;
+    public Integer addEmotionCount(long idx) {
+        if(idx == 0) return ++angerCount;
+        else if(idx == 1) return ++disgustCount;
+        else if(idx == 2) return ++fearCount;
+        else if(idx == 3) return ++happinessCount;
+        else if(idx == 4) return ++sadnessCount;
+        else return ++surpriseCount;
     }
 
-    public Integer addContemptCount() {
-        return ++contemptCount;
+    public Integer addAngerCount() {
+        return ++angerCount;
     }
 
     public Integer addDisgustCount() {
@@ -102,10 +107,6 @@ public class BadgeCondition extends BaseEntity {
 
     public Integer addHappinessCount() {
         return ++happinessCount;
-    }
-
-    public Integer addNeutralCount() {
-        return ++neutralCount;
     }
 
     public Integer addSadnessCount() {

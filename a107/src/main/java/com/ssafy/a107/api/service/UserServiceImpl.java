@@ -85,4 +85,14 @@ public class UserServiceImpl implements UserService {
             throw new ConflictException("User does not exist. (Leaved)");
         }
     }
+
+    @Override
+    public void addPoint(Long userSeq, Long point) throws NotFoundException {
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new NotFoundException("Wrong user seq!"));
+
+        user.addPoint(point);
+
+        userRepository.save(user);
+    }
 }

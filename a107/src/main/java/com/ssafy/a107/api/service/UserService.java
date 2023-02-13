@@ -16,4 +16,6 @@ public interface UserService {
     List<UserRes> getBlockeds(Long userSeq) throws NotFoundException;
     void deleteUser(String email) throws NotFoundException, ConflictException;
     void checkLeavedUser(String email) throws NotFoundException, ConflictException;
+
+    void addPoint(Long userSeq, Long point) throws NotFoundException;
 }

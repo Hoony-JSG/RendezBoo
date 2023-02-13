@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.ChatRoomCreateReq;
 import com.ssafy.a107.api.request.FriendReq;
 import com.ssafy.a107.api.request.OneToOneChatReq;
 import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
@@ -50,6 +51,8 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
     private final UserRepository userRepository;
 
     private final UserFriendService userFriendService;
+
+    private final ChatRoomService chatRoomService;
 
     /**
      * 유저 시퀀스를 받아서 성별을 확인 후 상대 성별이 만든 미팅방이 있을 시 참여, 없을 시 새로운 미팅방 생성 후 해당 세션의 아이디와
@@ -218,8 +221,12 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
             return oneToOneMeetingChatRes;
         } else if (room.getStatus().intValue() == 6 && choiceReq.getWantDocking()) {
             // 첫번쨰 O 두번째 O일시 매칭성사
-//            userFriendService.addFriend(room.getManSeq(), room.getWomanSeq());
             userFriendService.addFriend(new FriendReq(room.getManSeq(), room.getWomanSeq()));
+            chatRoomService.createChatRoom(ChatRoomCreateReq.builder()
+                    .userMaleSeq(room.getManSeq())
+                    .userFemaleSeq(room.getWomanSeq())
+                    .build()
+            );
             OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                     .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
                     .oneToOneMeetingRoomSeq(choiceReq.getMeetingRoomSeq())
