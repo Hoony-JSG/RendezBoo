@@ -3,7 +3,7 @@ import NaverLogin from './NaverLogin'
 const AllSocialLogins = (props) => {
   return (
     <div>
-      <div>
+      <div style={{ border: '1px solid red' }}>
         <NaverLogin />
       </div>
       <div>
