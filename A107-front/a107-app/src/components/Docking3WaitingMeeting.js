@@ -379,6 +379,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                     startFaceAPI={() => {}}
                   />
                 </div>
+                
               ))}
               {publisher !== undefined ? (
                 <div className="cam">
