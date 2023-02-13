@@ -47,7 +47,7 @@ public class OAuthController {
         // 이미 가입한 유저
         if(userRepository.existsByEmail(userEmail)) {
             TokenRes tokenRes = authService.login(userEmail);
-            return ResponseEntity.status(HttpStatus.OK).body(tokenRes);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(tokenRes);
         }
         // 회원가입이 필요한 유저
         else {
@@ -72,7 +72,7 @@ public class OAuthController {
         // 이미 가입한 유저
         if(userRepository.existsByEmail(userEmail)) {
             TokenRes tokenRes = authService.login(userEmail);
-            return ResponseEntity.status(HttpStatus.OK).body(tokenRes);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(tokenRes);
         }
         // 회원가입이 필요한 유저
         else {
