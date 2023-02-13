@@ -25,9 +25,9 @@ public class EmotionDataServiceImpl implements EmotionDataService{
     @Transactional
     @Override
     public Long addExpressionData(EmotionDataReq req) throws NotFoundException{
-        User user = userRepository.findById(req.getUser_seq())
+        User user = userRepository.findById(req.getUserSeq())
                 .orElseThrow(()->new NotFoundException("Invalid user sequence!"));
-        OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getMeeting_room_seq())
+        OnetoOneMeetingRoom room = onetoOneMeetingRoomRepository.findById(req.getMeetingRoomSeq())
                 .orElseThrow(()->new NotFoundException("Invalid Meeting Room sequence!"));
         EmotionData e = emotionDataRepository.save(EmotionData.builder()
                 .user(user)

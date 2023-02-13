@@ -21,4 +21,8 @@ public class EmotionDataReq {
 
     private Long meetingRoomSeq;
     private Long userSeq;
+
+    public Double[] emotionDataArr() {
+        return new Double[] {anger, disgust, fear, happiness, sadness, surprise};
+    }
 }

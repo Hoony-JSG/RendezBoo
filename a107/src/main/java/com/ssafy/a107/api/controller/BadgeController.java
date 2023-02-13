@@ -1,9 +1,6 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.request.BadgeCheckReq;
-import com.ssafy.a107.api.request.BadgeCreateReq;
-import com.ssafy.a107.api.request.BadgeUpdateReq;
-import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.request.*;
 import com.ssafy.a107.api.response.BadgeCheckRes;
 import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.api.service.BadgeService;
@@ -66,10 +63,31 @@ public class BadgeController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(badgeSeq);
     }
 
-    @PostMapping("/check/{userSeq}")
-    @ApiOperation("특정 유저가 뱃지 획득 조건을 만족하는지 확인")
-    public ResponseEntity<?> checkBadge(@PathVariable Long userSeq, @RequestBody BadgeCheckReq badgeCheckReq) throws NotFoundException {
-        BadgeCheckRes badgeCheckRes = badgeService.checkBadge(userSeq, badgeCheckReq);
+    @PostMapping("/onetoone")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 일대일 미팅 종료시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeOneToOne(@RequestBody EmotionDataReq emotionDataReq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeOneToOne(emotionDataReq);
         return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
     }
+
+    @PostMapping("/manytomany/{userSeq}")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 다대다 미팅 종료시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeManyToMany(@PathVariable Long userSeq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeManyToMany(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+    }
+
+    @PostMapping("/item/{userSeq}")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 아이템 구매시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeItem(@PathVariable Long userSeq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeItem(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+    }
+
+//    @PostMapping("/check/{userSeq}")
+//    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인")
+//    public ResponseEntity<?> checkBadge(@PathVariable Long userSeq, @RequestBody BadgeCheckReq badgeCheckReq) throws NotFoundException {
+//        BadgeCheckRes badgeCheckRes = badgeService.checkBadge(userSeq, badgeCheckReq);
+//        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+//    }
 }
