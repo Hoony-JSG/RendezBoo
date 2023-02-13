@@ -75,7 +75,6 @@ public class MultiMeetingRoomController {
     @PostMapping("/{multiMeetingRoomSeq}/{userSeq}")
     public ResponseEntity saveUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException {
         multiMeetingRoomService.saveUserToMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
-        multiMeetingRoomService.sendToWebSocketAtJoin(multiMeetingRoomSeq, userSeq);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
