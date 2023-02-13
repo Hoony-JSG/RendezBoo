@@ -1,4 +1,3 @@
-import '../../Styles/temp_border_style.css'
 import '../../Styles/JoinItem2Style.css'
 
 import JoinItemName from './JoinItemName'
@@ -11,7 +10,7 @@ import JoinPassword from './JoinPassword'
 const JoinItem2nd = (props) => {
   const [hasName, setHasName] = useState(false)
   const [hasGender, setHasGender] = useState(false)
-  const [hasPhoneNumber, setHasPhoneNumber] = useState(true)
+  const [hasPhoneNumber, setHasPhoneNumber] = useState(false)
   const [hasPW, setHasPW] = useState(false)
   const wholeHas = [
     [hasName, setHasName],
@@ -27,8 +26,7 @@ const JoinItem2nd = (props) => {
   return (
     <div className="display">
       <div className="whole-block">
-        <h2>Let's Build Your Own Rocket (1/3)</h2>
-        {`hasName : ${hasName}`}
+        <div className="Join2Title">Ready For Rendez-BOO</div>
         <div className="whole-items">
           <div className="left-items">
             <div

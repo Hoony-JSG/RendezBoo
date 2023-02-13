@@ -27,7 +27,6 @@ const JoinItemName = (props) => {
           }}
         />
       </div>
-      <div></div>
     </div>
   )
 }

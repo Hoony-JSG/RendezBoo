@@ -1,33 +1,188 @@
-.gender-select {
+.JoinGender_whole-box {
+  padding: 20px 0px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 90%;
+  justify-content: center;
+}
+
+.JoinGender_box-discribe {
+  box-sizing: border-box;
+  padding: 30px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  text-align: center;
+  padding-inline: 10px;
+}
+.JoinGender_bottom-box {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-content: space-between;
+  justify-content: center;
+  /* border: 1px solid red; */
+  align-items: center;
+}
+.JoinGender_between-space {
+  width: 100px;
+}
+/* .gender-select {
   background-color: rgba(0, 0, 0, 0.3);
   border: 1px solid lightgray;
-  border-radius: 5px;
-  padding: 10px;
+  border-radius: 30px;
   font-size: 20px;
   margin: 10px;
   cursor: pointer;
   color: white;
+  font-size: 35px;
+  height: 60%;
+  width: 30%;
 }
 
 .gender-select:hover {
-  background-color: rgba(98, 98, 98, 0.3);
+  background-color: rgba(98, 98, 98, 0.181);
 }
 
 .gender-select:focus {
-  background-color: rgba(138, 138, 138, 0.456);
-}
-
-.selected {
-}
-
-.unselected {
-}
-
-/* .PWinput {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  padding: 10px;
-  color: white;
-  width: 100%;
+  background-color: rgba(81, 117, 147, 0.531);
 } */
+.JoinGender_gender-select-male {
+  width: 160px;
+  position: relative;
+  height: 70px;
+  border-right: 3px ridge #149cea;
+  border-left: 3px ridge #149cea;
+  outline: none;
+  border-top: none;
+  border-bottom: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 25px;
+  /* font-weight: bold; */
+}
+
+.JoinGender_gender-select-male::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  background-color: none;
+  transform-origin: center;
+}
+
+.JoinGender_gender-select-male::before {
+  content: '';
+  transform-origin: center;
+  position: absolute;
+  top: 97%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  background-color: none;
+}
+
+.JoinGender_gender-select-male:hover::before,
+.JoinGender_gender-select-male:hover::after {
+  transform: scale(0);
+}
+
+.JoinGender_gender-select-male:hover {
+  box-shadow: inset 0px 0px 25px #1479ea;
+  border: 3px ridge #149cea;
+}
+.clicked-male {
+  animation: JoinGender_glowing-male 1s ease-in-out infinite;
+  border: 3px ridge #149cea;
+}
+
+@keyframes JoinGender_glowing-male {
+  0% {
+    box-shadow: inset 0px 0px 40px #1466eaa7;
+    /* background-color: #1478ea54; */
+  }
+  50% {
+    box-shadow: inset 0px 0px 15px #1478ea82;
+    /* background-color: #1478ea82; */
+  }
+  100% {
+    box-shadow: inset 0px 0px 40px #1466eaa7;
+    /* background-color: #1478ea54; */
+  }
+}
+
+.JoinGender_gender-select-female {
+  width: 160px;
+  position: relative;
+  height: 70px;
+  border-right: 3px ridge #ea1458;
+  border-left: 3px ridge #ea1458;
+  outline: none;
+  border-top: none;
+  border-bottom: none;
+  background-color: transparent;
+  color: white;
+  transition: 1s;
+  border-radius: 0.3em;
+  font-size: 25px;
+  /* font-weight: bold; */
+}
+
+.JoinGender_gender-select-female::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  background-color: none;
+  transform-origin: center;
+}
+
+.JoinGender_gender-select-female::before {
+  content: '';
+  transform-origin: center;
+  position: absolute;
+  top: 97%;
+  left: 0%;
+  width: 100%;
+  height: 10%;
+  background-color: none;
+}
+
+.JoinGender_gender-select-female:hover::before,
+.JoinGender_gender-select-female:hover::after {
+  transform: scale(0);
+}
+
+.JoinGender_gender-select-female:hover {
+  box-shadow: inset 0px 0px 25px #ea1458;
+  border: 3px ridge #ea1458;
+}
+.clicked-female {
+  animation: JoinGender_glowing-female 1s ease-in-out infinite;
+  border: 3px ridge #ea1458;
+}
+
+@keyframes JoinGender_glowing-female {
+  0% {
+    box-shadow: inset 0px 0px 40px #ea1458a7;
+    /* background-color: #ea14585d; */
+  }
+  50% {
+    box-shadow: inset 0px 0px 15px #ea145853;
+    /* background-color: #ea14582e; */
+  }
+  100% {
+    box-shadow: inset 0px 0px 40px #ea1458a7;
+    /* background-color: #ea14585d; */
+  }
+}
