@@ -7,7 +7,10 @@ import { Cookies } from "react-cookie";
 //   refreshToken: "dfdfdfdfdfdf"
 // }
 
-
+const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://i8a107.p.ssafy.io'
+      : 'http://localhost:8080'
 
 // refresh token / access token 유효시간 입니다.
 const REFRESH_TOKEN_AGE = 604800   // 1 week
@@ -64,7 +67,7 @@ export const reissueAccessToken = async (refreshToken) => {
   // access 토큰 발급 axios 요청
   try {
     const response = await axios.post(
-      'https://i8a107.p.ssafy.io/api/user/reissue',
+      `${APPLICATION_SERVER_URL}/api/user/reissue`,
       {},
       // 헤더 부착
       {

@@ -10,11 +10,6 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router'
 
-// const BASE_URL = 'http://localhost:8080'
-
-// test@gmail.com
-// 1234
-
 const LoginNew = () => {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSeq, setUserSeq] = useState('')
@@ -23,7 +18,10 @@ const LoginNew = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const BASE_URL = 'https://i8a107.p.ssafy.io'
+  const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://i8a107.p.ssafy.io'
+      : 'http://localhost:8080'
 
   const dispatch = useDispatch()
   const accessToken = useSelector(
@@ -36,7 +34,7 @@ const LoginNew = () => {
     event.preventDefault()
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/user/login`, {
+      const response = await axios.post(`${APPLICATION_SERVER_URL}/api/user/login`, {
         email: email,
         password: password,
       })
