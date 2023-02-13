@@ -9,9 +9,11 @@ const KakaoLogin = () => {
     window.Kakao.Auth.login({
       redirectUri: 'https://i8a107.p.ssafy.io/join',
       success: (authObj) => {
+        console.log('카카오 성공 : ')
         console.log(authObj)
       },
       fail: (err) => {
+        console.log('카카오 실패 : ')
         console.error(err)
       },
     })

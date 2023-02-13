@@ -1,8 +1,16 @@
+<<<<<<< Updated upstream
 import { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
+=======
+import { useRef, useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import * as StompJs from '@stomp/stompjs'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+>>>>>>> Stashed changes
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as tf from '@tensorflow/tfjs'
@@ -18,10 +26,18 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     process.env.NODE_ENV === 'production'
       ? 'wss://i8a107.p.ssafy.io/'
       : 'ws://localhost:8080/'
+<<<<<<< Updated upstream
   const REQUEST_HEADER = getHeader()
   const navigate = useNavigate()
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
+=======
+  const navigate = useNavigate()
+  const usertoken = '$$$mytoken$$$'
+  const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
+
+  // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
+>>>>>>> Stashed changes
   const client = useRef({})
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
@@ -351,6 +367,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   }
 
   return completeFlag ? (
+<<<<<<< Updated upstream
     <div>
       {session === undefined ? (
         <div>
@@ -370,6 +387,59 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           <div className="main">
             MAIN
             <div className="cam-group">
+=======
+    <div
+      className="container"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        overflowX: 'scroll',
+        padding: '20px',
+      }}
+    >
+      <div className="main">
+        {/* <h1>일대일 매칭 테스트 중</h1> */}
+        {session === undefined ? (
+          <div>
+            <button onClick={joinSession}>미팅방 입장하기</button>
+          </div>
+        ) : null}
+        {session !== undefined ? (
+          <div
+            className="video-container"
+            style={{
+              margin: '20px',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '30px',
+            }}
+          >
+            <div
+              className="sub-container"
+              style={{
+                width: '60%',
+                height: '840px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderRadius: '40px',
+                border: '2px solid #FFFFFF',
+                background: 'rgba(23, 49, 71, 0.8)',
+                filter:
+                  'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
+                position: 'relative',
+              }}
+            ></div>
+          </div>
+        ) : (
+          <div className="video-container cam-group">
+            <div className="sub-container">
+>>>>>>> Stashed changes
               {subscribers.map((sub, idx) => (
                 <div key={idx} className="cam">
                   <FilteredVideo
@@ -392,6 +462,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                 </div>
               ) : null}
             </div>
+<<<<<<< Updated upstream
             <div className="chat">CHAT</div>
           </div>
           <div id="side">
@@ -411,6 +482,37 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           return <div key={index}>{item}</div>
         })}
       </div>
+=======
+            <div className="pub-container">
+              {publisher !== undefined ? (
+                <div className="cam">
+                  <FilteredVideo
+                    streamManager={publisher}
+                    maskPath={maskPath}
+                    userSeq={userSeq}
+                    startFaceAPI={() => {}}
+                  />
+                </div>
+              ) : null}
+              <div className="chat"></div>
+              <div className="btn-group"></div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ) : (
+    <div>
+      <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
+      <p>내 유저 시퀀스는 {userSeq}입니다.</p>
+      <p>내 토큰은 {usertoken}입니다.</p>
+      <p>내 화면</p>
+      <div className={'chat-list'}>
+        {chatList.map((item, index) => {
+          return <div key={index}>{item}</div>
+        })}
+      </div>
+>>>>>>> Stashed changes
       <form onSubmit={(event) => handleSubmit(event, message)}>
         <div>
           <input

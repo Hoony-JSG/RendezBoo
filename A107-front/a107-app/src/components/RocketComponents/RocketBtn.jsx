@@ -17,12 +17,14 @@ const RocketBtn = (props) => {
         <RocketBtn_Diff {...props} />
       </div>
     )
-  } else {
+  } else if (props.ver === 'Start') {
     return (
       <div>
         <MBTISelector />
       </div>
     )
+  } else {
+    return <div></div>
   }
 }
 

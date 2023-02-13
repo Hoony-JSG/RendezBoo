@@ -2,10 +2,11 @@ import { useEffect } from 'react'
 
 const NaverLogin = (props) => {
   const { naver } = window
-  const NAVER_CLIENT_ID = 'ZvY7wDn48i4hvuK23vQM' // 발급 받은 Client ID 입력
-  const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/join'
+  const NAVER_CLIENT_ID = 'F3K8r9yyEG_RFk8RpLgi' // 발급 받은 Client ID 입력
+  const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/api/oauth/naver'
 
   const initializeNaverLogin = () => {
+    console.log('여기로 안오나')
     // props.cameback = true
     const naverLogin = new naver.LoginWithNaverId({
       clientId: NAVER_CLIENT_ID,

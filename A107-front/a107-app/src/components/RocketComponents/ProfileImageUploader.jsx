@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-
+import '../../Styles/ProfileImageUploaderStyle.css'
 const ProfileImageUploader = (props) => {
   const [newImage, setNewImage] = useState(null)
   const handleImageUpload = (e) => {
@@ -12,10 +12,12 @@ const ProfileImageUploader = (props) => {
   }, [newImage])
 
   return (
-    <div className="ProfileImageUploader">
-      <label htmlFor="file-input"></label>
-
-      <input type="file" onChange={handleImageUpload} />
+    <div>
+      <input
+        className="Rocket_profile-iamge-upload-button"
+        type="file"
+        onChange={handleImageUpload}
+      />
     </div>
   )
 }

@@ -13,13 +13,26 @@ const Rendezboo = () => {
   const goToPage = (props) => {
     navigate('/' + props)
   }
+<<<<<<< Updated upstream
 
+=======
+  const Contents = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '0px',
+    margin: '30px',
+    height: 'auto',
+    gap: '50px',
+  }
+>>>>>>> Stashed changes
   const MeAndYou = {
     Me: userid,
     Inquire: userid,
     Rendez: true,
     BadgeRep: 1,
-    ver: 'Me',
+    ver: '',
   }
 
   return (
