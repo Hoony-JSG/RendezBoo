@@ -15,7 +15,7 @@ import java.text.ParseException;
 public interface AuthService {
 
     Long createUser(JoinReq joinReq) throws ParseException;
-    TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException;
+    TokenRes login(String userEmail) throws NotFoundException, ConflictException;
     TokenRes reissue(String bearerToken) throws JwtInvalidException, ConflictException, NotFoundException;
     String logout(String bearerToken) throws JwtInvalidException, BadRequestException, ConflictException, NotFoundException;
     String resolveToken(String bearerToken);
