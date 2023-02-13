@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { FiUserCheck, FiUserX } from 'react-icons/fi'
+
 import '../../Styles/JoinPhoneNumberCodeStyle.css'
 const VerificationCode = (props) => {
   const [showResendButton, setShowResendButton] = useState(false)
@@ -62,7 +64,7 @@ const VerificationCode = (props) => {
 
   useEffect(timer3min, [])
   useEffect(timer, [])
-
+  const [checkRight, setCheckRight] = useState()
   const checkCode = async () => {
     console.log('입력된 인증 코드 : ' + VerificationCode)
     try {
@@ -74,15 +76,20 @@ const VerificationCode = (props) => {
       setShowCheckButton(false)
       setShowResendButton(false)
       props.setHas(2, true)
+      setRemainThreeMinutes(0)
+      setTimeLeft(0)
+      setCheckRight(true)
     } catch (error) {
       console.log('인증 코드 에러 발생')
       console.log('전송된 인증번호 : ' + VerificationCode)
       console.error(error)
+      setCheckRight(false)
     }
   }
   const [fillingBtn, setFillingBtn] = useState(false)
 
   const resendSMS = () => {
+    setCheckRight('')
     timer3min()
     console.log('재전송 요청')
     setShowResendButton(false)
@@ -91,17 +98,35 @@ const VerificationCode = (props) => {
   }
   const [VerificationCode, setVerificationCode] = useState(null)
   return (
-    <div className="Code-container">
-      <input
-        className="Code_code-input"
-        placeholder="인증 번호"
-        onChange={(e) => {
-          setVerificationCode(e.target.value)
-        }}
-        readOnly={fixReadOnly}
-        onKeyUp={checkCodeLength}
-      ></input>
-      <div className="Code_two-btn-container">
+    <div className="Code_container">
+      <div className="Code_left-box">
+        <div className="Code_check-result-icons">
+          <div
+            className={`Code_result-right ${
+              checkRight === true ? 'Code_light-greening' : 'Code_light-hided'
+            }`}
+          >
+            <FiUserCheck size="30" />
+          </div>
+          <div
+            className={`Code_result-error ${
+              checkRight === false ? 'Code_light-redding' : 'Code_light-hided'
+            }`}
+          >
+            <FiUserX size="30" />
+          </div>
+        </div>
+        <input
+          className="Code_code-input"
+          placeholder="인증 번호"
+          onChange={(e) => {
+            setVerificationCode(e.target.value)
+          }}
+          readOnly={fixReadOnly}
+          onKeyUp={checkCodeLength}
+        ></input>
+      </div>
+      <div className="Code_right-box">
         <div className="Code_up-items">
           <button
             className="Code_check-btn"
@@ -112,19 +137,22 @@ const VerificationCode = (props) => {
             인증
           </button>
           <div className="Code_remain-time">
-            남은 시간 ({timeFormatter(remainThreeMinutes)})
+            남은 시간
+            <br />({timeFormatter(remainThreeMinutes)})
           </div>
         </div>
         <div className="Code_bottom-items">
-          <div className="Code_filling-background"></div>
           <button
             className={`
-          ${
-            fillingBtn
-              ? 'Code_resend-filling Code_resend-btn'
-              : 'Code_resend-btn'
-          }
+            ${
+              fillingBtn
+                ? 'Code_resend-filling-animation Code_filling-background'
+                : 'Code_filling-background'
+            }
           `}
+          ></button>
+          <button
+            className="Code_resend-btn"
             disabled={!showResendButton}
             type="button"
             onClick={resendSMS}
