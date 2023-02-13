@@ -1,4 +1,4 @@
-import kakaoLogo from '../../Images/kakao-logo.png'
+import kakaoLogo from '../../Images/kakao_login_large_narrow.png'
 
 const KakaoLogin = () => {
   const handleKakaoLogin = () => {
@@ -7,7 +7,7 @@ const KakaoLogin = () => {
 
     // Kakao Login API call
     window.Kakao.Auth.login({
-      redirectUri: 'http://localhost:3000/join',
+      redirectUri: 'https://i8a107.p.ssafy.io/join',
       success: (authObj) => {
         console.log(authObj)
       },
@@ -18,8 +18,15 @@ const KakaoLogin = () => {
   }
   return (
     <div>
-      <button onClick={handleKakaoLogin}>
-        <img src={kakaoLogo} alt="Kakao logo" />
+      <button
+        style={{ backgroundColor: 'rgba(0,0,0,0)', border: '0px' }}
+        onClick={handleKakaoLogin}
+      >
+        <img
+          src={kakaoLogo}
+          alt="Kakao logo"
+          style={{ width: '346.8px', height: '75px' }}
+        />
       </button>
     </div>
   )
