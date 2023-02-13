@@ -102,12 +102,6 @@ const Docking1Chat = ({
       return
     }
 
-    // // 입력된 메세지가 없는 경우
-    // if (!message) {
-    //   alert('메세지 입력 해')
-    //   return
-    // }
-
     let body = JSON.stringify({
       message: message,
       meetingRoomSeq: meetingRoomSeq,
@@ -153,14 +147,8 @@ const Docking1Chat = ({
   return (
     <div className={'signal-container'} style={{ height: '300px' }}>
       <div className={'signal-selected'}>
-        {chatList.map(
-          (chat, index) => (
-            <DockingChatSelectedItem chat={chat} key={index} />
-          )
-          // {
-          // console.log(chat)
-          // return <div key={index}>{chat.message}</div>
-          // }
+        {chatList.map((chat, index) => 
+          <DockingChatSelectedItem chat={chat} key={index}/>
         )}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>

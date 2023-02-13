@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { SiRocketdotchat } from 'react-icons/si'
 import SignalList from '../components/SignalComponents/SignalList'
@@ -8,23 +9,23 @@ import SignalSelected from '../components/SignalComponents/SignalSelected'
 const Signal = () => {
   const tmpChatRoomSeq = useParams().tmpChatRoomSeq
   
-  // 스토어에 저장된 userSeq가져오기
-  // const userSeq = useSelector((state) => state.user.userSeq)
-  const userSeq = 1
+  const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [chatRoom, setChatRoom] = useState([])
-
-  const getChatRoom = () => axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
-    setChatRoom(response.data)
-    console.log(response.data)
-  })
+  // const [chatList, setChatList] = useState([])
 
   useEffect( () => {
-    getChatRoom()
-    // axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
-    //   setChatRoom(response.data)
-    //   console.log(response.data)
-    // })
+    axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
+      setChatRoom(response.data)
+      console.log(response.data)
+    })
   }, [])
+
+  // useEffect( () => {
+  //   axios.get('https://i8a107.p.ssafy.io/api/chat/'+ tmpChatRoomSeq).then((response)=>{
+  //     setChatList(response.data)
+  //     console.log(response.data)
+  //   })
+  // }, [])
 
   const windowStyle = {
     boxSizing: 'border-box',
@@ -62,8 +63,8 @@ const Signal = () => {
 
   return (
     <div style={{
-      display: 'flex',
-      justifyContent: 'center',
+      position: 'relative',
+      left: '140px',
       margin: '20px',
     }}>
       <div className="window" style={windowStyle}>
@@ -76,20 +77,22 @@ const Signal = () => {
               flexDirection: 'column',
               gap: '20px',
               width: '100%',
+              height: '500px',
+              overflowY: 'scroll',
             }}
           >
-            {chatRoom ? 
+            {chatRoom.length ? 
               (chatRoom.map((chat) => (
                 <SignalList userSeq={userSeq} chat={chat} key={chat.seq} />
               ))
              ) : (
-              <h1>주고받은 시그널이 없습니다.</h1>
+              <h2>주고받은 시그널이 없습니다.</h2>
             )}
           </div>
         </div>
         <div style={{ width: '65%', alignSelf: 'center' }}>
           {tmpChatRoomSeq ? (
-            <SignalSelected userSeq={userSeq} roomSeq={tmpChatRoomSeq} />
+            <SignalSelected userSeq={userSeq} chatRoomSeq={tmpChatRoomSeq} />
           ) : (
             <h1>메시지를 선택하세요.</h1>
           )}

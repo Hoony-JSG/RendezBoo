@@ -8,7 +8,6 @@ const Rendezboo = () => {
   const userid = useSelector((state) => state.userInfoReducer.userEmail)
 
   console.log('랑데부 페이지')
-  const id = 'wjdgnsxhsl'
   const navigate = useNavigate()
   const goToPage = (props) => {
     navigate('/' + props)
