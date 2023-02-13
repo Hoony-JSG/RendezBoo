@@ -2,6 +2,7 @@ import { useState } from 'react'
 import ProfileImageUploader from './ProfileImageUploader'
 import RocketBtn from './RocketBtn'
 import MangleGom from '../../Images/MangleGom.png'
+import '../../Styles/Join3RocketItemStyle.css'
 
 const RocketItem = (props) => {
   const Me = props.Me
@@ -21,7 +22,7 @@ const RocketItem = (props) => {
   console.log('Btn :' + ver)
   return (
     <div style={setTempBorder}>
-      <h1> 로켓아이템 </h1>
+      <div className="Join3_profileimage">프로필 이미지 업로드</div>
       <div>
         <img src={profileimage} style={{ width: '200px', height: '200px' }} />
         {props.ver === 'Start' && (
