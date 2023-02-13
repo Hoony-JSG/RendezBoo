@@ -9,7 +9,7 @@ const Navbar = () => {
   const navStyle = {
     position: 'absolute fixed',
     top: 0,
-    width: '100%',
+    width: '1920px',
     height: '90px',
     display: 'flex',
     background: 'rgba(23, 49, 71, 0.5)',

@@ -260,6 +260,7 @@ const Docking1 = (props) => {
       { userSeq: userSeq },
       REQUEST_HEADER
     )
+    console.log("mm"+response.data)
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
     console.log('Get Token!!!' + token)
