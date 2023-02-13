@@ -367,66 +367,43 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
           <div>
             <button onClick={joinSession}>미팅방 입장하기</button>
           </div>
-        ) : null}
-        {session !== undefined ? (
-          <div
-            className="video-container"
-            style={{
-              margin: '20px',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              gap: '30px',
-            }}
-          >
-            <div
-              className="sub-container"
-              style={{
-                width: '60%',
-                height: '840px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderRadius: '40px',
-                border: '2px solid #FFFFFF',
-                background: 'rgba(23, 49, 71, 0.8)',
-                filter:
-                  'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                position: 'relative',
-              }}
-            ></div>
-          </div>
         ) : (
-          <div className="video-container cam-group">
-            <div className="sub-container">
-              {subscribers.map((sub, idx) => (
-                <div key={idx} id="subscriber" className="cam">
-                  <FilteredVideo
-                    streamManager={sub.streamManager}
-                    maskPath={maskPath}
-                    userSeq={2}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ))}
+          <div className="main">
+            <div className="video-container cam-group">
+              <div className="sub-container">
+                {subscribers.map((sub, idx) => (
+                  <div key={idx} id="subscriber" className="cam">
+                    <FilteredVideo
+                      streamManager={sub.streamManager}
+                      maskPath={maskPath}
+                      userSeq={2}
+                      startFaceAPI={() => {}}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="pub-container ">
+                {publisher !== undefined ? (
+                  <div className="cam">
+                    <FilteredVideo
+                      streamManager={publisher}
+                      maskPath={maskPath}
+                      userSeq={userSeq}
+                      startFaceAPI={() => {}}
+                    />
+                  </div>
+                ) : null}
+              </div>
             </div>
-            <div className="pub-container">
-              {publisher !== undefined ? (
-                <div className="cam">
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={maskPath}
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-              <div className="chat"></div>
-              <div className="btn-group"></div>
+            <div className="chat"></div>
+            <div className="side">
+              <div id="game">
+              
+              </div>
+              <div id="btn-group">
+              </div>
             </div>
-          </div>
+          </div> //main
         )}
       </div>
     </div>
