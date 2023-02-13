@@ -15,13 +15,15 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class UserFriend extends BaseEntity{
 
+    //    남자 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_seq")
-    private User user;
+    @JoinColumn(name = "user_male_seq")
+    private User userMale;
 
+    //    여자 유저
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "friend_seq")
-    private User friend;
+    @JoinColumn(name = "user_female_seq")
+    private User userFemale;
 
     @CreatedDate
     @Column(updatable = false)
