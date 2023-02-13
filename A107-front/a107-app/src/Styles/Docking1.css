@@ -89,8 +89,7 @@
 }
 
 .btn-group-btn:hover {
-  background-color: white;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn-group-btn-exit {
@@ -105,8 +104,7 @@
 }
 
 .btn-group-btn-exit:hover {
-  background-color: red;
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 #final-choice-modal {
@@ -163,8 +161,7 @@
 }
 
 .ready-enter-btn:hover {
-  background-color: #ffffff;
-  color: black;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .ready-exit-btn {
@@ -180,6 +177,5 @@
 }
 
 .ready-exit-btn:hover {
-  background-color: red;
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
 }

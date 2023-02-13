@@ -81,10 +81,10 @@ const Rocket = () => {
           alignItems: 'center',
         }}
       >
-        <div style={{ width: '300px' }}>
+        <div style={{ width: '400px' }}>
           <RocketItem {...MeAndYou} />
         </div>
-        <div>
+        <div style={{ width: '800px' }}>
           <div>
             <RocketBadge {...MeAndYou} />
           </div>

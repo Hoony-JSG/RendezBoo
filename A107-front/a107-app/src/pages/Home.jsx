@@ -14,8 +14,8 @@ const Home = (setGetToken) => {
         <NavLink to="/joinsocial">조인</NavLink>
       </div>
       <div style={{ height: '100px' }}></div>
-      {/* <FloatingPlanet /> */}
-      <SpaceShip />
+      <FloatingPlanet />
+      {/* <SpaceShip /> */}
     </div>
   )
 }
