@@ -3,6 +3,7 @@ package com.ssafy.a107.db.repository;
 import com.ssafy.a107.db.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +14,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
     Boolean existsByPhoneNumber(String phoneNumber);
 
-    @Query("select u from UserFriend uf inner join User u on uf.user.seq = u.seq where uf.user.seq = ?1")
-    List<User> findFriendByUserSeq(Long userSeq);
+//    @Query("select u from UserFriend uf inner join User u on uf.user.seq = u.seq where uf.user.seq = ?1")
+//    List<User> findFriendByUserSeq(Long userSeq);
+
+    @Query("SELECT CASE WHEN userMale.seq = :userSeq THEN userFemale ELSE userMale END FROM UserFriend " +
+            "WHERE userMale.seq = :userSeq OR userFemale.seq = :userSeq")
+    List<User> findFriendsByUserSeq(@Param("userSeq") Long userSeq);
+
 
     @Query("select u from UserBlocked ub inner join User u on ub.user.seq = u.seq where ub.user.seq = ?1")
     List<User> findBlockedByUserSeq(Long userSeq);
