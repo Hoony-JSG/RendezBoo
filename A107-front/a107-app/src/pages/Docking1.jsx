@@ -17,7 +17,7 @@ const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const minute = 5000
+  const minute = 30000
   const REQUEST_HEADER = getHeader()
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -123,7 +123,6 @@ const Docking1 = (props) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
       console.log('here', subscriber)
-      console.log(data)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
@@ -225,47 +224,40 @@ const Docking1 = (props) => {
       .detectSingleFace(videoEl)
       .withFaceExpressions()
 
-    // console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
       if (predict.expressions.angry > 0.25) {
         setAngryCnt((prev) => {
-          console.log('angryCnt =' + prev)
           return prev + 1
         })
       }
       setDisgusted(predict.expressions.disgusted)
       if (predict.expressions.disgusted > 0.25) {
         setDisgustedCnt((prev) => {
-          console.log('disgustCnt =' + prev)
           return prev + 1
         })
       }
       setFearful(predict.expressions.fearful)
       if (predict.expressions.fearful > 0.25) {
         setFearfulCnt((prev) => {
-          console.log('fearCnt =' + prev)
           return prev + 1
         })
       }
       setHappy(predict.expressions.happy)
       if (predict.expressions.happy > 0.25) {
         setHappyCnt((prev) => {
-          console.log('happyCnt =' + prev)
           return prev + 1
         })
       }
       setSad(predict.expressions.sad)
       if (predict.expressions.sad > 0.25) {
         setSadCnt((prev) => {
-          console.log('sadCnt =' + prev)
           return prev + 1
         })
       }
       setSurprised(predict.expressions.surprised)
       if (predict.expressions.surprised > 0.25) {
         setSurprisedCnt((prev) => {
-          console.log('surprisedCnt =' + prev)
           return prev + 1
         })
       }
@@ -400,7 +392,6 @@ const Docking1 = (props) => {
       user_seq: userSeq,
     }
 
-    console.log(emotion_body)
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
       emotion_body,
@@ -436,7 +427,6 @@ const Docking1 = (props) => {
       user_seq: userSeq,
     }
 
-    console.log(emotion_body)
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
       emotion_body,
