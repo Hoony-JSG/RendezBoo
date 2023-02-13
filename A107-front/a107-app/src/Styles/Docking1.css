@@ -77,6 +77,38 @@
   border-radius: 30px;
 }
 
+.btn-group-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+  border: #ffffff solid 2px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-group-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.btn-group-btn-exit {
+  width: 100px;
+  height: 40px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0);
+  color: red;
+  border: red solid 2px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-group-btn-exit:hover {
+  background-color: red;
+  color: #ffffff;
+}
+
 #final-choice-modal {
   position: fixed;
   top: 50%;
@@ -116,4 +148,38 @@
   backdrop-filter: blur(2px);
   font-family: 'KIMM_light';
   cursor: pointer;
+}
+
+.ready-enter-btn {
+  width: 400px;
+  height: 300px;
+  font-size: 2.5rem;
+  background-color: rgba(0, 0, 0, 0);
+  color: #ffffff;
+  border-radius: 30px;
+  border: #ffffff solid 2px;
+  margin: 0px 20px;
+  cursor: pointer;
+}
+
+.ready-enter-btn:hover {
+  background-color: #ffffff;
+  color: black;
+}
+
+.ready-exit-btn {
+  width: 400px;
+  height: 300px;
+  font-size: 2.5rem;
+  background-color: rgba(0, 0, 0, 0);
+  color: red;
+  border-radius: 30px;
+  border: red solid 2px;
+  margin: 0px 20px;
+  cursor: pointer;
+}
+
+.ready-exit-btn:hover {
+  background-color: red;
+  color: #ffffff;
 }

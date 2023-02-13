@@ -11,13 +11,20 @@ import '../Styles/Docking1.css'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { getHeader } from '../modules/Auth/Jwt'
+import {
+  BsCameraVideoOff,
+  BsCameraVideo,
+  BsMic,
+  BsMicMute,
+} from 'react-icons/bs'
+import { ImEnter, ImExit } from 'react-icons/im'
 
 const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const minute = 5000
+  const minute = 30000
   const REQUEST_HEADER = getHeader()
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -30,6 +37,8 @@ const Docking1 = (props) => {
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
+  const [audioStatus, setAudioStatus] = useState(true)
+  const [videoStatus, setVideoStatus] = useState(true)
 
   const [phase, setPhase] = useState(-1)
 
@@ -123,7 +132,6 @@ const Docking1 = (props) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
       console.log('here', subscriber)
-      console.log(data)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
@@ -191,20 +199,16 @@ const Docking1 = (props) => {
   }
 
   // 카메라 상태
-  const onChangeCameraStatus = useCallback(
-    (status) => {
-      publisher?.publishVideo(status)
-    },
-    [publisher]
-  )
+  const onChangeCameraStatus = useCallback(() => {
+    publisher.publishVideo(!videoStatus)
+    setVideoStatus((prev) => !prev)
+  }, [publisher, videoStatus])
 
   // 마이크 상태
-  const onChangeMicStatus = useCallback(
-    (status) => {
-      publisher?.publishAudio(status)
-    },
-    [publisher]
-  )
+  const onChangeMicStatus = useCallback(() => {
+    publisher.publishAudio(!audioStatus)
+    setAudioStatus((prev) => !prev)
+  }, [publisher, audioStatus])
 
   // 감정 분석 시작
   async function startFaceAPI(videoEl) {
@@ -225,47 +229,40 @@ const Docking1 = (props) => {
       .detectSingleFace(videoEl)
       .withFaceExpressions()
 
-    // console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
       if (predict.expressions.angry > 0.25) {
         setAngryCnt((prev) => {
-          console.log('angryCnt =' + prev)
           return prev + 1
         })
       }
       setDisgusted(predict.expressions.disgusted)
       if (predict.expressions.disgusted > 0.25) {
         setDisgustedCnt((prev) => {
-          console.log('disgustCnt =' + prev)
           return prev + 1
         })
       }
       setFearful(predict.expressions.fearful)
       if (predict.expressions.fearful > 0.25) {
         setFearfulCnt((prev) => {
-          console.log('fearCnt =' + prev)
           return prev + 1
         })
       }
       setHappy(predict.expressions.happy)
       if (predict.expressions.happy > 0.25) {
         setHappyCnt((prev) => {
-          console.log('happyCnt =' + prev)
           return prev + 1
         })
       }
       setSad(predict.expressions.sad)
       if (predict.expressions.sad > 0.25) {
         setSadCnt((prev) => {
-          console.log('sadCnt =' + prev)
           return prev + 1
         })
       }
       setSurprised(predict.expressions.surprised)
       if (predict.expressions.surprised > 0.25) {
         setSurprisedCnt((prev) => {
-          console.log('surprisedCnt =' + prev)
           return prev + 1
         })
       }
@@ -400,7 +397,6 @@ const Docking1 = (props) => {
       user_seq: userSeq,
     }
 
-    console.log(emotion_body)
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
       emotion_body,
@@ -436,7 +432,6 @@ const Docking1 = (props) => {
       user_seq: userSeq,
     }
 
-    console.log(emotion_body)
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
       emotion_body,
@@ -479,22 +474,20 @@ const Docking1 = (props) => {
       {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div>
-          <div style={{ height: '400px' }}></div>
-          <button
-            style={{
-              height: '200px',
-              width: '400px',
-            }}
-            onClick={joinSession}
-          >
-            준비 완료
+          <div style={{ height: '300px' }}></div>
+          <h1>일대일 미팅</h1>
+          <button className="ready-enter-btn" onClick={joinSession}>
+            <ImEnter />
+            &nbsp;준비 완료
           </button>
           <button
+            className="ready-exit-btn"
             onClick={() => {
               navigate('/')
             }}
           >
-            돌아가기
+            <ImExit />
+            &nbsp;돌아가기
           </button>
         </div>
       ) : null}
@@ -561,10 +554,23 @@ const Docking1 = (props) => {
                   startFaceAPI={() => {}}
                 />
                 <div className="btn-group">
-                  <p>
-                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
-                  </p>
-                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                  <button
+                    className="btn-group-btn"
+                    onClick={onChangeCameraStatus}
+                  >
+                    {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
+                    &nbsp;영상
+                  </button>
+                  <button className="btn-group-btn" onClick={onChangeMicStatus}>
+                    {audioStatus ? <BsMic /> : <BsMicMute />}
+                    &nbsp;마이크
+                  </button>
+                  <button
+                    className="btn-group-btn-exit"
+                    onClick={leaveSessionWithAlert}
+                  >
+                    <ImExit /> &nbsp;나가기
+                  </button>
                 </div>
               </div>
             ) : (
