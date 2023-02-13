@@ -39,20 +39,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
     )
 
     useEffect(()=>{
-<<<<<<< Updated upstream
-        connect()
-        console.log(typeof(userSeq))
-        console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
-        axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq)
-        .then((response)=>{
-          console.log(response.data)
-        })
-        .catch((e)=>{
-            console.log(e.message)
-            navigate('/error')
-        })
-        return() => disconnect()
-=======
       connect()
       console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
       axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq)
@@ -136,7 +122,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
       })
       
       return() => disconnect()
->>>>>>> Stashed changes
     },[])
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -414,7 +399,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
         ) : (
           <div className="video-container cam-group">
             <div className="sub-container">
->>>>>>> Stashed changes
               {subscribers.map((sub, idx) => (
                 <div key={idx} id="subscriber" className="cam">
                   <FilteredVideo
