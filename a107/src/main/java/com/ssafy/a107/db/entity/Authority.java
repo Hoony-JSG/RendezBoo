@@ -1,5 +1,6 @@
 package com.ssafy.a107.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -17,6 +18,7 @@ public class Authority extends BaseEntity implements GrantedAuthority {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_seq")
+    @JsonIgnore
     private User user;
 
     private String role;
