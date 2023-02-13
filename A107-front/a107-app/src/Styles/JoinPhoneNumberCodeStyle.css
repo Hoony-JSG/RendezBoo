@@ -156,7 +156,15 @@
   cursor: default;
   color: gray;
 }
-
+.Code_filling-background {
+  height: 50px;
+  width: 100%;
+  border: 1px solid blue;
+}
+.Code_bottom-items {
+  position: relative;
+  border: 1px solid white;
+}
 .Code_resend-btn {
   height: 50px;
   width: 100%;
