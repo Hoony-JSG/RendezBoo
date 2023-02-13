@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class JoinRes {
 
     private String email;
+    private Integer type; // 0 - 네이버, 1 - 카카오
 }
