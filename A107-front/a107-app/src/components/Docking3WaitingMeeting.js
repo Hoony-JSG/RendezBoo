@@ -9,7 +9,7 @@ import * as tf from '@tensorflow/tfjs'
 import '../Styles/Docking3ing.css'
 import { getHeader } from '../modules/Auth/Jwt'
 
-const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
+const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production'
       ? 'https://i8a107.p.ssafy.io/'
@@ -21,7 +21,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
   const REQUEST_HEADER = getHeader()
   const navigate = useNavigate()
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
-  
+
   const client = useRef({})
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
@@ -351,61 +351,54 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
   }
 
   return completeFlag ? (
-    <div
-      className="container"
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        overflowX: 'scroll',
-        padding: '20px',
-      }}
-    >
-      <div className="main">
-        {session === undefined ? (
-          <div>
-            <button onClick={joinSession}>미팅방 입장하기</button>
-          </div>
-        ) : (
+    <div>
+      {session === undefined ? (
+        <div>
+          <button onClick={joinSession}>미팅방 입장하기</button>
+        </div>
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            overflowX: 'scroll',
+            padding: '20px',
+          }}
+        >
           <div className="main">
-            <div className="video-container cam-group">
-              <div className="sub-container">
-                {subscribers.map((sub, idx) => (
-                  <div key={idx} id="subscriber" className="cam">
-                    <FilteredVideo
-                      streamManager={sub.streamManager}
-                      maskPath={maskPath}
-                      userSeq={2}
-                      startFaceAPI={() => {}}
-                    />
-                  </div>
-                ))}
-              </div>
-              <div className="pub-container ">
-                {publisher !== undefined ? (
-                  <div className="cam">
-                    <FilteredVideo
-                      streamManager={publisher}
-                      maskPath={maskPath}
-                      userSeq={userSeq}
-                      startFaceAPI={() => {}}
-                    />
-                  </div>
-                ) : null}
-              </div>
+            MAIN
+            <div className="cam-group">
+              {subscribers.map((sub, idx) => (
+                <div key={idx} className="cam">
+                  <FilteredVideo
+                    streamManager={sub.streamManager}
+                    maskPath={maskPath}
+                    userSeq={2}
+                    startFaceAPI={() => {}}
+                  />
+                </div>
+              ))}
+              {publisher !== undefined ? (
+                <div className="cam">
+                  <FilteredVideo
+                    streamManager={publisher}
+                    maskPath={maskPath}
+                    userSeq={userSeq}
+                    startFaceAPI={() => {}}
+                  />
+                </div>
+              ) : null}
             </div>
-            <div className="chat"></div>
-            <div className="side">
-              <div id="game">
-              
-              </div>
-              <div id="btn-group">
-              </div>
-            </div>
-          </div> //main
-        )}
-      </div>
+            <div className="chat">CHAT</div>
+          </div>
+          <div id="side">
+            <div id="game">GAME</div>
+            <div id="btn-group">BUTTON-GROUP</div>
+          </div>
+        </div>
+      )}
     </div>
   ) : (
     <div>
