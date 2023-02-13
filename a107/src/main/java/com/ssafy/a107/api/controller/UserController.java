@@ -34,7 +34,7 @@ public class UserController {
     // 유저 정보 조회
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "유저 정보 조회", notes = "Seq로 유저 정보 제공")
-    public ResponseEntity<UserRes> getUserInfo(@PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity<UserRes> getUserInfo(@PathVariable Long userSeq) throws NotFoundException {
         UserRes user = userService.getUserBySeq(userSeq);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
@@ -97,14 +97,14 @@ public class UserController {
     }
 
     @GetMapping("/{userSeq}/friends")
-    @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
-    public ResponseEntity<List<UserRes>> getFriends(@PathVariable Long userSeq) throws NotFoundException{
+    @ApiOperation(value = "유저의 친구 목록", notes = "유저의 친구 목록")
+    public ResponseEntity<List<UserRes>> getFriends(@PathVariable Long userSeq) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getFriends(userSeq));
     }
 
     @GetMapping("/{userSeq}/blockeds")
-    @ApiOperation(value="유저의 친구 목록", notes = "유저의 친구 목록")
-    public ResponseEntity<List<UserRes>> getBlockeds(@PathVariable Long userSeq) throws NotFoundException{
+    @ApiOperation(value = "유저의 차단 목록", notes = "유저의 차단 목록")
+    public ResponseEntity<List<UserRes>> getBlockeds(@PathVariable Long userSeq) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getBlockeds(userSeq));
     }
 
