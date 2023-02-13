@@ -1,10 +1,10 @@
+import { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
-import DockingChat from '../components/DockingComponents/DockingChat'
 import * as tf from '@tensorflow/tfjs'
 import '../Styles/Docking3ing.css'
 import { getHeader } from '../modules/Auth/Jwt'
@@ -351,16 +351,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     return response.data
   }
 
-  // faceapi 모델 불러오기
-  async function loadModels() {
-    const MODEL_URL = 'https://d156wamfkmlo3m.cloudfront.net/models'
-    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
-    console.log('tinyFaceDetector loaded')
-    await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL)
-    console.log('faceEx loaded')
-  }
-
   return completeFlag ? (
     <div
       className="container"
@@ -445,7 +435,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     <div>
       <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
       <p>내 유저 시퀀스는 {userSeq}입니다.</p>
-      <p>내 토큰은 {usertoken}입니다.</p>
       <p>내 화면</p>
       <div className={'chat-list'}>
         {chatList.map((item, index) => {
