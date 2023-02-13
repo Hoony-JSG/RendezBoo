@@ -159,6 +159,8 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
         Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
         if(maleNum==0 && femaleNum==0){
             multiMeetingRoomRepository.deleteById(multiMeetingRoomSeq);
+        }else{
+            sendToWebSocketAtExit(multiMeetingRoomSeq, userSeq);
         }
     }
 

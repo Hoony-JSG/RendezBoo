@@ -83,7 +83,6 @@ public class MultiMeetingRoomController {
     @DeleteMapping("/{multiMeetingRoomSeq}/{userSeq}")
     public ResponseEntity removeUserFromMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException{
         multiMeetingRoomService.deleteUserFromMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
-        multiMeetingRoomService.sendToWebSocketAtExit(multiMeetingRoomSeq, userSeq);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
