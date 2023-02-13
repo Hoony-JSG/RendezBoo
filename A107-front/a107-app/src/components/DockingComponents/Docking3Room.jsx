@@ -24,10 +24,8 @@ const Docking3Room = () => {
                 userSeq: userSeq,
                 title: title,
             }).then((response) => {
-              const multiMeetingRoomSeq = response.data
-              axios.post(`${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`, {}).then(()=>{
+                const multiMeetingRoomSeq = response.data
                 navigate(`/docking3/${multiMeetingRoomSeq}`)
-              })
             })
           }
         setTitle('')
