@@ -85,18 +85,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public TokenRes login(LoginReq loginReq) throws NotFoundException, ConflictException {
-        User user = userRepository.findByEmail(loginReq.getEmail())
-                .orElseThrow(() -> new NotFoundException("Wrong email!"));
+    public TokenRes login(String userEmail) throws NotFoundException, ConflictException {
+        User user = userRepository.findByEmail(userEmail)
+                        .orElseThrow(() -> new NotFoundException("Wrong user email!"));
 
-        userService.checkLeavedUser(user.getEmail());
-
-        checkPassword(loginReq.getPassword(), user.getPassword());
+        userService.checkLeavedUser(userEmail);
 
         String accessToken = jwtTokenProvider.generateAccessToken(user);
         RefreshToken refreshToken = saveRefreshToken(user);
 
-        log.debug("로그인 이메일: {}", user.getEmail());
+        log.debug("로그인 이메일: {}", userEmail);
         log.debug("발급된 AccessToken: {}", accessToken);
         log.debug("발급된 RefreshToken: {}", refreshToken.getRefreshToken());
 

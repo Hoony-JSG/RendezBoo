@@ -57,7 +57,8 @@ public class UserController {
     @PostMapping(value = "/login")
     @ApiOperation(value = "유저 로그인", notes = "유저 로그인")
     public ResponseEntity<TokenRes> login(@RequestBody LoginReq loginReq) throws NotFoundException, ConflictException {
-        TokenRes res = authService.login(loginReq);
+        // 간편 로그인으로 변경하여 현재는 이메일만 체크
+        TokenRes res = authService.login(loginReq.getEmail());
 
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
