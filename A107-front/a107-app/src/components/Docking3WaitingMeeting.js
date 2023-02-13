@@ -7,8 +7,9 @@ import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import DockingChat from '../components/DockingComponents/DockingChat'
 import * as tf from '@tensorflow/tfjs'
+import '../Styles/Docking3ing.css'
 
-const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) => {
+const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
 
     const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/' 
@@ -16,7 +17,8 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
     'wss://i8a107.p.ssafy.io/' : 'ws://localhost:8080/' 
     const navigate = useNavigate()
     const usertoken = "$$$mytoken$$$"
-
+    const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
+    
     // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
     const client = useRef({});
     const [chatList, setChatList] = useState([])
@@ -32,7 +34,12 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
     const [session, setSession] = useState()
     const [token, setToken] = useState('')
     
+    const [maskPath, setMaskPath] = useState(
+      CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
+    )
+
     useEffect(()=>{
+<<<<<<< Updated upstream
         connect()
         console.log(typeof(userSeq))
         console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
@@ -45,6 +52,91 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
             navigate('/error')
         })
         return() => disconnect()
+=======
+      connect()
+      console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
+      axios.post(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq)
+      .then((response)=>{
+        console.log(response.data)
+        const openVidu = new OpenVidu()
+        let session = openVidu.initSession()
+
+        // On every new Stream received...
+        session.on('streamCreated', (event) => {
+          const subscriber = session.subscribe(event.stream, '')
+          const data = JSON.parse(event.stream.connection.data)
+          setSubscribers((prev) => {
+            return [
+              ...prev.filter((it) => it.userSeq !== +data.userSeq),
+              {
+                streamManager: subscriber,
+                userSeq: +data.userSeq,
+                gender: data.gender,
+              },
+            ]
+          })
+        })
+
+        // On every Stream destroyed...
+        session.on('streamDestroyed', (event) => {
+          event.preventDefault()
+
+          const data = JSON.parse(event.stream.connection.data)
+          setSubscribers((prev) =>
+            prev.filter((it) => it.userSeq !== +data.userSeq)
+          )
+        })
+
+        // On every asynchronous exception...
+        session.on('exception', (exception) => {
+          console.warn(exception)
+        })
+
+        // 위에서 주입받은 토큰 사용 하여 세션에 연결
+        getDocking3Token(userSeq).then((data) => {
+          session
+            .connect(data.token, JSON.stringify({ clientData: userSeq }))
+            .then(async () => {
+              await navigator.mediaDevices.getUserMedia({
+                audio: true,
+                video: true,
+              })
+              const devices = await openVidu.getDevices()
+              const videoDevices = devices.filter(
+                (device) => device.kind === 'videoinput'
+              )
+
+              const publisher = openVidu.initPublisher('', {
+                audioSource: undefined,
+                videoSource: videoDevices[0].deviceId,
+                publishAudio: true,
+                publishVideo: true,
+                resolution: '640x480',
+                frameRate: 30,
+                insertMode: 'APPEND',
+                mirror: false,
+              })
+
+              setPublisher(publisher)
+              session.publish(publisher)
+            })
+            .catch((error) => {
+              console.log(
+                'There was an error connecting to the session:',
+                error.code,
+                error.message
+              )
+            })
+        })
+        setSession(session)
+      })
+      .catch((e)=>{
+          console.log(e.message)
+          navigate('/error')
+      })
+      
+      return() => disconnect()
+>>>>>>> Stashed changes
     },[])
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -110,7 +202,7 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
         var femaleNum = json_body.femaleNum
         console.log('malenum: '+maleNum)
         console.log('femalenum: '+femaleNum)
-        if(maleNum+femaleNum==6){
+        if(maleNum==1 && femaleNum==1){
           setCompleteFlag(true)
         }
       }
@@ -159,7 +251,6 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
     axios.delete(APPLICATION_SERVER_URL + "api/multi-meetings/"+multiMeetingRoomSeq+'/'+userSeq).then((response)=>{
         console.log(response.status)
     })
-    setMultiMeetingRoomSeq(null)
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
@@ -274,12 +365,22 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
 
   return(
     completeFlag?(
-      <div className="container">
+      <div className="container" style={{ 
+        display:'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        overflowX: 'scroll',
+        padding: '20px',
+        }}
+      >
+        <div className="main">
         {/* <h1>일대일 매칭 테스트 중</h1> */}
         {session === undefined ? (
           <div>
             <button onClick={joinSession}>미팅방 입장하기</button>
           </div>
+<<<<<<< Updated upstream
         ) : null}
         {session !== undefined ? (
           <div
@@ -309,68 +410,39 @@ const Docking3WaitingMeeting = ({multiMeetingRoomSeq, setMultiMeetingRoomSeq}) =
                 position: 'relative',
               }}
             >
+=======
+        ) : (
+          <div className="video-container cam-group">
+            <div className="sub-container">
+>>>>>>> Stashed changes
               {subscribers.map((sub, idx) => (
-                <div 
-                key={idx}
-                id="subscriber"
-                style={{
-                  width: '100%',
-                  height: '840px',
-                  overflow: 'hidden',
-                  borderRadius: '40px',
-                  border: '2px solid #FFFFFF',
-                  background: 'rgba(23, 49, 71, 0.8)',
-                  filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                }}
-                >
+                <div key={idx} id="subscriber" className="cam">
                   <FilteredVideo
                     streamManager={sub.streamManager}
-                    maskPath={
-                      'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                    }
+                    maskPath={maskPath}
                     userSeq={2}
-                    startFaceAPI={()=>{}}
+                    startFaceAPI={() => {}}
                   />
                 </div>
               ))}
             </div>
-            <div
-              className="pub-container"
-              style={{
-                width: '30%',
-                height: '840px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-              >
-              {publisher !== undefined ? (
-                <div
-                style={{
-                  width: '100%',
-                  height: '360px',
-                  overflow: 'hidden',
-                  borderRadius: '40px',
-                  border: '2px solid #FFFFFF',
-                  background: 'rgba(23, 49, 71, 0.8)',
-                  filter: 'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                }}
-                >
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={
-                      'https://d156wamfkmlo3m.cloudfront.net/images/1675671334613cherial-mask.jpg'
-                    }
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-              <DockingChat />
-            </div>
+            <div className="pub-container">
+            {publisher !== undefined ? (
+              <div className="cam">
+                <FilteredVideo
+                  streamManager={publisher}
+                  maskPath={maskPath}
+                  userSeq={userSeq}
+                  startFaceAPI={() => {}}
+                />
+              </div>
+            ) : null}
+            <div className="chat"></div>
+            <div className="btn-group"></div>
           </div>
-        ) : null}
+        </div>
+        )}
+        </div>
       </div>
     ):(
         <div>
