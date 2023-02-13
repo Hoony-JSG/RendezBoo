@@ -19,6 +19,6 @@ public class EmotionDataReq {
     private Double sadness;
     private Double surprise;
 
-    private Long meeting_room_seq;
-    private Long user_seq;
+    private Long meetingRoomSeq;
+    private Long userSeq;
 }
