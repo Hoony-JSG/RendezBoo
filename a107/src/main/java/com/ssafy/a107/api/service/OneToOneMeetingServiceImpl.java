@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.FriendReq;
 import com.ssafy.a107.api.request.OneToOneChatReq;
 import com.ssafy.a107.api.request.OneToOneFinalChoiceReq;
 import com.ssafy.a107.api.request.OneToOneMeetingJoinReq;
@@ -217,7 +218,8 @@ public class OneToOneMeetingServiceImpl implements OneToOneMeetingService {
             return oneToOneMeetingChatRes;
         } else if (room.getStatus().intValue() == 6 && choiceReq.getWantDocking()) {
             // 첫번쨰 O 두번째 O일시 매칭성사
-            userFriendService.addFriend(room.getManSeq(), room.getWomanSeq());
+//            userFriendService.addFriend(room.getManSeq(), room.getWomanSeq());
+            userFriendService.addFriend(new FriendReq(room.getManSeq(), room.getWomanSeq()));
             OneToOneMeetingChatRes oneToOneMeetingChatRes = OneToOneMeetingChatRes.builder()
                     .flag(OneToOneMeetingChatRes.OneToOneChatFlag.EXIT)
                     .oneToOneMeetingRoomSeq(choiceReq.getMeetingRoomSeq())
