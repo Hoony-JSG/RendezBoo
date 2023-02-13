@@ -39,7 +39,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
   )
 
-  useEffect(() => {
+  useEffect(() => { 
     connect()
     console.log('나를 이 미팅방-유저 테이블에 추가합니다.')
     axios
@@ -130,6 +130,19 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       })
 
     return () => disconnect()
+  }, [])
+
+  //뒤로가기 버튼 처리
+  const onBackButtonEvent = (e) => {
+      e.preventDefault();
+      navigate('/docking3')
+  }
+  useEffect(()=>{
+    window.history.pushState(null, null, window.location.pathname)
+    window.addEventListener('popstate', onBackButtonEvent)
+    return()=>{
+      window.removeEventListener('popstate', onBackButtonEvent)
+    }
   }, [])
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -229,11 +242,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     setMessage('')
   }
 
-  const disconnect = () => {
+  const disconnect = async () => {
     console.log('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios
+    await axios
       .delete(
         APPLICATION_SERVER_URL +
           'api/multi-meetings/' +
@@ -241,9 +254,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           '/' +
           userSeq
       )
-      .then((response) => {
-        console.log(response.status)
-      })
+    navigate('/docking3')
+
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정

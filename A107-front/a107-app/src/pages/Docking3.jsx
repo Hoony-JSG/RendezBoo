@@ -9,17 +9,15 @@ import Docking3Room from '../components/DockingComponents/Docking3Room'
 const Docking3 = ()=>{
 
     const APPLICATION_SERVER_URL =
-    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'  
+    process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io' : 'http://localhost:8080'  
     const multiMeetingRoomSeq = useParams().roomid
     const [docking3List, setDocking3List] = useState([])
     useEffect(()=>{
-        axios.get(APPLICATION_SERVER_URL + 'api/multi-meetings/').then((response)=>{
+        axios.get(`${APPLICATION_SERVER_URL}/api/multi-meetings/`).then((response)=>{
             setDocking3List(response.data)
             console.log(response.data)
         })
     }, [])
-    //DockingRoomList를 onclick -> docking3 미팅룸 시퀀스가 셋팅됨
-    //셋팅 하기 전엔 null
 
     return(
         <div className='content'>
