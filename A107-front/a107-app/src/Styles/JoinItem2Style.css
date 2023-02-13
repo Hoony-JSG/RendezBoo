@@ -44,12 +44,18 @@
   flex-direction: column;
   /* border: 1px solid red; */
 }
-
-.name-item {
+.email-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 40%;
+  height: 20%;
+  margin-bottom: 20px;
+}
+.phonenumber-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
   margin-bottom: 20px;
 }
 .pw-item {
@@ -66,18 +72,19 @@
   /* border: 1px solid red; */
 }
 
-.phonenumber-item {
+.name-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70%;
+  height: 45%;
   margin-bottom: 20px;
 }
+
 .gender-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 30%;
+  height: 45%;
 }
 .each-items {
   background: linear-gradient(
@@ -111,5 +118,37 @@
   }
   100% {
     box-shadow: 0 0 5px white;
+  }
+}
+
+.border-glow-naver {
+  box-shadow: 0 0 10px rgb(47, 172, 6);
+  animation: glow-naver 1s ease-in-out infinite;
+}
+.border-glow-kakao {
+  box-shadow: 0 0 10px rgb(231, 235, 7);
+  animation: glow-kakao 1s ease-in-out infinite;
+}
+
+@keyframes glow-naver {
+  0% {
+    box-shadow: 0 0 5px rgb(47, 172, 6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgb(120, 184, 99);
+  }
+  100% {
+    box-shadow: 0 0 5px rgb(47, 172, 6);
+  }
+}
+@keyframes glow-kakao {
+  0% {
+    box-shadow: 0 0 5px rgb(231, 235, 7);
+  }
+  50% {
+    box-shadow: 0 0 20px rgb(233, 235, 113);
+  }
+  100% {
+    box-shadow: 0 0 5px rgb(231, 235, 7);
   }
 }

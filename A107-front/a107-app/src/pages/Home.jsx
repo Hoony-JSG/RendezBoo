@@ -22,7 +22,10 @@ const Home = (setGetToken) => {
       </div>
       <div style={{ height: '100px' }}></div>
       <FloatingPlanet />
+<<<<<<< Updated upstream
       <SpaceShip /> */}
+=======
+>>>>>>> Stashed changes
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ProfileImageUploader from './ProfileImageUploader'
 import RocketBtn from './RocketBtn'
-import MangleGom from '../../Images/MangleGom.png'
+import userprofile from '../../Images/user-profile.png'
 import '../../Styles/Join3RocketItemStyle.css'
 
 const RocketItem = (props) => {
@@ -20,7 +20,7 @@ const RocketItem = (props) => {
     border: '1px solid black',
   }
 
-  const [profileimage, setprofileimage] = useState(MangleGom)
+  const [profileimage, setprofileimage] = useState(userprofile)
   const changeImage = (image) => {
     if (image !== null) {
       console.log('새 이미지를 가져와서 setProfileImage : ' + image)
@@ -32,10 +32,15 @@ const RocketItem = (props) => {
   return (
     <div style={setTempBorder}>
       <div className="Join3_profileimage">프로필 이미지 업로드</div>
-      <div>
-        <img src={profileimage} style={{ width: '200px', height: '200px' }} />
+      <div className="Join3_uploader">
+        <div className="Join3_uiverse">
+          <div class="Join3_uiverse-image-card"></div>
+          <div class="Join3_default-image-frame">
+            <img className="Join3_default-image" src={profileimage} />
+          </div>
+        </div>
         {props.ver === 'Start' && (
-          <div>
+          <div className="Join3_uploader-button">
             <ProfileImageUploader profileimage={changeImage} />
           </div>
         )}

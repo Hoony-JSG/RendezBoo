@@ -6,6 +6,7 @@ const NaverLogin = (props) => {
   const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/join'
 
   const initializeNaverLogin = () => {
+    console.log('여기로 안오나')
     // props.cameback = true
     const naverLogin = new naver.LoginWithNaverId({
       clientId: NAVER_CLIENT_ID,
