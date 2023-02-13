@@ -14,12 +14,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
     Boolean existsByPhoneNumber(String phoneNumber);
 
-//    @Query("select u from UserFriend uf inner join User u on uf.user.seq = u.seq where uf.user.seq = ?1")
-//    List<User> findFriendByUserSeq(Long userSeq);
-
-    @Query("SELECT CASE WHEN userMale.seq = :userSeq THEN userFemale ELSE userMale END FROM UserFriend " +
-            "WHERE userMale.seq = :userSeq OR userFemale.seq = :userSeq")
-    List<User> findFriendsByUserSeq(@Param("userSeq") Long userSeq);
+    @Query(value = "SELECT CASE WHEN uf.user_male_seq = :userSeq THEN uf.user_female_seq ELSE uf.user_male_seq END as friend_seq " +
+            "FROM user_friend uf " +
+            "WHERE (uf.user_male_seq = :userSeq OR uf.user_female_seq = :userSeq)",
+            nativeQuery = true)
+    List<Long> findFriendsByUserSeq(@Param("userSeq") Long userSeq);
 
 
     @Query("select u from UserBlocked ub inner join User u on ub.user.seq = u.seq where ub.user.seq = ?1")
