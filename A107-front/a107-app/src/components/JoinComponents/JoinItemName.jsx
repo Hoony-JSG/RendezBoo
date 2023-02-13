@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import '../../Styles/JoinNameInputStyle.css'
 
 const JoinItemName = (props) => {
   const [name, setName] = useState('')
@@ -13,17 +14,19 @@ const JoinItemName = (props) => {
   }
 
   return (
-    <div>
-      이름 [2~5자]
-      <br />
-      <input
-        type="text"
-        placeholder="Enter your name"
-        value={name}
-        onChange={(e) => {
-          setChange(e.target.value)
-        }}
-      />
+    <div className="JoinName_container">
+      <div className="JoinName_box-discribe">이름을 입력하세요.</div>
+      <div className="JoinName_box-input">
+        <input
+          className="JoinName_name-input"
+          type="text"
+          placeholder="한글 [2~5자]"
+          value={name}
+          onChange={(e) => {
+            setChange(e.target.value)
+          }}
+        />
+      </div>
     </div>
   )
 }

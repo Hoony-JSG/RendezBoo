@@ -1,53 +1,86 @@
-import '../../Styles/temp_border_style.css'
-import JoinItemBirth from './JoinItemBirth'
+import '../../Styles/JoinItem2Style.css'
+
 import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'
 import JoinItemGender from './JoinItemGender'
 import { useState } from 'react'
 import NextPageButton from './NextPageButton'
+import JoinItemSocialEmail from './JoinItemSocialEmail'
+import JoinPassword from './JoinPassword'
 
 const JoinItem2nd = (props) => {
-  const [hasName, setHasName] = useState(true)
+  const [hasName, setHasName] = useState(false)
   const [hasGender, setHasGender] = useState(false)
-  const [hasBirth, setHasBirth] = useState(true)
-  const [hasPhoneNumber, setHasPhoneNumber] = useState(true)
+  const [hasPhoneNumber, setHasPhoneNumber] = useState(false)
+  const [hasPW, setHasPW] = useState(true)
   const wholeHas = [
     [hasName, setHasName],
     [hasGender, setHasGender],
-    [hasBirth, setHasBirth],
     [hasPhoneNumber, setHasPhoneNumber],
+    [hasPW, setHasPW],
   ]
+
+  const [emailType, setEmailType] = useState()
 
   const setWholeHas = (index, value) => {
     console.log(index, value)
     wholeHas[index][1](value)
   }
   return (
-    <div>
-      J_2_휴대폰 인증 및 정보 가져오기
-      <br />
-      {`hasName : ${hasName} // hasGender : ${hasGender} // hasBirht : ${hasBirth} // hasPhoneNumber : ${hasPhoneNumber}`}
-      <div>
-        <div>
-          <div className="temp_border_style">
-            <JoinItemName setHas={setWholeHas} />
+    <div className="display">
+      <div className="whole-block">
+        <div className="Join2Title">Ready For Rendez-BOO</div>
+        <div className="whole-items">
+          <div className="left-items">
+            {/* <div
+              className={'each-items pw-item ' + (hasPW ? 'border-glow' : '')}
+              >
+              <JoinPassword setHas={setWholeHas} />
+            </div> */}
+            <div
+              className={
+                'each-items email-item ' +
+                (emailType === 0
+                  ? 'border-glow-naver'
+                  : emailType === 1
+                  ? 'border-glow-kakao'
+                  : '')
+              }
+            >
+              <JoinItemSocialEmail />
+            </div>
+            <div
+              className={
+                'each-items phonenumber-item ' +
+                (hasPhoneNumber ? 'border-glow' : '')
+              }
+            >
+              <JoinItemPhoneNumber setHas={setWholeHas} />
+            </div>
           </div>
-          <div className="temp_border_style">
-            <JoinItemGender setHas={setWholeHas} />
-          </div>
-          <div className="temp_border_style">
-            <JoinItemBirth setHas={setWholeHas} />
-          </div>
-          <div className="temp_border_style">
-            <JoinItemPhoneNumber setHas={setWholeHas} />
+          <div className="right-items">
+            <div
+              className={
+                'each-items name-item ' + (hasName ? 'border-glow' : '')
+              }
+            >
+              <JoinItemName setHas={setWholeHas} />
+            </div>
+            <div
+              className={
+                'each-items gender-item ' + (hasGender ? 'border-glow' : '')
+              }
+            >
+              <JoinItemGender setHas={setWholeHas} />
+            </div>
           </div>
         </div>
-        <div>
+        <div className="next-button">
           <NextPageButton
             hasName={hasName}
             hasGender={hasGender}
-            hasBirth={hasBirth}
             hasPhoneNumber={hasPhoneNumber}
+            hasPW={hasPW}
             setNext={props.setNext}
           />
         </div>

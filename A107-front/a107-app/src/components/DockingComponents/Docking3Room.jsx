@@ -1,11 +1,17 @@
 import { useState } from "react"
 import axios from "axios"
 import { useSelector } from "react-redux"
+import { useNavigate} from 'react-router-dom'
 
 const Docking3Room = () => {
+    const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://i8a107.p.ssafy.io'
+      : 'http://localhost:8080'
     const userSeq = useSelector(
         (state) => state.userInfoReducer.userSeq
     )
+    const navigate = useNavigate()
     const [title, setTitle] = useState('')
 
     const titleInput = (e) => {
@@ -14,18 +20,15 @@ const Docking3Room = () => {
     const makeRoom = (e) => {
         e.preventDefault()
         if (title.trim()) {
-            axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/', {
+            axios.post(`${APPLICATION_SERVER_URL}/api/multi-meetings/`, {
                 userSeq: userSeq,
                 title: title,
             }).then((response) => {
-              console.log(response.data)
-              axios.post('https://i8a107.p.ssafy.io/api/multi-meetings/'+response.data+'/'+userSeq)
-            }).then(() => {
-                
+                const multiMeetingRoomSeq = response.data
+                navigate(`/docking3/${multiMeetingRoomSeq}`)
             })
           }
-            setTitle('')
-
+        setTitle('')
     }
 
     return (

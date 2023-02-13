@@ -1,0 +1,40 @@
+.JoinName_container {
+  padding: 20px 0px 20px 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 90%;
+  justify-content: center;
+}
+.JoinName_box-input {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: center;
+}
+.JoinName_box-discribe {
+  box-sizing: border-box;
+  padding: 30px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  text-align: center;
+  /* padding-inline: 10px; */
+}
+.JoinName_name-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  width: 400px;
+  height: 50px;
+  font-size: 30px;
+  text-align: center;
+}

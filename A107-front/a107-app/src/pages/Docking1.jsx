@@ -11,13 +11,20 @@ import '../Styles/Docking1.css'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { getHeader } from '../modules/Auth/Jwt'
+import {
+  BsCameraVideoOff,
+  BsCameraVideo,
+  BsMic,
+  BsMicMute,
+} from 'react-icons/bs'
+import { ImEnter, ImExit } from 'react-icons/im'
 
 const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
 const Docking1 = (props) => {
-  const minute = 5000
+  const minute = 30000
   const REQUEST_HEADER = getHeader()
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -30,6 +37,8 @@ const Docking1 = (props) => {
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
+  const [audioStatus, setAudioStatus] = useState(true)
+  const [videoStatus, setVideoStatus] = useState(true)
 
   const [phase, setPhase] = useState(-1)
 
@@ -100,6 +109,9 @@ const Docking1 = (props) => {
         .then(() => {
           window.location.href = '/'
         })
+        .catch(() => {
+          window.location.href = '/'
+        })
     }
   }
   // 마운트 시 창 종료하면 세션 나가게 훅 걸기
@@ -120,7 +132,6 @@ const Docking1 = (props) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
       console.log('here', subscriber)
-      console.log(data)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
@@ -188,20 +199,16 @@ const Docking1 = (props) => {
   }
 
   // 카메라 상태
-  const onChangeCameraStatus = useCallback(
-    (status) => {
-      publisher?.publishVideo(status)
-    },
-    [publisher]
-  )
+  const onChangeCameraStatus = useCallback(() => {
+    publisher.publishVideo(!videoStatus)
+    setVideoStatus((prev) => !prev)
+  }, [publisher, videoStatus])
 
   // 마이크 상태
-  const onChangeMicStatus = useCallback(
-    (status) => {
-      publisher?.publishAudio(status)
-    },
-    [publisher]
-  )
+  const onChangeMicStatus = useCallback(() => {
+    publisher.publishAudio(!audioStatus)
+    setAudioStatus((prev) => !prev)
+  }, [publisher, audioStatus])
 
   // 감정 분석 시작
   async function startFaceAPI(videoEl) {
@@ -222,31 +229,42 @@ const Docking1 = (props) => {
       .detectSingleFace(videoEl)
       .withFaceExpressions()
 
-    // console.log(predict)
     if (predict) {
       setAngry(predict.expressions.angry)
-      if (angry > 0.25) {
-        setAngryCnt(angryCnt + 1)
+      if (predict.expressions.angry > 0.25) {
+        setAngryCnt((prev) => {
+          return prev + 1
+        })
       }
       setDisgusted(predict.expressions.disgusted)
-      if (disgusted > 0.25) {
-        setDisgustedCnt(disgustedCnt + 1)
+      if (predict.expressions.disgusted > 0.25) {
+        setDisgustedCnt((prev) => {
+          return prev + 1
+        })
       }
       setFearful(predict.expressions.fearful)
-      if (fearful > 0.25) {
-        setFearfulCnt(fearfulCnt + 1)
+      if (predict.expressions.fearful > 0.25) {
+        setFearfulCnt((prev) => {
+          return prev + 1
+        })
       }
       setHappy(predict.expressions.happy)
-      if (happy > 0.25) {
-        setHappyCnt(happyCnt + 1)
+      if (predict.expressions.happy > 0.25) {
+        setHappyCnt((prev) => {
+          return prev + 1
+        })
       }
       setSad(predict.expressions.sad)
-      if (sad > 0.25) {
-        setSadCnt(sadCnt + 1)
+      if (predict.expressions.sad > 0.25) {
+        setSadCnt((prev) => {
+          return prev + 1
+        })
       }
       setSurprised(predict.expressions.surprised)
-      if (surprised > 0.25) {
-        setSurprisedCnt(surprisedCnt + 1)
+      if (predict.expressions.surprised > 0.25) {
+        setSurprisedCnt((prev) => {
+          return prev + 1
+        })
       }
     }
 
@@ -297,14 +315,14 @@ const Docking1 = (props) => {
     }
   }
   async function handlePhase1(json_body) {
-    setAngryCnt(0)
-    setDisgustedCnt(0)
-    setHappyCnt(0)
-    setFearfulCnt(0)
-    setSadCnt(0)
-    setSurprisedCnt(0)
     // 미팅 시작 - 타이머 돌릴것
     if (phase < 1) {
+      setAngryCnt(0)
+      setDisgustedCnt(0)
+      setHappyCnt(0)
+      setFearfulCnt(0)
+      setSadCnt(0)
+      setSurprisedCnt(0)
       setPhase(1)
       if (userGender) {
         setTimeout(() => {
@@ -358,33 +376,34 @@ const Docking1 = (props) => {
       }
     }
   }
-  async function handleFinal(json_body) {
+  const handleFinal = useCallback(async () => {
     if (phase < 4) {
       setPhase(4)
-
-      await axios.post(
-        APPLICATION_SERVER_URL + 'api/emotion/',
-        {
-          anger: angryCnt,
-          contempt: 0,
-          disgust: disgustedCnt,
-          fear: fearfulCnt,
-          happiness: happyCnt,
-          meeting_room_seq: meetingRoomSeq,
-          neutral: 0,
-          sadness: sadCnt,
-          surprise: surprisedCnt,
-          user_seq: userSeq,
-        },
-        REQUEST_HEADER
-      )
     }
     // 최종선택 - 모달창 등을 띄울것
-  }
+  }, [phase])
 
   async function choiceYes() {
     setPhase(5)
-    axios
+    let emotion_body = {
+      anger: angryCnt,
+      contempt: 0,
+      disgust: disgustedCnt,
+      fear: fearfulCnt,
+      happiness: happyCnt,
+      meeting_room_seq: meetingRoomSeq,
+      neutral: 0,
+      sadness: sadCnt,
+      surprise: surprisedCnt,
+      user_seq: userSeq,
+    }
+
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
+    await axios
       .post(
         APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
         {
@@ -401,6 +420,24 @@ const Docking1 = (props) => {
 
   async function choiceNo() {
     setPhase(5)
+    let emotion_body = {
+      anger: angryCnt,
+      contempt: 0,
+      disgust: disgustedCnt,
+      fear: fearfulCnt,
+      happiness: happyCnt,
+      meeting_room_seq: meetingRoomSeq,
+      neutral: 0,
+      sadness: sadCnt,
+      surprise: surprisedCnt,
+      user_seq: userSeq,
+    }
+
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
     await axios
       .post(
         APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
@@ -438,22 +475,20 @@ const Docking1 = (props) => {
       {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div>
-          <div style={{ height: '400px' }}></div>
-          <button
-            style={{
-              height: '200px',
-              width: '400px',
-            }}
-            onClick={joinSession}
-          >
-            준비 완료
+          <div style={{ height: '300px' }}></div>
+          <h1>일대일 미팅</h1>
+          <button className="ready-enter-btn" onClick={joinSession}>
+            <ImEnter />
+            &nbsp;준비 완료
           </button>
           <button
+            className="ready-exit-btn"
             onClick={() => {
               navigate('/')
             }}
           >
-            돌아가기
+            <ImExit />
+            &nbsp;돌아가기
           </button>
         </div>
       ) : null}
@@ -520,10 +555,23 @@ const Docking1 = (props) => {
                   startFaceAPI={() => {}}
                 />
                 <div className="btn-group">
-                  <p>
-                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
-                  </p>
-                  <button onClick={leaveSessionWithAlert}>나가기</button>
+                  <button
+                    className="btn-group-btn"
+                    onClick={onChangeCameraStatus}
+                  >
+                    {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
+                    &nbsp;영상
+                  </button>
+                  <button className="btn-group-btn" onClick={onChangeMicStatus}>
+                    {audioStatus ? <BsMic /> : <BsMicMute />}
+                    &nbsp;마이크
+                  </button>
+                  <button
+                    className="btn-group-btn-exit"
+                    onClick={leaveSessionWithAlert}
+                  >
+                    <ImExit /> &nbsp;나가기
+                  </button>
                 </div>
               </div>
             ) : (
@@ -560,6 +608,7 @@ const Docking1 = (props) => {
         <div id={'final-choice-modal'}>
           <div style={{ height: '200px' }}></div>
           <p style={{ fontSize: '2.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
+          <p>{happyCnt}</p>
           <div>
             <button className="choice-btn" onClick={choiceYes}>
               O

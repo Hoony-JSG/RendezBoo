@@ -89,7 +89,7 @@ const Docking1Chat = ({
         handlePhase3(json_body)
       } else if (flag === 'FINAL') {
         console.log(json_body.message)
-        handleFinal(json_body)
+        handleFinal()
       }
     })
   }
