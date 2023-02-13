@@ -91,4 +91,8 @@ public class User extends BaseEntity{
                 .map(Authority::getRole)
                 .collect(Collectors.toList());
     }
+
+    public void addPoint(Long point) {
+        this.point += point;
+    }
 }
