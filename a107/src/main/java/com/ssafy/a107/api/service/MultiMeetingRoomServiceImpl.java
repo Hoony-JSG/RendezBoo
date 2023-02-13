@@ -139,10 +139,12 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
             Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
             if(femaleNum>=3) throw new MeetingRoomAlreadyFullException("Women are already full!");
         }
-        return multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
+        Long seq= multiMeetingRoomUserRepository.save(MultiMeetingRoomUser.builder()
                 .multiMeetingRoom(multiMeetingRoom)
                 .user(user)
                 .build()).getSeq();
+        sendToWebSocketAtJoin(multiMeetingRoomSeq, userSeq);
+        return seq;
     }
 
     @Transactional
@@ -157,7 +159,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
         Long maleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true);
         Long femaleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false);
-        if(maleNum==0 && femaleNum==0){
+        if(maleNum==0L && femaleNum==0L){
             multiMeetingRoomRepository.deleteById(multiMeetingRoomSeq);
         }else{
             sendToWebSocketAtExit(multiMeetingRoomSeq, userSeq);
