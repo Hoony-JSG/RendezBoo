@@ -1,23 +1,20 @@
 import { useSelector} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
-  const APPLICATION_SERVER_URL =
-  process.env.NODE_ENV === 'production' ? 'https://i8a107.p.ssafy.io/' : 'http://localhost:8080/'
+const Docking3List = ({ docking3room }) => {
+  const { title, maleNum, femaleNum, multiMeetingRoomSeq } = docking3room
   const userGender = useSelector(
     (state) => state.userInfoReducer.userGender
   )
   const userSeq = useSelector(
     (state) => state.userInfoReducer.userSeq
   )
-  const { title, maleNum, femaleNum } = docking3room
   const navigate = useNavigate()
-  const enterMeetingRoom = (multiMeetingRoomSeq) => {
+  const enterMeetingRoom = () => {
       if((userGender==true && maleNum>=3) || (userGender==false && femaleNum>=3)){
         console.log("이 성별은 너무 많아요")
       }else{
-        setMultiMeetingRoomSeq(multiMeetingRoomSeq)  
-      navigate('/docking3/' + multiMeetingRoomSeq)
+        navigate('/docking3/' + multiMeetingRoomSeq)
       }
   }
   const multiMeetingRoomListStyle = {
@@ -33,7 +30,7 @@ const Docking3List = ({ docking3room, setMultiMeetingRoomSeq }) => {
   return (
     <div
       style={multiMeetingRoomListStyle}
-      onClick={() => enterMeetingRoom(docking3room.multiMeetingRoomSeq)}
+      onClick={() => enterMeetingRoom(multiMeetingRoomSeq)}
     >
       <div>
         <h3>제목: {title}</h3>

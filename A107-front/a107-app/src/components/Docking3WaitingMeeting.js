@@ -2,14 +2,14 @@ import { useEffect, useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as tf from '@tensorflow/tfjs'
 import '../Styles/Docking3ing.css'
 import { getHeader } from '../modules/Auth/Jwt'
 
-const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
+const Docking3WaitingMeeting = ({multiMeetingRoomSeq}) => {
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production'
       ? 'https://i8a107.p.ssafy.io/'
@@ -21,8 +21,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const REQUEST_HEADER = getHeader()
   const navigate = useNavigate()
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
-
-  // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
+  
   const client = useRef({})
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
