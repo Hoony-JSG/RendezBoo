@@ -2,10 +2,10 @@ import '../../Styles/SpaceShipStyle.css'
 
 const SpaceShip = () => {
   return (
-    <div class="spaceship">
-      <div class="spaceship__body"></div>
-      <div class="spaceship__cockpit"></div>
-      <div class="spaceship__wings"></div>
+    <div className="spaceship">
+      <div className="spaceship__body"></div>
+      <div className="spaceship__cockpit"></div>
+      <div className="spaceship__wings"></div>
     </div>
   )
 }
