@@ -18,7 +18,7 @@ const LoginNew = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const APPLICATION_SERVER_URL =
+  const APPLICATION_SERVER_URL = 
     process.env.NODE_ENV === 'production'
       ? 'https://i8a107.p.ssafy.io'
       : 'http://localhost:8080'
@@ -39,7 +39,7 @@ const LoginNew = () => {
         password: password,
       })
 
-      console.log(response.data)
+      console.log(response)
       setRefreshToken(response.data.refreshToken)
 
       const decode = jwtDecode(response.data.accessToken)

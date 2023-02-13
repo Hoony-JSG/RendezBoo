@@ -21,13 +21,13 @@ const KakaoLogin = () => {
   return (
     <div>
       <button
-        style={{ backgroundColor: 'rgba(0,0,0,0)', border: '0px' }}
+        style={{ backgroundColor: 'rgba(0,0,0,0)', border: '0px', cursor:'pointer' }}
         onClick={handleKakaoLogin}
       >
         <img
           src={kakaoLogo}
           alt="Kakao logo"
-          style={{ width: '346.8px', height: '75px' }}
+          style={{ width: '300px', height: '75px' }}
         />
       </button>
     </div>
