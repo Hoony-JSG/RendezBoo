@@ -23,7 +23,7 @@ public class UserFriendController {
      */
     @PostMapping("")
     @ApiOperation(value = "친구 추가", notes="여자와 남자 유저 번호를 받으면 친구를 맺어줍니다")
-    public ResponseEntity<Long> addFriend(FriendReq req) throws NotFoundException {
+    public ResponseEntity<Long> addFriend(@RequestBody FriendReq req) throws NotFoundException {
         Long friendSeq = friendService.addFriend(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(friendSeq);
     }
@@ -33,7 +33,7 @@ public class UserFriendController {
      */
     @DeleteMapping("")
     @ApiOperation(value = "친구 삭제", notes="여자와 남자 유저 번호를 받으면 친구 관계를 끊어줍니다")
-    public ResponseEntity deleteFriend(FriendReq req) throws NotFoundException{
+    public ResponseEntity deleteFriend(@RequestBody FriendReq req) throws NotFoundException{
         friendService.deleteFriend(req);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
