@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 const NaverLogin = (props) => {
   const { naver } = window
   const NAVER_CLIENT_ID = 'ZvY7wDn48i4hvuK23vQM' // 발급 받은 Client ID 입력
-  const NAVER_CALLBACK_URL = 'http://localhost:3000/join'
+  const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/join'
 
   const initializeNaverLogin = () => {
     // props.cameback = true
@@ -11,7 +11,7 @@ const NaverLogin = (props) => {
       clientId: NAVER_CLIENT_ID,
       callbackUrl: NAVER_CALLBACK_URL,
       isPopup: false,
-      loginButton: { color: 'green', type: 1, height: 50 },
+      loginButton: { color: 'green', type: 3, height: 75 },
       callbackHandle: true,
     })
     naverLogin.init()
