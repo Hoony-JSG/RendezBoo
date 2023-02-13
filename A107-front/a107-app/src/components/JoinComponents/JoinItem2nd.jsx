@@ -20,7 +20,7 @@ const JoinItem2nd = (props) => {
     [hasPW, setHasPW],
   ]
 
-  const [emailType, setEmailType] = useState()
+  const [emailType, setEmailType] = useState(0)
 
   const setWholeHas = (index, value) => {
     console.log(index, value)
@@ -47,7 +47,7 @@ const JoinItem2nd = (props) => {
                   : '')
               }
             >
-              <JoinItemSocialEmail />
+              <JoinItemSocialEmail type={setEmailType} />
             </div>
             <div
               className={

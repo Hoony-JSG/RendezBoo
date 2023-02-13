@@ -28,6 +28,7 @@ import {
 } from './modules/Auth/Jwt'
 import { useDispatch } from 'react-redux'
 import { SET_TOKEN } from './containers/JwtContainer'
+import NaverOauth from './components/JoinComponents/NaerOauth'
 
 function App() {
   const location = useLocation()
@@ -35,8 +36,15 @@ function App() {
   const navigate = useNavigate()
 
   const refreshToken = getRefreshTokenFromCookie()
-  const allowedPaths = ['/loginnew', '/home', '/join', '/joinsocial'];
-  const isAllowedPath = allowedPaths.includes(location.pathname);
+  const allowedPaths = [
+    '/loginnew',
+    '/home',
+    '/join',
+    '/joinsocial',
+    '/oauth/naver',
+    '/oauth/kakao',
+  ]
+  const isAllowedPath = allowedPaths.includes(location.pathname)
 
   useEffect(async () => {
     if (!refreshToken && !isAllowedPath) {
@@ -47,8 +55,7 @@ function App() {
       const accessToken = await reissueAccessToken(refreshToken)
       dispatch(SET_TOKEN(accessToken))
     }
-  }, [location.pathname, refreshToken]
-  )
+  }, [location.pathname, refreshToken])
 
   // useEffect(async () => {
   //   console.log('refresh')
@@ -63,7 +70,6 @@ function App() {
   //     navigate('/logintest')
   //   }
   // }, [])
-  
 
   return (
     <div className="App">
@@ -81,10 +87,8 @@ function App() {
           <Route exact path="/" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/loginnew" element={<LoginNew />}></Route>;
-
           <Route path="/joinsocial" element={<JoinSocial />} />
           <Route path="/join" element={<Join />} />
           <Route path="/docking1" element={<Docking1 />} />
@@ -94,8 +98,9 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
-
-
+          <Route path="/oauth/naver" element={<NaverOauth />}>
+            {' '}
+          </Route>
           <Route path="/*" element={<Error />}></Route>
           {/* 웹소켓 테스트용 라우터 */}
           <Route

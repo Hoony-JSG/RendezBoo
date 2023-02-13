@@ -132,23 +132,29 @@
 
 @keyframes glow-naver {
   0% {
-    box-shadow: 0 0 5px rgb(47, 172, 6);
+    border: 1px solid rgb(54, 210, 3);
+    box-shadow: 0 0 5px rgb(54, 210, 3);
   }
   50% {
-    box-shadow: 0 0 20px rgb(120, 184, 99);
+    border: 1px solid rgb(92, 198, 57);
+    box-shadow: 0 0 20px rgb(92, 198, 57);
   }
   100% {
-    box-shadow: 0 0 5px rgb(47, 172, 6);
+    border: 1px solid rgb(54, 210, 3);
+    box-shadow: 0 0 5px rgb(54, 210, 3);
   }
 }
 @keyframes glow-kakao {
   0% {
+    border: 1px solid rgb(231, 235, 7);
     box-shadow: 0 0 5px rgb(231, 235, 7);
   }
   50% {
+    border: 1px solid rgb(233, 235, 113);
     box-shadow: 0 0 20px rgb(233, 235, 113);
   }
   100% {
+    border: 1px solid rgb(231, 235, 7);
     box-shadow: 0 0 5px rgb(231, 235, 7);
   }
 }

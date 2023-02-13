@@ -43,7 +43,7 @@ const NaverLogin = (props) => {
       {/* // 구현할 위치에 아래와 같이 코드를 입력해주어야 한다. 
          // 태그에 id="naverIdLogin" 를 해주지 않으면 오류가 발생한다! */}
       {/* <div id="naverIdLogin"> </div> */}
-      <a href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2fapi%2foauth%2fnaver&state=1234">
+      <a href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2foauth%2fnaver&state=1234">
         Naver Login
       </a>
     </>
