@@ -4,10 +4,12 @@ import NaverLogo from '../../Images/btnG_완성형.png'
 const NaverLogin = (props) => {
   const { naver } = window
   const NAVER_CLIENT_ID = 'F3K8r9yyEG_RFk8RpLgi' // 발급 받은 Client ID 입력
-  const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/api/oauth/naver'
+  const NAVER_CALLBACK_URL = 'https://i8a107.p.ssafy.io/oauth/naver'
 
-  const NAVER_PROD_REDIRECT = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2foauth%2fnaver&state=1234'
-  const NAVER_LOCAL_REDIRECT = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fnaver&state=1234'
+  const NAVER_PROD_REDIRECT =
+    'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2foauth%2fnaver&state=1234'
+  const NAVER_LOCAL_REDIRECT =
+    'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Foauth%2Fnaver&state=1234'
   // const initializeNaverLogin = () => {
   //   console.log('여기로 안오나')
   //   const naverLogin = new naver.LoginWithNaverId({
@@ -46,8 +48,8 @@ const NaverLogin = (props) => {
       {/* // 구현할 위치에 아래와 같이 코드를 입력해주어야 한다. 
          // 태그에 id="naverIdLogin" 를 해주지 않으면 오류가 발생한다! */}
       {/* <div id="naverIdLogin"> </div> */}
-      <a href={NAVER_LOCAL_REDIRECT}>
-      <img
+      <a href={NAVER_PROD_REDIRECT}>
+        <img
           src={NaverLogo}
           alt="Naver logo"
           style={{ width: '300px', height: '75px' }}
