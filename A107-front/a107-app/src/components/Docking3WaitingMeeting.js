@@ -206,7 +206,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         var femaleNum = json_body.femaleNum
         console.log('malenum: ' + maleNum)
         console.log('femalenum: ' + femaleNum)
-        if (maleNum == 1 && femaleNum == 1) {
+        if (maleNum ==3 && femaleNum == 3) {
           setCompleteFlag(true)
         }
       }
