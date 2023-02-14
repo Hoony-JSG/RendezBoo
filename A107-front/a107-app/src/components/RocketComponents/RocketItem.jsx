@@ -26,11 +26,15 @@ const RocketItem = (props) => {
   }
   console.log('Btn :' + ver)
   return (
-    <div>
+    <div
+    // style={ver === '' ? { height: 'fitContent' } : ''}
+    >
       {props.ver === 'Start' && (
         <div className="Join3_profileimage">About Me</div>
       )}
-      <div className="Join3_uploader">
+      <div
+        className={ver === '' ? 'Join3_uploader_mainpage' : 'Join3_uploader'}
+      >
         <div className="Join3_uiverse">
           <div className="Join3_uiverse-image-card"></div>
           <div className="Join3_default-image-frame">

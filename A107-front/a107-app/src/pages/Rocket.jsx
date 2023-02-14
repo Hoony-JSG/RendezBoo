@@ -8,6 +8,8 @@ import { getHeader } from '../modules/Auth/Jwt'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
+// import '../../Styles/RocketStyle.css'
+
 const Rocket = () => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
