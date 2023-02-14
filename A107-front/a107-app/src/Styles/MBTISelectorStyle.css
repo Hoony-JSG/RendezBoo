@@ -11,11 +11,11 @@
   width: 80px;
 }
 
-.mbti-selector-item div {
+.mbti-selector-item .mbti-selector-item-div {
   margin: 10px;
 }
 
-.mbti-selector-item button {
+.mbti-selector-item .mbti-selector-item-button {
   margin-bottom: 10px;
   cursor: pointer;
   border-radius: 25%;
@@ -23,4 +23,9 @@
   height: auto;
   border: 1px solid gray;
   background-color: lightgray;
+}
+
+.MBTISelector_btn {
+  width: 100px;
+  border: 1px solid red;
 }

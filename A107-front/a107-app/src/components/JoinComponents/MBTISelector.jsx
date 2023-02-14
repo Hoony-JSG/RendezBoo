@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import '../../Styles/MBTISelectorStyle.css'
+import MBTIBtn from './MBTIBtn'
 const MBTISelector = (props) => {
   const [MBTI, setMBTI] = useState({
     I: 'I',
@@ -34,28 +35,44 @@ const MBTISelector = (props) => {
   return (
     <div className="mbti-selector">
       <div className="mbti-selector-item">
+        <div className="MBTISelector_btn">
+          <MBTIBtn />
+        </div>
+        {/* 
         <div>I/E</div>
-        <button onClick={() => updateMBTI('IE')}>
-          <div>{MBTI.I}</div>
+        <button
+          className="mbti-selector-item-button"
+          onClick={() => updateMBTI('IE')}
+        >
+          <div className="mbti-selector-item-div">{MBTI.I}</div>
         </button>
       </div>
       <div className="mbti-selector-item">
         <div>S/N</div>
-        <button onClick={() => updateMBTI('SN')}>
-          <div>{MBTI.S}</div>
+        <button
+          className="mbti-selector-item-button"
+          onClick={() => updateMBTI('SN')}
+        >
+          <div className="mbti-selector-item-div">{MBTI.S}</div>
         </button>
       </div>
       <div className="mbti-selector-item">
         <div>F/T</div>
-        <button onClick={() => updateMBTI('TF')}>
-          <div>{MBTI.F}</div>
+        <button
+          className="mbti-selector-item-button"
+          onClick={() => updateMBTI('TF')}
+        >
+          <div className="mbti-selector-item-div">{MBTI.F}</div>
         </button>
       </div>
       <div className="mbti-selector-item">
         <div>J/P</div>
-        <button onClick={() => updateMBTI('PJ')}>
-          <div>{MBTI.J}</div>
-        </button>
+        <button
+          className="mbti-selector-item-button"
+          onClick={() => updateMBTI('PJ')}
+        >
+          <div className="mbti-selector-item-div">{MBTI.J}</div>
+        </button> */}
       </div>
     </div>
   )
