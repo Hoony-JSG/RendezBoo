@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import JoinItem2nd from './JoinItem2nd'
@@ -28,15 +29,46 @@ const JoinItem = () => {
     profileImagePath: profileImagePath,
   }
 
+  const sendUserSetting = async () => {
+    const dateObj = new Date(birthday)
+    const formattedBirth = `${dateObj.getFullYear()}-${String(
+      dateObj.getMonth() + 1
+    ).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
+    try {
+      let response = await axios.post('http://52.78.60.53:8080/api/user/join', {
+        birthday: formattedBirth,
+        city: '',
+        email: email,
+        gender: gender,
+        isAdmin: false,
+        mbti: mbti,
+        name: name,
+        password: '',
+        phoneNumber: phoneNumber,
+        profileImagePath: '',
+      })
+      console.log('유저 세팅 전송 Good')
+      window.location.href = '/'
+    } catch (error) {
+      console.log('유저 세팅 전송 오류')
+      console.error(error)
+    }
+  }
+
   const setNext = () => {
     if (order === 3) {
-      window.location.href = '/'
+      sendUserSetting()
+      // window.location.href = '/'
     } else {
       setOrder(order + 1)
     }
   }
 
   const print = () => {
+    const dateObj = new Date(birthday)
+    const formattedDate = `${dateObj.getFullYear()}-${String(
+      dateObj.getMonth() + 1
+    ).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
     console.log('----------------------')
     console.log('받은 이메일 : ' + email)
     console.log('받은 이메일 타입 : ' + emailType)
@@ -45,6 +77,14 @@ const JoinItem = () => {
     console.log('받은 성별 : ' + gender)
     console.log('받은 MBTI : ' + mbti)
     console.log('받은 생일 : ' + birthday)
+    console.log('받은 생일(format) : ' + formattedDate)
+    // console.log(
+    //   '받은 생일(formatted) : ' +
+    //     `${birthday.getFullYear()}-${String(birthday.getMonth() + 1).padStart(
+    //       2,
+    //       '0'
+    //     )}-${String(birthday.getDate()).padStart(2, '0')}`
+    // )
     console.log('받은 프사 : ' + profileImagePath)
   }
 
