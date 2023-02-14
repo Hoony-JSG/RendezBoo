@@ -403,6 +403,11 @@ const Docking1 = (props) => {
       emotion_body,
       REQUEST_HEADER
     )
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/badges/onetotone',
+      emotion_body,
+      REQUEST_HEADER
+    )
     await axios
       .post(
         APPLICATION_SERVER_URL + 'api/onetoone/one/choice',
@@ -435,6 +440,11 @@ const Docking1 = (props) => {
 
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/badges/onetotone',
       emotion_body,
       REQUEST_HEADER
     )
