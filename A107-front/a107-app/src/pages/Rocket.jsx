@@ -95,7 +95,10 @@ const Rocket = () => {
         }}
       >
         <div style={{ width: '400px' }}>
-          <RocketItem {...MeAndYou} />
+          <RocketItem
+            {...MeAndYou}
+            profileImagePath={rocketUser.profileImagePath}
+          />
         </div>
         <div style={{ width: '1000px' }}>
           <div>

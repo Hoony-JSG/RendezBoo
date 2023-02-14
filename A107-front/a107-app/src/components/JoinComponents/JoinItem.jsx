@@ -22,17 +22,17 @@ const JoinItem = () => {
   const [mbti, setMbti] = useState()
   const [name, setName] = useState()
   const [phoneNumber, setPhoneNumber] = useState()
-  const [profileImagePath, setProfileImagePath] = useState()
+  const [profileImage, setProfileImage] = useState()
 
-  const dataForBack = {
-    birthday: birthday,
-    email: email,
-    gender: gender,
-    mbti: mbti,
-    name: name,
-    phoneNumber: phoneNumber,
-    profileImagePath: profileImagePath,
-  }
+  // const dataForBack = {
+  //   birthday: birthday,
+  //   email: email,
+  //   gender: gender,
+  //   mbti: mbti,
+  //   name: name,
+  //   phoneNumber: phoneNumber,
+  //   profileImagePath: profileImagePath,
+  // }
 
   const sendUserSetting = async () => {
     const dateObj = new Date(birthday)
@@ -40,9 +40,8 @@ const JoinItem = () => {
       dateObj.getMonth() + 1
     ).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
     try {
-      let response = await axios.post(
-        'https://i8a107.p.ssafy.io/api/user/join',
-        {
+      axios
+        .post('https://i8a107.p.ssafy.io/api/user/join', {
           birthday: formattedBirth,
           city: '',
           email: email,
@@ -53,15 +52,38 @@ const JoinItem = () => {
           password: '',
           phoneNumber: phoneNumber,
           profileImagePath: '',
-        }
-      )
-      console.log('유저 세팅 전송 Good')
-
-      if (emailType == 0) {
-        window.location.href = NAVER_URL
-      } else {
-        window.location.href = KAKAO_URL
-      }
+        })
+        .then((res) => {
+          console.log('회원가입 성공')
+          if (profileImage) {
+            const formData = new FormData()
+            formData.append('file', profileImage)
+            axios({
+              method: 'post',
+              url:
+                'https://i8a107.p.ssafy.io/api/user/profile?userSeq=' +
+                res.data,
+              data: formData,
+              headers: { 'Content-Type': 'multipart/form-data' },
+            })
+              .then((res) => {
+                console.log(res)
+                if (emailType == 0) {
+                  window.location.href = NAVER_URL
+                } else {
+                  window.location.href = KAKAO_URL
+                }
+              })
+              .catch((e) => {
+                console.log(e)
+              })
+          } else if (emailType == 0) {
+            window.location.href = NAVER_URL
+          } else {
+            window.location.href = KAKAO_URL
+          }
+        })
+        .catch((e) => {})
     } catch (error) {
       console.log('유저 세팅 전송 오류')
       console.error(error)
@@ -98,7 +120,7 @@ const JoinItem = () => {
     //       '0'
     //     )}-${String(birthday.getDate()).padStart(2, '0')}`
     // )
-    console.log('받은 프사 : ' + profileImagePath)
+    // console.log('받은 프사 : ' + profileImagePath)
   }
 
   useEffect(print, [gender, mbti])
@@ -115,7 +137,7 @@ const JoinItem = () => {
       setNext={setNext}
     />,
     <JoinItem3rd
-      profileImagePath={setProfileImagePath}
+      setProfileImage={setProfileImage}
       mbti={setMbti}
       birthday={setBirthday}
       setNext={setNext}

@@ -26,7 +26,7 @@ const JoinItem3rd = (props) => {
         >
           <RocketItem
             ver="Start"
-            profileImagePath={props.profileImagePath}
+            setProfileImage={props.setProfileImage}
             mbti={props.mbti}
             setTrue={setHasProfileImage}
           />

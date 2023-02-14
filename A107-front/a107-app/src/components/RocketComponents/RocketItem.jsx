@@ -3,11 +3,11 @@ import ProfileImageUploader from './ProfileImageUploader'
 import RocketBtn from './RocketBtn'
 import userprofile from '../../Images/user-profile.png'
 import '../../Styles/Join3RocketItemStyle.css'
+import { useEffect } from 'react'
 
 const RocketItem = (props) => {
-  const Me = props.Me
-  const Inquire = props.Inquire
-  const ver = props.ver
+  const { Me, Inquire, ver, setProfileImage } = props
+  const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   const MeAndYou = {
     Me: Me,
@@ -16,11 +16,17 @@ const RocketItem = (props) => {
     BadgeRep: 1,
   }
 
-  const [profileimage, setprofileimage] = useState(userprofile)
+  const [image, setimage] = useState(userprofile)
+  useEffect(() => {
+    if (props.profileImagePath) {
+      console.log('프사있음')
+      setimage(SRC_URL + props.profileImagePath)
+    }
+  }, [])
   const changeImage = (image) => {
     if (image !== null) {
       console.log('새 이미지를 가져와서 setProfileImage : ' + image)
-      setprofileimage(image)
+      setimage(image)
       props.setTrue(true)
     }
   }
@@ -38,14 +44,15 @@ const RocketItem = (props) => {
         <div className="Join3_uiverse">
           <div className="Join3_uiverse-image-card"></div>
           <div className="Join3_default-image-frame">
-            <img className="Join3_default-image" src={profileimage} />
+            <img className="Join3_default-image" src={image} alt={''} />
           </div>
         </div>
         {props.ver === 'Start' && (
           <div className="Join3_uploader-button">
             <ProfileImageUploader
               profileImagePath={props.profileImagePath}
-              profileimage={changeImage}
+              changeImage={changeImage}
+              setProfileImage={setProfileImage}
             />
           </div>
         )}
