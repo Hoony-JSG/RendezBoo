@@ -71,7 +71,8 @@
     color: white;
     font-family: Gmarket_light;
     border: none;
-    margin: 10px;
+    padding: 10px;
+    font-size: 100%;
 }
 
 .signal-form > button {

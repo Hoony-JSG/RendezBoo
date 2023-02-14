@@ -18,6 +18,7 @@ import {
   BsMicMute,
 } from 'react-icons/bs'
 import { ImEnter, ImExit } from 'react-icons/im'
+import { FaHeart, FaHeartBroken } from 'react-icons/fa'
 
 const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
@@ -484,22 +485,19 @@ const Docking1 = (props) => {
     <div className="container">
       {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
-        <div>
-          <div style={{ height: '300px' }}></div>
-          <h1>일대일 미팅</h1>
-          <button className="ready-enter-btn" onClick={joinSession}>
-            <ImEnter />
-            &nbsp;준비 완료
-          </button>
-          <button
-            className="ready-exit-btn"
-            onClick={() => {
-              navigate('/')
-            }}
-          >
-            <ImExit />
-            &nbsp;돌아가기
-          </button>
+        <div className="docking1-modal">
+          <h1>1:1 Docking...</h1>
+          <p style={{ fontSize: '1.5rem' }}>일대일 미팅에 입장하시겠습니까?</p>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}>
+            <button className="ready-enter-btn" onClick={joinSession}>
+              <ImEnter />
+              &nbsp;입장하기
+            </button>
+            <button className="ready-exit-btn" onClick={() => {navigate('/')}}>
+              <ImExit />
+              &nbsp;돌아가기
+            </button>
+          </div>
         </div>
       ) : null}
       {session !== undefined && !finished ? (
@@ -542,7 +540,7 @@ const Docking1 = (props) => {
               left={'750px'}
             />
             <div className="video-back" style={videoBackStyle}>
-              미팅 준비중입니다.
+              <h1>Waiting for Docking...</h1>
             </div>
             {subscribers.map((sub, idx) => (
               <div key={idx} id="subscriber">
@@ -570,17 +568,18 @@ const Docking1 = (props) => {
                     onClick={onChangeCameraStatus}
                   >
                     {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
-                    &nbsp;영상
+                    {/* &nbsp;영상 */}
                   </button>
                   <button className="btn-group-btn" onClick={onChangeMicStatus}>
                     {audioStatus ? <BsMic /> : <BsMicMute />}
-                    &nbsp;마이크
+                    {/* &nbsp;마이크 */}
                   </button>
                   <button
                     className="btn-group-btn-exit"
                     onClick={leaveSessionWithAlert}
                   >
-                    <ImExit /> &nbsp;나가기
+                    <ImExit style={{position: 'relative', top: '5px', left: '4px'}}/>
+                    {/* &nbsp;나가기 */}
                   </button>
                 </div>
               </div>
@@ -609,22 +608,25 @@ const Docking1 = (props) => {
       ) : null}
       {finished ? (
         // 미팅 종료 문구
-        <div style={{ fontSize: '3rem' }}>
-          <div style={{ height: '400px' }}></div> 미팅이 종료되었습니다.
-        </div>
+        <h1 style={{marginTop: '300px'}}>Docking Ends!</h1>
       ) : null}
       {phase === 4 && !finished ? (
         // 친구 추가 모달
-        <div id={'final-choice-modal'}>
-          <div style={{ height: '200px' }}></div>
-          <p style={{ fontSize: '2.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
-          <p>{happyCnt}</p>
-          <div>
-            <button className="choice-btn" onClick={choiceYes}>
-              O
+        <div
+          className="docking1-modal"
+          // id={'final-choice-modal'}
+        >
+          <h1>Docking Complete!</h1>
+          <p style={{ fontSize: '1.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
+          {/* <p>{happyCnt}</p> */}
+          <div
+            style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}
+          >
+            <button className="ready-exit-btn" onClick={choiceYes}>
+              <FaHeart style={{fontSize: '3rem'}}/>
             </button>
-            <button className="choice-btn" onClick={choiceNo}>
-              X
+            <button className="ready-enter-btn" onClick={choiceNo}>
+              <FaHeartBroken style={{fontSize: '3rem'}}/>
             </button>
           </div>
         </div>
