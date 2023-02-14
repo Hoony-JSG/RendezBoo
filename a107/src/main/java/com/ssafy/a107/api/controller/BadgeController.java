@@ -44,15 +44,26 @@ public class BadgeController {
 
     @PostMapping()
     @ApiOperation("새로운 뱃지 생성 - 관리자만 사용가능 해야함")
-    public ResponseEntity<Long> createBadge(@RequestPart MultipartFile multipartFile, @RequestParam String name) throws IOException{
-        Long createdSeq = badgeService.createBadge(new BadgeCreateReq(name, multipartFile));
+    public ResponseEntity<Long> createBadge(@RequestPart MultipartFile multipartFile, @RequestParam String name, @RequestParam String description) throws IOException{
+        Long createdSeq = badgeService.createBadge(BadgeCreateReq.builder()
+                .image(multipartFile)
+                .name(name)
+                .description(description)
+                .build());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSeq);
     }
 
     @PutMapping("/{badgeSeq}")
     @ApiOperation("뱃지 업데이트 - 관리자만 사용가능 해야함")
-    public ResponseEntity<Long> updateBadge(@PathVariable Long badgeSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name) throws NotFoundException, IOException{
-        Long updatedSeq = badgeService.updateBadge(new BadgeUpdateReq(badgeSeq, name, multipartFile));
+    public ResponseEntity<Long> updateBadge(@PathVariable Long badgeSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name, @RequestParam String description) throws NotFoundException, IOException{
+        Long updatedSeq = badgeService.updateBadge(BadgeUpdateReq.builder()
+                .seq(badgeSeq)
+                .image(multipartFile)
+                .name(name)
+                .description(description)
+                .build());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedSeq);
     }
 

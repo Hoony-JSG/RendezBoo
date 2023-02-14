@@ -11,5 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class BadgeUpdateReq {
     private Long seq;
     private String name;
+    private String description;
     private MultipartFile image;
 }

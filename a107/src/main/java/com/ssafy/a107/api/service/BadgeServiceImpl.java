@@ -67,6 +67,7 @@ public class BadgeServiceImpl implements BadgeService {
         String url = s3Uploader.upload(badgeCreateReq.getImage(), "images");
         Badge badge = Badge.builder()
                 .name(badgeCreateReq.getName())
+                .description(badgeCreateReq.getDescription())
                 .url(url)
                 .build();
         badgeRepository.save(badge);
@@ -78,7 +79,7 @@ public class BadgeServiceImpl implements BadgeService {
         String url = s3Uploader.upload(badgeUpdateReq.getImage(), "images");
         Badge badge = badgeRepository.findById(badgeUpdateReq.getSeq())
                 .orElseThrow(() -> new NotFoundException("Wrong Badge Seq"));
-        badge.update(badgeUpdateReq.getName(), url);
+        badge.update(badgeUpdateReq.getName(), url, badgeUpdateReq.getDescription());
         badgeRepository.save(badge);
         return badge.getSeq();
     }
