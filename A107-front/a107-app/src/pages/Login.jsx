@@ -7,7 +7,6 @@ const Login = (props) => {
       로그인
       <div>
         <LoginForm />
-        {/* <AllSocialLogins ver="login" /> */}
       </div>
     </div>
   )

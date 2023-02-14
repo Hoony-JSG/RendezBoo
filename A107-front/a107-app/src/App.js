@@ -53,7 +53,7 @@ function App() {
       // 토큰이 없고 접근 제한된 라우트에 접근하려고 할 때 홈으로 보내기
       if (!isAllowedPath && !refreshToken) {
         alert('로그인이 필요한 서비스입니다.')
-        navigate('/home')
+        navigate('/')
         //  그 외에는 토큰 재발급
       } else {
         const accessToken = await reissueAccessToken(refreshToken)
@@ -68,7 +68,7 @@ function App() {
     <div className="App">
       <div>
         {!(
-          location.pathname === '/home' ||
+          location.pathname === '/' ||
           location.pathname === '/join' ||
           location.pathname === '/login' ||
           location.pathname === '/joinsocial' ||
@@ -76,8 +76,8 @@ function App() {
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route exact path="/" element={<Rendezboo />} />
+          <Route path="/" element={<Home />} />
+          <Route exact path="/rendezboo" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
           <Route path="/login" element={<Login />} />
