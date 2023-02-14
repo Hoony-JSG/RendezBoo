@@ -6,9 +6,6 @@ const Docking3List = ({ docking3room }) => {
   const userGender = useSelector(
     (state) => state.userInfoReducer.userGender
   )
-  const userSeq = useSelector(
-    (state) => state.userInfoReducer.userSeq
-  )
   const navigate = useNavigate()
   const enterMeetingRoom = () => {
       if((userGender==true && maleNum>=3) || (userGender==false && femaleNum>=3)){

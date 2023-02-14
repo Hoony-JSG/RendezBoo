@@ -12,12 +12,12 @@ import { getHeader } from '../modules/Auth/Jwt'
 const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production'
-      ? 'https://i8a107.p.ssafy.io/'
-      : 'http://localhost:8080/'
+      ? 'https://i8a107.p.ssafy.io'
+      : 'http://localhost:8080'
   const WEBSOCKET_SERVER_URL =
     process.env.NODE_ENV === 'production'
-      ? 'wss://i8a107.p.ssafy.io/'
-      : 'ws://localhost:8080/'
+      ? 'wss://i8a107.p.ssafy.io'
+      : 'ws://localhost:8080'
   const navigate = useNavigate()
   const usertoken = '$$$mytoken$$$'
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
@@ -45,7 +45,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     // connect: 웹소켓(stomp)연결
     const connect = async () => {
       client.current = new StompJs.Client({
-        brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
+        brokerURL: `${WEBSOCKET_SERVER_URL}/ws-stomp`, // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
         // 연결 확인용 출력 문구
         debug: function (str) {
@@ -76,13 +76,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
     connect().then(()=>{
       alert('나를 이 미팅방-유저 테이블에 추가하고 웹소켓으로 보낸다.')
-      axios.post(
-          APPLICATION_SERVER_URL +
-            'api/multi-meetings/' +
-            multiMeetingRoomSeq +
-            '/' +
-            userSeq
-        )
+      axios.post(`${APPLICATION_SERVER_URL}/
+                  api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`)
         .then((response) => {
           console.log(response.data)
           const openVidu = new OpenVidu()
@@ -206,7 +201,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         var femaleNum = json_body.femaleNum
         console.log('malenum: ' + maleNum)
         console.log('femalenum: ' + femaleNum)
-        if (maleNum == 1 && femaleNum == 1) {
+        if (maleNum >=3 && femaleNum >=3) {
           setCompleteFlag(true)
         }
       }
@@ -249,7 +244,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     alert('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios.delete(APPLICATION_SERVER_URL +'api/multi-meetings/' +multiMeetingRoomSeq +'/' +userSeq)
+    axios.delete(`${APPLICATION_SERVER_URL}/api/multi-meetings/
+                    ${multiMeetingRoomSeq}/${userSeq}`)
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
@@ -347,8 +343,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
   // userSeq 기반으로 오픈비두 토큰 가져옴
   async function getDocking3Token(userSeq) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + 'api/multi-meetings/join',
+    const response = await axios.post(`${APPLICATION_SERVER_URL}/api/multi-meetings/join`,
       { userSeq: userSeq, multiMeetingRoomSeq: multiMeetingRoomSeq },
       {}
     )
@@ -358,23 +353,22 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   }
 
   return completeFlag ? (
-    <div
-      className="container"
+    <div className="container"
       style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        overflowX: 'scroll',
-        padding: '20px',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      overflowX: 'scroll',
+      padding: '20px',
       }}
     >
       <div className="main">
         {/* <h1>일대일 매칭 테스트 중</h1> */}
         {session === undefined ? (
-          <div>
-            <button onClick={joinSession}>미팅방 입장하기</button>
-          </div>
+        <div>
+          <button onClick={joinSession}>미팅방 입장하기</button>
+        </div>
         ) : null}
         {session !== undefined ? (
           <div
@@ -407,45 +401,45 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             ></div>
           </div>
         ) : (
-          <div className="video-container cam-group">
-            <div className="sub-container">
-              {subscribers.map((sub, idx) => (
-                <div key={idx} className="cam">
-                  <FilteredVideo
-                    streamManager={sub.streamManager}
-                    maskPath={maskPath}
-                    userSeq={2}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-                
-              ))}
-              {publisher !== undefined ? (
-                <div className="cam">
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={maskPath}
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-            </div>
-            <div className="pub-container">
-              {publisher !== undefined ? (
-                <div className="cam">
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={maskPath}
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-              <div className="chat"></div>
-              <div className="btn-group"></div>
-            </div>
+        <div className="video-container cam-group">
+          <div className="sub-container">
+            {subscribers.map((sub, idx) => (
+              <div key={idx} className="cam">
+                <FilteredVideo
+                  streamManager={sub.streamManager}
+                  maskPath={maskPath}
+                  userSeq={2}
+                  startFaceAPI={() => {}}
+                />
+              </div>
+              
+            ))}
+            {publisher !== undefined ? (
+              <div className="cam">
+                <FilteredVideo
+                  streamManager={publisher}
+                  maskPath={maskPath}
+                  userSeq={userSeq}
+                  startFaceAPI={() => {}}
+                />
+              </div>
+            ) : null}
           </div>
+          <div className="pub-container">
+            {publisher !== undefined ? (
+              <div className="cam">
+                <FilteredVideo
+                  streamManager={publisher}
+                  maskPath={maskPath}
+                  userSeq={userSeq}
+                  startFaceAPI={() => {}}
+                />
+              </div>
+            ) : null}
+            <div className="chat"></div>
+            <div className="btn-group"></div>
+          </div>
+        </div>
         )}
       </div>
     </div>
