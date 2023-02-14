@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 const SignalListItem = ({ chat, you }) => {
   const { message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
+  const time = typeof(createdAt) === "string" ? new Date(createdAt) : new Date(...createdAt)
 
   return (
     <div>
@@ -19,14 +20,14 @@ const SignalListItem = ({ chat, you }) => {
           <div className="your-signal">
             <p>{message}</p>
             <p id="time">
-              {createdAt[3]}:{createdAt[4]} AM
+              {time.getHours()}:{time.getMinutes()}
             </p>
           </div>
         </div>
       ) : (
         <div className="my-signal">
           <p id="time">
-            {createdAt[3]}:{createdAt[4]} AM
+            {time.getHours()}:{time.getMinutes()}
           </p>
           <p>{message}</p>
         </div>
