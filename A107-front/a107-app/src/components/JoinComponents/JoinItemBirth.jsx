@@ -4,22 +4,22 @@ import '../../Styles/BirthCalendarStyle.css'
 
 const JoinItemBirth = (props) => {
   const [selectedDate, setSelectedDate] = useState(new Date())
-  const [month, setMonth] = useState(selectedDate.getMonth())
-  const [year, setYear] = useState(selectedDate.getFullYear())
-
+  const [month, setMonth] = useState()
+  const [year, setYear] = useState()
   const currentYear = new Date().getFullYear()
   const currentMonth = new Date().getMonth()
   const handlePrevMonth = () => {
-    setMonth((prevMonth) => (prevMonth === 0 ? 11 : prevMonth - 1))
+    setMonth((month) => (month === 0 ? 11 : month - 1))
     if (month === 0) {
-      setYear((prevYear) => prevYear - 1)
+      setYear((year) => year - 1)
     }
   }
 
   const handleNextMonth = () => {
-    setMonth((prevMonth) => (prevMonth === 11 ? 0 : prevMonth + 1))
+    setMonth((month) => (month === 11 ? 0 : month + 1))
+    console.log('현재 데이터 속 year : ' + year)
     if (month === 11) {
-      setYear((prevYear) => prevYear + 1)
+      setYear((year) => year + 1)
     }
   }
 
@@ -28,10 +28,13 @@ const JoinItemBirth = (props) => {
   }
 
   const handleSelectYear = (e) => {
-    setYear(e.target.value)
+    console.log('선택 이어 : ' + e.target.value)
+    const toInteger = parseInt(e.target.value)
+    setYear(toInteger)
   }
 
   const getDays = () => {
+    console.log('getDays 내부 데이터 : ' + year + ', ' + month)
     const firstDayOfMonth = new Date(year, month, 1)
     const firstDayOfWeek = firstDayOfMonth.getDay()
     const daysInMonth = new Date(year, month + 1, 0).getDate()
@@ -73,14 +76,19 @@ const JoinItemBirth = (props) => {
 
     return daysOfWeek
   }
-
+  const [underNineteen, setUnderNineteen] = useState(true)
   useEffect(() => {
+    setMonth(selectedDate.getMonth())
+    console.log(year + ']]]]]]]]]]]]]]')
+    if (year === undefined) setYear(selectedDate.getFullYear())
     const birthYear = selectedDate.getFullYear()
     if (currentYear - birthYear >= 19) {
       props.birthday(selectedDate)
       props.setHas(true)
+      setUnderNineteen(false)
     } else {
       props.setHas(false)
+      setUnderNineteen(true)
     }
     console.log(
       '년도 : ' +
@@ -135,15 +143,23 @@ const JoinItemBirth = (props) => {
         </div>
         <div className="header-left-right"></div>
       </div>
-      <div className="weekdays">{getDaysOfWeek()}</div>
-      <div className="days">{getDays().map((day) => day)}</div>
-      <div className="selected-date">
-        {selectedDate.toLocaleString('default', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          weekday: 'long',
-        })}
+      <div className="Birth_body">
+        <div className="Birth_body_dates">
+          <div className="weekdays">{getDaysOfWeek()}</div>
+          <div className="days">{getDays().map((day) => day)}</div>
+        </div>
+        <div
+          className={underNineteen ? 'Birth_undernineteen' : 'selected-date'}
+        >
+          {underNineteen
+            ? '19세 미만 이용 불가'
+            : selectedDate.toLocaleString('default', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long',
+              })}
+        </div>
       </div>
     </div>
   )
