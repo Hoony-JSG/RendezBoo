@@ -95,7 +95,7 @@ const Rocket = () => {
         <div style={{ width: '400px' }}>
           <RocketItem {...MeAndYou} />
         </div>
-        <div style={{ width: '800px' }}>
+        <div style={{ width: '1000px' }}>
           <div>
             <RocketBadge {...MeAndYou} badgeList={badgeList} />
           </div>

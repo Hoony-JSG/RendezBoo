@@ -7,13 +7,17 @@ const RocketBadgeList = (props) => {
       <h3>로켓 뱃지 리스트</h3>
       <div>
         {badgeList.map((badge, idx) => (
-          <div key={idx} title={badge.description}>
+          <div
+            key={idx}
+            title={badge.description}
+            style={{ display: 'inline-block' }}
+          >
             <img
               src={SRC_URL + badge.url}
               alt={badge.name}
               style={{ width: '128px', height: '128px' }}
             />
-            <p>{badge.name}</p>
+            <div style={{ margin: '5px 0px' }}>{badge.name}</div>
           </div>
         ))}
       </div>
