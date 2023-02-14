@@ -42,11 +42,13 @@ const Rocket = () => {
     surprise: 0,
   })
 
+  const [badgeList, setBadgeList] = useState([])
+
   const MeAndYou = {
     Me: rocketUser.name,
     Inquire: Inquire,
     ver: ver,
-    BadgeRep: 1,
+    BadgeRep: rocketUser.badge,
   }
 
   useEffect(() => {
@@ -63,6 +65,14 @@ const Rocket = () => {
       .then((res) => {
         setRocketUserEmotion(res.data)
         console.log(res.data)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+    axios
+      .get(APPLICATION_SERVER_URL + 'api/badge/' + Inquire, REQUEST_HEADER)
+      .then((res) => {
+        setBadgeList(res.data)
       })
       .catch((e) => {
         console.log(e)
@@ -86,7 +96,7 @@ const Rocket = () => {
         </div>
         <div style={{ width: '800px' }}>
           <div>
-            <RocketBadge {...MeAndYou} />
+            <RocketBadge {...MeAndYou} badgeList={badgeList} />
           </div>
           <div>
             <RocketRadar rocketUserEmotion={rocketUserEmotion} />
