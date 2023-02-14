@@ -35,18 +35,21 @@ const JoinItem = () => {
       dateObj.getMonth() + 1
     ).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`
     try {
-      let response = await axios.post('http://52.78.60.53:8080/api/user/join', {
-        birthday: formattedBirth,
-        city: '',
-        email: email,
-        gender: gender,
-        isAdmin: false,
-        mbti: mbti,
-        name: name,
-        password: '',
-        phoneNumber: phoneNumber,
-        profileImagePath: '',
-      })
+      let response = await axios.post(
+        'https://i8a107.p.ssafy.io/api/user/join',
+        {
+          birthday: formattedBirth,
+          city: '',
+          email: email,
+          gender: gender,
+          isAdmin: false,
+          mbti: mbti,
+          name: name,
+          password: '',
+          phoneNumber: phoneNumber,
+          profileImagePath: '',
+        }
+      )
       console.log('유저 세팅 전송 Good')
       window.location.href = '/'
     } catch (error) {
