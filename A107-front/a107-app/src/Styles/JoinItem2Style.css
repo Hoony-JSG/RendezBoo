@@ -106,10 +106,10 @@
 
 .border-glow {
   box-shadow: 0 0 10px white;
-  animation: glow 1s ease-in-out infinite;
+  animation: brd-glow 1s ease-in-out infinite;
 }
 
-@keyframes glow {
+@keyframes brd-glow {
   0% {
     box-shadow: 0 0 5px white;
   }
@@ -132,13 +132,13 @@
 
 @keyframes glow-naver {
   0% {
-    box-shadow: 0 0 5px rgb(47, 172, 6);
+    box-shadow: 0 0 5px rgb(70, 227, 17);
   }
   50% {
     box-shadow: 0 0 20px rgb(120, 184, 99);
   }
   100% {
-    box-shadow: 0 0 5px rgb(47, 172, 6);
+    box-shadow: 0 0 5px rgb(70, 227, 17);
   }
 }
 @keyframes glow-kakao {

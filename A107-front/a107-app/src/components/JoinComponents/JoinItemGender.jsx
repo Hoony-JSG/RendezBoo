@@ -7,11 +7,13 @@ const JoinItemGender = (props) => {
 
   const handleMale = () => {
     props.setHas(1, true)
+    props.fixedGender(true)
     setGender('Male')
   }
 
   const handleFemale = () => {
     props.setHas(1, true)
+    props.fixedGender(false)
     setGender('Female')
   }
 

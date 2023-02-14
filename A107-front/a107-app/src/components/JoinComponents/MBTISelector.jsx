@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../../Styles/MBTISelectorStyle.css'
-const MBTISelector = () => {
+const MBTISelector = (props) => {
   const [MBTI, setMBTI] = useState({
     I: 'I',
     S: 'S',
@@ -28,6 +28,7 @@ const MBTISelector = () => {
         break
     }
     setMBTI(newMBTI)
+    props.mbti(newMBTI.I + newMBTI.S + newMBTI.F + newMBTI.J)
   }
 
   return (

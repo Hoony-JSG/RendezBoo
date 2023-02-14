@@ -5,6 +5,7 @@ const ProfileImageUploader = (props) => {
   const handleImageUpload = (e) => {
     console.log('새로운 이미지를 input함')
     setNewImage(URL.createObjectURL(e.target.files[0]))
+    // props.profileImagePath = newImage;
   }
 
   useEffect(() => {

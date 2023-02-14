@@ -25,7 +25,12 @@ const JoinItem3rd = (props) => {
             'Join3_left-box ' + (hasProfileImage ? 'Join3_border-glow' : '')
           }
         >
-          <RocketItem ver="Start" setTrue={setHasProfileImage} />
+          <RocketItem
+            ver="Start"
+            profileImagePath={props.profileImagePath}
+            mbti={props.mbti}
+            setTrue={setHasProfileImage}
+          />
         </div>
         <div className="Join3_right-box">
           <div
@@ -33,7 +38,7 @@ const JoinItem3rd = (props) => {
               'Join3_right-top-box ' + (hasBirth ? 'Join3_border-glow' : '')
             }
           >
-            <JoinItemBirth setHas={setHasBirth} />
+            <JoinItemBirth birthday={props.birthday} setHas={setHasBirth} />
           </div>
           <div className="Join3_right-bottom-box">
             <div className="Join3_next-button">

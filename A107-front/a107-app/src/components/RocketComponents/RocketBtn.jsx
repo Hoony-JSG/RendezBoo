@@ -20,7 +20,7 @@ const RocketBtn = (props) => {
   } else if (props.ver === 'Start') {
     return (
       <div>
-        <MBTISelector />
+        <MBTISelector mbti={props.mbti} />
       </div>
     )
   } else {

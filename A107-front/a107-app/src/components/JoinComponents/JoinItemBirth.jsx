@@ -77,6 +77,7 @@ const JoinItemBirth = (props) => {
   useEffect(() => {
     const birthYear = selectedDate.getFullYear()
     if (currentYear - birthYear >= 19) {
+      props.birthday(selectedDate)
       props.setHas(true)
     } else {
       props.setHas(false)
