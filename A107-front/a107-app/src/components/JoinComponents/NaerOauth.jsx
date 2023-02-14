@@ -6,7 +6,6 @@ const NaverOauth = () => {
   const searchParams = new URLSearchParams(location.search)
   const code = searchParams.get('code')
   const state = searchParams.get('state')
-
   axios
     .get('https://i8a107.p.ssafy.io/api/oauth/naver' + location.search)
     .then((res) => {

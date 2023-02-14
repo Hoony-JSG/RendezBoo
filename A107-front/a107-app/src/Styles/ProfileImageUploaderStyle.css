@@ -1,3 +1,36 @@
 .Rocket_profile-iamge-upload-button {
   border: 1px solid red;
 }
+
+.ImageUploader_button {
+  display: flex;
+  align-items: center;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.8em 1.3em 0.8em 0.9em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: 16px;
+}
+
+.ImageUploader_button .ImageUploader_svg {
+  margin-right: 3px;
+  transform: rotate(90deg);
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.ImageUploader_button .ImageUploader_span {
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.ImageUploader_button:hover .ImageUploader_svg {
+  transform: translateX(5px) rotate(0deg);
+}
+
+.ImageUploader_button:hover .ImageUploader_span {
+  transform: translateX(7px);
+}
