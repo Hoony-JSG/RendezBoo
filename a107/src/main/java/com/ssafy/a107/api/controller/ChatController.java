@@ -31,11 +31,11 @@ public class ChatController {
     @MessageMapping("/send")
     @ApiOperation("채팅 생성(보내기) - stomp")
     public ResponseEntity<ChatRes> sendChat(@RequestBody ChatReq req) throws NotFoundException{
-        log.debug("got message");
-        log.debug("message: " + req.getMessage());
-        log.debug("chatRoomSeq: " + req.getChatRoomSeq());
-        log.debug("senderSeq: " + req.getSenderSeq());
-        log.debug("receiverSeq: " + req.getReceiverSeq());
+//        log.debug("got message");
+//        log.debug("message: " + req.getMessage());
+//        log.debug("chatRoomSeq: " + req.getChatRoomSeq());
+//        log.debug("senderSeq: " + req.getSenderSeq());
+//        log.debug("receiverSeq: " + req.getReceiverSeq());
 
 
         String insertChat = chatService.insertChat(req);
@@ -48,25 +48,6 @@ public class ChatController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRes);
     }
 
-
-
-//    @PostMapping("/insert")
-//    @ApiOperation("채팅 생성(보내기) - 테스트")
-//    public ResponseEntity<?> createChat(@RequestBody ChatReq req){
-//        try {
-//            String insertChat = chatService.insertChat(req);
-//            Chat chat = chatService.findBySeq(insertChat);
-//
-//            ChatRes chatRes = new ChatRes(chat);
-//
-//            sendingOperations.convertAndSend("/sub/" + req.getChatRoomSeq(), req);
-//
-//            return ResponseEntity.status(HttpStatus.CREATED).body(chatRes);
-//
-//        } catch (NotFoundException ex) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//    }
 
     @GetMapping("/api/chat/{chatRoomSeq}")
     @ApiOperation("해당 채팅 방의 채팅 내역 불러오기")
