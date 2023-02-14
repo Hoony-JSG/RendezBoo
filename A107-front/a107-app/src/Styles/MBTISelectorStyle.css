@@ -1,21 +1,35 @@
 .mbti-selector {
-  place-content: center;
   display: flex;
   align-items: center;
+  margin-top: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.122);
+  padding: 30px 10px;
+}
+.MBTISelector_head {
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+}
+
+.MBTISelector_text {
+  font-size: 24px;
+  margin: 20px 0px;
 }
 
 .mbti-selector-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 80px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 30px;
 }
 
 .mbti-selector-item .mbti-selector-item-div {
   margin: 10px;
 }
 
-.mbti-selector-item .mbti-selector-item-button {
+.mbti-selector-item .mbti-selector-item-btn {
   margin-bottom: 10px;
   cursor: pointer;
   border-radius: 25%;
@@ -26,6 +40,7 @@
 }
 
 .MBTISelector_btn {
-  width: 100px;
-  border: 1px solid red;
+  width: fit-content;
+  height: fit-content;
+  /* border: 1px solid red; */
 }

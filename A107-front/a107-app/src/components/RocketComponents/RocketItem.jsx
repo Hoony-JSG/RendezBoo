@@ -16,10 +16,6 @@ const RocketItem = (props) => {
     BadgeRep: 1,
   }
 
-  const setTempBorder = {
-    border: '1px solid black',
-  }
-
   const [profileimage, setprofileimage] = useState(userprofile)
   const changeImage = (image) => {
     if (image !== null) {
@@ -30,7 +26,7 @@ const RocketItem = (props) => {
   }
   console.log('Btn :' + ver)
   return (
-    <div style={setTempBorder}>
+    <div>
       {props.ver === 'Start' && (
         <div className="Join3_profileimage">About Me</div>
       )}

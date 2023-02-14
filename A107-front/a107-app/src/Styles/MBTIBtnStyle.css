@@ -1,60 +1,87 @@
 .MBTIBtn_container {
-  border: 1px solid green;
+  padding: 10px;
+  /* border: 1px solid green; */
+  height: fit-content;
+  width: fit-content;
 }
 
-.MBTIBtn_download-button {
+.MBTIBtn_button {
   position: relative;
   border-width: 0;
+  background: none;
   color: white;
   font-size: 15px;
   font-weight: 600;
   border-radius: 4px;
   z-index: 1;
-}
-
-.MBTIBtn_download-button .MBTIBtn_docs {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  height: 50px;
-  width: 100px;
-  /* min-height: 40px; */
-  padding: 0 10px;
-  border-radius: 4px;
-  z-index: 1;
-  background-color: #242a35;
-  border: solid 1px #e8e8e82d;
-  transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  justify-content: center;
+  align-content: center;
 }
-
-.MBTIBtn_download-button:hover {
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-}
-
-.MBTIBtn_download {
+.MBTIBtn_pop {
+  width: 40px;
+  height: 40px;
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 90%;
-  margin: 0 auto;
+  margin-top: 5px;
+  margin-left: 15px;
   z-index: -1;
   border-radius: 4px;
   transform: translateY(0%);
-  background-color: #01e056;
-  border: solid 1px #01e0572d;
+  background-color: #00000074;
+  border: solid 1px #ffffff85;
   transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
 }
+.MBTIBtn_button .MBTIBtn_cover {
+  font-family: monospace;
+  font-size: 1.5rem;
+  color: #fafafa;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 2px solid #fafafa;
+  background: #252525;
+  box-shadow: 3px 3px #fafafa;
+  cursor: pointer;
+}
+/* .MBTIBtn_button .MBTIBtn_cover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  width: 100px;
+  padding: 0 10px;
+  border-radius: 4px;
+  z-index: 1;
+  background-color: rgb(189, 60, 60);
+  border: solid 1px #e8e8e82d;
+  transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+} */
 
-.MBTIBtn_download-button:hover .MBTIBtn_download {
-  transform: translateY(100%);
+/* .MBTIBtn_button:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+} */
+
+.MBTIBtn_prevent-hover {
+  pointer-events: none;
 }
 
-.MBTIBtn_download .MBTIBtn_download {
+.MBTIBtn_button:hover .MBTIBtn_pop {
+  transform: translateY(-100%);
+}
+
+.MBTIBtn_button:active .MBTIBtn_cover {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+/* .MBTIBtn_download .MBTIBtn_download {
   animation: MBTIBtn_docs 1s infinite;
 }
 
@@ -70,4 +97,4 @@
   100% {
     transform: translateY(0%);
   }
-}
+} */
