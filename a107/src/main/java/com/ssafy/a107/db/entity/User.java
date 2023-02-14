@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Column(nullable = false, length = 40)
     private String email;
@@ -67,7 +67,7 @@ public class User extends BaseEntity{
     @Column
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch =FetchType.LAZY, cascade = ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "badge_seq")
     private Badge badge;
 
@@ -78,7 +78,7 @@ public class User extends BaseEntity{
     @Builder.Default
     private Set<Authority> authorities = new HashSet<>();
 
-    public void deleteUser(){
+    public void deleteUser() {
         isValid = false;
     }
 
@@ -94,5 +94,9 @@ public class User extends BaseEntity{
 
     public void addPoint(Long point) {
         this.point += point;
+    }
+
+    public void updateProfileImage(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
     }
 }
