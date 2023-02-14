@@ -44,15 +44,15 @@ public class UserController {
     // 회원가입
     @PostMapping("/join")
     @ApiOperation(value = "유저 회원가입", notes = "유저 회원가입")
-    public ResponseEntity<String> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, ParseException {
+    public ResponseEntity<Long> joinUser(@RequestBody JoinReq joinReq) throws ConflictException, ParseException {
         userService.checkEmailDuplicate(joinReq.getEmail());
 
         joinReq.parsePhoneNumber();
         userService.checkPhoneNumberDuplicate(joinReq.getPhoneNumber());
 
-        authService.createUser(joinReq);
+        Long userSeq = authService.createUser(joinReq);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(joinReq.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userSeq);
     }
 
     // 로그인

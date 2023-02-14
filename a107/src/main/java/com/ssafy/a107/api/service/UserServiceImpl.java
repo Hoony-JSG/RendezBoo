@@ -105,6 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateProfileImage(MultipartFile file, Long userSeq) throws IOException, NotFoundException {
         User user = userRepository.findById(userSeq).orElseThrow(() -> new NotFoundException("Wrong user seq!"));
         String url = s3Uploader.uploadProfile(file, "images");
