@@ -48,6 +48,11 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 jwt:
   header: Authorization
   secret: rendezboosecretkeyneedsverylongsecretkeyforsafety
@@ -116,6 +121,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 jwt:
   header: Authorization
