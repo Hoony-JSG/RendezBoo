@@ -47,19 +47,21 @@ function App() {
   ]
   const isAllowedPath = allowedPaths.includes(location.pathname)
 
-  const reissueAndSetToken = async () => {
-    // 토큰이 없고 접근 제한된 라우트에 접근하려고 할 때 홈으로 보내기
-    if (!isAllowedPath && !refreshToken) {
-      alert('로그인이 필요한 서비스입니다.')
-      navigate('/home')
-      //  그 외에는 토큰 재발급
-    } else {
-      const accessToken = await reissueAccessToken(refreshToken)
-      dispatch(SET_TOKEN(accessToken))
+  useEffect(() => {
+    const reissueAndSetToken = async () => {
+      // 토큰이 없고 접근 제한된 라우트에 접근하려고 할 때 홈으로 보내기
+      if (!isAllowedPath && !refreshToken) {
+        alert('로그인이 필요한 서비스입니다.')
+        navigate('/home')
+        //  그 외에는 토큰 재발급
+      } else {
+        const accessToken = await reissueAccessToken(refreshToken)
+        dispatch(SET_TOKEN(accessToken))
+      }
     }
-  }
 
-  useEffect(reissueAndSetToken(), [location.pathname, refreshToken])
+    reissueAndSetToken()
+  }, [isAllowedPath, location.pathname, refreshToken, dispatch, navigate])
 
   return (
     <div className="App">
