@@ -7,7 +7,7 @@ const KakaoLogin = () => {
 
     // Kakao Login API call
     window.Kakao.Auth.login({
-      redirectUri: 'https://i8a107.p.ssafy.io/join',
+      redirectUri: 'https://i8a107.p.ssafy.io/oauth/kakao',
       success: (authObj) => {
         console.log('카카오 성공 : ')
         console.log(authObj)
@@ -21,7 +21,11 @@ const KakaoLogin = () => {
   return (
     <div>
       <button
-        style={{ backgroundColor: 'rgba(0,0,0,0)', border: '0px', cursor:'pointer' }}
+        style={{
+          backgroundColor: 'rgba(0,0,0,0)',
+          border: '0px',
+          cursor: 'pointer',
+        }}
         onClick={handleKakaoLogin}
       >
         <img
