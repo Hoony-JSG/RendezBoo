@@ -70,7 +70,7 @@ const Rocket = () => {
         console.log(e)
       })
     axios
-      .get(APPLICATION_SERVER_URL + 'api/badge/' + Inquire, REQUEST_HEADER)
+      .get(APPLICATION_SERVER_URL + 'api/badges/' + Inquire, REQUEST_HEADER)
       .then((res) => {
         setBadgeList(res.data)
       })
@@ -78,6 +78,7 @@ const Rocket = () => {
         console.log(e)
       })
   }, [])
+
   console.log(ver)
 
   return (
