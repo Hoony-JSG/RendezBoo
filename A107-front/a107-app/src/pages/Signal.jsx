@@ -11,7 +11,6 @@ const Signal = () => {
   
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [chatRoom, setChatRoom] = useState([])
-  // const [chatList, setChatList] = useState([])
 
   useEffect( () => {
     axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
@@ -19,13 +18,6 @@ const Signal = () => {
       console.log(response.data)
     })
   }, [])
-
-  // useEffect( () => {
-  //   axios.get('https://i8a107.p.ssafy.io/api/chat/'+ tmpChatRoomSeq).then((response)=>{
-  //     setChatList(response.data)
-  //     console.log(response.data)
-  //   })
-  // }, [])
 
   const windowStyle = {
     boxSizing: 'border-box',

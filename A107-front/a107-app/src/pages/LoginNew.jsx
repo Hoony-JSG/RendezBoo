@@ -18,8 +18,10 @@ const LoginNew = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const APPLICATION_SERVER_URL = 
-    process.env.NODE_ENV === 'https://i8a107.p.ssafy.io'
+  const APPLICATION_SERVER_URL = 'http://localhost:8080'
+    // process.env.NODE_ENV === 'production'
+    //   ? 'https://i8a107.p.ssafy.io'
+    //   : 'http://localhost:8080'
 
   const dispatch = useDispatch()
   const accessToken = useSelector(

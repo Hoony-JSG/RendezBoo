@@ -1,8 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-// import { useSelector } from 'react-redux'
 import axios from 'axios'
 import * as StompJs from '@stomp/stompjs'
-// import SignalForm from './SignalForm'
 import SignalSelectedItem from './SignalSelectedItem'
 import userLogo from '../../Images/user-profile.png'
 import { SiRocketdotchat } from 'react-icons/si'
@@ -10,8 +8,6 @@ import '../../Styles/SignalSelected.css'
 
 const SignalSelected = ({ userSeq, chatRoomSeq }) => {
   const client = useRef({})
-
-  // const me = useSelector((state) => state.userInfoReducer.userSeq)
 
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
@@ -96,16 +92,16 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
       const json_body = JSON.parse(body.body)
       console.log(json_body)
 
-        console.log(chatList)
-        setChatList((_chat_list) => [
-          {
-            createdAt: json_body.createdAt,
-            message: json_body.message,
-            receiverSeq: json_body.receiverSeq,
-            senderSeq: json_body.senderSeq,
-          },
-          ..._chat_list,
-        ])
+      console.log(chatList)
+      setChatList((_chat_list) => [
+        {
+          createdAt: json_body.createdAt,
+          message: json_body.message,
+          receiverSeq: json_body.receiverSeq,
+          senderSeq: json_body.senderSeq,
+        },
+        ..._chat_list,
+      ])
     })
   }
 
@@ -153,7 +149,6 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
 
   useEffect(() => {
     connect()
-
     return () => disconnect()
   }, [chatRoomSeq])
 

@@ -4,9 +4,7 @@ import userLogo from '../../Images/user-profile.png'
 const SignalList = ({ userSeq, chat }) => {
   const { userFemale, userMale } = chat
   const navigate = useNavigate()
-  const goToPage = (props) => {
-    navigate('/' + props)
-  }
+
   const chatListStyle = {
     width: '100%',
     height: '120px',
@@ -25,7 +23,7 @@ const SignalList = ({ userSeq, chat }) => {
       'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
   }
   return (
-    <div onClick={() => goToPage('signal/' + chat.seq)}>
+    <div onClick={() => navigate('/signal/' + chat.seq)}>
       {userFemale.seq !== userSeq ? (
         <div style={chatListStyle}>
           <img
