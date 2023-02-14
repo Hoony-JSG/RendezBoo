@@ -278,7 +278,7 @@ const Docking1 = (props) => {
       { userSeq: userSeq },
       REQUEST_HEADER
     )
-    console.log("mm"+response.data)
+    console.log('mm' + response.data)
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
     console.log('Get Token!!!' + token)
@@ -391,11 +391,11 @@ const Docking1 = (props) => {
       disgust: disgustedCnt,
       fear: fearfulCnt,
       happiness: happyCnt,
-      meeting_room_seq: meetingRoomSeq,
+      meetingRoomSeq: meetingRoomSeq,
       neutral: 0,
       sadness: sadCnt,
       surprise: surprisedCnt,
-      user_seq: userSeq,
+      userSeq: userSeq,
     }
 
     await axios.post(
@@ -426,11 +426,11 @@ const Docking1 = (props) => {
       disgust: disgustedCnt,
       fear: fearfulCnt,
       happiness: happyCnt,
-      meeting_room_seq: meetingRoomSeq,
+      meetingRoomSeq: meetingRoomSeq,
       neutral: 0,
       sadness: sadCnt,
       surprise: surprisedCnt,
-      user_seq: userSeq,
+      userSeq: userSeq,
     }
 
     await axios.post(
