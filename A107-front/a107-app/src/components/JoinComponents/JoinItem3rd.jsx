@@ -1,6 +1,5 @@
 import RocketItem from '../RocketComponents/RocketItem'
 import JoinItemBirth from './JoinItemBirth'
-import '../../Styles/temp_border_style.css'
 import '../../Styles/JoinItem3Style.css'
 import NextPageButton from './NextPageButton'
 import { useState } from 'react'
@@ -38,7 +37,10 @@ const JoinItem3rd = (props) => {
               'Join3_right-top-box ' + (hasBirth ? 'Join3_border-glow' : '')
             }
           >
-            <JoinItemBirth birthday={props.birthday} setHas={setHasBirth} />
+            <div className="Join3_birth-title">Birth</div>
+            <div className="Join3_birth-container">
+              <JoinItemBirth birthday={props.birthday} setHas={setHasBirth} />
+            </div>
           </div>
           <div className="Join3_right-bottom-box">
             <div className="Join3_next-button">

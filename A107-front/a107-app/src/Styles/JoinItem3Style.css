@@ -69,16 +69,31 @@
   border-radius: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   width: 100%;
   height: 80%;
-  align-items: center;
   padding: 30px;
-  align-content: flex-start;
+  align-content: space-between;
 }
 
+.Join3_birth-title {
+  padding: 30px 10px 10px 10px;
+  border-bottom: 1px solid white;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  color: white;
+  font-size: 40px;
+  text-align: center;
+}
+
+.Join3_birth-container {
+  height: 100%;
+  display: flex;
+  align-items: top;
+  justify-content: center;
+}
 .Join3_right-bottom-box {
-  border: 1px solid red;
   align-items: self-end;
   width: 100%;
   height: 20%;
