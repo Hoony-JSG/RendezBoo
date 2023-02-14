@@ -1,15 +1,18 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import logo from '../logo.png'
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import logoColor from '../logo_color.png'
+import logoWhite from '../logo_white.png'
 import { useSelector } from 'react-redux'
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+  const [ logo, setLogo ] = useState(logoColor)
 
   const navStyle = {
     position: 'absolute fixed',
     top: 0,
-    width: '1920px',
+    width: '100%',
     height: '90px',
     display: 'flex',
     background: 'rgba(23, 49, 71, 0.5)',
@@ -29,7 +32,7 @@ const Navbar = () => {
   }
 
   const logoStyle = {
-    height: 'inherit',
+    height: '60%',
   }
 
   return (
@@ -48,7 +51,11 @@ const Navbar = () => {
         </NavLink>
       </div>
       <div style={divStyle}>
-        <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
+        <img src={logo} className="Main-logo" alt="logo" style={logoStyle}
+          onClick={() => navigate('/')}
+          onMouseOverCapture={() => setLogo(logoWhite)}
+          onMouseOutCapture={() => setLogo(logoColor)}
+        />
       </div>
       <div style={divStyle}>
         <NavLink

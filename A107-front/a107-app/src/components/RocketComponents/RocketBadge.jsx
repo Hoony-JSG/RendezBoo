@@ -5,9 +5,9 @@ const RocketBadge = (props) => {
 
   console.log(props.ver === 'Me' ? '내꺼' : '다른사람꺼')
   const WholeFrame = {
-    border: '1px solid blue',
+    // border: '1px solid blue',
     padding: '5px',
-    height: '200px',
+    // height: '200px',
   }
   const BadgeDes = {
     border: '1px solid black',
