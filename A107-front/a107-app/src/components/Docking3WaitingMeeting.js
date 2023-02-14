@@ -58,9 +58,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         heartbeatOutgoing: 4000,
 
         // 연결 시
-        onConnect: () => {
+        onConnect: async () => {
           console.log('success')
-          subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
+          await subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
         },
 
         // 에러 발생 시 로그 출력
@@ -182,10 +182,10 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
 
   // subscribe: 메세지 받을 주소 구독
-  const subscribeMulti = () => {
+  const subscribeMulti = async () => {
     // 구독한 주소로 메세지 받을 시 이벤트 발생
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
-    client.current.subscribe('/sub/multi/' + multiMeetingRoomSeq, (body) => {
+    await client.current.subscribe('/sub/multi/' + multiMeetingRoomSeq, (body) => {
       // 받아온 제이슨 파싱
       const json_body = JSON.parse(body.body)
 
