@@ -1,12 +1,17 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import JoinItem2nd from './JoinItem2nd'
 import JoinItem3rd from './JoinItem3rd'
 import JoinItem4rd from './JoinItem4rd'
 
 const JoinItem = () => {
   const location = useLocation()
+
+  const NAVER_URL =
+    'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=F3K8r9yyEG_RFk8RpLgi&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2foauth%2fnaver&state=1234'
+  const KAKAO_URL =
+    'https://kauth.kakao.com/oauth/authorize?client_id=712c281c808f36c63bc8cea4a11ba42f&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2foauth%2fkakao&response_type=code'
   const params = new URLSearchParams(location.search)
   const email = params.get('email')
   const emailType = params.get('type')
@@ -51,7 +56,12 @@ const JoinItem = () => {
         }
       )
       console.log('유저 세팅 전송 Good')
-      window.location.href = '/'
+
+      if (emailType == 0) {
+        window.location.href = NAVER_URL
+      } else {
+        window.location.href = KAKAO_URL
+      }
     } catch (error) {
       console.log('유저 세팅 전송 오류')
       console.error(error)

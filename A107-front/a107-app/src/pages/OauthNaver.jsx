@@ -15,12 +15,13 @@ const OauthNaver = (props) => {
   axios
     .get('https://i8a107.p.ssafy.io/api/oauth/naver' + location.search)
     .then((res) => {
+      console.log(res)
       if (res.status === 200) {
         // 회원가입으로
         const email = res.data.email
         const type = res.data.type
         navigate({ pathname: '/join', search: `?email=${email}&type=${type}` })
-      } else if (res.status === 201) {
+      } else if (res.status === 202) {
         // 로그인
         setRefreshToken(res.data.refreshToken)
         const decode = jwtDecode(res.data.accessToken)
