@@ -127,7 +127,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     //미팅방에 유저 더하기, 삭제하기
     @Transactional
     @Override
-    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException {
+    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException, InterruptedException {
         MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
                 .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!"));
         User user = userRepository.findById(userSeq)
@@ -168,7 +168,7 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
 
     //    multimeetingroom 세션 참가 시 웹소켓 연결 되어있는 클라이언트에게 메세지 보내는 기능
     @Override
-    public void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException {
+    public void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, InterruptedException {
         if (!multiMeetingRoomRepository.existsById(multiMeetingRoomSeq))
             throw new NotFoundException("Invalid multi meeting room sequence!");
         else if (!userRepository.existsById(userSeq))
@@ -183,6 +183,8 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
                 .femaleNum(multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, false))
                 .createdAt(LocalDateTime.now())
                 .build();
+
+        Thread.sleep(1000);
 
 //        미팅 룸 번호 구독 주소에 메세지 보냄
         simpMessageSendingOperations.convertAndSend("/sub/multi/" + multiMeetingRoomSeq, res);

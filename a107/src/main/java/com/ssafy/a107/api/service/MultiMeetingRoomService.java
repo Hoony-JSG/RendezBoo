@@ -23,10 +23,10 @@ public interface MultiMeetingRoomService {
     MultiMeetingRoomRes findMultiMeetingRoom(Long roomSeq) throws NotFoundException;
     List<MultiMeetingRoomRes> findAllMultiMeetingRoom();
 
-    Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException;
+    Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException, InterruptedException;
     void deleteUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 
-    void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
+    void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, InterruptedException;
 
     void sendToWebSocket (MultiWebSocketReq req) throws NotFoundException;
 
