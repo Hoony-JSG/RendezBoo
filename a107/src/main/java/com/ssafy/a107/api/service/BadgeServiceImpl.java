@@ -109,7 +109,7 @@ public class BadgeServiceImpl implements BadgeService {
 
         int finCount = badgeCondition.addOneToOneFinCount();
 
-        // 첫 일대일 미팅 완료, 일대일 미팅 5, 10, 20회 완료
+        // 첫 일대일 미팅 완료, 일대일 미팅 1, 5, 10회 완료
         if(finCount == 1) {
             obtainedBadges.add(getBadgeBySeq(1L));
             obtainedPoints += 100L;
@@ -121,10 +121,6 @@ public class BadgeServiceImpl implements BadgeService {
         else if(finCount == 10) {
             obtainedBadges.add(getBadgeBySeq(3L));
             obtainedPoints += 300L;
-        }
-        else if(finCount == 20) {
-            obtainedBadges.add(getBadgeBySeq(4L));
-            obtainedPoints += 400L;
         }
 
         Double[] emotionDataArr = emotionDataReq.emotionDataArr();
@@ -142,17 +138,17 @@ public class BadgeServiceImpl implements BadgeService {
 
         int emotionCount = badgeCondition.addEmotionCount(idx);
 
-        // 감정 5, 10, 15회 유발
-        if(emotionCount == 5) {
-            obtainedBadges.add(getBadgeBySeq(3*idx+13));
+        // 감정 1, 5, 10회 유발
+        if(emotionCount == 1) {
+            obtainedBadges.add(getBadgeBySeq(3*idx+7));
             obtainedPoints += 100L;
         }
-        else if(emotionCount == 10) {
-            obtainedBadges.add(getBadgeBySeq(3*idx+14));
+        else if(emotionCount == 5) {
+            obtainedBadges.add(getBadgeBySeq(3*idx+8));
             obtainedPoints += 200L;
         }
-        else if(emotionCount == 15) {
-            obtainedBadges.add(getBadgeBySeq(3*idx+15));
+        else if(emotionCount == 10) {
+            obtainedBadges.add(getBadgeBySeq(3*idx+9));
             obtainedPoints += 300L;
         }
 
@@ -184,22 +180,18 @@ public class BadgeServiceImpl implements BadgeService {
 
         int finCount = badgeCondition.addManyToManyFinCount();
 
-        // 첫 일대일 미팅 완료, 일대일 미팅 5, 10, 20회 완료
+        // 첫 일대일 미팅 완료, 일대일 미팅 1, 5, 10회 완료
         if(finCount == 1) {
-            obtainedBadges.add(getBadgeBySeq(5L));
+            obtainedBadges.add(getBadgeBySeq(4L));
             obtainedPoints += 100L;
         }
         else if(finCount == 5) {
-            obtainedBadges.add(getBadgeBySeq(6L));
+            obtainedBadges.add(getBadgeBySeq(5L));
             obtainedPoints += 200L;
         }
         else if(finCount == 10) {
-            obtainedBadges.add(getBadgeBySeq(7L));
+            obtainedBadges.add(getBadgeBySeq(6L));
             obtainedPoints += 300L;
-        }
-        else if(finCount == 20) {
-            obtainedBadges.add(getBadgeBySeq(8L));
-            obtainedPoints += 400L;
         }
 
         // 획득한 뱃지가 있으면 유저에게 지급
@@ -230,21 +222,21 @@ public class BadgeServiceImpl implements BadgeService {
 
         int itemCount = badgeCondition.addItemCount();
 
-        // 첫 일대일 미팅 완료, 일대일 미팅 5, 10, 20회 완료
+        // 첫 아이템 구매 1, 5, 10회 완료 - 보류
         if(itemCount == 1) {
-            obtainedBadges.add(getBadgeBySeq(9L));
+            obtainedBadges.add(getBadgeBySeq(999L));
             obtainedPoints += 100L;
         }
         else if(itemCount == 5) {
-            obtainedBadges.add(getBadgeBySeq(10L));
+            obtainedBadges.add(getBadgeBySeq(999L));
             obtainedPoints += 200L;
         }
         else if(itemCount == 10) {
-            obtainedBadges.add(getBadgeBySeq(11L));
+            obtainedBadges.add(getBadgeBySeq(999L));
             obtainedPoints += 300L;
         }
         else if(itemCount == 20) {
-            obtainedBadges.add(getBadgeBySeq(12L));
+            obtainedBadges.add(getBadgeBySeq(999L));
             obtainedPoints += 400L;
         }
 
