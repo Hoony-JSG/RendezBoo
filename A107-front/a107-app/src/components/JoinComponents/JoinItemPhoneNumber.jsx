@@ -15,9 +15,12 @@ const JoinItemPhoneNumber = (props) => {
 
   const sendFirstSMS = async () => {
     try {
-      let response = await axios.post('http://52.78.60.53:8080/api/sms/send', {
-        phoneNumber: PhoneNumber,
-      })
+      let response = await axios.post(
+        'https://i8a107.p.ssafy.io/api/sms/send',
+        {
+          phoneNumber: PhoneNumber,
+        }
+      )
       console.log('정상적으로 전송됨')
       setShowCheckComponent(true)
     } catch (error) {
