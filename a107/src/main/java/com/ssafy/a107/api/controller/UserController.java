@@ -17,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -117,5 +119,12 @@ public class UserController {
         userService.deleteUser(userEmail);
 
         return ResponseEntity.status(HttpStatus.OK).body(userEmail);
+    }
+
+    @PostMapping("/profile")
+    @ApiOperation(value = "프로필 사진 변경")
+    public ResponseEntity<?> postProfileImage(@RequestPart MultipartFile file, @RequestParam Long userSeq) throws NotFoundException, IOException {
+        userService.updateProfileImage(file, userSeq);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
