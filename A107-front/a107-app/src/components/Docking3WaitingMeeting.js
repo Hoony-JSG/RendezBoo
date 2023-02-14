@@ -22,19 +22,22 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const usertoken = '$$$mytoken$$$'
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-  // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
+  //gotFirstWebSocketMessageFlag
+  const gotFirstWebSocketMessageFlag = useRef(false)
+   // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
   const client = useRef({})
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
   const [completeFlag, setCompleteFlag] = useState(false)
-
+    //gotFirstWebSocketMessageFlag
+  
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
   const [token, setToken] = useState('')
-
+  
   const [maskPath, setMaskPath] = useState(
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
   )
@@ -44,6 +47,38 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
     // connect: 웹소켓(stomp)연결
     const connect = async () => {
+
+      // subscribe: 메세지 받을 주소 구독
+      const subscribeMulti = async () => {
+        // 구독한 주소로 메세지 받을 시 이벤트 발생
+        // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
+        await client.current.subscribe('/sub/multi/' + multiMeetingRoomSeq, (body) => {
+          // 받아온 제이슨 파싱
+          const json_body = JSON.parse(body.body)
+
+          console.log('메세지 받았당') // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
+          console.log(json_body)
+
+          const type = json_body.flag //JOIN, CHAT, EXIT, SYSTEM, GAME
+
+          // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
+          setChatList((_chat_list) => [
+            ..._chat_list,
+            json_body.message,
+            json_body.createdAt,
+          ])
+
+          if (type === 'JOIN') {
+            var maleNum = json_body.maleNum
+            var femaleNum = json_body.femaleNum
+            console.log('malenum: ' + maleNum)
+            console.log('femalenum: ' + femaleNum)
+            if (maleNum ==3 && femaleNum == 3) {
+              setCompleteFlag(true)
+            }
+          }
+        })
+      }
       client.current = new StompJs.Client({
         brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
@@ -58,9 +93,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         heartbeatOutgoing: 4000,
 
         // 연결 시
-        onConnect: () => {
+        onConnect: async () => {
           console.log('success')
-          subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
+          await subscribeMulti() // 메세지(채팅)을 받을 주소를 구독합니다.
         },
 
         // 에러 발생 시 로그 출력
@@ -84,6 +119,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             userSeq
         )
         .then((response) => {
+          
           console.log(response.data)
           const openVidu = new OpenVidu()
           let session = openVidu.initSession()
@@ -178,40 +214,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       window.removeEventListener('popstate', onBackButtonEvent)
     }
   }, [])
-
-
-
-  // subscribe: 메세지 받을 주소 구독
-  const subscribeMulti = async () => {
-    // 구독한 주소로 메세지 받을 시 이벤트 발생
-    // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
-    await client.current.subscribe('/sub/multi/' + multiMeetingRoomSeq, (body) => {
-      // 받아온 제이슨 파싱
-      const json_body = JSON.parse(body.body)
-
-      console.log('메세지 받았당') // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
-      console.log(json_body)
-
-      const type = json_body.flag //JOIN, CHAT, EXIT, SYSTEM, GAME
-
-      // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
-      setChatList((_chat_list) => [
-        ..._chat_list,
-        json_body.message,
-        json_body.createdAt,
-      ])
-
-      if (type === 'JOIN') {
-        var maleNum = json_body.maleNum
-        var femaleNum = json_body.femaleNum
-        console.log('malenum: ' + maleNum)
-        console.log('femalenum: ' + femaleNum)
-        if (maleNum ==3 && femaleNum == 3) {
-          setCompleteFlag(true)
-        }
-      }
-    })
-  }
 
   // publish: 메세지 보내기
   const publish = (message) => {
@@ -357,7 +359,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     return response.data
   }
 
-  return completeFlag ? (
+  return (completeFlag ? (
     <div
       className="container"
       style={{
@@ -472,6 +474,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         <input type={'submit'} value={'메세지 보내기'} />
       </form>
     </div>
+  )
   )
 }
 export default Docking3WaitingMeeting
