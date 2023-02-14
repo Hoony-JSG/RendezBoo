@@ -34,21 +34,24 @@ const RocketItem = (props) => {
       <div className="Join3_profileimage">프로필 이미지 업로드</div>
       <div className="Join3_uploader">
         <div className="Join3_uiverse">
-          <div class="Join3_uiverse-image-card"></div>
-          <div class="Join3_default-image-frame">
+          <div className="Join3_uiverse-image-card"></div>
+          <div className="Join3_default-image-frame">
             <img className="Join3_default-image" src={profileimage} />
           </div>
         </div>
         {props.ver === 'Start' && (
           <div className="Join3_uploader-button">
-            <ProfileImageUploader profileimage={changeImage} />
+            <ProfileImageUploader
+              profileImagePath={props.profileImagePath}
+              profileimage={changeImage}
+            />
           </div>
         )}
       </div>
       <h3>Me = {Me}</h3>
       <h5>Inquire = {Inquire}</h5>
 
-      <RocketBtn {...MeAndYou} />
+      <RocketBtn mbti={props.mbti} {...MeAndYou} />
     </div>
   )
 }

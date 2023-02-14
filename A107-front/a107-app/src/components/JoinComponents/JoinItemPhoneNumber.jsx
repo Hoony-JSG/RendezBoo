@@ -29,6 +29,7 @@ const JoinItemPhoneNumber = (props) => {
 
   const fixPhoneNumber = (index, value) => {
     props.setHas(index, value)
+    props.fixedPhoneNumber(PhoneNumber)
     if (value === true) {
       setShowPNInput(false)
     } else {
