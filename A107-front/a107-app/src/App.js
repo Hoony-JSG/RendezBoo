@@ -28,6 +28,7 @@ import {
 } from './modules/Auth/Jwt'
 import { useDispatch } from 'react-redux'
 import { SET_TOKEN } from './containers/JwtContainer'
+import NaverOauth from './components/JoinComponents/NaerOauth'
 import OauthKakao from './pages/OauthKakao'
 import OauthNaver from './pages/OauthNaver'
 

@@ -69,7 +69,7 @@ const JoinItem = () => {
     />,
     // <JoinItem4rd setNext={setNext} />,
   ]
-  const [order, setOrder] = useState(2, '')
+  const [order, setOrder] = useState(3, '')
   return <div style={{ marginTop: '20px' }}>{ItemList[order]}</div>
 }
 
