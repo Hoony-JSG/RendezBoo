@@ -93,10 +93,6 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
     open-in-view: true
 
   redis:
@@ -142,7 +138,3 @@ cloud:
       auto: false
     cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
 
-logging:
-  level:
-    root: info
-    com.ssafy: debug
