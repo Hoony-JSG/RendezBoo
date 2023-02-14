@@ -3,7 +3,7 @@ import '../../Styles/JoinItem2Style.css'
 import JoinItemName from './JoinItemName'
 import JoinItemPhoneNumber from './JoinItemPhoneNumber'
 import JoinItemGender from './JoinItemGender'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import NextPageButton from './NextPageButton'
 import JoinItemSocialEmail from './JoinItemSocialEmail'
 import JoinPassword from './JoinPassword'
@@ -19,13 +19,18 @@ const JoinItem2nd = (props) => {
     [hasPhoneNumber, setHasPhoneNumber],
     [hasPW, setHasPW],
   ]
-
   const [emailType, setEmailType] = useState()
 
   const setWholeHas = (index, value) => {
     console.log(index, value)
     wholeHas[index][1](value)
   }
+
+  useEffect(() => {
+    setEmailType(props.emailType)
+    console.log('헉 type : ' + props.emailType)
+  }, [])
+
   return (
     <div className="display">
       <div className="whole-block">
@@ -40,14 +45,14 @@ const JoinItem2nd = (props) => {
             <div
               className={
                 'each-items email-item ' +
-                (emailType === 0
+                (emailType === '0'
                   ? 'border-glow-naver'
-                  : emailType === 1
+                  : emailType === '1'
                   ? 'border-glow-kakao'
                   : '')
               }
             >
-              <JoinItemSocialEmail />
+              <JoinItemSocialEmail email={props.email} />
             </div>
             <div
               className={
@@ -55,7 +60,10 @@ const JoinItem2nd = (props) => {
                 (hasPhoneNumber ? 'border-glow' : '')
               }
             >
-              <JoinItemPhoneNumber setHas={setWholeHas} />
+              <JoinItemPhoneNumber
+                fixedPhoneNumber={props.phoneNumber}
+                setHas={setWholeHas}
+              />
             </div>
           </div>
           <div className="right-items">
@@ -64,14 +72,14 @@ const JoinItem2nd = (props) => {
                 'each-items name-item ' + (hasName ? 'border-glow' : '')
               }
             >
-              <JoinItemName setHas={setWholeHas} />
+              <JoinItemName fixedName={props.name} setHas={setWholeHas} />
             </div>
             <div
               className={
                 'each-items gender-item ' + (hasGender ? 'border-glow' : '')
               }
             >
-              <JoinItemGender setHas={setWholeHas} />
+              <JoinItemGender fixedGender={props.gender} setHas={setWholeHas} />
             </div>
           </div>
         </div>

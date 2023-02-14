@@ -8,6 +8,7 @@ const JoinItemName = (props) => {
     setName(newName)
     if (newName.length >= 2 && newName.length <= 5) {
       props.setHas(0, true)
+      props.fixedName(newName)
     } else {
       props.setHas(0, false)
     }

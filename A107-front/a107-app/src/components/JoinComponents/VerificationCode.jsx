@@ -68,10 +68,13 @@ const VerificationCode = (props) => {
   const checkCode = async () => {
     console.log('입력된 인증 코드 : ' + VerificationCode)
     try {
-      let response = await axios.post('http://52.78.60.53:8080/api/sms/check', {
-        code: VerificationCode,
-        phoneNumber: props.PhoneNumber,
-      })
+      let response = await axios.post(
+        'https://i8a107.p.ssafy.io/api/sms/check',
+        {
+          code: VerificationCode,
+          phoneNumber: props.PhoneNumber,
+        }
+      )
       setFixReadOnly(true)
       setShowCheckButton(false)
       setShowResendButton(false)

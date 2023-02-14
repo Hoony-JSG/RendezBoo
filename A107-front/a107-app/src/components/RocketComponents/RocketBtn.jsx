@@ -1,7 +1,7 @@
 import RocketBtn_Diff from './RocketBtn_Diff'
 import RocketBtn_Same from './RocketBtn_Same'
 import MBTISelector from '../JoinComponents/MBTISelector'
-
+import '../../Styles/RocketBtnStyle.css'
 const RocketBtn = (props) => {
   if (props.ver === 'Me') {
     return (
@@ -19,8 +19,8 @@ const RocketBtn = (props) => {
     )
   } else if (props.ver === 'Start') {
     return (
-      <div>
-        <MBTISelector />
+      <div className="RocketBtn_MBTI-container">
+        <MBTISelector mbti={props.mbti} />
       </div>
     )
   } else {

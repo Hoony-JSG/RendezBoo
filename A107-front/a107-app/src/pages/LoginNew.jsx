@@ -18,10 +18,8 @@ const LoginNew = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
+  const LOCAL_SERVER_URL = 'http://localhost:8080'
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
-    // process.env.NODE_ENV === 'production'
-    //   ? 'https://i8a107.p.ssafy.io'
-    //   : 'http://localhost:8080'
 
   const dispatch = useDispatch()
   const accessToken = useSelector(
@@ -34,17 +32,44 @@ const LoginNew = () => {
     event.preventDefault()
 
     try {
-      const response = await axios.post(`${APPLICATION_SERVER_URL}/api/user/login`, {
+      const response = await axios.post(`${LOCAL_SERVER_URL}/api/user/login`, {
         email: email,
         password: password,
       })
 
-      console.log(response)
       setRefreshToken(response.data.refreshToken)
 
       const decode = jwtDecode(response.data.accessToken)
-      console.log(12)
-      console.log(decode)
+      dispatch(SET_USER_INFO(decode))
+      dispatch(SET_TOKEN(response.data.accessToken))
+
+      // setIsLoggedIn(true);
+      setUserName(decode.name)
+      setUserSeq(decode.seq)
+      setEmail(decode.email)
+
+      navigate('/')
+      // setUserSeq()
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+
+  const serverLogin = async (event) => {
+    event.preventDefault()
+
+    try {
+      const response = await axios.post(
+        `${APPLICATION_SERVER_URL}/api/user/login`,
+        {
+          email: email,
+          password: password,
+        }
+      )
+
+      setRefreshToken(response.data.refreshToken)
+
+      const decode = jwtDecode(response.data.accessToken)
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
@@ -93,8 +118,9 @@ const LoginNew = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        <button type="submit">로컬로 로그인</button>
       </form>
+      <button onClick={serverLogin}>서버로 로그인</button>
     </div>
   )
 }
