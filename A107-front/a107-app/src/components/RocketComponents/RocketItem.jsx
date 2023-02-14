@@ -16,10 +16,6 @@ const RocketItem = (props) => {
     BadgeRep: 1,
   }
 
-  const setTempBorder = {
-    border: '1px solid black',
-  }
-
   const [profileimage, setprofileimage] = useState(userprofile)
   const changeImage = (image) => {
     if (image !== null) {
@@ -30,8 +26,10 @@ const RocketItem = (props) => {
   }
   console.log('Btn :' + ver)
   return (
-    <div style={setTempBorder}>
-      <div className="Join3_profileimage">프로필 이미지 업로드</div>
+    <div>
+      {props.ver === 'Start' && (
+        <div className="Join3_profileimage">About Me</div>
+      )}
       <div className="Join3_uploader">
         <div className="Join3_uiverse">
           <div className="Join3_uiverse-image-card"></div>
@@ -48,8 +46,6 @@ const RocketItem = (props) => {
           </div>
         )}
       </div>
-      <h3>Me = {Me}</h3>
-      <h5>Inquire = {Inquire}</h5>
 
       <RocketBtn mbti={props.mbti} {...MeAndYou} />
     </div>

@@ -28,7 +28,7 @@
 }
 
 .ImageUploader_button:hover .ImageUploader_svg {
-  transform: translateX(5px) rotate(0deg);
+  transform: translateX(5px) rotate(360deg);
 }
 
 .ImageUploader_button:hover .ImageUploader_span {
