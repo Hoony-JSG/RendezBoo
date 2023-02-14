@@ -73,7 +73,7 @@ public class MultiMeetingRoomController {
     //add/remove user to/from multiMeetingRoom
     @ApiOperation(value = "단체 미팅방에 유저 추가하기", notes = "단체 미팅방에 유저를 추가하면서 +  해당 미팅방에 속해있는 유저들한테 웹소켓으로 정보(인원, 입장) 보냄")
     @PostMapping("/{multiMeetingRoomSeq}/{userSeq}")
-    public ResponseEntity saveUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException {
+    public ResponseEntity saveUserToMultiMeetingRoom(@PathVariable Long multiMeetingRoomSeq, @PathVariable Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException, InterruptedException {
         multiMeetingRoomService.saveUserToMultiMeetingRoom(multiMeetingRoomSeq, userSeq);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
