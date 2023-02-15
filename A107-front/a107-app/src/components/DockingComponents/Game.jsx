@@ -1,24 +1,40 @@
 import {useState} from 'react'
-import GameBR31 from './GameBR31'
-import GameTheGameOfDeath from './GameTheGameOfDeath'
-import GameFastClick from './GameFastClick'
+import GameBR31 from './GameComponents/GameBR31'
+import GameTheGameOfDeath from './GameComponents/GameTheGameOfDeath'
+import GameFastClick from './GameComponents/GameFastClick'
+import axios from 'axios'
 
-const Game = () =>{
+const Game = (client) =>{
   const {gameType, setGameType} = useState()
+  const APPLICATION_SERVER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'https://i8a107.p.ssafy.io'
+      : 'http://localhost:8080'
+  const WEBSOCKET_SERVER_URL =
+    process.env.NODE_ENV === 'production'
+      ? 'wss://i8a107.p.ssafy.io/'
+      : 'ws://localhost:8080/'
 
   return (
-    <div className="game_container">
+    <div className="game_container"
+    style={{
+      width: '50%',
+      height: '50%',
+      opacity: '0.2'
+    }}>
       {gameType === undefined?(
           <div>
             <div onClick={
               function(){
-                return setGameType("BR31")
+                axios.post(`${APPLICATION_SERVER_URL}/api/game/br31/start`).then(
+                  setGameType("BR31")
+                )
               }
             }>베스킨라빈스31게임
             </div>
             <div onClick={
               function(){
-                return setGameType("THEGAMEOFDEATH")
+                return setGameType("GAMEOFDEATH")
               }
             }>더게임오브데스
             </div>
@@ -31,9 +47,9 @@ const Game = () =>{
           </div>
         ):(null)
       }
-      {gameType === "BR31"?(<GameBR31/>):(null)}
-      {gameType === "THEGAMEOFDEATH"?(<GameTheGameOfDeath/>):(null)}
-      {gameType === "FASTCLICK"?(<GameFastClick/>):(null)}
+      {gameType === "BR31"?(<GameBR31 client={client}/>):(null)}
+      {gameType === "THEGAMEOFDEATH"?(<GameTheGameOfDeath client={client}/>):(null)}
+      {gameType === "FASTCLICK"?(<GameFastClick client={client}/>):(null)}
     </div>
   )
 }
