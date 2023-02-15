@@ -127,6 +127,7 @@ const VerificationCode = (props) => {
           }}
           readOnly={fixReadOnly}
           onKeyUp={checkCodeLength}
+          maxLength="6"
         ></input>
       </div>
       <div className="Code_right-box">

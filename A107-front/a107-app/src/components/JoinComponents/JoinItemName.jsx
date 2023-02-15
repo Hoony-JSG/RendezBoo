@@ -26,6 +26,7 @@ const JoinItemName = (props) => {
           onChange={(e) => {
             setChange(e.target.value)
           }}
+          maxLength="5"
         />
       </div>
     </div>
