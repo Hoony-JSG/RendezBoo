@@ -61,7 +61,7 @@ public class GameServiceImpl implements GameService {
         log.debug("참여자 명단: {}", userSeqList);
         log.debug("첫 번째 순서: User {}", firstTurn);
 
-        return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!", br31.getNowUser(), MultiChatFlag.START);
+        return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!", userSeqList, br31.getNowUser(), MultiChatFlag.START);
     }
 
      // 배스킨 라빈스 게임을 진행
@@ -114,6 +114,7 @@ public class GameServiceImpl implements GameService {
         log.debug("숫자: {}, 유저: {}, 선택한 숫자: {}", br31.getPoint(), br31Req.getUserSeq(), br31Req.getPoint());
 
         Long nextUserSeq = 0L;
+        List<Long> order = null;
 
         // 누군가 나갔으면
         if(userSeqList.size() != curOrder.size()) {
@@ -129,6 +130,7 @@ public class GameServiceImpl implements GameService {
             }
 
             br31.setOrder(newOrder);
+            order = newOrder;
             nextUserSeq = curOrder.get(nextIdx);
             br31.setNextUser(nextUserSeq);
 
@@ -147,6 +149,8 @@ public class GameServiceImpl implements GameService {
         }
         // 아무도 안 나갔으면
         else {
+            order = curOrder;
+
             int curIdx = curOrder.indexOf(br31Req.getUserSeq());
             int nextIdx = (curIdx + 1) % curOrder.size();
             nextUserSeq = curOrder.get(nextIdx);
@@ -161,19 +165,19 @@ public class GameServiceImpl implements GameService {
             br31Repository.delete(br31);
             log.debug("게임 종료! 유저 {} 패배", br31.getNowUser());
             String msg = "30을 말하셔서 다음 분이 패배하셨습니다.";
-            return new BR31Res(br31, msg, br31.getNowUser(), MultiChatFlag.FIN);
+            return new BR31Res(br31, msg, order, br31.getNowUser(), MultiChatFlag.FIN);
         } else if (br31.getPoint() >= 31) {
             // 게임이 끝난 경우 2
             br31Repository.delete(br31);
             log.debug("게임 종료! 유저 {} 패배", br31Req.getUserSeq());
             String msg = "31을 말하셔서 패배하셨습니다.";
-            return new BR31Res(br31, msg, br31Req.getUserSeq(), MultiChatFlag.FIN);
+            return new BR31Res(br31, msg, order, br31Req.getUserSeq(), MultiChatFlag.FIN);
         } else {
             // 게임이 지속될 경우
             br31Repository.save(br31);
             log.debug("다음 유저: User {}", nextUserSeq);
             String msg = "다음 분의 차례입니다.";
-            return new BR31Res(br31, msg, br31.getNowUser(), MultiChatFlag.GAME);
+            return new BR31Res(br31, msg, order, br31.getNowUser(), MultiChatFlag.GAME);
         }
     }
 

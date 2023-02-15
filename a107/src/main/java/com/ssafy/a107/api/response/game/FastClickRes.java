@@ -20,6 +20,7 @@ public class FastClickRes {
     private String message;
     private Map<Long, Integer> scores;
     private Long loseUserSeq;
+    private GameType gameType;
 
     public FastClickRes(FastClick fastClick, Long loseUserSeq, String message, MultiChatFlag flag) {
         this.flag = flag;
@@ -27,5 +28,6 @@ public class FastClickRes {
         this.message = message;
         this.scores = fastClick.getScores();
         this.loseUserSeq = loseUserSeq;
+        this.gameType = GameType.FASTCLICK;
     }
 }
