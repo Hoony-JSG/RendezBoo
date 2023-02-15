@@ -8,7 +8,7 @@ import { getHeader } from '../modules/Auth/Jwt'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-// import '../../Styles/RocketStyle.css'
+import '../Styles/RocketStyle.css'
 
 const Rocket = () => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
@@ -51,6 +51,7 @@ const Rocket = () => {
     Inquire: Inquire,
     ver: ver,
     BadgeRep: rocketUser.badge,
+    rocketUser: rocketUser,
   }
 
   useEffect(() => {
@@ -84,28 +85,25 @@ const Rocket = () => {
   console.log(ver)
 
   return (
-    <div>
-      <div></div>
-      <h1>{rocketUser.name}'s Rocket</h1>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <div style={{ width: '400px' }}>
-          <RocketItem
-            {...MeAndYou}
-            profileImagePath={rocketUser.profileImagePath}
-          />
+    <div className="Rocket_Page">
+      <div className="Rocket_container">
+        <div className="Rocket_title">
+          <span>{rocketUser.name}'s License</span>
         </div>
-        <div style={{ width: '1000px' }}>
-          <div>
-            <RocketBadge {...MeAndYou} badgeList={badgeList} />
+        <div className="Rocket_rocketitem-whole-box">
+          <div className="Rocket_rocketitem-left-box">
+            <RocketItem
+              {...MeAndYou}
+              profileImagePath={rocketUser.profileImagePath}
+            />
           </div>
-          <div>
-            <RocketRadar rocketUserEmotion={rocketUserEmotion} />
+          <div className="Rocket_rocketitem-right-box">
+            <div className="Rocket_rocketitem-right-top-box">
+              <RocketBadge {...MeAndYou} badgeList={badgeList} />
+            </div>
+            <div className="Rocket_rocketitem-right-bottom-box">
+              <RocketRadar rocketUserEmotion={rocketUserEmotion} />
+            </div>
           </div>
         </div>
       </div>

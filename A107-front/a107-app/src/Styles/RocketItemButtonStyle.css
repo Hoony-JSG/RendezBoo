@@ -4,3 +4,13 @@
   height: 50px;
   width: 100px;
 }
+
+.RocketBtnSame_container {
+  border: 1px solid white;
+  margin-top: 20px;
+  height: 300px;
+}
+
+.tempborders {
+  border: 1px solid yellow;
+}

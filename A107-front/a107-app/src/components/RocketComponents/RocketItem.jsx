@@ -9,12 +9,12 @@ const RocketItem = (props) => {
   const { Me, Inquire, ver, setProfileImage } = props
   const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-  const MeAndYou = {
-    Me: Me,
-    Inquire: Inquire,
-    ver: ver,
-    BadgeRep: 1,
-  }
+  // const MeAndYou = {
+  //   Me: Me,
+  //   Inquire: Inquire,
+  //   ver: ver,
+  //   BadgeRep: 1,
+  // }
 
   const [image, setimage] = useState(userprofile)
   useEffect(() => {
@@ -33,7 +33,8 @@ const RocketItem = (props) => {
   console.log('Btn :' + ver)
   return (
     <div
-    // style={ver === '' ? { height: 'fitContent' } : ''}
+      className="Join3_whole-container"
+      // style={ver === '' ? { height: 'fitContent' } : ''}
     >
       {props.ver === 'Start' && (
         <div className="Join3_profileimage">About Me</div>
@@ -58,7 +59,7 @@ const RocketItem = (props) => {
         )}
       </div>
 
-      <RocketBtn mbti={props.mbti} {...MeAndYou} />
+      <RocketBtn mbti={props.mbti} ver={ver} rocketUser={props.rocketUser} />
     </div>
   )
 }

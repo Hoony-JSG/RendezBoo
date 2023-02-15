@@ -1,3 +1,8 @@
+.Join3_whole-container {
+  border: 1px solid red;
+  height: fit-content;
+}
+
 .Join3_profileimage {
   box-sizing: border-box;
   padding: 30px 10px 10px 10px;
