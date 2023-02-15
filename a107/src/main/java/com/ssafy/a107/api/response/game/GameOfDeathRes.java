@@ -32,6 +32,8 @@ public class GameOfDeathRes {
 
     private Set<Long> rechoiceSet;
 
+    private GameType gameType;
+
     public GameOfDeathRes(GameOfDeath gameOfDeath, List<Long> resultList, Long loseUserSeq, String message, MultiChatFlag flag, Set<Long> rechoiceSet) {
         this.multiMeetingRoomSeq = gameOfDeath.getMultiMeetingRoomSeq();
         this.targets = gameOfDeath.getTargets();
@@ -40,5 +42,6 @@ public class GameOfDeathRes {
         this.message = message;
         this.flag = flag;
         this.rechoiceSet = rechoiceSet;
+        this.gameType = GameType.GAMEOFDEATH;
     }
 }
