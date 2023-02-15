@@ -1,4 +1,4 @@
-import NaverLogo from '../../Images/btnG_완성형.png'
+import NaverLogo from '../../Images/naverlogin.png'
 
 const NaverLogin = (props) => {
   const NAVER_PROD_REDIRECT =
@@ -8,8 +8,8 @@ const NaverLogin = (props) => {
       <a href={NAVER_PROD_REDIRECT}>
         <img
           src={NaverLogo}
-          alt="Naver logo"
-          style={{ width: '300px', height: '75px' }}
+          alt="Login with Naver"
+          style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))' }}
         />
       </a>
   )
