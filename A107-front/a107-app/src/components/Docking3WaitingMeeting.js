@@ -421,18 +421,24 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           </div> {/* pub-container, 밑에: video-container*/}
         </div>
         ):null }
+        <div className={'chat-list'}
+            style={{
+              overflow: 'scroll'
+            }}>
+          {chatList.map((item, index) => {
+            return <div key={index}>{item}</div>
+          })}
+        </div>
       </div> {/*main */}
       <div className="side">
-        <div className="chat">
-        </div>
+        {/*게임 모달*/}
+        {gameFlag?(<Game gameType = {gameType}/>):(null)}
         <div className="btn-group">
           <div onclick={()=>{
             setGameFlag(true)
           }}>게임하기</div>
         </div>
       </div> {/* side */}
-      {/*게임 모달*/}
-      {gameFlag?(<Game gameType = {gameType}/>):(null)}
     </div>
   ) : (
     <div>
