@@ -78,7 +78,7 @@ const LoginNew = () => {
       setUserSeq(decode.seq)
       setEmail(decode.email)
 
-      navigate('/')
+      navigate('/rendezboo')
       // setUserSeq()
     } catch (error) {
       setError(error.message)
