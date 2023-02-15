@@ -34,7 +34,7 @@
   background: rgba(0, 0, 0, 0.707);
   box-sizing: border-box;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
+  border-radius: 50px;
 }
 
 .RocketBtnSame_form-top-box {
@@ -88,8 +88,9 @@
 }
 
 .RocketBtnSame_form-input-mbti {
-  width: 200px !important;
-  margin-right: 10px;
+  width: 150px !important;
+  margin-right: 30px;
+  text-align: center;
 }
 
 .RocketBtnSame_form-input:focus ~ .RocketBtnSame_form-label,

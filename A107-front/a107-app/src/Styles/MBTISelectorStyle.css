@@ -60,7 +60,7 @@
   margin: 0px !important;
   background: rgba(189, 189, 189, 0.127);
 }
-.mbti-move {
+/* .mbti-move {
   animation: mbti-move-ani 1s ease-in-out;
 }
 
@@ -71,7 +71,7 @@
   to {
     left: 100px;
   }
-}
+} */
 .MBTISelector_btn-edit {
   width: fit-content;
   height: fit-content;
@@ -89,7 +89,6 @@
   padding: 10px;
   padding-left: 40px;
 }
-
 .MBTISelector_btn-edit .MBTIBtn_container .MBTIBtn_button:hover .MBTIBtn_pop {
   transform: translateX(-100%);
 }
