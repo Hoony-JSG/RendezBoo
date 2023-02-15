@@ -14,24 +14,24 @@ const Docking3ing = () => {
             overflowX: 'scroll',
             padding: '20px',
             }}>
-            <div id="main">
-                <div id="cam-group">
-                    <div id="cam"></div>
-                    <div id="cam"></div>
-                    <div id="cam"></div>
-                    <div id="cam"></div>
-                    <div id="cam"></div>
-                    <div id="cam"></div>
+            <div className="main">
+                <div className="cam-group">
+                    <div className="cam"></div>
+                    <div className="cam"></div>
+                    <div className="cam"></div>
+                    <div className="cam"></div>
+                    <div className="cam"></div>
+                    <div className="cam"></div>
                 </div>
-                <div id="chat">
+                <div className="chat">
 
                 </div>
             </div>
-            <div id="side">
-                <div id="game">
+            <div className="side">
+                <div className="game">
 
                 </div>
-                <div id="btn-group">
+                <div className="btn-group-d3">
 
                 </div>
             </div>

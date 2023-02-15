@@ -70,6 +70,7 @@ function App() {
           location.pathname === '/join' ||
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
+          location.pathname === '/docking3' ||
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>

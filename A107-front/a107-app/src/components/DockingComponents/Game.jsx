@@ -1,7 +1,7 @@
 import {useState} from 'react'
-import GameBR31 from '../components/DockingComponents/GameBR31'
-import GameTheGameOfDeath from '../components/DockingComponents/GameTheGameOfDeath'
-import GameFastClick from '../components/DockingComponents/GameFastClick'
+import GameBR31 from './GameBR31'
+import GameTheGameOfDeath from './GameTheGameOfDeath'
+import GameFastClick from './GameFastClick'
 
 const Game = () =>{
   const {gameType, setGameType} = useState()

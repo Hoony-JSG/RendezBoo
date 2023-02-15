@@ -11,20 +11,22 @@ import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
 
 const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
-  const APPLICATION_SERVER_URL =
-    process.env.NODE_ENV === 'production'
-      ? 'https://i8a107.p.ssafy.io/'
-      : 'http://localhost:8080/'
-  const WEBSOCKET_SERVER_URL =
-    process.env.NODE_ENV === 'production'
-      ? 'wss://i8a107.p.ssafy.io/'
-      : 'ws://localhost:8080/'
+  const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
+    // process.env.NODE_ENV === 'production'
+    //   ? 'https://i8a107.p.ssafy.io'
+    //   : 'http://localhost:8080'
+    
+  const WEBSOCKET_SERVER_URL = 'ws://i8a107.p.ssafy.io/'
+    // process.env.NODE_ENV === 'production'
+    //   ? 'wss://i8a107.p.ssafy.io'
+    //   : 'ws://localhost:8080'
+
   const navigate = useNavigate()
-  const usertoken = '$$$mytoken$$$'
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   //gotFirstWebSocketMessageFlag
   const gotFirstWebSocketMessageFlag = useRef(false)
+
    // 웹소켓 관련 기능
   const client = useRef({})
   const [chatList, setChatList] = useState([])
@@ -38,7 +40,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const [gameType, setGameType] = useState()
   
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
-  const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
 
   //openvidu관련
   const [subscribers, setSubscribers] = useState([])
@@ -82,7 +83,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             var femaleNum = json_body.femaleNum
             console.log('malenum: ' + maleNum)
             console.log('femalenum: ' + femaleNum)
-            if (maleNum ==3 && femaleNum == 3) {
+            if (maleNum ===3 && femaleNum === 3) {
               setCompleteFlag(true)
             }
           }
@@ -93,10 +94,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
               setGameFlag(true)
             }
           }
-
-
         })
       }
+      
       client.current = new StompJs.Client({
         brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
 
@@ -124,11 +124,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
       // client 객체 활성화
       await client.current.activate()
-      alert("connect()가 되었다")
+      // alert("connect()가 되었다")
     }
 
     connect().then(()=>{
-      alert('나를 이 미팅방-유저 테이블에 추가하고 웹소켓으로 보낸다.')
+      // alert('나를 이 미팅방-유저 테이블에 추가하고 웹소켓으로 보낸다.')
       axios.post(
           APPLICATION_SERVER_URL +
             'api/multi-meetings/' +
@@ -137,7 +137,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             userSeq
         )
         .then((response) => {
-          
           console.log(response.data)
           const openVidu = new OpenVidu()
           let session = openVidu.initSession()
@@ -212,10 +211,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         })
         .catch((e) => {
           console.log(e.message)
-          navigate('/error')
+          navigate('/docking3')
         })
       }
-
     )
     return () => disconnect()
   }, [])
@@ -237,13 +235,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const publish = (message) => {
     // 연결이 안되어있을 경우
     if (!client.current.connected) {
-      alert('연결이 안 되어있어')
-      return
-    }
-
-    // 입력된 메세지가 없는 경우
-    if (!message) {
-      alert('메세지 입력 해')
+      alert('연결 상태를 확인해주세요.')
       return
     }
 
@@ -266,22 +258,18 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   }
 
   const disconnect = () => {
-    alert('disconnect(): 대기방 연결을 해제합니다.')
+    console.log('연결이 끊어졌습니다.')
     client.current.deactivate()
-    console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
     axios.delete(APPLICATION_SERVER_URL +'api/multi-meetings/' +multiMeetingRoomSeq +'/' +userSeq)
   }
 
-  // handleChage: 채팅 입력 시 state에 값 설정
-  const handleChange = (event) => {
-    setMessage(event.target.value)
+  const inputChat = (e) => {
+    setMessage(e.target.value)
   }
 
-  // handleSubmit: 보내기 버튼 눌렀을 때 보내기(publish 실행)
-  const handleSubmit = (event, message) => {
-    event.preventDefault()
-
-    publish(message)
+  const sendChat = (e, message) => {
+    e.preventDefault()
+    if (message.trim()) publish(message)
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -390,7 +378,6 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       }}
     >
       <div className="main">
-        {/* <h1>일대일 매칭 테스트 중</h1> */}
         {session === undefined ? (
           <div>
             <button onClick={joinSession}>미팅방 입장하기</button>
@@ -479,19 +466,18 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     <div>
       <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
       <p>내 유저 시퀀스는 {userSeq}입니다.</p>
-      <p>내 토큰은 {usertoken}입니다.</p>
       <p>내 화면</p>
       <div className={'chat-list'}>
         {chatList.map((item, index) => {
           return <div key={index}>{item}</div>
         })}
       </div>
-      <form onSubmit={(event) => handleSubmit(event, message)}>
+      <form onSubmit={(event) => sendChat(event, message)}>
         <div>
           <input
             type={'text'}
             name={'chatInput'}
-            onChange={handleChange}
+            onChange={inputChat}
             value={message}
           />
         </div>

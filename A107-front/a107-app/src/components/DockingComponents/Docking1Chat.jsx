@@ -125,12 +125,10 @@ const Docking1Chat = ({
     client.current.deactivate()
   }
 
-  // handleChage: 채팅 입력 시 state에 값 설정
   const inputChat = (e) => {
     setMessage(e.target.value)
   }
 
-  // handleSubmit: 보내기 버튼 눌렀을 때 보내기(publish 실행)
   const sendChat = (e, message) => {
     e.preventDefault()
     if (message.trim()) publish(message)
