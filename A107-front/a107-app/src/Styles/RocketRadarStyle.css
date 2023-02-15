@@ -31,13 +31,9 @@
   display: none;
 }
 
-rect {
+/* rect {
   fill: rgba(10, 104, 73, 0.382);
-}
-
-path {
-  fill: rgba(10, 104, 73, 0.382);
-}
+} */
 circle {
   display: none;
 }
@@ -52,6 +48,7 @@ circle {
 
 .apexcharts-series path {
   stroke: rgba(101, 209, 38, 0.657);
+  fill: rgba(10, 104, 73, 0.382);
   stroke-width: 3px;
 }
 
