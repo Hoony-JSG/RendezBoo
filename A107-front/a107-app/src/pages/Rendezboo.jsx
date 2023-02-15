@@ -44,21 +44,6 @@ const Rendezboo = () => {
   console.log('랑데부 페이지')
   const navigate = useNavigate()
 
-  // const goToPage = (props) => {
-  //   navigate('/' + props)
-  // }
-
-  // const Contents = {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   padding: '0px',
-  //   margin: '30px',
-  //   height: 'auto',
-  //   gap: '50px',
-  // }
-
   const MeAndYou = {
     Me: userid,
     Inquire: userid,

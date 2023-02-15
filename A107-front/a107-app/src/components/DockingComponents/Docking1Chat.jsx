@@ -60,10 +60,8 @@ const Docking1Chat = ({
       // 받아온 제이슨 파싱
       const json_body = JSON.parse(body.body)
       const flag = json_body.flag
-      console.log(json_body)
 
       if (json_body.flag === 'CHAT') {
-        console.log(chatList)
         setChatList((_chat_list) => [
           {
             senderSeq: json_body.senderSeq,
@@ -123,7 +121,7 @@ const Docking1Chat = ({
 
   // disconnect: 웹소켓 연결 끊기
   const disconnect = () => {
-    console.log('연결이 끊어졌습니다')
+    console.log('연결이 끊어졌습니다.')
     client.current.deactivate()
   }
 

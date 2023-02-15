@@ -95,7 +95,6 @@ const Docking1 = () => {
     setSession(null)
     setPublisher(null)
     setSubscribers([])
-    // navigate('/')
   }, [session, meetingRoomSeq])
 
   const leaveSessionWithAlert = () => {
@@ -132,7 +131,6 @@ const Docking1 = () => {
     session.on('streamCreated', (event) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
-      console.log('here', subscriber)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
@@ -279,10 +277,10 @@ const Docking1 = () => {
       { userSeq: userSeq },
       REQUEST_HEADER
     )
-    console.log('mm' + response.data)
+
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
-    console.log('Get Token!!!' + token)
+    console.log('Get Token!!! ' + token)
     if (response.status !== 200) {
       alert('매칭 실패!')
     }
@@ -483,11 +481,10 @@ const Docking1 = () => {
 
   return (
     <div className="container">
-      {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
         <div className="docking1-modal">
           <h1>1:1 Docking...</h1>
-          <p style={{ fontSize: '1.5rem' }}>일대일 미팅에 입장하시겠습니까?</p>
+          <p style={{ fontSize: '1.5rem' }}>1:1 미팅에 입장하시겠습니까?</p>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}>
             <button className="ready-enter-btn" onClick={joinSession}>
               <ImEnter />
@@ -568,29 +565,26 @@ const Docking1 = () => {
                     onClick={onChangeCameraStatus}
                   >
                     {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
-                    {/* &nbsp;영상 */}
                   </button>
                   <button className="btn-group-btn" onClick={onChangeMicStatus}>
                     {audioStatus ? <BsMic /> : <BsMicMute />}
-                    {/* &nbsp;마이크 */}
                   </button>
                   <button
                     className="btn-group-btn-exit"
                     onClick={leaveSessionWithAlert}
                   >
                     <ImExit style={{position: 'relative', top: '5px', left: '4px'}}/>
-                    {/* &nbsp;나가기 */}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="me">
-                <div className="btn-group">
+                {/* <div className="btn-group">
                   <p>
                     Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
                   </p>
                   <button onClick={leaveSessionWithAlert}>나가기</button>
-                </div>
+                </div> */}
               </div>
             )}
             <Docking1Chat
@@ -608,17 +602,15 @@ const Docking1 = () => {
       ) : null}
       {finished ? (
         // 미팅 종료 문구
-        <h1 style={{marginTop: '300px'}}>Docking Ends!</h1>
+        <h1 style={{marginTop: '300px'}}>Docking Ended!</h1>
       ) : null}
       {phase === 4 && !finished ? (
         // 친구 추가 모달
         <div
           className="docking1-modal"
-          // id={'final-choice-modal'}
         >
           <h1>Docking Complete!</h1>
           <p style={{ fontSize: '1.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
-          {/* <p>{happyCnt}</p> */}
           <div
             style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}
           >

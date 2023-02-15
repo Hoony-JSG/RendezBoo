@@ -17,7 +17,6 @@ const DockingChatSelectedItem = ({ chat }) => {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
-          console.log(response.data)
           setYou({
             yourSeq: senderSeq,
             yourName: response.data.name,
@@ -40,16 +39,28 @@ const DockingChatSelectedItem = ({ chat }) => {
           <p className="your-name">{you.yourName}</p>
           <div className="your-signal">
             <p>{message}</p>
-            <p id="time">
-              {time.getHours()}:{time.getMinutes()}
-            </p>
+            {parseInt(time.getHours() / 12) ? (
+              <p id="time">
+                {time.getHours() % 12 || 12}:{time.getMinutes()} PM
+              </p>
+            ) : (
+              <p id="time">
+                {time.getHours()}:{time.getMinutes()} AM
+              </p>
+            )}
           </div>
         </div>
       ) : (
         <div className="my-signal">
-          <p id="time">
-            {time.getHours()}:{time.getMinutes()}
-          </p>
+          {parseInt(time.getHours() / 12) ? (
+            <p id="time">
+              {time.getHours() % 12 || 12}:{time.getMinutes()} PM
+            </p>
+          ) : (
+            <p id="time">
+              {time.getHours() || 12}:{time.getMinutes()} AM
+            </p>
+          )}
           <p>{message}</p>
         </div>
       )}

@@ -25,7 +25,6 @@ import {
 } from './modules/Auth/Jwt'
 import { useDispatch } from 'react-redux'
 import { SET_TOKEN } from './containers/JwtContainer'
-import NaverOauth from './components/JoinComponents/NaerOauth'
 import OauthKakao from './pages/OauthKakao'
 import OauthNaver from './pages/OauthNaver'
 
@@ -88,8 +87,6 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
-
-          {/* 로그인 테스트용 라우터 */}
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/oauth/naver" element={<OauthNaver />}></Route>
           <Route path="/oauth/kakao" element={<OauthKakao />}></Route>
