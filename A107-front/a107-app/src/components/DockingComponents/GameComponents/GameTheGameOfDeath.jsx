@@ -1,4 +1,4 @@
-const GameTheGameOfDeath = () =>{
+const GameTheGameOfDeath = (client) =>{
   return (
     <div>
       더게임오브데스 진행중...
