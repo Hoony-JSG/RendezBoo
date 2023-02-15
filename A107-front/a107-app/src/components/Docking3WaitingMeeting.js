@@ -291,79 +291,79 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
   }, [completeFlag])
 
-  const joinSession = () => {
-    const openVidu = new OpenVidu()
-    let session = openVidu.initSession()
+  // const joinSession = () => {
+  //   const openVidu = new OpenVidu()
+  //   let session = openVidu.initSession()
 
-    // On every new Stream received...
-    session.on('streamCreated', (event) => {
-      const subscriber = session.subscribe(event.stream, '')
-      const data = JSON.parse(event.stream.connection.data)
-      setSubscribers((prev) => {
-        return [
-          ...prev.filter((it) => it.userSeq !== +data.userSeq),
-          {
-            streamManager: subscriber,
-            userSeq: +data.userSeq,
-            gender: data.gender,
-          },
-        ]
-      })
-    })
+  //   // On every new Stream received...
+  //   session.on('streamCreated', (event) => {
+  //     const subscriber = session.subscribe(event.stream, '')
+  //     const data = JSON.parse(event.stream.connection.data)
+  //     setSubscribers((prev) => {
+  //       return [
+  //         ...prev.filter((it) => it.userSeq !== +data.userSeq),
+  //         {
+  //           streamManager: subscriber,
+  //           userSeq: +data.userSeq,
+  //           gender: data.gender,
+  //         },
+  //       ]
+  //     })
+  //   })
 
-    // On every Stream destroyed...
-    session.on('streamDestroyed', (event) => {
-      event.preventDefault()
+  //   // On every Stream destroyed...
+  //   session.on('streamDestroyed', (event) => {
+  //     event.preventDefault()
 
-      const data = JSON.parse(event.stream.connection.data)
-      setSubscribers((prev) =>
-        prev.filter((it) => it.userSeq !== +data.userSeq)
-      )
-    })
+  //     const data = JSON.parse(event.stream.connection.data)
+  //     setSubscribers((prev) =>
+  //       prev.filter((it) => it.userSeq !== +data.userSeq)
+  //     )
+  //   })
 
-    // On every asynchronous exception...
-    session.on('exception', (exception) => {
-      console.warn(exception)
-    })
+  //   // On every asynchronous exception...
+  //   session.on('exception', (exception) => {
+  //     console.warn(exception)
+  //   })
 
-    // 위에서 주입받은 토큰 사용 하여 세션에 연결
-    getDocking3Token(userSeq).then((data) => {
-      session
-        .connect(data.token, JSON.stringify({ clientData: userSeq }))
-        .then(async () => {
-          await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
-          })
-          const devices = await openVidu.getDevices()
-          const videoDevices = devices.filter(
-            (device) => device.kind === 'videoinput'
-          )
+  //   // 위에서 주입받은 토큰 사용 하여 세션에 연결
+  //   getDocking3Token(userSeq).then((data) => {
+  //     session
+  //       .connect(data.token, JSON.stringify({ clientData: userSeq }))
+  //       .then(async () => {
+  //         await navigator.mediaDevices.getUserMedia({
+  //           audio: true,
+  //           video: true,
+  //         })
+  //         const devices = await openVidu.getDevices()
+  //         const videoDevices = devices.filter(
+  //           (device) => device.kind === 'videoinput'
+  //         )
 
-          const publisher = openVidu.initPublisher('', {
-            audioSource: undefined,
-            videoSource: videoDevices[0].deviceId,
-            publishAudio: true,
-            publishVideo: true,
-            resolution: '640x480',
-            frameRate: 30,
-            insertMode: 'APPEND',
-            mirror: false,
-          })
+  //         const publisher = openVidu.initPublisher('', {
+  //           audioSource: undefined,
+  //           videoSource: videoDevices[0].deviceId,
+  //           publishAudio: true,
+  //           publishVideo: true,
+  //           resolution: '640x480',
+  //           frameRate: 30,
+  //           insertMode: 'APPEND',
+  //           mirror: false,
+  //         })
 
-          setPublisher(publisher)
-          session.publish(publisher)
-        })
-        .catch((error) => {
-          console.log(
-            'There was an error connecting to the session:',
-            error.code,
-            error.message
-          )
-        })
-    })
-    setSession(session)
-  }
+  //         setPublisher(publisher)
+  //         session.publish(publisher)
+  //       })
+  //       .catch((error) => {
+  //         console.log(
+  //           'There was an error connecting to the session:',
+  //           error.code,
+  //           error.message
+  //         )
+  //       })
+  //   })
+  //   setSession(session)
+  // }
 
   // userSeq 기반으로 오픈비두 토큰 가져옴
   async function getDocking3Token(userSeq) {
@@ -391,87 +391,46 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     >
       <div className="main">
         {/* <h1>일대일 매칭 테스트 중</h1> */}
-        {session === undefined ? (
+        {/* {session === undefined ? (
           <div>
             <button onClick={joinSession}>미팅방 입장하기</button>
           </div>
-        ) : null}
+        ) : null} */}
         {session !== undefined ? (
-          <div
-            className="video-container"
-            style={{
-              margin: '20px',
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              gap: '30px',
-            }}
-          >
-            <div
-              className="sub-container"
-              style={{
-                width: '60%',
-                height: '840px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderRadius: '40px',
-                border: '2px solid #FFFFFF',
-                background: 'rgba(23, 49, 71, 0.8)',
-                filter:
-                  'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
-                position: 'relative',
-              }}
-            ></div>
-          </div>
-        ) : (
-          <div className="video-container cam-group">
-            <div className="sub-container">
-              {subscribers.map((sub, idx) => (
-                <div key={idx} className="cam">
-                  <FilteredVideo
-                    streamManager={sub.streamManager}
-                    maskPath={maskPath}
-                    userSeq={2}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-                
-              ))}
-              {publisher !== undefined ? (
-                <div className="cam">
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={maskPath}
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-            </div>
-            <div className="pub-container">
-              {publisher !== undefined ? (
-                <div className="cam">
-                  <FilteredVideo
-                    streamManager={publisher}
-                    maskPath={maskPath}
-                    userSeq={userSeq}
-                    startFaceAPI={() => {}}
-                  />
-                </div>
-              ) : null}
-              <div className="chat"></div>
-              <div className="btn-group">
-                <div onclick={()=>{
-                  setGameFlag(true)
-                }}>게임하기</div>
+        <div className="video-container cam-group">SESSION DEFINED: VIDEO-CONTAINER
+          <div className="sub-container">SESSION DEFINED: SUB-CONTAINER
+            {subscribers.map((sub, idx) => (
+              <div key={idx} className="cam">
+                <FilteredVideo
+                  streamManager={sub.streamManager}
+                  maskPath={maskPath}
+                  userSeq={2}
+                  startFaceAPI={() => {}}/>
               </div>
-            </div>
+            ))}
           </div>
-        )}
-      </div>
+          <div className="pub-container">
+            {publisher !== undefined ? (
+            <div className="cam">
+              <FilteredVideo
+                streamManager={publisher}
+                maskPath={maskPath}
+                userSeq={userSeq}
+                startFaceAPI={() => {}}/>
+            </div>) : null}
+          </div> {/* pub-container, 밑에: video-container*/}
+        </div>
+        ):null }
+      </div> {/*main */}
+      <div className="side">
+        <div className="chat">
+        </div>
+        <div className="btn-group">
+          <div onclick={()=>{
+            setGameFlag(true)
+          }}>게임하기</div>
+        </div>
+      </div> {/* side */}
       {/*게임 모달*/}
       {gameFlag?(<Game gameType = {gameType}/>):(null)}
     </div>
