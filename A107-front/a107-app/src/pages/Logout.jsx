@@ -21,9 +21,8 @@ const Logout = () => {
   }, [])
 
   const logout = async () => {
-    console.log(accessToken)
     try {
-      const response = await axios.post(
+      await axios.post(
         `${BASE_URL}/api/user/logout`,
         {},
         {
@@ -39,7 +38,7 @@ const Logout = () => {
       dispatch(REMOVE_TOKEN())
       dispatch(REMOVE_USER_INFO())
 
-      navigate('/home')
+      navigate('/')
     }
   }
 
