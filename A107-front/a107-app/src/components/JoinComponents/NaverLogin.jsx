@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import NaverLogo from '../../Images/btnG_완성형.png'
+import '../../Styles/SocialLogin.css'
 
 const NaverLogin = (props) => {
   const { naver } = window
@@ -44,18 +45,21 @@ const NaverLogin = (props) => {
     // initializeNaverLogin()
   }, [])
   return (
-    <>
-      {/* // 구현할 위치에 아래와 같이 코드를 입력해주어야 한다. 
-         // 태그에 id="naverIdLogin" 를 해주지 않으면 오류가 발생한다! */}
-      {/* <div id="naverIdLogin"> </div> */}
-      <a href={NAVER_PROD_REDIRECT}>
-        <img
-          src={NaverLogo}
-          alt="Naver logo"
-          style={{ width: '300px', height: '75px' }}
-        />
-      </a>
-    </>
+    <button className={'naver-btn'} href={NAVER_PROD_REDIRECT}>
+    네이버 로그인
+  </button>
+    // <>
+    //   {/* // 구현할 위치에 아래와 같이 코드를 입력해주어야 한다. 
+    //      // 태그에 id="naverIdLogin" 를 해주지 않으면 오류가 발생한다! */}
+    //   {/* <div id="naverIdLogin"> </div> */}
+    //   <a href={NAVER_PROD_REDIRECT}>
+    //     <img
+    //       src={NaverLogo}
+    //       alt="Naver logo"
+    //       style={{ width: '300px', height: '75px' }}
+    //     />
+    //   </a>
+    // </>
   )
 }
 

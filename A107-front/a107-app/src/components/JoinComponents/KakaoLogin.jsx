@@ -1,4 +1,5 @@
 import kakaoLogo from '../../Images/kakao_login_large_narrow.png'
+import '../../Styles/SocialLogin.css'
 
 const KakaoLogin = () => {
   const KAKAO_SOCIAL_LOGIN_URL =
@@ -22,15 +23,18 @@ const KakaoLogin = () => {
   //   })
   // }
   return (
-    <div>
-      <a href={KAKAO_SOCIAL_LOGIN_URL}>
-        <img
-          src={kakaoLogo}
-          alt="Kakao logo"
-          style={{ width: '300px', height: '75px' }}
-        />
-      </a>
-    </div>
+    <button className={'kakao-btn'} href={KAKAO_SOCIAL_LOGIN_URL}>
+      카카오 로그인
+    </button>
+    // <div>
+    //   <a href={KAKAO_SOCIAL_LOGIN_URL}>
+    //     <img
+    //       src={kakaoLogo}
+    //       alt="Kakao logo"
+    //       style={{ width: '300px', height: '75px' }}
+    //     />
+    //   </a>
+    // </div>
   )
 }
 
