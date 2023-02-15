@@ -40,7 +40,13 @@ const RocketItem = (props) => {
         <div className="Join3_profileimage">About Me</div>
       )}
       <div
-        className={ver === '' ? 'Join3_uploader_mainpage' : 'Join3_uploader'}
+        className={
+          ver === ''
+            ? 'Join3_uploader_mainpage'
+            : ver === 'Start'
+            ? 'Join3_uploader'
+            : 'Rocket_uploader'
+        }
       >
         <div className="Join3_uiverse">
           <div className="Join3_uiverse-image-card"></div>
@@ -48,8 +54,16 @@ const RocketItem = (props) => {
             <img className="Join3_default-image" src={image} alt={''} />
           </div>
         </div>
-        {props.ver === 'Start' && (
-          <div className="Join3_uploader-button">
+        {props.ver !== 'Other' && (
+          <div
+            className={`${
+              props.ver === 'Me'
+                ? 'Rocket_me-upload-btn'
+                : props.ver === 'Start'
+                ? 'Join3_uploader-button'
+                : 'Rendezboo_uploader-button'
+            }`}
+          >
             <ProfileImageUploader
               profileImagePath={props.profileImagePath}
               changeImage={changeImage}

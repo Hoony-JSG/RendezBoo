@@ -82,7 +82,7 @@ const RocketBtn_Same = (props) => {
                 name=""
                 type="text"
                 disabled
-                value={`   ${userMBTI}`}
+                value={`${userMBTI}`}
               />
               <div className="RocketBtnSame_form-edit-box">
                 <button
@@ -93,16 +93,16 @@ const RocketBtn_Same = (props) => {
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
-                  {modalPop ? 'Edit' : 'New'}
+                  {modalPop ? 'Save' : 'Edit'}
                 </button>
               </div>
             </div>
-            {modalPop && (
-              <div className="RocketBtnSame_modal">
-                <MBTISelector mbti={setTempMBTI} setBtn={popBtn} />
-              </div>
-            )}
           </form>
+          {modalPop && (
+            <div className="RocketBtnSame_modal">
+              <MBTISelector mbti={setTempMBTI} setBtn={popBtn} />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,6 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ApexCharts from 'react-apexcharts'
-import { BiHappyHeartEyes } from 'react-icons/bi'
-
+import '../../Styles/RocketRadarStyle.css'
 const RocketRadar = (props) => {
   const emotion = props.rocketUserEmotion
 
@@ -31,9 +30,7 @@ const RocketRadar = (props) => {
         },
       },
     },
-    title: {
-      text: '다이어그램',
-    },
+    title: {},
     colors: ['#FF4560'],
     markers: {
       size: 4,
@@ -70,12 +67,12 @@ const RocketRadar = (props) => {
       {
         name: 'Series',
         data: [
-          emotion.happiness,
-          emotion.surprise,
-          emotion.fear,
-          emotion.disgust,
-          emotion.anger,
-          emotion.sadness,
+          emotion.happiness.toFixed(2),
+          emotion.surprise.toFixed(2),
+          emotion.fear.toFixed(2),
+          emotion.disgust.toFixed(2),
+          emotion.anger.toFixed(2),
+          emotion.sadness.toFixed(2),
         ],
       },
     ])

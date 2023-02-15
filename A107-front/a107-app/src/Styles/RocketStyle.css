@@ -1,8 +1,7 @@
-.Rocket_Page {
-  border: 1px solid red;
+.Rocket_whole-page {
+  border: 1px solid yellow;
 }
 .Rocket_title {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.515);
   height: 10%;
   font-size: 50px;
   display: flex;
@@ -11,14 +10,52 @@
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   letter-spacing: 4px;
 }
+.Rocket_uploader {
+  /* border: 1px solid red; */
+  border: 2px solid rgba(207, 207, 206, 0.231);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 436px;
+  height: fit-content;
+  margin-top: 10px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.122);
+}
 
 .Rocket_container {
   box-sizing: border-box;
   position: absolute;
+  /* background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  border: 2px solid #ffffff;
+  filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))
+    drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
+  border-radius: 50px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   width: 1600px;
   height: 780px;
   left: 160px;
   top: 120px;
+}
+
+.Rocket_rocketitem-whole-box {
+  display: flex;
+  flex-direction: row;
+  height: 90%;
+}
+
+.Rocket_rocketitem-left-box {
+  box-sizing: border-box;
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.5) 0%,
@@ -28,36 +65,61 @@
   filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))
     drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
   border-radius: 50px;
-  display: flex;
-  flex-direction: column;
-}
-.Rocket_rocketitem-whole-box {
-  display: flex;
-  flex-direction: row;
-  height: 90%;
-}
-
-.Rocket_rocketitem-left-box {
-  border: 1px solid red;
-  width: 30%;
-  box-sizing: border-box;
+  width: 480px;
   padding: 0px 20px;
   height: 100%;
   padding-bottom: 30px;
 }
 
 .Rocket_rocketitem-right-box {
-  z-index: -1;
-  border: 1px solid red;
-  width: 70%;
+  /* z-index: -1; */
+  box-sizing: border-box;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  border: 2px solid #ffffff;
+  filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))
+    drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
+  border-radius: 50px;
+  width: 800px;
+  margin-right: 50px;
 }
 
 .Rocket_rocketitem-right-top-box {
-  border: 1px solid red;
-  height: 40%;
+  /* border: 1px solid red; */
+  height: 35%;
 }
 
 .Rocket_rocketitem-right-bottom-box {
-  border: 1px solid red;
-  height: 60%;
+  /* border: 1px solid red; */
+  height: 65%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.Rocket_radar-container {
+  border: 1px solid white;
+  width: 500px;
+  height: 390px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 20px;
+  align-items: center;
+  background: linear-gradient(
+    160deg,
+    rgba(79, 151, 128, 0.328) 0%,
+    rgba(255, 255, 255, 0.363) 100%
+  );
+  padding-top: 20px;
+}
+.Rocket_radar-title {
+  font-size: 30px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid white;
+  width: 280px;
 }

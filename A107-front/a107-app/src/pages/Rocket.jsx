@@ -85,25 +85,30 @@ const Rocket = () => {
   console.log(ver)
 
   return (
-    <div className="Rocket_Page">
+    <div className="bottom-nav-page">
       <div className="Rocket_container">
         <div className="Rocket_title">
           <span>{rocketUser.name}'s License</span>
         </div>
         <div className="Rocket_rocketitem-whole-box">
-          <div className="Rocket_rocketitem-left-box">
-            <RocketItem
-              {...MeAndYou}
-              profileImagePath={rocketUser.profileImagePath}
-            />
-          </div>
           <div className="Rocket_rocketitem-right-box">
             <div className="Rocket_rocketitem-right-top-box">
               <RocketBadge {...MeAndYou} badgeList={badgeList} />
             </div>
             <div className="Rocket_rocketitem-right-bottom-box">
-              <RocketRadar rocketUserEmotion={rocketUserEmotion} />
+              <div className="Rocket_radar-container">
+                <div className="Rocket_radar-title">
+                  <span>감정 분석 기록</span>
+                </div>
+                <RocketRadar rocketUserEmotion={rocketUserEmotion} />
+              </div>
             </div>
+          </div>
+          <div className="Rocket_rocketitem-left-box">
+            <RocketItem
+              {...MeAndYou}
+              profileImagePath={rocketUser.profileImagePath}
+            />
           </div>
         </div>
       </div>
