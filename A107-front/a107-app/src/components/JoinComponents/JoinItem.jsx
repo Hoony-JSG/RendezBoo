@@ -93,7 +93,7 @@ const JoinItem = () => {
   const setNext = () => {
     if (order === 3) {
       sendUserSetting()
-      // window.location.href = '/'
+      window.location.href = '/'
     } else {
       setOrder(order + 1)
     }
@@ -144,7 +144,7 @@ const JoinItem = () => {
     />,
     // <JoinItem4rd setNext={setNext} />,
   ]
-  const [order, setOrder] = useState(3, '')
+  const [order, setOrder] = useState(2, '')
   return <div style={{ marginTop: '20px' }}>{ItemList[order]}</div>
 }
 

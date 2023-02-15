@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import MBTISelector from '../JoinComponents/MBTISelector'
+import { useState } from 'react'
 
 import '../../Styles/RocketItemButtonStyle.css'
+import MBTISelector from '../JoinComponents/MBTISelector'
 
 const RocketBtn_Same = (props) => {
-  const navigate = useNavigate()
-  const { Inquire } = props
   const [rocketUser, setRocketUser] = useState({
     email: 'wjdgnsxhsl@naver.com',
     gender: props.rocketUser.gender,
@@ -21,7 +18,7 @@ const RocketBtn_Same = (props) => {
   const [userMBTI, setUserMBTI] = useState(rocketUser.mbti)
   const [tempMBTI, setTempMBTI] = useState()
   const [modalPop, setModalPop] = useState(false)
-  const handleClick = () => {
+  const handleModalOpen = () => {
     if (modalPop) {
       setUserMBTI(tempMBTI)
       setModalPop(false)
@@ -32,7 +29,6 @@ const RocketBtn_Same = (props) => {
     }
   }
 
-  console.log(rocketUser)
   return (
     <div className="RocketBtnSame_container">
       <div className="RocketBtnSame_form-container">
@@ -40,7 +36,7 @@ const RocketBtn_Same = (props) => {
           <div className="RocketBtnSame_form-top-box">
             <p className="RocketBtnSame_form-p">INFORMATION</p>
           </div>
-          <form className="RocketBtnSame_form-form">
+          <div className="RocketBtnSame_form-form">
             <div className="RocketBtnSame_form-input-box">
               <label className="RocketBtnSame_form-label">Name</label>
               <input
@@ -87,7 +83,7 @@ const RocketBtn_Same = (props) => {
               <div className="RocketBtnSame_form-edit-box">
                 <button
                   className="RocketBtnSame_form-button"
-                  onClick={handleClick}
+                  onClick={handleModalOpen}
                 >
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
@@ -97,7 +93,7 @@ const RocketBtn_Same = (props) => {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
           {modalPop && (
             <div className="RocketBtnSame_modal">
               <MBTISelector mbti={setTempMBTI} setBtn={popBtn} />
