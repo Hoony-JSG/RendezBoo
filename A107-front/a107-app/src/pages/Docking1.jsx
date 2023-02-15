@@ -24,7 +24,7 @@ const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-const Docking1 = (props) => {
+const Docking1 = () => {
   const minute = 30000
   const REQUEST_HEADER = getHeader()
 

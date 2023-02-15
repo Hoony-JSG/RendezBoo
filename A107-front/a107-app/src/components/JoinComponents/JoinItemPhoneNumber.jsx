@@ -58,6 +58,8 @@ const JoinItemPhoneNumber = (props) => {
               setPhoneNumber(e.target.value)
             }}
             onKeyUp={checkPhoneNumberLength}
+            maxLength="11"
+            autoFocus
           />
           <button
             className="JoinPhoneNumber_send-code-button"

@@ -76,11 +76,15 @@ const JoinItemBirth = (props) => {
 
     return daysOfWeek
   }
+
+  const [warningMessage, setWarningMessage] = useState(
+    `${currentYear - 19}년생부터 이용 가능합니다.`
+  )
   const [underNineteen, setUnderNineteen] = useState(true)
   useEffect(() => {
     setMonth(selectedDate.getMonth())
     console.log(year + ']]]]]]]]]]]]]]')
-    if (year === undefined) setYear(selectedDate.getFullYear())
+    if (year === undefined) setYear(selectedDate.getFullYear() - 19)
     const birthYear = selectedDate.getFullYear()
     if (currentYear - birthYear >= 19) {
       props.birthday(selectedDate)
@@ -152,7 +156,7 @@ const JoinItemBirth = (props) => {
           className={underNineteen ? 'Birth_undernineteen' : 'selected-date'}
         >
           {underNineteen
-            ? '19세 미만 이용 불가'
+            ? warningMessage
             : selectedDate.toLocaleString('default', {
                 year: 'numeric',
                 month: 'long',

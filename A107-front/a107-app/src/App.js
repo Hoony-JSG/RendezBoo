@@ -5,7 +5,6 @@ import {
   Home,
   Rendezboo,
   Signal,
-  Login,
   LoginNew,
   Join,
   Rocket,
@@ -18,9 +17,7 @@ import {
 } from './pages'
 import Navbar from './components/Navbar'
 import './App.css'
-import WebSocketChatTest from './modules/WebSocketChatTest'
 import JoinSocial from './pages/JoinSocial'
-import LoginTest from './pages/LoginNew'
 import Logout from './pages/Logout'
 import {
   getRefreshTokenFromCookie,
@@ -40,7 +37,7 @@ function App() {
   const refreshToken = getRefreshTokenFromCookie()
   const allowedPaths = [
     '/loginnew',
-    '/home',
+    '/',
     '/join',
     '/joinsocial',
     '/oauth/naver',
@@ -53,8 +50,10 @@ function App() {
       // 토큰이 없고 접근 제한된 라우트에 접근하려고 할 때 홈으로 보내기
       if (!isAllowedPath && !refreshToken) {
         alert('로그인이 필요한 서비스입니다.')
-        navigate('/home')
+        navigate('/')
         //  그 외에는 토큰 재발급
+      } else if (isAllowedPath && refreshToken) {
+        navigate('/rendezboo')
       } else {
         const accessToken = await reissueAccessToken(refreshToken)
         dispatch(SET_TOKEN(accessToken))
@@ -68,19 +67,17 @@ function App() {
     <div className="App">
       <div>
         {!(
-          location.pathname === '/home' ||
+          location.pathname === '/' ||
           location.pathname === '/join' ||
-          location.pathname === '/login' ||
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
           location.pathname === '/docking3ing'
         ) && <Navbar />}
         <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route exact path="/" element={<Rendezboo />} />
+          <Route path="/" element={<Home />} />
+          <Route exact path="/rendezboo" element={<Rendezboo />} />
           <Route exact path="/signal" element={<Signal />} />
           <Route path="/signal/:tmpChatRoomSeq" element={<Signal />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/loginnew" element={<LoginNew />}></Route>;
           <Route path="/joinsocial" element={<JoinSocial />} />
           <Route path="/join" element={<Join />} />
@@ -91,17 +88,12 @@ function App() {
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;
-          {/* 웹소켓 테스트용 라우터 */}
-          <Route
-            path="/websocketchattest"
-            element={<WebSocketChatTest />}
-          ></Route>
+
           {/* 로그인 테스트용 라우터 */}
-          <Route path="/logintest" element={<LoginTest />}></Route>
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/oauth/naver" element={<OauthNaver />}></Route>
           <Route path="/oauth/kakao" element={<OauthKakao />}></Route>
-          <Route path="/*" element={<Error />}></Route>
+          <Route path="/*" element={<Error islogin={refreshToken} />}></Route>
         </Routes>
       </div>
     </div>

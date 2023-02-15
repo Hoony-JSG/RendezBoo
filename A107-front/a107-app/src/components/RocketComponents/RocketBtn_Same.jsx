@@ -16,9 +16,9 @@ const RocketBtn_Same = (props) => {
       <button className="RocketItemButton" onClick={edit}>
         정보 수정
       </button>
-      <button className="RocketItemButton" onClick={itemBox}>
+      {/* <button className="RocketItemButton" onClick={itemBox}>
         아이템 상자
-      </button>
+      </button> */}
     </div>
   )
 }

@@ -43,9 +43,10 @@ const Rendezboo = () => {
 
   console.log('랑데부 페이지')
   const navigate = useNavigate()
-  const goToPage = (props) => {
-    navigate('/' + props)
-  }
+
+  // const goToPage = (props) => {
+  //   navigate('/' + props)
+  // }
 
   // const Contents = {
   //   display: 'flex',
@@ -73,7 +74,7 @@ const Rendezboo = () => {
           type="button"
           className="RendezbooBtn"
           onClick={(e) => {
-            goToPage('docking1')
+            navigate('/docking1')
           }}
         >
           <div className="doorIconLayoutStyle">
@@ -95,7 +96,7 @@ const Rendezboo = () => {
           type="button"
           className="RendezbooBtn"
           onClick={(e) => {
-            goToPage('docking3')
+            navigate('/docking3')
           }}
         >
           <div className="doorIconLayoutStyle">
