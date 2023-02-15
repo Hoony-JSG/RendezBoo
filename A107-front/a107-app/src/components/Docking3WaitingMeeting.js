@@ -8,6 +8,7 @@ import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as tf from '@tensorflow/tfjs'
 import '../Styles/Docking3ing.css'
 import { getHeader } from '../modules/Auth/Jwt'
+import Game from './DockingComponents/Game'
 
 const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL =
@@ -24,81 +25,77 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
   //gotFirstWebSocketMessageFlag
   const gotFirstWebSocketMessageFlag = useRef(false)
-  // 임시로 설정해둔 인자 변수 (나중에 프론트에서 넣어주세요)
+   // 웹소켓 관련 기능
   const client = useRef({})
   const [chatList, setChatList] = useState([])
   const [message, setMessage] = useState('')
-  const [completeFlag, setCompleteFlag] = useState(false)
-  //gotFirstWebSocketMessageFlag
 
+  //6명이 다 모였으면 completeFlag === true
+  const [completeFlag, setCompleteFlag] = useState(false)
+  
+  //게임 관련
+  const [gameFlag, setGameFlag] = useState(false)
+  const [gameType, setGameType] = useState()
+  
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
+
+  //openvidu관련
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
   const [session, setSession] = useState()
   const [token, setToken] = useState('')
-
+  
+  //마스크 씌우기
   const [maskPath, setMaskPath] = useState(
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
   )
 
   useEffect(() => {
-    //////////////////////////////////////////////////////////////////////////////////////
+      //////////////////////////////////////////////////////////////////////////////////////
     //대기방에서 필요한 일이다. 웹소켓 연결, 구독...
     // connect: 웹소켓(stomp)연결
     const connect = async () => {
+
       // subscribe: 메세지 받을 주소 구독
       const subscribeMulti = async () => {
         // 구독한 주소로 메세지 받을 시 이벤트 발생
         // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
-        await client.current.subscribe(
-          '/sub/multi/' + multiMeetingRoomSeq,
-          (body) => {
-            // 받아온 제이슨 파싱
-            const json_body = JSON.parse(body.body)
+        await client.current.subscribe('/sub/multi/' + multiMeetingRoomSeq, (body) => {
+          // 받아온 제이슨 파싱
+          const json_body = JSON.parse(body.body)
 
-            console.log('메세지 받았당') // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
-            console.log(json_body)
+          console.log('메세지 받았당') // 확인용 출력 (이처럼 메세지 수령 시 특정 이벤트를 발생 시킬 수 있습니다.)
+          console.log(json_body)
 
-            const type = json_body.flag //JOIN, CHAT, EXIT, SYSTEM, GAME
+          const type = json_body.flag //JOIN, CHAT, EXIT, SYSTEM, GAME
 
-            // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
-            if (type === 'JOIN') {
-              setChatList((_chat_list) => [
-                ..._chat_list,
-                json_body.message,
-                json_body.createdAt,
-              ])
-              let maleNum = json_body.maleNum
-              let femaleNum = json_body.femaleNum
-              console.log('malenum: ' + maleNum)
-              console.log('femalenum: ' + femaleNum)
-              if (maleNum == 3 && femaleNum == 3) {
-                setCompleteFlag(true)
-              }
-            } else if (type === 'CHAT') {
-              setChatList((_chat_list) => [
-                ..._chat_list,
-                json_body.message,
-                json_body.createdAt,
-              ])
-            } else if (type === 'EXIT') {
-              setChatList((_chat_list) => [
-                ..._chat_list,
-                json_body.message,
-                json_body.createdAt,
-              ])
-            } else if (type === 'SYSTEM') {
-              handleSystem(json_body)
-            } else if (type === 'GAME') {
-              handleGame(json_body)
-            } else if (type === 'FIN') {
-              handleFin(json_body)
-            } else if (type === 'START') {
-              handleStart(json_body)
+          // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
+          setChatList((_chat_list) => [
+            ..._chat_list,
+            json_body.message,
+            json_body.createdAt,
+          ])
+
+          if (type === 'JOIN') {
+            var maleNum = json_body.maleNum
+            var femaleNum = json_body.femaleNum
+            console.log('malenum: ' + maleNum)
+            console.log('femalenum: ' + femaleNum)
+            if (maleNum ==3 && femaleNum == 3) {
+              setCompleteFlag(true)
             }
           }
-        )
+          ///////////////////////////////////////GAME: START, GAME, FIN
+          if(type === 'START'){
+            setGameType(json_body.gameType)
+            if(gameFlag === false){
+              setGameFlag(true)
+            }
+          }
+
+
+        })
       }
       client.current = new StompJs.Client({
         brokerURL: WEBSOCKET_SERVER_URL + 'ws-stomp', // 연결할 url(이후에 localhost는 배포 도메인으로 바꿔주세요)
@@ -127,13 +124,12 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
       // client 객체 활성화
       await client.current.activate()
-      alert('connect()가 되었다')
+      alert("connect()가 되었다")
     }
 
-    connect().then(() => {
+    connect().then(()=>{
       alert('나를 이 미팅방-유저 테이블에 추가하고 웹소켓으로 보낸다.')
-      axios
-        .post(
+      axios.post(
           APPLICATION_SERVER_URL +
             'api/multi-meetings/' +
             multiMeetingRoomSeq +
@@ -141,6 +137,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             userSeq
         )
         .then((response) => {
+          
           console.log(response.data)
           const openVidu = new OpenVidu()
           let session = openVidu.initSession()
@@ -217,19 +214,21 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           console.log(e.message)
           navigate('/error')
         })
-    })
+      }
+
+    )
     return () => disconnect()
   }, [])
 
   //뒤로가기 버튼 처리
   const onBackButtonEvent = (e) => {
-    e.preventDefault()
-    navigate('/docking3')
+      e.preventDefault();
+      navigate('/docking3')
   }
-  useEffect(() => {
+  useEffect(()=>{
     window.history.pushState(null, null, window.location.pathname)
     window.addEventListener('popstate', onBackButtonEvent)
-    return () => {
+    return()=>{
       window.removeEventListener('popstate', onBackButtonEvent)
     }
   }, [])
@@ -270,13 +269,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     alert('disconnect(): 대기방 연결을 해제합니다.')
     client.current.deactivate()
     console.log('나를 이 미팅방-유저 테이블에서 삭제합니다.')
-    axios.delete(
-      APPLICATION_SERVER_URL +
-        'api/multi-meetings/' +
-        multiMeetingRoomSeq +
-        '/' +
-        userSeq
-    )
+    axios.delete(APPLICATION_SERVER_URL +'api/multi-meetings/' +multiMeetingRoomSeq +'/' +userSeq)
   }
 
   // handleChage: 채팅 입력 시 state에 값 설정
@@ -384,13 +377,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     return response.data
   }
 
-  const handleExit = (json_body) => {}
-  const handleSystem = (json_body) => {}
-  const handleGame = (json_body) => {}
-  const handleFin = (json_body) => {}
-  const handleStart = (json_body) => {}
-
-  return completeFlag ? (
+  return (completeFlag ? (
     <div
       className="container"
       style={{
@@ -451,6 +438,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                     startFaceAPI={() => {}}
                   />
                 </div>
+                
               ))}
               {publisher !== undefined ? (
                 <div className="cam">
@@ -475,11 +463,17 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                 </div>
               ) : null}
               <div className="chat"></div>
-              <div className="btn-group"></div>
+              <div className="btn-group">
+                <div onclick={()=>{
+                  setGameFlag(true)
+                }}>게임하기</div>
+              </div>
             </div>
           </div>
         )}
       </div>
+      {/*게임 모달*/}
+      {gameFlag?(<Game gameType = {gameType}/>):(null)}
     </div>
   ) : (
     <div>
@@ -504,6 +498,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         <input type={'submit'} value={'메세지 보내기'} />
       </form>
     </div>
+  )
   )
 }
 export default Docking3WaitingMeeting
