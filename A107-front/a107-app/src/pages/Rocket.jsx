@@ -35,6 +35,12 @@ const Rocket = () => {
     userInterests: [],
   })
 
+  const setNewProfile = (file) => {
+    setRocketUser((prevState) => ({
+      ...prevState,
+      profileImagePath: file,
+    }))
+  }
   const [rocketUserEmotion, setRocketUserEmotion] = useState({
     anger: 0,
     disgust: 0,
@@ -55,6 +61,7 @@ const Rocket = () => {
   }
 
   useEffect(() => {
+    console.log('왜 자꾸 돌아가냐')
     axios
       .get(APPLICATION_SERVER_URL + 'api/user/' + Inquire, REQUEST_HEADER)
       .then((res) => {
@@ -83,7 +90,9 @@ const Rocket = () => {
   }, [])
 
   console.log(ver)
-
+  const notJoin = () => {
+    console.log('MyRocket')
+  }
   return (
     <div className="bottom-nav-page">
       <div className="Rocket_container">
@@ -107,7 +116,8 @@ const Rocket = () => {
           <div className="Rocket_rocketitem-left-box">
             <RocketItem
               {...MeAndYou}
-              profileImagePath={rocketUser.profileImagePath}
+              setProfileImage={setNewProfile}
+              setTrue={notJoin}
             />
           </div>
         </div>
