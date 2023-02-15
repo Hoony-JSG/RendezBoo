@@ -47,6 +47,7 @@
 }
 
 .Rocket_rocketitem-right-box {
+  z-index: -1;
   border: 1px solid red;
   width: 70%;
 }
