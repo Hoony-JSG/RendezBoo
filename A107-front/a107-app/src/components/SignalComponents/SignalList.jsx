@@ -23,7 +23,10 @@ const SignalList = ({ userSeq, chat }) => {
       'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
   }
   return (
-    <div onClick={() => navigate(`/signal/${chat.seq}`)}>
+    <div onClick={() => {
+      // navigate(`/signal/${chat.seq}`)
+      window.location.assign(`/signal/${chat.seq}`)
+      }}>
       {userFemale.seq !== userSeq ? (
         <div style={chatListStyle}>
           <img

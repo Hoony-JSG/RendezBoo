@@ -1,4 +1,4 @@
-import kakaoLogo from '../../Images/kakao_login_large_narrow.png'
+import kakaoLogo from '../../Images/kakaologin.png'
 
 const KakaoLogin = () => {
   const KAKAO_SOCIAL_LOGIN_URL =
@@ -8,8 +8,8 @@ const KakaoLogin = () => {
       <a href={KAKAO_SOCIAL_LOGIN_URL}>
         <img
           src={kakaoLogo}
-          alt="Kakao logo"
-          style={{ width: '300px', height: '75px' }}
+          alt="Login with Kakao"
+          style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))' }}
         />
       </a>
   )
