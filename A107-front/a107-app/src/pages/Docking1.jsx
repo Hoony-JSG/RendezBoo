@@ -490,7 +490,7 @@ const Docking1 = () => {
               <ImEnter />
               &nbsp;입장하기
             </button>
-            <button className="ready-exit-btn" onClick={() => {navigate('/')}}>
+            <button className="ready-exit-btn" onClick={() => {navigate('/rendezboo')}}>
               <ImExit />
               &nbsp;돌아가기
             </button>
@@ -544,7 +544,7 @@ const Docking1 = () => {
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={maskPath}
-                  userSeq={2}
+                  // userSeq={2}
                   startFaceAPI={startFaceAPI}
                 />
               </div>
@@ -556,7 +556,7 @@ const Docking1 = () => {
                 <FilteredVideo
                   streamManager={publisher}
                   maskPath={maskPath}
-                  userSeq={userSeq}
+                  // userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
                 <div className="btn-group">
