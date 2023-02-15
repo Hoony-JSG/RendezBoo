@@ -29,7 +29,7 @@
   margin: 10px;
 }
 
-.mbti-selector-item .mbti-selector-item-btn {
+.mbti-selector-item-btn {
   margin-bottom: 10px;
   cursor: pointer;
   border-radius: 25%;
@@ -43,4 +43,55 @@
   width: fit-content;
   height: fit-content;
   /* border: 1px solid red; */
+}
+/* //////////////////////////////////////////////// */
+.mbti-selector-edit::-webkit-scrollbar-track {
+  margin: 0px;
+}
+.mbti-selector-edit {
+  border-top: 2px solid rgba(255, 255, 255, 0.189);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.189);
+  border-right: 2px solid rgba(255, 255, 255, 0.189);
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin: 0px !important;
+  background: rgba(189, 189, 189, 0.127);
+}
+/* .mbti-move {
+  animation: mbti-move-ani 1s ease-in-out;
+}
+
+@keyframes mbti-move-ani {
+  from {
+    left: 0px;
+  }
+  to {
+    left: 100px;
+  }
+} */
+.MBTISelector_btn-edit {
+  width: fit-content;
+  height: fit-content;
+  /* border: 1px solid red; */
+}
+.mbti-selector-item-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+}
+
+.MBTISelector_btn-edit .MBTIBtn_container {
+  padding: 10px;
+  padding-left: 40px;
+}
+.MBTISelector_btn-edit .MBTIBtn_container .MBTIBtn_button:hover .MBTIBtn_pop {
+  transform: translateX(-100%);
+}
+.MBTISelector_btn-edit .MBTIBtn_container .MBTIBtn_button .MBTIBtn_pop {
+  margin-top: 5px;
 }

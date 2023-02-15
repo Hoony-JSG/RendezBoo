@@ -9,12 +9,12 @@ const RocketItem = (props) => {
   const { Me, Inquire, ver, setProfileImage, profileImagePath } = props
   const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-  const MeAndYou = {
-    Me: Me,
-    Inquire: Inquire,
-    ver: ver,
-    BadgeRep: 1,
-  }
+  // const MeAndYou = {
+  //   Me: Me,
+  //   Inquire: Inquire,
+  //   ver: ver,
+  //   BadgeRep: 1,
+  // }
 
   const [image, setimage] = useState(userprofile)
   useEffect(() => {
@@ -33,13 +33,20 @@ const RocketItem = (props) => {
   console.log('Btn :' + ver)
   return (
     <div
-    // style={ver === '' ? { height: 'fitContent' } : ''}
+      className="Join3_whole-container"
+      // style={ver === '' ? { height: 'fitContent' } : ''}
     >
       {props.ver === 'Start' && (
         <div className="Join3_profileimage">About Me</div>
       )}
       <div
-        className={ver === '' ? 'Join3_uploader_mainpage' : 'Join3_uploader'}
+        className={
+          ver === ''
+            ? 'Join3_uploader_mainpage'
+            : ver === 'Start'
+            ? 'Join3_uploader'
+            : 'Rocket_uploader'
+        }
       >
         <div className="Join3_uiverse">
           <div className="Join3_uiverse-image-card"></div>
@@ -47,8 +54,16 @@ const RocketItem = (props) => {
             <img className="Join3_default-image" src={image} alt={''} />
           </div>
         </div>
-        {props.ver === 'Start' && (
-          <div className="Join3_uploader-button">
+        {props.ver !== 'Other' && (
+          <div
+            className={`${
+              props.ver === 'Me'
+                ? 'Rocket_me-upload-btn'
+                : props.ver === 'Start'
+                ? 'Join3_uploader-button'
+                : 'Rendezboo_uploader-button'
+            }`}
+          >
             <ProfileImageUploader
               profileImagePath={props.profileImagePath}
               changeImage={changeImage}
@@ -58,7 +73,7 @@ const RocketItem = (props) => {
         )}
       </div>
 
-      <RocketBtn mbti={props.mbti} {...MeAndYou} />
+      <RocketBtn mbti={props.mbti} ver={ver} rocketUser={props.rocketUser} />
     </div>
   )
 }
