@@ -6,7 +6,7 @@ import '../../Styles/Join3RocketItemStyle.css'
 import { useEffect } from 'react'
 
 const RocketItem = (props) => {
-  const { Me, Inquire, ver, setProfileImage } = props
+  const { Me, Inquire, ver, setProfileImage, profileImagePath } = props
   const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   const MeAndYou = {
@@ -18,11 +18,11 @@ const RocketItem = (props) => {
 
   const [image, setimage] = useState(userprofile)
   useEffect(() => {
-    if (props.profileImagePath) {
+    if (profileImagePath) {
       console.log('프사있음')
-      setimage(SRC_URL + props.profileImagePath)
+      setimage(SRC_URL + profileImagePath)
     }
-  }, [])
+  }, [profileImagePath])
   const changeImage = (image) => {
     if (image !== null) {
       console.log('새 이미지를 가져와서 setProfileImage : ' + image)
