@@ -10,7 +10,8 @@
   text-align: center;
   /* padding-inline: 10px; */
 }
-
+.Join3_uploader_mainpage {
+}
 .Join3_uploader {
   /* border: 1px solid red; */
   padding: 40px 0px 40px 0px;
@@ -42,6 +43,7 @@
   top: 0;
   left: 0;
   z-index: 1;
+  overflow: hidden;
 }
 .Join3_default-image {
   border: 1px solid green;
@@ -49,6 +51,7 @@
   width: 200px;
   height: 200px;
   align-self: center;
+  object-fit: cover;
 }
 
 /* /////////////////////////// */
