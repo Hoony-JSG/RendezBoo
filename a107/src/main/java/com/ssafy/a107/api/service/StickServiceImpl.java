@@ -1,11 +1,13 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.FriendReq;
 import com.ssafy.a107.api.request.StickCreateReq;
 import com.ssafy.a107.api.request.StickReq;
 import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.StickRes;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.Stick;
+import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.MultiMeetingRoomRepository;
 import com.ssafy.a107.db.repository.StickRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,14 @@ public class StickServiceImpl implements StickService {
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     private final StickRepository stickRepository;
 
+
+
+    private final UserFriendService userFriendService;
+
     private static final long stickOfLoveExpiration = 3600000;
 
     @Override
+    @Transactional
     public StickRes createStickOfLove(StickCreateReq stickCreateReq) {
         log.debug("************ 사랑의 작대기 시작! 채팅방 번호: {} ************", stickCreateReq.getMultiMeetingRoomSeq());
 
@@ -49,6 +56,7 @@ public class StickServiceImpl implements StickService {
     }
 
     @Override
+    @Transactional
     public StickRes runStickOfLove(StickReq stickReq) throws NotFoundException {
         log.debug("************ 사랑의 작대기 진행, 채팅방 번호: {} ************", stickReq.getMultiMeetingRoomSeq());
         Long userSeq = stickReq.getUserSeq();
@@ -79,8 +87,22 @@ public class StickServiceImpl implements StickService {
         // 지목 현황을 모두 받았으면 게임 진행
         if(targets.size() == userSeqList.size()) {
             List<long[]> matches = new ArrayList<>();
+            List<User> users = multiMeetingRoomRepository.findUsersByMultiMeetingRoomSeq(stickReq.getMultiMeetingRoomSeq());
+            for(User u : users) {
+                if(u.getGender()){
+                    if(u.getSeq() == targets.get(targets.get(u.getSeq()))) {
+
+                    userFriendService.addFriend(FriendReq.builder()
+                            .userMaleSeq(u.getSeq())
+                            .userFemaleSeq(targets.get(u.getSeq()))
+                            .build());
+                    }
+                }
+            }
 
             for(Map.Entry<Long, Long> entry: targets.entrySet()) {
+
+
                 Long temp = targets.get(entry.getValue());
 
                 // 상대방을 선택하지 않은 경우
