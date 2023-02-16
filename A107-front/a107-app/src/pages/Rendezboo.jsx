@@ -1,11 +1,12 @@
 import { BsFillDoorClosedFill, BsFillDoorOpenFill } from 'react-icons/bs'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import '../Styles/Rendezboo.css'
 import RocketItem from '../components/RocketComponents/RocketItem'
 import { getHeader } from '../modules/Auth/Jwt'
+import rocketImg from '../Images/RendezRocket.png'
 
 const Rendezboo = () => {
   const userid = useSelector((state) => state.userInfoReducer.userEmail)
@@ -52,14 +53,24 @@ const Rendezboo = () => {
     ver: '',
   }
 
+  // ??????????????????????????????
   return (
     <div className="RendezBoo_whole-container">
       <div className="Contents">
-        <div className="rocketItemSizeStyle">
-          <RocketItem
-            {...MeAndYou}
-            profileImagePath={rocketUser.profileImagePath}
-          />
+        <div className="RendezBoo_left-container">
+          <div id="RendezBoo_mouseRotate">
+            <img
+              className="RendezBoo_rocket-img"
+              src={rocketImg}
+              alt="rocketImg"
+            ></img>
+          </div>
+          <div className="rocketItemSizeStyle">
+            <RocketItem
+              {...MeAndYou}
+              profileImagePath={rocketUser.profileImagePath}
+            />
+          </div>
         </div>
         <div className="RendezBoo_docking-btn-container">
           <div className="onThisButtonStyle">
