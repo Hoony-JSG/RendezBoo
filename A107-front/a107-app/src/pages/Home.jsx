@@ -5,7 +5,7 @@ import KakaoLogin from '../components/JoinComponents/KakaoLogin'
 import NaverLogin from '../components/JoinComponents/NaverLogin'
 import GameBr31 from '../components/DockingComponents/GameComponents/GameBR31'
 import GameTheGameOfDeath from '../components/DockingComponents/GameComponents/GameTheGameOfDeath'
-
+import GameFastClick from '../components/DockingComponents/GameComponents/GameFastClick'
 const Home = () => {
   const homeDivStyle = {
     display: 'flex',
