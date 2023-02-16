@@ -82,3 +82,28 @@
   height: fit-content;
   margin-left: 100px;
 }
+
+.RendezBoo_rocket-img {
+  width: 572px;
+  height: 780px;
+  position: fixed;
+  right: -135.5px;
+  top: -70px;
+  bottom: -60px;
+  opacity: 0.9;
+}
+
+.RendezBoo_left-container {
+  animation: rendez-floating 3s infinite;
+}
+@keyframes rendez-floating {
+  0% {
+    transform: translateY(-100px);
+  }
+  50% {
+    transform: translateY(-70px);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
