@@ -70,18 +70,52 @@
   height: 100%;
   padding-bottom: 30px;
 }
+.Rocket_rocketitem-left-box-other {
+  box-sizing: border-box;
+  border-radius: 50px;
+  width: 480px;
+  padding: 0px 20px;
+  height: 100%;
+  padding-bottom: 30px;
+  animation: other-floating 3s infinite;
+}
+.Rocket_uploader-other {
+  /* border: 2px solid rgba(207, 207, 206, 0.231); */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  width: 436px;
+  height: fit-content;
+  margin-top: 100px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 50px;
+  /* background: rgba(255, 255, 255, 0.122); */
+}
+@keyframes other-floating {
+  0% {
+    transform: translateY(15px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(15px);
+  }
+}
 
 .Rocket_rocketitem-right-box {
   /* z-index: -1; */
   box-sizing: border-box;
-  background: linear-gradient(
+  /* background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.5) 0%,
     rgba(0, 0, 0, 0) 100%
   );
   border: 2px solid #ffffff;
   filter: drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))
-    drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
+    drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25)); */
   border-radius: 50px;
   width: 800px;
   margin-right: 50px;
@@ -105,7 +139,7 @@
 
 .Rocket_radar-container {
   border: 1px solid white;
-  width: 500px;
+  width: 760px;
   height: 390px;
   display: flex;
   flex-direction: column;

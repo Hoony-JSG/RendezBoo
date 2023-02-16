@@ -215,3 +215,17 @@
 .RocketBtnSame_form-edit-box {
   margin-top: 5px;
 }
+.RocketBtnDiff_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.RocketBtnDiff_rocket-img {
+  width: 150%;
+  right: 2px;
+  position: relative;
+  bottom: 470px;
+  height: 150%;
+  opacity: 0.9;
+}
