@@ -64,7 +64,14 @@ const Stick = (props) => {
         <div>
           <p style={{ fontSize: '2rem' }}>상대방을 선택하세요</p>
           <div>
-            <div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
               {subscribers
                 .filter((sub) => sub.userGender !== userGender)
                 .map((sub, idx) => (
