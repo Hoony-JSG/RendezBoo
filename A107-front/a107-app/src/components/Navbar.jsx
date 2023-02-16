@@ -33,6 +33,7 @@ const Navbar = () => {
 
   const logoStyle = {
     height: '60%',
+    transition: 'all easy-in-out 0.5s',
   }
 
   return (
