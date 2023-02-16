@@ -89,6 +89,8 @@
 
 .Rocket_rocketitem-right-top-box {
   /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
   height: 35%;
 }
 

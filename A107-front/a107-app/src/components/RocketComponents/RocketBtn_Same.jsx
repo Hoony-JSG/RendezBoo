@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import MBTISelector from '../JoinComponents/MBTISelector'
-
+import { FaUserAstronaut } from 'react-icons/fa'
 import '../../Styles/RocketItemButtonStyle.css'
 
 const RocketBtn_Same = (props) => {
@@ -10,7 +10,7 @@ const RocketBtn_Same = (props) => {
     phoneNumber: props.rocketUser.phoneNumber,
     name: props.rocketUser.name,
     profileImagePath: props.rocketUser.profileImagePath,
-    mbti: 'ENFP',
+    mbti: props.rocketUser.mbti,
     createdAt: props.rocketUser.createdAt,
     updatedAt: props.rocketUser.updatedAt,
   })
@@ -84,12 +84,13 @@ const RocketBtn_Same = (props) => {
                 <button
                   className="RocketBtnSame_form-button"
                   onClick={handleModalOpen}
+                  disabled
                 >
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
                   <span className="RocketBtnSame_form-span"></span>
-                  {modalPop ? 'Save' : 'Edit'}
+                  {modalPop ? 'Save' : <FaUserAstronaut size="30" />}
                 </button>
               </div>
             </div>
