@@ -1,8 +1,14 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 const GameTheGameOfDeath = (props) => {
-  const { client, subscribers, userSeq, multiMeetingRoomSeq, gameofdeathBody } =
-    props
+  const {
+    client,
+    subscribers,
+    userSeq,
+    multiMeetingRoomSeq,
+    gameofdeathBody,
+    userName,
+  } = props
   const [turn, setTurn] = useState(5)
   const [pubbed, setPubbed] = useState(false)
 
@@ -32,12 +38,28 @@ const GameTheGameOfDeath = (props) => {
     setTurn(e.target.value)
   }
 
+  const getLoseUserName = useCallback(
+    (loseUserSeq) => {
+      if (userSeq == loseUserSeq) {
+        return userName
+      } else {
+        return subscribers.filter((sub) => sub.userSeq == loseUserSeq)[0]
+          .userName
+      }
+    },
+    [subscribers]
+  )
+
   return (
     <div>
       <h1>더게임오브데스</h1>
       {pubbed ? (
         <div>
-          {gameofdeathBody.loseUserSeq ? (<div></div>): null}
+          {gameofdeathBody.loseUserSeq ? (
+            <div>
+              진 유저는 {getLoseUserName(gameofdeathBody.loseUserSeq)}입니다.
+            </div>
+          ) : null}
         </div>
       ) : (
         <div>
@@ -50,13 +72,13 @@ const GameTheGameOfDeath = (props) => {
               </div>
             ) : null}
             <div>
-              {subscribers.map((sub, idx) => 
+              {subscribers.map((sub, idx) => (
                 <div key={idx}>
                   <button onClick={pubGOD} id={sub.userSeq} value={turn}>
                     {sub.userName}
                   </button>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>

@@ -309,7 +309,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       if (loseUserSeq == userSeq) {
         if (myMaskPath == maskPath) {
           setMyMaskPath(maskPathMask)
-        } else if (myMaskPath == maskPathNone) {
+        } else if (myMaskPath == maskPathMask) {
           setMyMaskPath(maskPathNone)
         }
       } else {
@@ -318,7 +318,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             if (sub.userSeq == loseUserSeq) {
               if (sub.maskPath == maskPath) {
                 sub.maskPath = maskPathMask
-              } else if (sub.maskPath == maskPathNone) {
+              } else if (sub.maskPath == maskPathMask) {
                 sub.maskPath = maskPathNone
               }
               return sub
@@ -329,11 +329,14 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         )
       }
       setTimeout(() => {
+        setGameType(null)
         setGameFlag(false)
-      }, 4000)
+      }, 3000)
     },
     [myMaskPath]
   )
+
+  const onLoveStickStart = (e) => {}
 
   return completeFlag ? (
     <div
@@ -386,6 +389,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       {/*main */}
       <div className="side-multi">
         {/*게임 모달*/}
+        {gameCount > 3 ? (
+          <div>
+            <button onClick={onLoveStickStart}>사랑의 작대기</button>
+          </div>
+        ) : null}
         {gameFlag ? (
           <div className={'game-btn-containter'}>게임 진행중입니다.</div>
         ) : (
