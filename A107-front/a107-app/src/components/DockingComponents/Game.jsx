@@ -8,6 +8,7 @@ const Game = (props) => {
     client,
     setGameFlag,
     gameType,
+    setGameType,
     subscribers,
     multiMeetingRoomSeq,
     br31MyTurnFlag,
@@ -21,7 +22,6 @@ const Game = (props) => {
   const userGender = useSelector((state) => state.userInfoReducer.userGender)
 
   const pubGame = (gameName, body) => {
-    // 연결이 안되어있을 경우
     if (!client || !client.current.connected) {
       alert('연결 상태를 확인해주세요.')
       return
@@ -104,7 +104,10 @@ const Game = (props) => {
           userName={userName}
         />
       ) : null}
-      <button onClick={()=>{setGameFlag(false)}}>X</button>
+      <button onClick={()=>{
+        setGameType(false)
+        setGameFlag(false)
+        }}>X</button>
     </div>
   )
 }
