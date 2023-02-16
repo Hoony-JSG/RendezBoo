@@ -11,6 +11,13 @@ import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
 import Stick from './DockingComponents/GameComponents/Stick'
 import Docking3Chat from './DockingComponents/Docking3Chat'
+import {
+  BsCameraVideoOff,
+  BsCameraVideo,
+  BsMic,
+  BsMicMute,
+} from 'react-icons/bs'
+import { ImEnter, ImExit } from 'react-icons/im'
 
 const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
@@ -39,6 +46,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const [token, setToken] = useState('') //OpenVidu토큰
   const [subscribers, setSubscribers] = useState([])
   const [publisher, setPublisher] = useState()
+  const [audioStatus, setAudioStatus] = useState(true)
+  const [videoStatus, setVideoStatus] = useState(true)
 
   //6명이 다 모였으면 completeFlag === true
   const [completeFlag, setCompleteFlag] = useState(false)
@@ -370,6 +379,18 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     })
   }
 
+  // 카메라 상태
+  const onChangeCameraStatus = useCallback(() => {
+    publisher.publishVideo(!videoStatus)
+    setVideoStatus((prev) => !prev)
+  }, [publisher, videoStatus])
+
+  // 마이크 상태
+  const onChangeMicStatus = useCallback(() => {
+    publisher.publishAudio(!audioStatus)
+    setAudioStatus((prev) => !prev)
+  }, [publisher, audioStatus])
+
   return completeFlag ? (
     <div
       style={{
@@ -410,37 +431,56 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           </div>
         ) : null}
         <div className="chat-multi">
-          <Docking3Chat
-            client={client}
-            multiMeetingRoomSeq={multiMeetingRoomSeq}
-            userSeq={userSeq}
-            chatList={chatList}
-          />
+          {/*게임 모달*/}
+          {gameCount > 3 ? (
+            <div>
+              <button className="game-start-btn" onClick={onLoveStickStart}>
+                사랑의 작대기
+              </button>
+            </div>
+          ) : null}
+          {gameFlag ? (
+            <div className={'game-btn-containter'}>게임 진행중입니다.</div>
+          ) : (
+            <div className={'game-btn-containter'}>
+              <button
+                className="game-start-btn"
+                onClick={() => {
+                  setGameFlag(true)
+                }}
+              >
+                게임하기
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {/*main */}
       <div className="side-multi">
-        {/*게임 모달*/}
-        {gameCount > 3 ? (
-          <div>
-            <button onClick={onLoveStickStart}>사랑의 작대기</button>
-          </div>
-        ) : null}
-        {gameFlag ? (
-          <div className={'game-btn-containter'}>게임 진행중입니다.</div>
-        ) : (
-          <div className={'game-btn-containter'}>
-            <button
-              className="game-start-btn"
-              onClick={() => {
-                setGameFlag(true)
-              }}
-            >
-              게임하기
-            </button>
-          </div>
-        )}
-        <div className="btn-group-d3"></div>
+        <div className="btn-group-d3">
+          <button className="btn-group-btn3" onClick={onChangeCameraStatus}>
+            {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
+          </button>
+          <button className="btn-group-btn3" onClick={onChangeMicStatus}>
+            {audioStatus ? <BsMic /> : <BsMicMute />}
+          </button>
+          <button
+            className="btn-group-btn-exit3"
+            onClick={(e) => {
+              window.location.href = '/rendezboo'
+            }}
+          >
+            <ImExit style={{ position: 'relative', top: '5px', left: '4px' }} />
+          </button>
+        </div>
+        <Docking3Chat
+          client={client}
+          multiMeetingRoomSeq={multiMeetingRoomSeq}
+          userSeq={userSeq}
+          chatList={chatList}
+          height={'800px'}
+        />
+
         {gameFlag ? (
           <Game
             client={client}
@@ -473,12 +513,15 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     <div className="docking-modal" style={{ padding: '30px' }}>
       <h1>Now Docking...</h1>
       <p style={{ fontSize: '1.5rem' }}>3:3 미팅 대기중입니다.</p>
-      <Docking3Chat
-        client={client}
-        multiMeetingRoomSeq={multiMeetingRoomSeq}
-        userSeq={userSeq}
-        chatList={chatList}
-      />
+      <div style={{ width: '100%', height: '300px' }}>
+        <Docking3Chat
+          client={client}
+          multiMeetingRoomSeq={multiMeetingRoomSeq}
+          userSeq={userSeq}
+          chatList={chatList}
+          height={'300px'}
+        />
+      </div>
     </div>
   )
 }

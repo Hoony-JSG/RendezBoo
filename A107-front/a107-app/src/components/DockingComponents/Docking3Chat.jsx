@@ -3,7 +3,13 @@ import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
 import Docking3ChatItem from './Docking3ChatItem'
 
-const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
+const Docking3Chat = ({
+  client,
+  multiMeetingRoomSeq,
+  userSeq,
+  chatList,
+  height,
+}) => {
   const [message, setMessage] = useState('')
   //채팅 입력
   const inputChat = (e) => {
@@ -41,7 +47,7 @@ const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
   }
 
   return (
-    <div className={'signal-container'} style={{ height: '300px' }}>
+    <div className={'signal-container'} style={{ height: height }}>
       <div className={'signal-selected'}>
         {chatList &&
           chatList.map((chat, index) => (
