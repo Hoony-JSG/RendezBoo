@@ -72,7 +72,7 @@ const GameTheGameOfDeath = (props) => {
       ) : (
         <div className="TGD_game-box">
           <div className="TGD_game-choose-options">
-            {gameofdeathBody.startUserSeq == userSeq ? (
+            {gameofdeathBody && gameofdeathBody.startUserSeq == userSeq ? (
               <div className="TGD_game-choose-count-container">
                 <p className="TGD_game-choose-count-text">
                   <div>

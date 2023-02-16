@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router'
+import ArrowComponent from '../components/DockingComponents/GameComponents/ArrowComponent'
 
 const LoginNew = () => {
   const [userSeq, setUserSeq] = useState('')
