@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MBTISelector from '../JoinComponents/MBTISelector'
 import { FaUserAstronaut } from 'react-icons/fa'
 import '../../Styles/RocketItemButtonStyle.css'
@@ -14,6 +14,10 @@ const RocketBtn_Same = (props) => {
     createdAt: props.rocketUser.createdAt,
     updatedAt: props.rocketUser.updatedAt,
   })
+  useEffect(() => {
+    setRocketUser(props.rocketUser)
+  }, [props.rocketUser])
+
   const [popBtn, setPopBtn] = useState(false)
   const [userMBTI, setUserMBTI] = useState(rocketUser.mbti)
   const [tempMBTI, setTempMBTI] = useState()
@@ -78,7 +82,7 @@ const RocketBtn_Same = (props) => {
                 name=""
                 type="text"
                 disabled
-                value={`${userMBTI}`}
+                value={`${rocketUser.mbti}`}
               />
               <div className="RocketBtnSame_form-edit-box">
                 <button
