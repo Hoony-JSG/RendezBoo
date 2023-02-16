@@ -53,44 +53,46 @@ const Rendezboo = () => {
   }
 
   return (
-    <div className="Contents">
-      <div className="onThisButtonStyle">
-        <button
-          type="button"
-          className="RendezbooBtn"
-          onClick={(e) => {
-            navigate('/docking1')
-          }}
-        >
-          <div className="doorIconLayoutStyle">
-            <BsFillDoorOpenFill className="doorIconStyle" />
-          </div>
-          <h3>1:1 Docking</h3>
-        </button>
-      </div>
-      <div className="onThisButtonStyle">
+    <div className="RendezBoo_whole-container">
+      <div className="Contents">
         <div className="rocketItemSizeStyle">
           <RocketItem
             {...MeAndYou}
             profileImagePath={rocketUser.profileImagePath}
           />
         </div>
-      </div>
-      <div className="onThisButtonStyle">
-        <button
-          type="button"
-          className="RendezbooBtn"
-          onClick={(e) => {
-            navigate('/docking3')
-          }}
-        >
-          <div className="doorIconLayoutStyle">
-            <BsFillDoorClosedFill className="doorIconStyle" />
-            <BsFillDoorOpenFill className="doorIconStyle" />
-            <BsFillDoorClosedFill className="doorIconStyle" />
+        <div className="RendezBoo_docking-btn-container">
+          <div className="onThisButtonStyle">
+            <button
+              type="button"
+              className="RendezbooBtn"
+              onClick={(e) => {
+                navigate('/docking1')
+              }}
+            >
+              <div className="doorIconLayoutStyle">
+                <BsFillDoorOpenFill className="doorIconStyle" />
+              </div>
+              <h3>1:1 Docking</h3>
+            </button>
           </div>
-          <h3>3:3 Docking</h3>
-        </button>
+          <div className="onThisButtonStyle">
+            <button
+              type="button"
+              className="RendezbooBtn"
+              onClick={(e) => {
+                navigate('/docking3')
+              }}
+            >
+              <div className="doorIconLayoutStyle">
+                <BsFillDoorClosedFill className="doorIconStyle" />
+                <BsFillDoorOpenFill className="doorIconStyle" />
+                <BsFillDoorClosedFill className="doorIconStyle" />
+              </div>
+              <h3>3:3 Docking</h3>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   )
