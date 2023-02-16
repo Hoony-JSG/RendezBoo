@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { FaBookDead } from 'react-icons/fa'
+import '../../../Styles/TGDStyle.css'
 
 const GameTheGameOfDeath = (props) => {
   const {
@@ -40,7 +42,7 @@ const GameTheGameOfDeath = (props) => {
 
   const getLoseUserName = useCallback(
     (loseUserSeq) => {
-      if (userSeq == loseUserSeq) {
+      if (userSeq === loseUserSeq) {
         return userName
       } else {
         return subscribers.filter((sub) => sub.userSeq == loseUserSeq)[0]
@@ -50,35 +52,65 @@ const GameTheGameOfDeath = (props) => {
     [subscribers]
   )
 
+  ///////////////////////////////
+
   return (
-    <div>
+    <div className="TGD_whole-container">
       <h1>더게임오브데스</h1>
       {pubbed ? (
-        <div>
+        <div className="TGD_result-box">
           {gameofdeathBody.loseUserSeq ? (
-            <div>
-              진 유저는 {getLoseUserName(gameofdeathBody.loseUserSeq)}입니다.
+            <div className="TGD_loser">
+              {getLoseUserName(gameofdeathBody.loseUserSeq)}
+              has dead...
             </div>
           ) : null}
         </div>
       ) : (
-        <div>
-          <p>상대방을 선택하세요</p>
-          <div>
+        <div className="TGD_game-box">
+          <div className="TGD_game-choose-options">
             {gameofdeathBody.startUserSeq == userSeq ? (
-              <div>
-                <p>횟수를 선택하세요</p>
-                <input type="number" value={turn} onChange={handleTurnChange} />
+              <div className="TGD_game-choose-count-container">
+                <p className="TGD_game-choose-count-text">
+                  <div>
+                    set Count
+                    <br />[ 3 ~ 20 ]
+                  </div>
+                  <FaBookDead
+                    className="TGD_game-choose-count-text-icon"
+                    size="50px"
+                  />
+                </p>
+                <select
+                  className="TGD_game-choose-count-select"
+                  value={turn}
+                  onChange={handleTurnChange}
+                >
+                  {Array.from({ length: 18 }, (_, i) => i + 3).map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
               </div>
             ) : null}
-            <div>
-              {subscribers.map((sub, idx) => (
-                <div key={idx}>
-                  <button onClick={pubGOD} id={sub.userSeq} value={turn}>
-                    {sub.userName}
-                  </button>
+            <div className="TGD_game-choose-whole-person-box">
+              <div className="TGD_card">
+                <span className="TGD_card-span">💀 Choose One 💀</span>
+                <div class="TGD_card-inner-select">
+                  {subscribers.map((sub, idx) => (
+                    <div className="TGD_game-choose-one-person-box" key={idx}>
+                      <button
+                        className="TGD_game-choose-one-person-button"
+                        onClick={pubGOD}
+                        /* id={sub.userSeq} */ value={turn}
+                      >
+                        {/* {sub.userName} */}
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
