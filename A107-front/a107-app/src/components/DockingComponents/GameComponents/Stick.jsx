@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import ArrowComponent from './ArrowComponent'
 
 const Stick = (props) => {
   const {
@@ -50,12 +51,13 @@ const Stick = (props) => {
       <h1>사랑의 작대기</h1>
       {selected ? (
         stickBody ? (
-          userSeq == stickBody.targets[stickBody.targets[userSeq]] ? (
-            <div> 매칭에 성공하셨습니다. </div>
-          ) : (
-            <div> 매칭에 실패하셨습니다. </div>
-          )
+          <ArrowComponent {...props} />
         ) : (
+          // userSeq == stickBody.targets[stickBody.targets[userSeq]] ? (
+          //   <div> 매칭에 성공하셨습니다. </div>
+          // ) : (
+          //   <div> 매칭에 실패하셨습니다. </div>
+          // )
           <div>선택하셨습니다.</div>
         )
       ) : (
