@@ -210,7 +210,13 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             if (gameFlag === false) {
               setGameFlag(true)
             }
-          } else if (type === 'end') {
+          } else if (type === 'END') {
+            if(json_body.gameType === 'BR31'){
+              changeLoseUserMaskPath(json_body.nextUser)
+            }
+            else{
+              changeLoseUserMaskPath(json_body.loseUserSeq)
+            }
           }
           if (type === 'GAME' || type === 'START') {
             if (json_body.gameType === 'BR31') {
@@ -379,7 +385,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             client={client}
             multiMeetingRoomSeq={multiMeetingRoomSeq}
             userSeq={userSeq}
-            setChatList={chatList}
+            chatList={chatList}
           />
         </div>
       </div>
