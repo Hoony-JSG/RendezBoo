@@ -19,7 +19,10 @@ import {
 } from 'react-icons/bs'
 import { ImEnter, ImExit } from 'react-icons/im'
 
-const Docking3WaitingMeeting = ({ multiMeetingRoomSeq, setMultiMeetingRoomSeq }) => {
+const Docking3WaitingMeeting = ({
+  multiMeetingRoomSeq,
+  setMultiMeetingRoomSeq,
+}) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
 
   const WEBSOCKET_SERVER_URL = 'wss://i8a107.p.ssafy.io'
@@ -167,7 +170,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq, setMultiMeetingRoomSeq })
           setSession(session)
         })
         .catch((e) => {
-          alert("아마도 UserAlreadyExistFullException 아니면 MultiMeetingRoomAlreadyFullException")
+          alert(
+            '아마도 UserAlreadyExistFullException 아니면 MultiMeetingRoomAlreadyFullException'
+          )
           console.log(e.message)
           //navigate(-1)
           setMultiMeetingRoomSeq(null)
