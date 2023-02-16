@@ -50,13 +50,13 @@ const GameTheGameOfDeath = (props) => {
               </div>
             ) : null}
             <div>
-              {subscribers.map((sub, idx) => {
+              {subscribers.map((sub, idx) => 
                 <div key={idx}>
                   <button onClick={pubGOD} id={sub.userSeq} value={turn}>
                     {sub.userName}
                   </button>
                 </div>
-              })}
+              )}
             </div>
           </div>
         </div>

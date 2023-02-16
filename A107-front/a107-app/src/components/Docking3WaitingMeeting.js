@@ -53,9 +53,13 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const [gameofdeathBody, setGameofdeathBody] = useState(false)
 
   //마스크 씌우기
-  const [maskPath, setMaskPath] = useState(
+  const [myMaskPath, setMyMaskPath] = useState(
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
   )
+
+  const maskPath = CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
+  const maskPathMask = CLOUD_FRONT_URL + 'images/glass-0-mask-1.png'
+  const maskPathNone = CLOUD_FRONT_URL + 'images/glass-0-mask-0.png'
 
   let abortController = null
 
@@ -90,6 +94,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                   userSeq: data.userSeq, //다음과 같이 subscrber에 userSeq, gender가 포함되어 있다
                   userGender: data.userGender,
                   userName: data.userName,
+                  maskPath: data.maskPath,
                 },
               ]
             })
@@ -114,7 +119,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             session //6. 토큰을 가지고 세션에 연결한다
               .connect(
                 data.token,
-                JSON.stringify({ userSeq, userGender, userName })
+                JSON.stringify({ userSeq, userGender, userName, maskPath })
               )
               .then(async () => {
                 alert('토큰으로 세션에 연결완료')
@@ -205,27 +210,29 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             if (gameFlag === false) {
               setGameFlag(true)
             }
-
+          } else if (type === 'end') {
           }
-          else if(type === 'end'){
-
-          }
-          if(type === 'GAME' || type === 'START'){
-            if(json_body.gameType === 'BR31'){
-              if(json_body.nextUser == userSeq){
+          if (type === 'GAME' || type === 'START') {
+            if (json_body.gameType === 'BR31') {
+              if (json_body.nextUser == userSeq) {
                 setBr31MyTurnFlag(true)
                 setBr31Point(json_body.point)
               }
-            }
-            else if(json_body.gameType === 'GAMEOFDEATH'){
-              setGameofdeathBody(json_body)              
-            }
-            else if(json_body.gameType === 'FASTCLICK'){
-              
+            } else if (json_body.gameType === 'GAMEOFDEATH') {
+              setGameofdeathBody(json_body)
+            } else if (json_body.gameType === 'FASTCLICK') {
             }
           }
-          
-
+          if (type === 'FIN') {
+            if (json_body.gameType === 'BR31') {
+              changeLoseUserMaskPath(json_body.nextUser)
+            } else if (json_body.gameType === 'GAMEOFDEATH') {
+              setGameofdeathBody(json_body)
+              changeLoseUserMaskPath(json_body.loseUserSeq)
+            } else if (json_body.gameType === 'FASTCLICK') {
+              changeLoseUserMaskPath(json_body.loseUserSeq)
+            }
+          }
         }
       )
     }
@@ -297,6 +304,37 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
   }, [completeFlag])
 
+  const changeLoseUserMaskPath = useCallback(
+    (loseUserSeq) => {
+      if (loseUserSeq == userSeq) {
+        if (myMaskPath == maskPath) {
+          setMyMaskPath(maskPathMask)
+        } else if (myMaskPath == maskPathNone) {
+          setMyMaskPath(maskPathNone)
+        }
+      } else {
+        setSubscribers((_subscribers) =>
+          _subscribers.map((sub) => {
+            if (sub.userSeq == loseUserSeq) {
+              if (sub.maskPath == maskPath) {
+                sub.maskPath = maskPathMask
+              } else if (sub.maskPath == maskPathNone) {
+                sub.maskPath = maskPathNone
+              }
+              return sub
+            } else {
+              return sub
+            }
+          })
+        )
+      }
+      setTimeout(() => {
+        setGameFlag(false)
+      }, 4000)
+    },
+    [myMaskPath]
+  )
+
   return completeFlag ? (
     <div
       style={{
@@ -315,11 +353,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
               <div key={idx} className="cam">
                 <FilteredVideo
                   streamManager={sub.streamManager}
-                  maskPath={maskPath}
+                  maskPath={sub.maskPath}
                   // userSeq={2}
                   startFaceAPI={() => {}}
                 />
-                <div style={{color:'#FFFFFF'}}>이름 : {sub.userName}</div>
+                <div style={{ color: '#FFFFFF' }}>이름 : {sub.userName}</div>
               </div>
             ))}
 
@@ -327,7 +365,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
               {publisher !== undefined ? (
                 <FilteredVideo
                   streamManager={publisher}
-                  maskPath={maskPath}
+                  maskPath={myMaskPath}
                   // userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
@@ -349,11 +387,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       <div className="side-multi">
         {/*게임 모달*/}
         {gameFlag ? (
-          <div className={'game-btn-containter'} >
-            게임 진행중입니다.
-          </div>
+          <div className={'game-btn-containter'}>게임 진행중입니다.</div>
         ) : (
-          <div className={'game-btn-containter'} >
+          <div className={'game-btn-containter'}>
             <button
               className="game-start-btn"
               onClick={() => {
@@ -380,15 +416,15 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       </div>
     </div>
   ) : (
-      <div className="docking-modal" style={{padding: '30px'}}>
-        <h1>Now Docking...</h1>
-        <p style={{ fontSize: '1.5rem' }}>3:3 미팅 대기중입니다.</p>
-        <Docking3Chat
-            client={client}
-            multiMeetingRoomSeq={multiMeetingRoomSeq}
-            userSeq={userSeq}
-            chatList={chatList}
-          />
+    <div className="docking-modal" style={{ padding: '30px' }}>
+      <h1>Now Docking...</h1>
+      <p style={{ fontSize: '1.5rem' }}>3:3 미팅 대기중입니다.</p>
+      <Docking3Chat
+        client={client}
+        multiMeetingRoomSeq={multiMeetingRoomSeq}
+        userSeq={userSeq}
+        chatList={chatList}
+      />
     </div>
   )
 }
