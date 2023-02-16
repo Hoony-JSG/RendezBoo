@@ -12,6 +12,7 @@ const Home = () => {
     flexDirection: 'column',
     alignItems: 'center',
     margin: '120px',
+    marginTop: '230px',
     gap: '90px',
   }
 

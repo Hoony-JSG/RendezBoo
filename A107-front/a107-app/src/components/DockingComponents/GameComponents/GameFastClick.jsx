@@ -45,10 +45,10 @@ const GameFastClick = (props) => {
 
   const getUserName = useCallback(
     (seq) => {
-      if (userSeq == seq) {
+      if (userSeq === seq) {
         return userName
       } else {
-        return subscribers.filter((sub) => sub.userSeq == seq)[0].userName
+        return subscribers.filter((sub) => sub.userSeq === seq)[0].userName
       }
     },
     [subscribers]

@@ -4,10 +4,12 @@ import logoColor from '../logo_color.png'
 import logoWhite from '../logo_white.png'
 import { useSelector } from 'react-redux'
 
+import '../Styles/NavbarStyle.css'
+
 const Navbar = () => {
   const navigate = useNavigate()
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
-  const [ logo, setLogo ] = useState(logoColor)
+  const [logo, setLogo] = useState(logoColor)
 
   const navStyle = {
     position: 'absolute fixed',
@@ -39,38 +41,33 @@ const Navbar = () => {
   return (
     <nav style={navStyle}>
       <div style={divStyle}>
-        <NavLink to="/rendezboo" style={{ color: 'white', textDecoration: 'none' }}>
+        <NavLink to="/rendezboo" className="navMenuStyle">
           Rendezboo
         </NavLink>
       </div>
       <div style={divStyle}>
-        <NavLink
-          to="/signal"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
+        <NavLink to="/signal" className="navMenuStyle">
           Signal
         </NavLink>
       </div>
       <div style={divStyle}>
-        <img src={logo} className="Main-logo" alt="logo" style={logoStyle}
+        <img
+          src={logo}
+          className="Main-logo"
+          alt="logo"
+          style={logoStyle}
           onClick={() => navigate('/rendezboo')}
           onMouseOverCapture={() => setLogo(logoWhite)}
           onMouseOutCapture={() => setLogo(logoColor)}
         />
       </div>
       <div style={divStyle}>
-        <NavLink
-          to={'/rocket/' + userSeq}
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
+        <NavLink to={'/rocket/' + userSeq} className="navMenuStyle">
           MyRocket
         </NavLink>
       </div>
       <div style={divStyle}>
-        <NavLink
-          to="/logout"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
+        <NavLink to="/logout" className="navMenuStyle">
           Logout
         </NavLink>
       </div>
