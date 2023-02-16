@@ -10,7 +10,7 @@ const Docking3ChatItem = ({ chat }) => {
   const time = new Date(createdAt)
 
   useEffect(() => {
-    if (senderSeq !== me && flag == 'CHAT') {
+    if (senderSeq !== me && flag === 'CHAT') {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
@@ -24,7 +24,7 @@ const Docking3ChatItem = ({ chat }) => {
 
   return (
     <div>
-      {flag != 'CHAT' ? (
+      {flag !== 'CHAT' ? (
         <p className="system-signal">{message}</p>
       ) : senderSeq !== me ? (
         <div
