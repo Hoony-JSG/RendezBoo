@@ -84,13 +84,13 @@ const Docking3WaitingMeeting = ({
 
     connect().then(() => {
       //1. 웹소켓 열기
-      alert('connect완료')
+      // alert('connect완료')
       axios //2. 서버로 미팅방에 들어가기 요청(웹소켓으로 들어왔다는 공지 날아옴)
         .post(
           `${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`
         )
         .then((response) => {
-          alert('서버에 추가완료')
+          // alert('서버에 추가완료')
           console.log(response.data)
           const openVidu = new OpenVidu() //3. openvidu 초기화
           let session = openVidu.initSession()
@@ -135,7 +135,7 @@ const Docking3WaitingMeeting = ({
                 JSON.stringify({ userSeq, userGender, userName, maskPath })
               )
               .then(async () => {
-                alert('토큰으로 세션에 연결완료')
+                // alert('토큰으로 세션에 연결완료')
                 await navigator.mediaDevices.getUserMedia({
                   audio: true,
                   video: true,
@@ -170,9 +170,9 @@ const Docking3WaitingMeeting = ({
           setSession(session)
         })
         .catch((e) => {
-          alert(
-            '아마도 UserAlreadyExistFullException 아니면 MultiMeetingRoomAlreadyFullException'
-          )
+          // alert(
+          //   '아마도 UserAlreadyExistFullException 아니면 MultiMeetingRoomAlreadyFullException'
+          // )
           console.log(e.message)
           //navigate(-1)
           setMultiMeetingRoomSeq(null)
@@ -216,7 +216,7 @@ const Docking3WaitingMeeting = ({
             var femaleNum = json_body.femaleNum
             console.log('malenum: ' + maleNum)
             console.log('femalenum: ' + femaleNum)
-            if (maleNum >= 1 && femaleNum >= 1) {
+            if (maleNum >= 3 && femaleNum >= 3) {
               setCompleteFlag(true)
             }
           }
@@ -318,7 +318,7 @@ const Docking3WaitingMeeting = ({
   }
 
   const disconnect = useCallback(async () => {
-    alert('disconnect')
+    // alert('disconnect')
     client.current.deactivate()
     if (session) {
       session.disconnect()
@@ -375,7 +375,7 @@ const Docking3WaitingMeeting = ({
   const onLoveStickStart = (e) => {
     // 연결이 안되어있을 경우
     if (!client || !client.current.connected) {
-      alert('연결 상태를 확인해주세요.')
+      // alert('연결 상태를 확인해주세요.')
       return
     }
     const body = JSON.stringify({
