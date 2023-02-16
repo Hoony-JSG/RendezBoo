@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface MultiMeetingRoomUserRepository extends JpaRepository<MultiMeetingRoomUser, Long> {
+    boolean existsByMultiMeetingRoomSeqAndUserSeq(Long userSeq, Long multiMeetingRoomSeq);
     @Modifying
     @Transactional
     void deleteByMultiMeetingRoomSeqAndUserSeq(Long multiMeetingRoomSeq, Long userSeq);

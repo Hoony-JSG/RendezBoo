@@ -9,6 +9,7 @@ import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.api.response.MultiWebSocketRes;
 import com.ssafy.a107.common.exception.MeetingRoomAlreadyFullException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.UserAlreadyExistsInMultiMeetingRoomException;
 import com.ssafy.a107.db.entity.MultiMeetingRoom;
 import com.ssafy.a107.db.entity.MultiMeetingRoomUser;
 import com.ssafy.a107.db.entity.User;
@@ -127,11 +128,15 @@ public class MultiMeetingRoomServiceImpl implements MultiMeetingRoomService {
     //미팅방에 유저 더하기, 삭제하기
     @Transactional
     @Override
-    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException, InterruptedException {
+    public Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, UserAlreadyExistsInMultiMeetingRoomException, MeetingRoomAlreadyFullException, InterruptedException {
         MultiMeetingRoom multiMeetingRoom = multiMeetingRoomRepository.findById(multiMeetingRoomSeq)
                 .orElseThrow(() -> new NotFoundException("Invalid Multi meeting room sequence!"));
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new NotFoundException("Invalid user sequence!"));
+        if(multiMeetingRoomUserRepository.existsByMultiMeetingRoomSeqAndUserSeq(multiMeetingRoomSeq, userSeq)){
+            throw new UserAlreadyExistsInMultiMeetingRoomException("User already exists in the meetingroom!");
+        }
+
         if(user.getGender()){
             Long maleNum = multiMeetingRoomRepository.countByMultiMeetingRoomSeqAndGender(multiMeetingRoomSeq, true);
             if(maleNum>=3) throw new MeetingRoomAlreadyFullException("Men are already full!");
