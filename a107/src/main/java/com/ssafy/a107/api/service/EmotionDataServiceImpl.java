@@ -56,7 +56,7 @@ public class EmotionDataServiceImpl implements EmotionDataService{
             anger += e.getAnger();
             contempt += e.getContempt();
             disgust += e.getDisgust();
-            fear += e.getDisgust();
+            fear += e.getFear();
             happiness += e.getHappiness();
             neutral += e.getNeutral();
             sadness += e.getSadness();
