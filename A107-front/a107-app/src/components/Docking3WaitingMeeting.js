@@ -213,11 +213,10 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           else if (type === 'START') {
             setGameType(json_body.gameType)
             setGameCount((prev) => prev + 1)
-            if (gameFlag === false) {
-              setGameFlag(true)
-            }
-            if (!json_body.gameTtpe) {
+            if (!json_body.gameType) {
               setStickFlag(true)
+            } else if (gameFlag === false) {
+              setGameFlag(true)
             }
           } else if (type === 'END') {
             if (json_body.gameType === 'BR31') {
@@ -248,6 +247,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
               changeLoseUserMaskPath(json_body.loseUserSeq)
             } else {
               setStickBody(json_body)
+              setTimeout(() => {
+                window.location.href = '/rendezboo'
+              }, 3000)
             }
           }
         }

@@ -50,7 +50,11 @@ const Stick = (props) => {
       <h1>사랑의 작대기</h1>
       {selected ? (
         stickBody ? (
-          <div>stickBody.targets</div>
+          userSeq == stickBody.targets[stickBody.targets[userSeq]] ? (
+            <div> 매칭에 성공하셨습니다. </div>
+          ) : (
+            <div> 매칭에 실패하셨습니다. </div>
+          )
         ) : (
           <div>선택하셨습니다.</div>
         )
