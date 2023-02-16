@@ -46,7 +46,17 @@
     gap: 10px;
 }
 
-.my-signal, .your-signal p { margin-block: auto; }
+.system-signal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-family: "Gmarket_bold";
+    color: #7253C0
+}
+
+.my-signal, .your-signal .system-signal p { margin-block: auto; }
 
 #time {
     color:rgba(255, 255, 255, 0.5);
