@@ -38,11 +38,11 @@ const GameBr31 = (props) => {
                 : 'BR31_button-discribe-text-opp'
             }
           >
-            {`${
-              br31MyTurnFlag
-                ? 'TotalPoint : ' + { br31Point } + '/31'
-                : 'Waiting...'
-            }`}
+            `$
+            {br31MyTurnFlag
+              ? 'TotalPoint : ' + br31Point + '/31'
+              : 'Waiting...'}
+            `
           </span>
         </div>
         {br31MyTurnFlag ? (

@@ -4,6 +4,7 @@ import Logo from '../logo_color.png'
 import KakaoLogin from '../components/JoinComponents/KakaoLogin'
 import NaverLogin from '../components/JoinComponents/NaverLogin'
 import GameBr31 from '../components/DockingComponents/GameComponents/GameBR31'
+import GameTheGameOfDeath from '../components/DockingComponents/GameComponents/GameTheGameOfDeath'
 
 const Home = () => {
   const homeDivStyle = {
@@ -23,6 +24,7 @@ const Home = () => {
 
   return (
     <div style={homeDivStyle}>
+      <GameTheGameOfDeath />
       <img src={Logo} alt="Logo" style={{ height: '240px' }} />
       <div style={sclLgnStyle}>
         <NaverLogin />
