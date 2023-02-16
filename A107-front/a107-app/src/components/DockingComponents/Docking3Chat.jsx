@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
-import DockingChatSelectedItem from './DockingChatSelectedItem'
+import Docking3ChatItem from './Docking3ChatItem'
 
 const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
   const [message, setMessage] = useState('')
@@ -45,7 +45,7 @@ const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
       <div className={'signal-selected'}>
         {chatList &&
           chatList.map((chat, index) => (
-            <Docking3Chat chat={chat} key={index} />
+            <Docking3ChatItem chat={chat} key={index} />
           ))}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>

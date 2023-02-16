@@ -1,8 +1,8 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import * as StompJs from '@stomp/stompjs'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { OpenVidu } from 'openvidu-browser'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import * as tf from '@tensorflow/tfjs'
@@ -11,7 +11,7 @@ import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
 import Docking3Chat from './DockingComponents/Docking3Chat'
 
-const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
+const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
   // process.env.NODE_ENV === 'production'
   //   ? 'https://i8a107.p.ssafy.io'
@@ -26,11 +26,12 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+  const userGender = useSelector((state) => state.userInfoReducer.userGender)
+  const userName = useSelector((state) => state.userInfoReducer.userName)
 
   // 웹소켓 관련 기능
   const client = useRef({}) //Client.current에 StompJs객체 저장
   const [chatList, setChatList] = useState([])
-  const [message, setMessage] = useState('')
 
   //openvidu관련
   const [session, setSession] = useState() //OpenVidu 세션
@@ -44,6 +45,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   //게임 관련
   const [gameFlag, setGameFlag] = useState(false)
   const [gameType, setGameType] = useState()
+  const [gameCount, setGameCount] = useState(0)
 
   //마스크 씌우기
   const [maskPath, setMaskPath] = useState(
@@ -53,25 +55,36 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   let abortController = null
 
   useEffect(() => {
+    window.history.pushState(null, null, window.location.pathname)
+    window.addEventListener('popstate', onMove)
+    window.addEventListener('beforeunload', onMove)
     abortController = new AbortController()
-    connect().then(() => { //1. 웹소켓 열기
-      axios                 //2. 서버로 미팅방에 들어가기 요청(웹소켓으로 들어왔다는 공지 날아옴)
-        .post(`${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`)
+
+    connect().then(() => {
+      //1. 웹소켓 열기
+      alert('connect완료')
+      axios //2. 서버로 미팅방에 들어가기 요청(웹소켓으로 들어왔다는 공지 날아옴)
+        .post(
+          `${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`
+        )
         .then((response) => {
+          alert('서버에 추가완료')
           console.log(response.data)
           const openVidu = new OpenVidu() //3. openvidu 초기화
           let session = openVidu.initSession()
           // On every new Stream received...
-          session.on('streamCreated', (event) => { //4. streamCreate이벤트 리스너: subscribers useState에 구독자들 등록한다
+          session.on('streamCreated', (event) => {
+            //4. streamCreate이벤트 리스너: subscribers useState에 구독자들 등록한다
             const subscriber = session.subscribe(event.stream, '')
             const data = JSON.parse(event.stream.connection.data)
             setSubscribers((prev) => {
               return [
-                ...prev.filter((it) => it.userSeq !== +data.userSeq),
+                ...prev.filter((it) => it.userSeq !== data.userSeq),
                 {
                   streamManager: subscriber,
-                  userSeq: +data.userSeq, //다음과 같이 subscrber에 userSeq, gender가 포함되어 있다
-                  gender: data.gender,
+                  userSeq: data.userSeq, //다음과 같이 subscrber에 userSeq, gender가 포함되어 있다
+                  gender: data.userGender,
+                  name: data.userName
                 },
               ]
             })
@@ -91,10 +104,12 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             console.warn(exception)
           })
 
-          getDocking3Token(userSeq).then((data) => {  //5. 서버에 요청보내 토큰 받아온다
-            session                                   //6. 토큰을 가지고 세션에 연결한다
-              .connect(data.token, JSON.stringify({ clientData: userSeq }))
+          getDocking3Token(userSeq).then((data) => {
+            //5. 서버에 요청보내 토큰 받아온다
+            session //6. 토큰을 가지고 세션에 연결한다
+              .connect(data.token, JSON.stringify({ userSeq, userGender, userName }))
               .then(async () => {
+                alert('토큰으로 세션에 연결완료')
                 await navigator.mediaDevices.getUserMedia({
                   audio: true,
                   video: true,
@@ -104,7 +119,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                   (device) => device.kind === 'videoinput'
                 )
 
-                const publisher = openVidu.initPublisher('', {  //7. publisher 초기화를 하고
+                const publisher = openVidu.initPublisher('', {
+                  //7. publisher 초기화를 하고
                   audioSource: undefined,
                   videoSource: videoDevices[0].deviceId,
                   publishAudio: true,
@@ -114,7 +130,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                   insertMode: 'APPEND',
                   mirror: false,
                 })
-                session.publish(publisher)  //8. 세션에 publisher등록한다.
+                session.publish(publisher) //8. 세션에 publisher등록한다.
                 setPublisher(publisher)
               })
               .catch((error) => {
@@ -132,14 +148,21 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           navigate('/docking3')
         })
     })
-    return () => disconnect()
+    return () => {
+      disconnect()
+      window.removeEventListener('popstate', onMove)
+      window.removeEventListener('unload', onMove)
+    }
   }, [])
 
   // connect: 웹소켓(stomp)연결
-  const connect = async () => {//connect함수 정의: client.current에 StompJs객체 
+  const connect = async () => {
+    //connect함수 정의: client.current에 StompJs객체
     // subscribe: 메세지 받을 주소 구독
-    const subscribeMulti = () => { //subscribe함수 정의
-      client.current.subscribe( //웹소켓 구독주소 등록, 해당주소로 받을시 발생하는 이벤트 등록
+    const subscribeMulti = () => {
+      //subscribe함수 정의
+      client.current.subscribe(
+        //웹소켓 구독주소 등록, 해당주소로 받을시 발생하는 이벤트 등록
         '/sub/multi/' + multiMeetingRoomSeq,
         (body) => {
           const json_body = JSON.parse(body.body)
@@ -149,7 +172,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
           // 받아온 채팅 채팅 리스트에 넣기 (이부분은 임시로 한 거고 이후 프론트에서 필요에 따라 받아온 메서지를 렌더링 하면 됩니다.)
           setChatList((_chat_list) => [
-            {flag: json_body.flag,
+            {
+              flag: json_body.flag,
               message: json_body.message,
               createdAt: json_body.createdAt,
               senderSeq: json_body.senderSeq,
@@ -162,13 +186,14 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             var femaleNum = json_body.femaleNum
             console.log('malenum: ' + maleNum)
             console.log('femalenum: ' + femaleNum)
-            if (maleNum === 3 && femaleNum === 3) {
+            if (maleNum >= 3 && femaleNum >= 3) {
               setCompleteFlag(true)
             }
           }
           ///////////////////////////////////////GAME: START, GAME, FIN
           if (type === 'START') {
             setGameType(json_body.gameType)
+            setGameCount(prev => prev+1)
             if (gameFlag === false) {
               setGameFlag(true)
             }
@@ -177,7 +202,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       )
     }
 
-    client.current = await new StompJs.Client({ //웹소켓 열기
+    client.current = new StompJs.Client({
+      //웹소켓 열기
       brokerURL: `${WEBSOCKET_SERVER_URL}/ws-stomp`,
 
       // 연결 확인용 출력 문구
@@ -217,67 +243,33 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   }
 
   //뒤로가기 버튼 처리
-  const onBackButtonEvent = (e) => {
+  const onMove = (e) => {
+    alert(e)
+    alert(e.caneclable)
     e.preventDefault()
-    navigate('/docking3')
+    e.returnValue = ""
+    navigate("/rendezboo")
   }
-  useEffect(() => {
-    window.history.pushState(null, null, window.location.pathname)
-    window.addEventListener('popstate', onBackButtonEvent)
-    return () => {
-      window.removeEventListener('popstate', onBackButtonEvent)
-    }
-  }, [])
-
-
 
   const disconnect = useCallback(async () => {
-    console.log('연결이 끊어졌습니다.')
+    alert('웹소켓 디액티브, openvidu세션 disconnect,방에서 나간다.')
     client.current.deactivate()
-    if (session) {
+    if (session) {  
       session.disconnect()
     }
-    axios.delete(`${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`)
+    await axios.delete(
+      `${APPLICATION_SERVER_URL}/api/multi-meetings/${multiMeetingRoomSeq}/${userSeq}`
+    )
     setSession(null)
     setPublisher(null)
     setSubscribers([])
-    
     abortController.abort()
-  }, [session, multiMeetingRoomSeq, userSeq])
+  }, [session])
 
-  // publish: 웹소켓으로 메세지 보내기
-  // const publish = (message) => {
-  //   // 연결이 안되어있을 경우
-  //   if (!client.current.connected) {
-  //     alert('연결 상태를 확인해주세요.')
-  //     return
-  //   }
-
-  //   // 메세지를 보내기
-  //   client.current.publish({
-  //     // destination: 보낼 주소
-  //     // (/pub: 웹소켓 공통 발신용 주소), (/send: 기능별 개별 발신용 주소)
-  //     destination: '/pub/send-multi',
-
-  //     // body: 보낼 메세지
-  //     body: JSON.stringify({
-  //       multiMeetingRoomSeq: multiMeetingRoomSeq,
-  //       message: message,
-  //       senderSeq: userSeq,
-  //     }),
-  //   })
-
-  //   // 보내고 메세지 초기화
-  //   setMessage('')
-  // }
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////
   //미팅방 기능: openvidu, filtered-video...
   useEffect(() => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
   }, [completeFlag])
-
-
 
   return completeFlag ? (
     <div
@@ -301,6 +293,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                   // userSeq={2}
                   startFaceAPI={() => {}}
                 />
+                <div>이름 : {sub.userName}</div>
               </div>
             ))}
 
@@ -330,7 +323,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       <div className="side-multi">
         {/*게임 모달*/}
         {gameFlag ? (
-          <Game className={'game'} gameType={gameType} />
+          <Game gameType={gameType} subscribers={subscribers} />
         ) : (
           <div
             className="game"
@@ -345,13 +338,13 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       </div>
     </div>
   ) : (
-      <div className="chat-multi">
-        <Docking3Chat
-            client={client}
-            multiMeetingRoomSeq={multiMeetingRoomSeq}
-            userSeq={userSeq}
-            chatList={chatList}
-          />
+    <div className="chat-multi">
+      <Docking3Chat
+        client={client}
+        multiMeetingRoomSeq={multiMeetingRoomSeq}
+        userSeq={userSeq}
+        chatList={chatList}
+      />
       {/* <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
       <p>내 유저 시퀀스는 {userSeq}입니다.</p>
       <div>
