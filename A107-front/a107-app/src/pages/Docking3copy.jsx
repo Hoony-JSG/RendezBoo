@@ -6,10 +6,10 @@ import * as faceapi from 'face-api.js'
 import * as tf from '@tensorflow/tfjs'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import Docking1Chat from '../components/DockingComponents/Docking1Chat'
-import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
-import '../Styles/Docking.css'
+import Docking3enter from '../components/DockingComponents/Docking3enter'
+import '../Styles/Docking1.css'
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import { getHeader } from '../modules/Auth/Jwt'
 import {
   BsCameraVideoOff,
@@ -24,13 +24,16 @@ const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-const Docking1 = () => {
+const Docking3copy = () => {
   const minute = 30000
   const REQUEST_HEADER = getHeader()
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const userGender = useSelector((state) => state.userInfoReducer.userGender)
   const navigate = useNavigate()
+
+  const multiMeetingRoomSeq = useParams().roomid
+  const [docking3List, setDocking3List] = useState([])
 
   const [myUserName, setMyUserName] = useState(Math.floor(Math.random() * 100))
   const [token, setToken] = useState('')
@@ -43,20 +46,7 @@ const Docking1 = () => {
 
   const [phase, setPhase] = useState(-1)
 
-  const [angryCnt, setAngryCnt] = useState(0)
-  const [disgustedCnt, setDisgustedCnt] = useState(0)
-  const [fearfulCnt, setFearfulCnt] = useState(0)
-  const [happyCnt, setHappyCnt] = useState(0)
-  const [sadCnt, setSadCnt] = useState(0)
-  const [surprisedCnt, setSurprisedCnt] = useState(0)
-
-  const [angry, setAngry] = useState(0)
-  const [disgusted, setDisgusted] = useState(0)
-  const [fearful, setFearful] = useState(0)
-  const [happy, setHappy] = useState(0)
-  const [sad, setSad] = useState(0)
-  const [surprised, setSurprised] = useState(0)
-
+ 
   const [apiStarted, setApiStarted] = useState(false)
 
   const [finished, setFinished] = useState(false)
@@ -69,6 +59,13 @@ const Docking1 = () => {
   useEffect(() => {
     tf.env().set('WEBGL_CPU_FORWARD', false)
     loadModels()
+
+    axios
+    .get(`${APPLICATION_SERVER_URL}/api/multi-meetings/`)
+    .then((response) => {
+      setDocking3List(response.data)
+      console.log(response.data)
+    })
   }, [])
 
   // faceapi 모델 불러오기
@@ -215,59 +212,7 @@ const Docking1 = () => {
       // 시작되었는지의 플래그
       setApiStarted(true)
       console.log('video loaded')
-      await onPlay(videoEl)
     }
-  }
-
-  // 감정 분석 1초에 2번
-  async function onPlay(videoEl) {
-    if (!videoEl || videoEl.paused || videoEl.ended)
-      return setTimeout(() => onPlay(videoEl), 500)
-
-    const predict = await faceapi
-      .detectSingleFace(videoEl)
-      .withFaceExpressions()
-
-    if (predict) {
-      setAngry(predict.expressions.angry)
-      if (predict.expressions.angry > 0.25) {
-        setAngryCnt((prev) => {
-          return prev + 1
-        })
-      }
-      setDisgusted(predict.expressions.disgusted)
-      if (predict.expressions.disgusted > 0.25) {
-        setDisgustedCnt((prev) => {
-          return prev + 1
-        })
-      }
-      setFearful(predict.expressions.fearful)
-      if (predict.expressions.fearful > 0.25) {
-        setFearfulCnt((prev) => {
-          return prev + 1
-        })
-      }
-      setHappy(predict.expressions.happy)
-      if (predict.expressions.happy > 0.25) {
-        setHappyCnt((prev) => {
-          return prev + 1
-        })
-      }
-      setSad(predict.expressions.sad)
-      if (predict.expressions.sad > 0.25) {
-        setSadCnt((prev) => {
-          return prev + 1
-        })
-      }
-      setSurprised(predict.expressions.surprised)
-      if (predict.expressions.surprised > 0.25) {
-        setSurprisedCnt((prev) => {
-          return prev + 1
-        })
-      }
-    }
-
-    setTimeout(() => onPlay(videoEl), 500)
   }
 
   // userSeq 기반으로 오픈비두 토큰 가져옴
@@ -316,12 +261,6 @@ const Docking1 = () => {
   async function handlePhase1(json_body) {
     // 미팅 시작 - 타이머 돌릴것
     if (phase < 1) {
-      setAngryCnt(0)
-      setDisgustedCnt(0)
-      setHappyCnt(0)
-      setFearfulCnt(0)
-      setSadCnt(0)
-      setSurprisedCnt(0)
       setPhase(1)
       if (userGender) {
         setTimeout(() => {
@@ -384,27 +323,12 @@ const Docking1 = () => {
 
   async function choiceYes() {
     setPhase(5)
-    let emotion_body = {
-      anger: angryCnt,
-      contempt: 0,
-      disgust: disgustedCnt,
-      fear: fearfulCnt,
-      happiness: happyCnt,
-      meetingRoomSeq: meetingRoomSeq,
-      neutral: 0,
-      sadness: sadCnt,
-      surprise: surprisedCnt,
-      userSeq: userSeq,
-    }
-
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
-      emotion_body,
       REQUEST_HEADER
     )
     await axios.post(
       APPLICATION_SERVER_URL + 'api/badges/onetoone',
-      emotion_body,
       REQUEST_HEADER
     )
     await axios
@@ -424,27 +348,14 @@ const Docking1 = () => {
 
   async function choiceNo() {
     setPhase(5)
-    let emotion_body = {
-      anger: angryCnt,
-      contempt: 0,
-      disgust: disgustedCnt,
-      fear: fearfulCnt,
-      happiness: happyCnt,
-      meetingRoomSeq: meetingRoomSeq,
-      neutral: 0,
-      sadness: sadCnt,
-      surprise: surprisedCnt,
-      userSeq: userSeq,
-    }
+
 
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
-      emotion_body,
       REQUEST_HEADER
     )
     await axios.post(
       APPLICATION_SERVER_URL + 'api/badges/onetoone',
-      emotion_body,
       REQUEST_HEADER
     )
     await axios
@@ -480,9 +391,9 @@ const Docking1 = () => {
   }, [phase])
 
   return (
-    <div className="container">
-      {session === undefined ? (
-        <div className="docking-modal">
+    <div>
+      {multiMeetingRoomSeq ? (
+        <div className="docking1-modal">
           <h1>1:1 Docking...</h1>
           <p style={{ fontSize: '1.5rem' }}>1:1 미팅에 입장하시겠습니까?</p>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}>
@@ -500,42 +411,6 @@ const Docking1 = () => {
       {session !== undefined && !finished ? (
         <div className="video-container">
           <div className="sub-container">
-            <EmotionComponent
-              imgSrc={'../img/emo-angry.png'}
-              data={angry}
-              top={'40px'}
-              left={'40px'}
-            />
-            <EmotionComponent
-              imgSrc={'../img/emo-disgusted.png'}
-              data={disgusted}
-              top={'290px'}
-              left={'40px'}
-            />
-            <EmotionComponent
-              imgSrc={'../img/emo-fearful.png'}
-              data={fearful}
-              top={'540px'}
-              left={'40px'}
-            />
-            <EmotionComponent
-              imgSrc={'../img/emo-happy.png'}
-              data={happy}
-              top={'40px'}
-              left={'750px'}
-            />
-            <EmotionComponent
-              imgSrc={'../img/emo-sad.png'}
-              data={sad}
-              top={'290px'}
-              left={'750px'}
-            />
-            <EmotionComponent
-              imgSrc={'../img/emo-surprised.png'}
-              data={surprised}
-              top={'540px'}
-              left={'750px'}
-            />
             <div className="video-back" style={videoBackStyle}>
               <h1>Waiting for Docking...</h1>
             </div>
@@ -544,7 +419,7 @@ const Docking1 = () => {
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={maskPath}
-                  // userSeq={2}
+                  userSeq={sub.userSeq}
                   startFaceAPI={startFaceAPI}
                 />
               </div>
@@ -579,12 +454,6 @@ const Docking1 = () => {
               </div>
             ) : (
               <div className="me">
-                {/* <div className="btn-group">
-                  <p>
-                    Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
-                  </p>
-                  <button onClick={leaveSessionWithAlert}>나가기</button>
-                </div> */}
               </div>
             )}
             <Docking1Chat
@@ -599,7 +468,9 @@ const Docking1 = () => {
             />
           </div>
         </div>
-      ) : null}
+      ) : (
+        <Docking3enter />
+      )}
       {finished ? (
         // 미팅 종료 문구
         <h1 style={{marginTop: '300px'}}>Docking Ended!</h1>
@@ -607,7 +478,7 @@ const Docking1 = () => {
       {phase === 4 && !finished ? (
         // 친구 추가 모달
         <div
-          className="docking-modal"
+          className="docking1-modal"
         >
           <h1>Docking Complete!</h1>
           <p style={{ fontSize: '1.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
@@ -627,4 +498,4 @@ const Docking1 = () => {
   )
 }
 
-export default Docking1
+export default Docking3copy

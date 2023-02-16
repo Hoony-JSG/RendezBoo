@@ -6,7 +6,7 @@ import '../../Styles/Join3RocketItemStyle.css'
 import { useEffect } from 'react'
 
 const RocketItem = (props) => {
-  const { Me, Inquire, ver, setProfileImage, profileImagePath } = props
+  const { Me, Inquire, ver, setProfileImage, rocketUser } = props
   const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   // const MeAndYou = {
@@ -16,20 +16,41 @@ const RocketItem = (props) => {
   //   BadgeRep: 1,
   // }
 
-  const [image, setimage] = useState(userprofile)
+  const [image, setImage] = useState(userprofile)
   useEffect(() => {
-    if (profileImagePath) {
+    if (props.profileImagePath && ver !== 'Start') {
       console.log('프사있음')
-      setimage(SRC_URL + profileImagePath)
+      setImage(SRC_URL + props.profileImagePath)
+      console.log(props.profileImagePath)
     }
-  }, [profileImagePath])
+  }, [props.profileImagePath])
+  useEffect(() => {
+    console.log('처음 로딩 이미지 형식 : ')
+    console.log(image)
+    if (props.checkRocket) {
+      // setImage(SRC_URL + props.profileImagePath)
+    }
+  }, [])
+
+  //profileImageUploader에서 업로드하면 사진 바꾸는 함수 하면 일로 들어ㅓ옴 (image)
   const changeImage = (image) => {
-    if (image !== null) {
-      console.log('새 이미지를 가져와서 setProfileImage : ' + image)
-      setimage(image)
-      props.setTrue(true)
+    console.log('ProfileImageUploader에서 넘어오는 input에 넣은 : ')
+    console.log(image)
+    const blobUrl = URL.createObjectURL(image)
+    setImage(blobUrl)
+    props.setTrue(true)
+    if (props.checkFirst !== undefined) props.checkFirst(true)
+    if (props.checkRocket !== undefined) {
+      console.log('checkRocket 트루')
+      // props.setProfileImage(image)
     }
   }
+
+  useEffect(() => {
+    console.log('이미지 바뀜')
+    console.log(image)
+  }, [image])
+
   console.log('Btn :' + ver)
   return (
     <div
@@ -67,7 +88,7 @@ const RocketItem = (props) => {
             <ProfileImageUploader
               profileImagePath={props.profileImagePath}
               changeImage={changeImage}
-              setProfileImage={setProfileImage}
+              setProfileImage={props.setProfileImage}
             />
           </div>
         )}
