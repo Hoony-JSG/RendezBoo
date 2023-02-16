@@ -16,6 +16,7 @@ const Game = (props) => {
     br31Point,
     gameofdeathBody,
     fastclickBody,
+    br31Body,
   } = props
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -84,6 +85,7 @@ const Game = (props) => {
           br31MyTurnFlag={br31MyTurnFlag}
           setBr31MyTurnFlag={setBr31MyTurnFlag}
           br31Point={br31Point}
+          br31Body={br31Body}
         />
       ) : null}
       {gameType === 'GAMEOFDEATH' ? (
@@ -106,10 +108,14 @@ const Game = (props) => {
           fastclickBody={fastclickBody}
         />
       ) : null}
-      <button onClick={()=>{
-        setGameType(false)
-        setGameFlag(false)
-        }}>X</button>
+      <button
+        onClick={() => {
+          setGameType(false)
+          setGameFlag(false)
+        }}
+      >
+        X
+      </button>
     </div>
   )
 }

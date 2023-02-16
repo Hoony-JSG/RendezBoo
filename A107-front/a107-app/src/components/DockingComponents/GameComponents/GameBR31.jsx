@@ -9,20 +9,23 @@ const GameBr31 = (props) => {
     br31MyTurnFlag,
     setBr31MyTurnFlag,
     br31Point,
+    br31Body,
   } = props
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
-  const pubBr31Point = (num) => {
+  const pubBr31Point = (event) => {
+    const num = event.currentTarget.value
     if (!client || !client.current.connected) {
       alert('연결 상태를 확인해주세요.')
       return
     }
+    const json_body = JSON.stringify({
+      multiMeetingRoomSeq: multiMeetingRoomSeq,
+      userSeq: userSeq,
+      point: num,
+    })
     client.current.publish({
       destination: '/pub/br31',
-      body: JSON.stringify({
-        multiMeetingRoomSeq: multiMeetingRoomSeq,
-        userSeq: userSeq,
-        point: num,
-      }),
+      body: json_body,
     })
     setBr31MyTurnFlag(false)
   }
@@ -50,7 +53,7 @@ const GameBr31 = (props) => {
             <button
               className="BR31_choose-button"
               value={1}
-              onClick={(e) => pubBr31Point(e.target.value)}
+              onClick={pubBr31Point}
             >
               <div className="multi-icecreams1">
                 <IoIosIceCream className="icecream d1-1" />
@@ -59,7 +62,7 @@ const GameBr31 = (props) => {
             <button
               className="BR31_choose-button"
               value={2}
-              onClick={(e) => pubBr31Point(e.target.value)}
+              onClick={pubBr31Point}
             >
               <div className="multi-icecreams2">
                 <IoIosIceCream className="icecream d2-1" />
@@ -69,7 +72,7 @@ const GameBr31 = (props) => {
             <button
               className="BR31_choose-button"
               value={3}
-              onClick={(e) => pubBr31Point(e.target.value)}
+              onClick={pubBr31Point}
             >
               <div className="multi-icecreams3">
                 <IoIosIceCream className="icecream d3-1" />
