@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import '../../../Styles/BR31Style.css'
 import { IoIosIceCream } from 'react-icons/io'
@@ -10,6 +10,8 @@ const GameBr31 = (props) => {
     setBr31MyTurnFlag,
     br31Point,
     br31Body,
+    userName,
+    subscribers,
   } = props
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const pubBr31Point = (event) => {
@@ -44,8 +46,24 @@ const GameBr31 = (props) => {
     return () => clearInterval(addDotInterval)
   }, [])
 
+  const getUserName = useCallback(
+    (seq) => {
+      if (userSeq === seq) {
+        return userName
+      } else {
+        return subscribers.filter((sub) => sub.userSeq === seq)[0].userName
+      }
+    },
+    [subscribers]
+  )
+
   return (
     <div className="BR31_whole-container">
+      {br31Body ? (
+        <div style={{ fontSize: '2rem' }}>
+          {getUserName(br31Body.nextUser)}님이 패배하셨습니다.
+        </div>
+      ) : null}
       <div className="BR31_button-discribe">
         <span
           className={

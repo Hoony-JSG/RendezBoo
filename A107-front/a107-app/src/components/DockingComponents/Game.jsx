@@ -123,7 +123,7 @@ const Game = (props) => {
                   className="Game_scene"
                   onClick={() => {
                     pubGame(
-                      'gameofdeath',
+                      'fastclick',
                       JSON.stringify({
                         multiMeetingRoomSeq: multiMeetingRoomSeq,
                         startUserSeq: userSeq,
@@ -160,6 +160,8 @@ const Game = (props) => {
               setBr31MyTurnFlag={setBr31MyTurnFlag}
               br31Point={br31Point}
               br31Body={br31Body}
+              userName={userName}
+              subscribers={subscribers}
             />
           </div>
         ) : null}
@@ -175,7 +177,7 @@ const Game = (props) => {
             />
           </div>
         ) : null}
-        {gameType === 'FAST CLICK' ? (
+        {gameType === 'FASTCLICK' ? (
           <div className="Game_started-game-container">
             <GameFastClick
               client={client}
