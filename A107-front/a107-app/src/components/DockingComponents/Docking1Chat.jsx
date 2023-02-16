@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 import * as StompJs from '@stomp/stompjs'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
-import DockingChatSelectedItem from './DockingChatSelectedItem'
+import Docking1ChatItem from './Docking1ChatItem'
 
 const Docking1Chat = ({
   meetingRoomSeq,
@@ -144,7 +144,7 @@ const Docking1Chat = ({
     <div className={'signal-container'} style={{ height: '300px' }}>
       <div className={'signal-selected'}>
         {chatList.map((chat, index) => 
-          <DockingChatSelectedItem chat={chat} key={index}/>
+          <Docking1ChatItem chat={chat} key={index}/>
         )}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
