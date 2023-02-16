@@ -41,11 +41,17 @@
 
 ![초기화면](https://user-images.githubusercontent.com/109324637/219236954-4029e47e-75cd-4266-8d85-032a7e3d0eb3.PNG)
 
-![소셜로그인](https://user-images.githubusercontent.com/109324637/219237064-5ad8f53f-1588-424d-b92e-a07422db341a.PNG)
+![소셜카카오](https://user-images.githubusercontent.com/109324637/219395488-0db5af40-d62b-43d5-bfbe-21a8e2a7877a.PNG)
+
+![회원가입1](https://user-images.githubusercontent.com/109324637/219395766-e28705de-4753-44fc-89f6-671c697afcc1.PNG)
+
+![회원가입2](https://user-images.githubusercontent.com/109324637/219395828-1ac35db5-cc76-44fb-935c-5616c6f2a502.PNG)
+
 
 ### 메인화면
 
-![메인화면](https://user-images.githubusercontent.com/109324637/219237235-dce81832-6ac4-47ad-be93-0ffd9e426150.PNG)
+![메인페이지](https://user-images.githubusercontent.com/109324637/219395880-35db11f5-d8b6-409f-99a3-74f96250feec.PNG)
+
 
 ### 1대1 미팅
 
@@ -65,11 +71,17 @@
 
 ### 3대3 미팅
 
-![3대3대기](https://user-images.githubusercontent.com/109324637/219238566-bf81310c-049e-43b3-b2bd-f7d0749f13a6.PNG)
+![3대3대기방](https://user-images.githubusercontent.com/109324637/219396059-3f85128b-d3dd-40e0-8afb-8e0ba0f52b8f.PNG)
+
+![3대3방목록](https://user-images.githubusercontent.com/109324637/219396162-68171c62-4f91-45eb-b5ff-5dacf47969b8.PNG)
+
 
 ### 채팅
 
 ![채팅](https://user-images.githubusercontent.com/109324637/219238626-39e37856-b134-4280-93c0-9d56f264bccd.PNG)
+
+![친구프로필](https://user-images.githubusercontent.com/109324637/219396320-84da4d4c-8542-4870-b5be-afe46356bbeb.PNG)
+
 
 ### 프로필 화면
 
