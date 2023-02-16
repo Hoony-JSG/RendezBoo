@@ -11,7 +11,7 @@ import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
 import Docking3Chat from './DockingComponents/Docking3Chat'
 
-const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
+const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
   // process.env.NODE_ENV === 'production'
   //   ? 'https://i8a107.p.ssafy.io'
@@ -84,7 +84,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
                   streamManager: subscriber,
                   userSeq: data.userSeq, //다음과 같이 subscrber에 userSeq, gender가 포함되어 있다
                   gender: data.userGender,
-                  name: data.userName
+                  name: data.userName,
                 },
               ]
             })
@@ -107,7 +107,10 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
           getDocking3Token(userSeq).then((data) => {
             //5. 서버에 요청보내 토큰 받아온다
             session //6. 토큰을 가지고 세션에 연결한다
-              .connect(data.token, JSON.stringify({ userSeq, userGender, userName }))
+              .connect(
+                data.token,
+                JSON.stringify({ userSeq, userGender, userName })
+              )
               .then(async () => {
                 alert('토큰으로 세션에 연결완료')
                 await navigator.mediaDevices.getUserMedia({
@@ -186,14 +189,14 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
             var femaleNum = json_body.femaleNum
             console.log('malenum: ' + maleNum)
             console.log('femalenum: ' + femaleNum)
-            if (maleNum >= 3 && femaleNum >= 3) {
+            if (maleNum >= 1 && femaleNum >= 1) {
               setCompleteFlag(true)
             }
           }
           ///////////////////////////////////////GAME: START, GAME, FIN
           if (type === 'START') {
             setGameType(json_body.gameType)
-            setGameCount(prev => prev+1)
+            setGameCount((prev) => prev + 1)
             if (gameFlag === false) {
               setGameFlag(true)
             }
@@ -244,17 +247,15 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
 
   //뒤로가기 버튼 처리
   const onMove = (e) => {
-    alert(e)
-    alert(e.caneclable)
     e.preventDefault()
-    e.returnValue = ""
-    navigate("/rendezboo")
+    e.returnValue = ''
+    navigate('/rendezboo')
   }
 
   const disconnect = useCallback(async () => {
     alert('웹소켓 디액티브, openvidu세션 disconnect,방에서 나간다.')
     client.current.deactivate()
-    if (session) {  
+    if (session) {
       session.disconnect()
     }
     await axios.delete(
@@ -323,18 +324,28 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
       <div className="side-multi">
         {/*게임 모달*/}
         {gameFlag ? (
-          <Game gameType={gameType} subscribers={subscribers} />
+          <div></div>
         ) : (
-          <div
-            className="game"
-            onclick={() => {
-              setGameFlag(true)
-            }}
-          >
-            게임하기
+          <div>
+            <button
+              className="game-start-btn"
+              onClick={() => {
+                setGameFlag(true)
+              }}
+            >
+              게임하기
+            </button>
           </div>
         )}
         <div className="btn-group-d3"></div>
+        {gameFlag ? (
+          <Game
+            client={client}
+            gameType={gameType}
+            subscribers={subscribers}
+            multiMeetingRoomSeq={multiMeetingRoomSeq}
+          />
+        ) : null}
       </div>
     </div>
   ) : (
