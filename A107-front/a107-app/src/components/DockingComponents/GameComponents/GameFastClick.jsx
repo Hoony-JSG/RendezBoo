@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-
+import '../../../Styles/GameFastClickStyle.css'
 const GameFastClick = (props) => {
   const {
     client,
@@ -53,27 +53,57 @@ const GameFastClick = (props) => {
     },
     [subscribers]
   )
+  ////////////////////////
+  const [count, setCount] = useState('Start!')
+  const fastClick = () => {
+    if (count === 'Start!') {
+      setCount(0)
+    } else {
+      setCount((previousCount) => {
+        setCount(previousCount + 1)
+        console.log(previousCount)
+        const randomColor = `rgba(${Math.floor(
+          Math.random() * 256
+        )}, ${Math.floor(Math.random() * 256)}, ${Math.floor(
+          Math.random() * 256
+        )}, 0.3)`
+        document.querySelector(
+          '.FastClick_fast-click-button-rainbow'
+        ).style.backgroundColor = randomColor
+      })
+    }
+  }
 
   return (
-    <div>
+    <div className="FastClick_container">
       <h1>FastClick</h1>
-      <div>
-        {pubbed ? (
-          fastclickBody ? (
-            <div>패배자는 {getUserName(fastclickBody.loseUserSeq)}</div>
-          ) : (
-            <div>시간이 다 되었습니다.</div>
-          )
-        ) : !ready ? (
-          <div>
-            <button onClick={onReadyGame}>준비</button>
+      {pubbed ? (
+        fastclickBody ? (
+          <div className="FastClick_loser">
+            패배 : {getUserName(fastclickBody.loseUserSeq)}
           </div>
         ) : (
-          <div>
-            <button onClick={handleClick}>빠르게 누르세요!</button>
-          </div>
-        )}
-      </div>
+          <div className="FastClick_time-out">시간이 다 되었습니다.</div>
+        )
+      ) : !ready ? (
+        <div>
+          <button className="FastClick_ready-button" onClick={onReadyGame}>
+            준비
+          </button>
+        </div>
+      ) : (
+        <div className="FastClick_fast-click-button-container">
+          <button
+            className="FastClick_fast-click-button-rainbow"
+            onClick={() => {
+              handleClick()
+              fastClick()
+            }}
+          >
+            <span className="FastClick_count">{count}</span>
+          </button>
+        </div>
+      )}
     </div>
   )
 }
