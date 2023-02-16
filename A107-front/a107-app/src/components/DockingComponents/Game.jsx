@@ -15,6 +15,7 @@ const Game = (props) => {
     setBr31MyTurnFlag,
     br31Point,
     gameofdeathBody,
+    fastclickBody,
   } = props
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -102,6 +103,7 @@ const Game = (props) => {
           userSeq={userSeq}
           multiMeetingRoomSeq={multiMeetingRoomSeq}
           userName={userName}
+          fastclickBody={fastclickBody}
         />
       ) : null}
       <button onClick={()=>{

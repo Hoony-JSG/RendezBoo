@@ -9,6 +9,7 @@ import * as tf from '@tensorflow/tfjs'
 import '../Styles/Docking3ing.css'
 import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
+import Stick from './DockingComponents/GameComponents/Stick'
 import Docking3Chat from './DockingComponents/Docking3Chat'
 
 const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
@@ -51,6 +52,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const [br31Point, setBr31Point] = useState(0)
 
   const [gameofdeathBody, setGameofdeathBody] = useState(false)
+
+  const [fastclickBody, setFastclickBody] = useState()
+
+  const [stickFlag, setStickFlag] = useState(false)
+  const [stickBody, setStickBody] = useState()
 
   //마스크 씌우기
   const [myMaskPath, setMyMaskPath] = useState(
@@ -210,11 +216,13 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             if (gameFlag === false) {
               setGameFlag(true)
             }
-          } else if (type === 'END') {
-            if(json_body.gameType === 'BR31'){
-              changeLoseUserMaskPath(json_body.nextUser)
+            if (!json_body.gameTtpe) {
+              setStickFlag(true)
             }
-            else{
+          } else if (type === 'END') {
+            if (json_body.gameType === 'BR31') {
+              changeLoseUserMaskPath(json_body.nextUser)
+            } else {
               changeLoseUserMaskPath(json_body.loseUserSeq)
             }
           }
@@ -236,7 +244,10 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
               setGameofdeathBody(json_body)
               changeLoseUserMaskPath(json_body.loseUserSeq)
             } else if (json_body.gameType === 'FASTCLICK') {
+              setFastclickBody(json_body)
               changeLoseUserMaskPath(json_body.loseUserSeq)
+            } else {
+              setStickBody(json_body)
             }
           }
         }
@@ -342,7 +353,20 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
     [myMaskPath]
   )
 
-  const onLoveStickStart = (e) => {}
+  const onLoveStickStart = (e) => {
+    // 연결이 안되어있을 경우
+    if (!client || !client.current.connected) {
+      alert('연결 상태를 확인해주세요.')
+      return
+    }
+    const body = JSON.stringify({
+      multiMeetingRoomSeq: multiMeetingRoomSeq,
+    })
+    client.current.publish({
+      destination: '/pub/stick/start',
+      body: body,
+    })
+  }
 
   return completeFlag ? (
     <div
@@ -426,7 +450,19 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             br31MyTurnFlag={br31MyTurnFlag}
             setBr31MyTurnFlag={setBr31MyTurnFlag}
             br31Point={br31Point}
+            fastclickBody={fastclickBody}
             gameofdeathBody={gameofdeathBody}
+          />
+        ) : null}
+        {stickFlag ? (
+          <Stick
+            client={client}
+            subscribers={subscribers}
+            userSeq={userSeq}
+            multiMeetingRoomSeq={multiMeetingRoomSeq}
+            userName={userName}
+            userGender={userGender}
+            stickBody={stickBody}
           />
         ) : null}
       </div>
