@@ -66,6 +66,8 @@ const RocketItem = (props) => {
             ? 'Join3_uploader_mainpage'
             : ver === 'Start'
             ? 'Join3_uploader'
+            : ver === 'Other'
+            ? 'Rocket_uploader-other'
             : 'Rocket_uploader'
         }
       >

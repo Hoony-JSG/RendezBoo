@@ -136,9 +136,9 @@ const Rocket = () => {
   return (
     <div className="bottom-nav-page">
       <div className="Rocket_container">
-        <div className="Rocket_title">
+        {/* <div className="Rocket_title">
           <span>{rocketUser.name}'s License</span>
-        </div>
+        </div> */}
         <div className="Rocket_rocketitem-whole-box">
           <div className="Rocket_rocketitem-right-box">
             <div className="Rocket_rocketitem-right-top-box">
@@ -153,7 +153,13 @@ const Rocket = () => {
               </div>
             </div>
           </div>
-          <div className="Rocket_rocketitem-left-box">
+          <div
+            className={
+              ver === 'Other'
+                ? 'Rocket_rocketitem-left-box-other'
+                : 'Rocket_rocketitem-left-box'
+            }
+          >
             <RocketItem
               {...MeAndYou}
               setProfileImage={chekcSetProfileImage}
