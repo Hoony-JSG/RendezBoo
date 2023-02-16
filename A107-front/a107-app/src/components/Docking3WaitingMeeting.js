@@ -59,6 +59,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
   const [br31MyTurnFlag, setBr31MyTurnFlag] = useState(false)
   const [br31Point, setBr31Point] = useState(0)
+  const [br31Body, setBr31Body] = useState()
 
   const [gameofdeathBody, setGameofdeathBody] = useState(false)
 
@@ -236,9 +237,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           }
           if (type === 'GAME' || type === 'START') {
             if (json_body.gameType === 'BR31') {
+              setBr31Point(json_body.point)
               if (json_body.nextUser == userSeq) {
                 setBr31MyTurnFlag(true)
-                setBr31Point(json_body.point)
               }
             } else if (json_body.gameType === 'GAMEOFDEATH') {
               setGameofdeathBody(json_body)
@@ -247,6 +248,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           }
           if (type === 'FIN') {
             if (json_body.gameType === 'BR31') {
+              setBr31Body(json_body)
               changeLoseUserMaskPath(json_body.nextUser)
             } else if (json_body.gameType === 'GAMEOFDEATH') {
               setGameofdeathBody(json_body)
@@ -359,6 +361,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       setTimeout(() => {
         setGameType(null)
         setGameFlag(false)
+        setBr31Body(null)
+        setFastclickBody(null)
+        setGameofdeathBody(null)
       }, 3000)
     },
     [myMaskPath]
@@ -494,6 +499,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             br31Point={br31Point}
             fastclickBody={fastclickBody}
             gameofdeathBody={gameofdeathBody}
+            br31Body={br31Body}
           />
         ) : null}
         {stickFlag ? (
