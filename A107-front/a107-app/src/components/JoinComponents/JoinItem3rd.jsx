@@ -15,7 +15,17 @@ const JoinItem3rd = (props) => {
   const setWholeHas = (index, value) => {
     wholeHas[index][1](value)
   }
+  const [profileImagePath, setProfileImagePath] = useState()
 
+  const checkProfileImage = (e) => {
+    const blob = new Blob([e], { type: e.type })
+    const blobUrl = URL.createObjectURL(blob)
+    props.setProfileImage(blobUrl)
+    setProfileImagePath('images/' + e.name)
+    console.log('Join3의 프로필 이미지 데이터')
+    console.log(e)
+    console.log(blobUrl)
+  }
   return (
     <div className="Join3_display">
       <div className="Join3_whole-block">
@@ -26,9 +36,10 @@ const JoinItem3rd = (props) => {
         >
           <RocketItem
             ver="Start"
-            setProfileImage={props.setProfileImage}
+            setProfileImage={checkProfileImage}
             mbti={props.mbti}
             setTrue={setHasProfileImage}
+            profileImagePath={profileImagePath}
           />
         </div>
         <div className="Join3_right-box">

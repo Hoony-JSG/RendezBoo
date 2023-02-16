@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SiRocketdotchat } from 'react-icons/si'
 import '../../Styles/SignalSelected.css'
-import DockingChatSelectedItem from './DockingChatSelectedItem'
+import Docking3ChatItem from './Docking3ChatItem'
 
 const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
   const [message, setMessage] = useState('')

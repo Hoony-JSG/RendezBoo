@@ -1,4 +1,6 @@
-const GameFastClick = () =>{
+const GameFastClick = (props) =>{
+  const {client} = props
+
   return (
     <div>
       FastClick진행중...

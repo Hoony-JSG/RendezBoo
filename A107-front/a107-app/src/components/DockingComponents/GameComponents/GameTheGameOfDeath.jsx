@@ -1,4 +1,6 @@
-const GameTheGameOfDeath = (client) =>{
+const GameTheGameOfDeath = (props) =>{
+  const {client} = props
+
   return (
     <div>
       더게임오브데스 진행중...
