@@ -85,7 +85,6 @@ function App() {
           <Route path="/docking1" element={<Docking1 />} />
           <Route path="/docking3" element={<Docking3 />} />
           <Route path="/docking3ing" element={<Docking3ing />} />
-          <Route path="/docking3/:roomid" element={<Docking3 />} />
           <Route path="/rocket/:userid" element={<Rocket />} />
           <Route path="/userinfo/:userid" element={<Userinfo />}></Route>;
           <Route path="/inventory/:userid" element={<Inventory />}></Route>;

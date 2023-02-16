@@ -14,7 +14,8 @@ const Docking3 = () => {
   //   : 'http://localhost:8080'
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
-  const multiMeetingRoomSeq = useParams().roomid
+  //const multiMeetingRoomSeq = useParams().roomid
+  const [multiMeetingRoomSeq, setMultiMeetingRoomSeq] = useState(null) 
   const [docking3List, setDocking3List] = useState([])
 
   const navigate = useNavigate()
@@ -28,33 +29,15 @@ const Docking3 = () => {
       })
   }, [])
 
-  const [title, setTitle] = useState('')
-
-  const titleInput = (e) => {
-    setTitle(e.target.value)
-  }
-  const makeRoom = (e) => {
-    e.preventDefault()
-    if (title.trim()) {
-      axios
-        .post(`${APPLICATION_SERVER_URL}/api/multi-meetings/`, {
-          userSeq: userSeq,
-          title: title,
-        })
-        .then((response) => {
-          const multiMeetingRoomSeq = response.data
-          navigate(`/docking3/${multiMeetingRoomSeq}`)
-        })
-    }
-    setTitle('')
-  }
-
   return (
     <div>
       {multiMeetingRoomSeq ? (
-        <Docking3WaitingMeeting multiMeetingRoomSeq={multiMeetingRoomSeq} />
+        <Docking3WaitingMeeting
+          multiMeetingRoomSeq={multiMeetingRoomSeq}
+          setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}/>
       ) : (
-        <Docking3Enter />
+        <Docking3Enter
+        setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}/>
       )}
     </div>
   )
