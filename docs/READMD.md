@@ -36,30 +36,44 @@
 
 ## 2. 서비스 화면
 
-### 메인화면
-
-사진 넣기
 
 ### 로그인 / 가입
 
-사진 넣기
+![초기화면](https://user-images.githubusercontent.com/109324637/219236954-4029e47e-75cd-4266-8d85-032a7e3d0eb3.PNG)
+
+![소셜로그인](https://user-images.githubusercontent.com/109324637/219237064-5ad8f53f-1588-424d-b92e-a07422db341a.PNG)
+
+### 메인화면
+
+![메인화면](https://user-images.githubusercontent.com/109324637/219237235-dce81832-6ac4-47ad-be93-0ffd9e426150.PNG)
 
 ### 1대1 미팅
 
-사진 넣기
+![1대1입장](https://user-images.githubusercontent.com/109324637/219237368-0a58e223-0304-40c1-98fd-4221e854441a.PNG)
+
+![1대1대기](https://user-images.githubusercontent.com/109324637/219237555-3634fc07-36a9-4c6a-a7cc-14e7c91b67f5.PNG)
+
+![1대1페이즈1](https://user-images.githubusercontent.com/109324637/219237641-ecf1ee7f-e904-4200-b079-bad52460c6d1.PNG)
+
+![1대1페이즈2](https://user-images.githubusercontent.com/109324637/219237860-a2623495-1dbb-45ea-a64c-d0c1c4218a9c.PNG)
+
+![1대1페이즈3](https://user-images.githubusercontent.com/109324637/219237951-49bbeb46-a08b-427e-a1c2-d268283f0548.PNG)
+
+![1대1친구신청](https://user-images.githubusercontent.com/109324637/219238332-e6449ee5-745a-441f-b950-0627280b015a.PNG)
+
+![1대1미팅종료](https://user-images.githubusercontent.com/109324637/219238422-ae8a0530-c423-49f1-87f0-a0a0e15c6007.PNG)
 
 ### 3대3 미팅
 
-사진 넣기
+![3대3대기](https://user-images.githubusercontent.com/109324637/219238566-bf81310c-049e-43b3-b2bd-f7d0749f13a6.PNG)
 
 ### 채팅
 
-사진 넣기
+![채팅](https://user-images.githubusercontent.com/109324637/219238626-39e37856-b134-4280-93c0-9d56f264bccd.PNG)
 
 ### 프로필 화면
 
-사진 넣기
-
+![프로필](https://user-images.githubusercontent.com/109324637/219238731-bcf5fa1d-2c7a-400d-811c-0be97b0cbf74.PNG)
 
 ## 3. 시스템 아키텍처
 
@@ -73,22 +87,25 @@
 
 ## 5. 컴포넌트 구성도 및 Figma
 
-사진 넣기
+![rdb-component](https://user-images.githubusercontent.com/109324637/219228129-9ab69ee2-6207-49f0-9458-cdb7bbf947c8.png)
+
+![PagesFlow](https://user-images.githubusercontent.com/109324637/219229051-bf9900e5-edf6-421b-ae59-b5a53e0cb1a5.png)
+
 
 ## 6. ERD
 
-사진 넣기
+![mysql erd](https://user-images.githubusercontent.com/109324637/219227717-ea6d8fe4-6d93-46dd-abbb-79106a1ea0c6.png)
 
 ## 7. 멤버 및 회고
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/1109code"><img src="https://avatars.githubusercontent.com/u/109256753?v=4?s=100" width="100px;" alt=""/><br /><sub><b>이홍주</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/Ming0kim"><img src="https://avatars.githubusercontent.com/u/109322004?v=4?s=100" width="100px;" alt=""/><br /><sub><b>김명준</b></sub></a><br /></td>      
+    <td align="center"><a href="https://github.com/developerhongjulee"><img src="https://avatars.githubusercontent.com/u/70627908?v=4?s=100" width="100px;" alt=""/><br /><sub><b>이홍주</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/grolarkim"><img src="https://avatars.githubusercontent.com/u/91328539?v=4?s=100" width="100px;" alt=""/><br /><sub><b>김명준</b></sub></a><br /></td>      
     <td align="center"><a href="https://github.com/Bluuubery"><img src="https://avatars.githubusercontent.com/u/109324637?v=4?s=100" width="100px;" alt=""/><br /><sub><b>유선준</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/wlsgh7608"><img src="https://avatars.githubusercontent.com/u/62232531?v=4?s=100" width="100px;" alt=""/><br /><sub><b>안예나</b></sub></a><br /></td>      
+    <td align="center"><a href="https://github.com/yena0426"><img src="https://avatars.githubusercontent.com/u/17820939?v=4?s=100" width="100px;" alt=""/><br /><sub><b>안예나</b></sub></a><br /></td>      
     <td align="center"><a href="https://github.com/ljaewon97"><img src="https://avatars.githubusercontent.com/u/106070950?v=4?s=100" width="100px;" alt=""/><br /><sub><b>이재원</b></sub></a><br /></td>     
-    <td align="center"><a href="https://github.com/Dodamon"><img src="https://avatars.githubusercontent.com/u/103018534?v=4?s=100" width="100px;" alt=""/><br /><sub><b>정훈</b></sub></a><br /></td>   
+    <td align="center"><a href="https://github.com/Hoony-JSG"><img src="https://avatars.githubusercontent.com/u/107928377?v=4?s=100" width="100px;" alt=""/><br /><sub><b>정훈</b></sub></a><br /></td>   
   </tr>
 </table>
 
