@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.service;
 
+import com.ssafy.a107.api.request.ChatRoomCreateReq;
 import com.ssafy.a107.api.request.FriendReq;
 import com.ssafy.a107.api.request.StickCreateReq;
 import com.ssafy.a107.api.request.StickReq;
@@ -29,7 +30,7 @@ public class StickServiceImpl implements StickService {
     private final MultiMeetingRoomRepository multiMeetingRoomRepository;
     private final StickRepository stickRepository;
 
-
+    private final ChatRoomService chatRoomService;
 
     private final UserFriendService userFriendService;
 
@@ -95,6 +96,10 @@ public class StickServiceImpl implements StickService {
                     userFriendService.addFriend(FriendReq.builder()
                             .userMaleSeq(u.getSeq())
                             .userFemaleSeq(targets.get(u.getSeq()))
+                            .build());
+                    chatRoomService.createChatRoom(ChatRoomCreateReq.builder()
+                                    .userMaleSeq(u.getSeq())
+                                    .userFemaleSeq(targets.get(u.getSeq()))
                             .build());
                     }
                 }
