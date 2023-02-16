@@ -6,7 +6,10 @@ import '../../Styles/SignalSelected.css'
 const DockingChatItem = ({ chat }) => {
   const { flag, message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
-  const [you, setYou] = useState([])
+  const [you, setYou] = useState({
+    yourSeq: null,
+    yourName: null,
+  })
   const time = new Date(createdAt)
 
   useEffect(() => {

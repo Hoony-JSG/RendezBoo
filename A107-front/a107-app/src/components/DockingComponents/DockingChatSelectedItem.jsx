@@ -13,7 +13,18 @@ const DockingChatSelectedItem = ({ chat }) => {
   const time = new Date(createdAt)
 
   useEffect(() => {
-    if (senderSeq !== me && flag === 'CHAT') {
+    if (
+      flag === 'JOIN' ||
+      flag === 'EXIT' ||
+      flag === 'START' ||
+      flag === 'GAME' ||
+      flag === 'FIN'
+    ) {
+      setYou({
+        yourSeq: 0,
+        yourName: 'SYSTEM',
+      })
+    } else if (senderSeq !== me) {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
@@ -27,7 +38,7 @@ const DockingChatSelectedItem = ({ chat }) => {
 
   return (
     <div>
-      {flag === 'JOIN' ? (
+      {you.yourSeq === 0 ? (
         <p className="system-signal">{message}</p>
       ) : (
         <div>
