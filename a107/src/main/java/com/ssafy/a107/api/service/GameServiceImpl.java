@@ -34,7 +34,7 @@ public class GameServiceImpl implements GameService {
     private static final long redisGameExpiration = 1800000;
     private static Random rd = new Random();
 
-     // 새로운 배스킨라빈스게임 세션 생성
+    // 새로운 배스킨라빈스게임 세션 생성
     @Override
     @Transactional
     public BR31Res createBRGameSession(BR31CreateReq br31CreateReq) {
@@ -64,7 +64,7 @@ public class GameServiceImpl implements GameService {
         return new BR31Res(br31, "배스킨 라빈스 31 게임 시작!", userSeqList, br31.getNowUser(), MultiChatFlag.START);
     }
 
-     // 배스킨 라빈스 게임을 진행
+    // 배스킨 라빈스 게임을 진행
     @Override
     @Transactional
     public BR31Res setBR31point(BR31Req br31Req) throws NotFoundException, ConflictException {
@@ -84,24 +84,24 @@ public class GameServiceImpl implements GameService {
 
         // 현재 채팅방에 있는 유저 set
         Set<Long> userSeqSet = new HashSet<>();
-        for(Long userSeq: userSeqList) {
+        for (Long userSeq : userSeqList) {
             userSeqSet.add(userSeq);
         }
 
         // 채팅방 유저 수와 순서 리스트의 사이즈가 다르면 -> 누군가 나갔음
-        if(userSeqList.size() != curOrder.size()) {
+        if (userSeqList.size() != curOrder.size()) {
             log.debug("유저 중도 퇴장(유저 수: {} -> {})", curOrder.size(), userSeqList.size());
 
-            for(Long userSeq: br31.getOrder()) {
+            for (Long userSeq : br31.getOrder()) {
                 newOrder.add(userSeq);
             }
 
-            for(int i = newOrder.size()-1; i >= 0; --i) {
+            for (int i = newOrder.size() - 1; i >= 0; --i) {
                 Long curSeq = newOrder.get(i);
 
-                if(!userSeqSet.contains(curSeq)) {
+                if (!userSeqSet.contains(curSeq)) {
                     // 현재 차례 유저가 숫자를 고르고 나간 경우
-                    if(curSeq == br31Req.getUserSeq()) {
+                    if (curSeq == br31Req.getUserSeq()) {
                         isCurUserExist = false;
                     }
 
@@ -117,15 +117,15 @@ public class GameServiceImpl implements GameService {
         List<Long> order = null;
 
         // 누군가 나갔으면
-        if(userSeqList.size() != curOrder.size()) {
-            if(newOrder.size() == 1) {
+        if (userSeqList.size() != curOrder.size()) {
+            if (newOrder.size() == 1) {
                 log.debug("유저가 한 명 남아서 게임 종료");
                 throw new ConflictException("Cannot continue game: only one user exists.");
             }
 
             int nextIdx = curOrder.indexOf(br31Req.getUserSeq()) + 1;
 
-            while(!userSeqSet.contains(curOrder.get(nextIdx))) {
+            while (!userSeqSet.contains(curOrder.get(nextIdx))) {
                 nextIdx = (nextIdx + 1) % curOrder.size();
             }
 
@@ -135,7 +135,7 @@ public class GameServiceImpl implements GameService {
             br31.setNextUser(nextUserSeq);
 
             // 나간 유저가 현재 유저가 아니면
-            if(isCurUserExist) {
+            if (isCurUserExist) {
                 log.debug("현재 유저가 아닌 다른 유저가 퇴장");
 
                 br31.addPoint(br31Req.getPoint());
@@ -199,7 +199,7 @@ public class GameServiceImpl implements GameService {
 
         log.debug("참여자 명단: {}", userSeqList);
 
-        return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath가 시작되었습니다.", MultiChatFlag.START, null);
+        return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath가 시작되었습니다.", MultiChatFlag.START, null, createReq.getStartUserSeq());
     }
 
     @Override
@@ -217,12 +217,11 @@ public class GameServiceImpl implements GameService {
         log.debug("채팅방 유저 현황: {}", userSeqList);
 
         // 시작하는 유저이면 turn 수 저장
-        if(userSeq == gameOfDeath.getStartUserSeq() && (gameOfDeath.getTurn() == null || gameOfDeath.getTurn() == 0)) {
-            if(gameOfDeathReq.getTurn() == null) {
-                gameOfDeathReq.setTurn(rd.nextInt(17)+3);
+        if (userSeq == gameOfDeath.getStartUserSeq() && (gameOfDeath.getTurn() == null || gameOfDeath.getTurn() == 0)) {
+            if (gameOfDeathReq.getTurn() == null) {
+                gameOfDeathReq.setTurn(rd.nextInt(17) + 3);
                 log.debug("시작 유저가 turn 수를 지정하지 않아 랜덤 선택, turn: {}", gameOfDeathReq.getTurn());
-            }
-            else if (gameOfDeathReq.getTurn() < 3 || gameOfDeathReq.getTurn() > 20) {
+            } else if (gameOfDeathReq.getTurn() < 3 || gameOfDeathReq.getTurn() > 20) {
                 throw new NotFoundException("Wrong Request");
             }
 
@@ -231,39 +230,38 @@ public class GameServiceImpl implements GameService {
         }
 
         Map<Long, Long> targets = gameOfDeath.getTargets();
-        if(targets == null) targets = new HashMap<>();
+        if (targets == null) targets = new HashMap<>();
 
         Set<Long> userSeqSet = new HashSet<>();
-        for(Long seq: userSeqList) {
+        for (Long seq : userSeqList) {
             userSeqSet.add(seq);
         }
 
-        if(targetSeq != null && !userSeqSet.contains(targetSeq)) {
+        if (targetSeq != null && !userSeqSet.contains(targetSeq)) {
             throw new ConflictException("Target user does not exist in the meeting room. Choose again.");
         }
 
         Set<Long> deleteSet = new HashSet<>();
         Set<Long> rechoiceSet = new HashSet<>();
 
-        for(Map.Entry<Long, Long> entry: targets.entrySet()) {
-            if(!userSeqSet.contains(entry.getKey())) {
+        for (Map.Entry<Long, Long> entry : targets.entrySet()) {
+            if (!userSeqSet.contains(entry.getKey())) {
                 deleteSet.add(entry.getKey());
-            }
-            else if(!userSeqSet.contains(entry.getValue())) {
+            } else if (!userSeqSet.contains(entry.getValue())) {
                 rechoiceSet.add(entry.getKey());
             }
         }
 
-        for(Long seq: deleteSet) {
+        for (Long seq : deleteSet) {
             targets.remove(seq);
         }
 
-        for(Long seq: rechoiceSet) {
-            if(targets.containsKey(seq)) targets.remove(seq);
+        for (Long seq : rechoiceSet) {
+            if (targets.containsKey(seq)) targets.remove(seq);
         }
 
         // 시간초과로 targetSeq를 선택하지 않았을 경우 -> 랜덤으로 선택
-        if(targetSeq == null) {
+        if (targetSeq == null) {
             while (true) {
                 int randIdx = rd.nextInt(userSeqList.size());
                 targetSeq = userSeqList.get(randIdx);
@@ -280,13 +278,13 @@ public class GameServiceImpl implements GameService {
         log.debug("지목 현황: {}", targets);
 
         // 지목 현황을 모두 받았으면 게임 진행
-        if(targets.size() == userSeqList.size()) {
+        if (targets.size() == userSeqList.size()) {
             List<Long> resultList = new ArrayList<>();
             int turn = gameOfDeath.getTurn();
             long cur = gameOfDeath.getStartUserSeq();
             resultList.add(cur);
 
-            while(turn-- > 0) {
+            while (turn-- > 0) {
                 cur = targets.get(cur);
                 resultList.add(cur);
             }
@@ -294,14 +292,13 @@ public class GameServiceImpl implements GameService {
             log.debug("게임 기록: {}", resultList);
             log.debug("User {} 패배!", cur);
 
-            return new GameOfDeathRes(gameOfDeath, resultList, cur, "GameOfDeath가 종료되었습니다.",MultiChatFlag.FIN, null);
-        }
-        else {
+            return new GameOfDeathRes(gameOfDeath, resultList, cur, "GameOfDeath가 종료되었습니다.", MultiChatFlag.FIN, null, gameOfDeath.getStartUserSeq());
+        } else {
             gameOfDeathRepository.save(gameOfDeath);
             log.debug("지목을 완료한 유저 수: {}", targets.size());
-            if(rechoiceSet.size() != 0) log.debug("선택을 다시 해야하는 유저 목록: {}", rechoiceSet);
+            if (rechoiceSet.size() != 0) log.debug("선택을 다시 해야하는 유저 목록: {}", rechoiceSet);
 
-            return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath 진행", MultiChatFlag.GAME, rechoiceSet);
+            return new GameOfDeathRes(gameOfDeath, null, null, "GameOfDeath 진행", MultiChatFlag.GAME, rechoiceSet, gameOfDeath.getStartUserSeq());
         }
     }
 
@@ -339,7 +336,7 @@ public class GameServiceImpl implements GameService {
                 .orElseThrow(() -> new NotFoundException("No game session!"));
 
         Map<Long, Integer> scores = fastClick.getScores();
-        if(scores == null) scores = new HashMap<>();
+        if (scores == null) scores = new HashMap<>();
 
         scores.put(fastClickReq.getUserSeq(), fastClickReq.getScore());
 
@@ -347,21 +344,21 @@ public class GameServiceImpl implements GameService {
                 .findUserSequencesByMultiMeetingRoomSeq(fastClickReq.getMultiMeetingRoomSeq());
 
         Set<Long> userSeqSet = new HashSet<>();
-        for(Long seq: userSeqList) {
+        for (Long seq : userSeqList) {
             userSeqSet.add(seq);
         }
 
         Set<Long> deleteSet = new HashSet<>();
 
-        for(Map.Entry<Long, Integer> entry: scores.entrySet()) {
+        for (Map.Entry<Long, Integer> entry : scores.entrySet()) {
             // 유저가 중간에 나간 경우
-            if(!userSeqSet.contains(entry.getKey())) {
+            if (!userSeqSet.contains(entry.getKey())) {
                 log.debug("유저 {} 탈주", entry.getKey());
                 deleteSet.add(entry.getKey());
             }
         }
 
-        for(Long seq: deleteSet) {
+        for (Long seq : deleteSet) {
             scores.remove(seq);
         }
 
@@ -371,25 +368,24 @@ public class GameServiceImpl implements GameService {
         fastClickRepository.save(fastClick);
 
         // 게임 종료
-        if(scores.size() == userSeqList.size()) {
+        if (scores.size() == userSeqList.size()) {
             int min = Integer.MAX_VALUE;
             List<Long> minUsers = new ArrayList<>();
 
-            for(long userSeq: userSeqList) {
+            for (long userSeq : userSeqList) {
                 int score = fastClick.getScores().get(userSeq);
 
-                if(score < min) {
+                if (score < min) {
                     min = score;
                     minUsers.clear();
                     minUsers.add(userSeq);
-                }
-                else if (score == min) {
+                } else if (score == min) {
                     minUsers.add(userSeq);
                 }
             }
 
             // 최저 점수가 여러명이면 랜덤으로 패배 유저 선정
-            if(minUsers.size() > 1) {
+            if (minUsers.size() > 1) {
                 log.debug("동점자 목록: {}", minUsers);
                 Collections.shuffle(minUsers);
                 Long loseUserSeq = minUsers.get(0);
@@ -403,8 +399,7 @@ public class GameServiceImpl implements GameService {
 
                 return new FastClickRes(fastClick, minUsers.get(0), "게임 종료!", MultiChatFlag.FIN);
             }
-        }
-        else {
+        } else {
             return new FastClickRes(fastClick, null, "게임 진행", MultiChatFlag.GAME);
         }
     }
