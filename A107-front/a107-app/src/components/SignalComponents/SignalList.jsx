@@ -24,8 +24,7 @@ const SignalList = ({ userSeq, chat }) => {
   }
   return (
     <div onClick={() => {
-      // navigate(`/signal/${chat.seq}`)
-      window.location.assign(`/signal/${chat.seq}`)
+      navigate(`/signal/${chat.seq}`)
       }}>
       {userFemale.seq !== userSeq ? (
         <div style={chatListStyle}>

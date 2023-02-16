@@ -50,7 +50,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
             })
         }
       })
-  }, [])
+  }, [chatRoomSeq])
 
   const connect = () => {
     // stomp js client 객체 생성
