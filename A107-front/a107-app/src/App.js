@@ -32,7 +32,7 @@ function App() {
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  
   const refreshToken = getRefreshTokenFromCookie()
   const allowedPaths = [
     '/loginnew',
@@ -71,7 +71,8 @@ function App() {
           location.pathname === '/joinsocial' ||
           location.pathname === '/docking1' ||
           location.pathname === '/docking3' ||
-          location.pathname === '/docking3ing'
+          location.pathname === '/docking3ing' ||
+          location.pathname.split('/')[1] === 'docking3'
         ) && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />

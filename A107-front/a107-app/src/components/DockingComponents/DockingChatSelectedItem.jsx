@@ -4,7 +4,7 @@ import axios from 'axios'
 import '../../Styles/SignalSelected.css'
 
 const DockingChatSelectedItem = ({ chat }) => {
-  const { message, createdAt, senderSeq } = chat
+  const { flag, message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
   const [you, setYou] = useState({
     yourSeq: null,
@@ -13,7 +13,7 @@ const DockingChatSelectedItem = ({ chat }) => {
   const time = new Date(createdAt)
 
   useEffect(() => {
-    if (senderSeq !== me) {
+    if (senderSeq !== me && flag === 'CHAT') {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
@@ -27,41 +27,35 @@ const DockingChatSelectedItem = ({ chat }) => {
 
   return (
     <div>
-      {senderSeq !== me ? (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            margin: '10px',
-          }}
-        >
-          <p className="your-name">{you.yourName}</p>
-          <div className="your-signal">
-            <p>{message}</p>
-            {parseInt(time.getHours() / 12) ? (
-              <p id="time">
-                {time.getHours() % 12 || 12}:{time.getMinutes()} PM
-              </p>
-            ) : (
-              <p id="time">
-                {time.getHours()}:{time.getMinutes()} AM
-              </p>
-            )}
-          </div>
-        </div>
+      {flag === 'JOIN' ? (
+        <p className="system-signal">{message}</p>
       ) : (
-        <div className="my-signal">
-          {parseInt(time.getHours() / 12) ? (
-            <p id="time">
-              {time.getHours() % 12 || 12}:{time.getMinutes()} PM
-            </p>
+        <div>
+          {senderSeq !== me ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                margin: '10px',
+              }}
+            >
+              <p className="your-name">{you.yourName}</p>
+              <div className="your-signal">
+                <p>{message}</p>
+                <p id="time">
+                  {time.getHours()}:{time.getMinutes()}
+                </p>
+              </div>
+            </div>
           ) : (
-            <p id="time">
-              {time.getHours() || 12}:{time.getMinutes()} AM
-            </p>
+            <div className="my-signal">
+              <p id="time">
+                {time.getHours()}:{time.getMinutes()}
+              </p>
+              <p>{message}</p>
+            </div>
           )}
-          <p>{message}</p>
         </div>
       )}
     </div>

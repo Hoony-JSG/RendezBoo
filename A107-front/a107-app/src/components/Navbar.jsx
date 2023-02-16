@@ -59,18 +59,18 @@ const Navbar = () => {
       </div>
       <div style={divStyle}>
         <NavLink
-          to="/logout"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
-          Logout
-        </NavLink>
-      </div>
-      <div style={divStyle}>
-        <NavLink
           to={'/rocket/' + userSeq}
           style={{ color: 'white', textDecoration: 'none' }}
         >
           MyRocket
+        </NavLink>
+      </div>
+      <div style={divStyle}>
+        <NavLink
+          to="/logout"
+          style={{ color: 'white', textDecoration: 'none' }}
+        >
+          Logout
         </NavLink>
       </div>
     </nav>

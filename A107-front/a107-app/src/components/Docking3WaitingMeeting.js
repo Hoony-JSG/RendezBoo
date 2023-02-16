@@ -19,7 +19,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
 
   const WEBSOCKET_SERVER_URL = 'wss://i8a107.p.ssafy.io'
   // process.env.NODE_ENV === 'production'
-  //   ? 'wss://i8a107.p.ssafy.io'
+  //   ? 'wss://i8a107.p.ssafy .io'
   //   : 'ws://localhost:8080'
 
   const navigate = useNavigate()
@@ -338,31 +338,15 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq}) => {
       </div>
     </div>
   ) : (
-    <div className="chat-multi">
-      <Docking3Chat
-        client={client}
-        multiMeetingRoomSeq={multiMeetingRoomSeq}
-        userSeq={userSeq}
-        chatList={chatList}
-      />
-      {/* <h1>단체 미팅방 {multiMeetingRoomSeq}의 대기방입니다.</h1>
-      <p>내 유저 시퀀스는 {userSeq}입니다.</p>
-      <div>
-        {chatList.map((item, index) => {
-          return <div key={index}>item: {item}</div>
-        })}
-      </div>
-      <form onSubmit={(event) => sendChat(event, message)}>
-        <div>
-          <input
-            type={'text'}
-            name={'chatInput'}
-            onChange={inputChat}
-            value={message}
+      <div className="docking-modal" style={{padding: '30px'}}>
+        <h1>Now Docking...</h1>
+        <p style={{ fontSize: '1.5rem' }}>3:3 미팅 대기중입니다.</p>
+        <Docking3Chat
+            client={client}
+            multiMeetingRoomSeq={multiMeetingRoomSeq}
+            userSeq={userSeq}
+            chatList={chatList}
           />
-        </div>
-        <input type={'submit'} value={'메세지 보내기'} />
-      </form> */}
     </div>
   )
 }
