@@ -4,7 +4,8 @@ import GameTheGameOfDeath from './GameComponents/GameTheGameOfDeath'
 import GameFastClick from './GameComponents/GameFastClick'
 import axios from 'axios'
 
-const Game = (client) =>{
+const Game = (props) =>{
+  const {client, subscribers} = props
   const {gameType, setGameType} = useState()
   const APPLICATION_SERVER_URL =
     process.env.NODE_ENV === 'production'
@@ -16,12 +17,7 @@ const Game = (client) =>{
       : 'ws://localhost:8080/'
 
   return (
-    <div className="game_container"
-    style={{
-      width: '50%',
-      height: '50%',
-      opacity: '0.2'
-    }}>
+    <div className={'game'}>
       {gameType === undefined?(
           <div>
             <div onClick={
@@ -47,8 +43,8 @@ const Game = (client) =>{
           </div>
         ):(null)
       }
-      {gameType === "BR31"?(<GameBR31 client={client}/>):(null)}
-      {gameType === "THEGAMEOFDEATH"?(<GameTheGameOfDeath client={client}/>):(null)}
+      {gameType === "BR31"?(<GameBR31 client={client} />):(null)}
+      {gameType === "THEGAMEOFDEATH"?(<GameTheGameOfDeath client={client} subscribers={subscribers} />):(null)}
       {gameType === "FASTCLICK"?(<GameFastClick client={client}/>):(null)}
     </div>
   )

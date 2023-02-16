@@ -1,6 +1,7 @@
 //import {useEffect} from 'react'
 
-const GameBr31 = (client) =>{
+const GameBr31 = (props) =>{
+  const {client} = props
   
   
   return (
