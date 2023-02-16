@@ -11,11 +11,15 @@ const Signal = () => {
   
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [chatRoom, setChatRoom] = useState([])
+  const getChatRoom = () => {
+    axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
+      setChatRoom(response.data)
+    })
+  }
 
   useEffect(() => {
     axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
       setChatRoom(response.data)
-      console.log(response.data)
     })
   }, [])
 
@@ -66,7 +70,8 @@ const Signal = () => {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'column-reverse',
+              justifyContent: 'flex-end',
               gap: '20px',
               width: '100%',
               height: '500px',

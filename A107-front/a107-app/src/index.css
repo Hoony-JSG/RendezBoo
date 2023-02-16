@@ -5,11 +5,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-image: url('bg.png');
   background-color: #173147;
-  background-size: cover;
+  background-size: 120%;
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: white;
   animation: bgChange 120s ease-in-out infinite;
+}
+
+body::before{
+  position:absolute; 
+  width:0; 
+  height:0; 
+  overflow:hidden; 
+  z-index:-1;
+  content: url('bg.png');
 }
 
 @keyframes bgChange {
@@ -26,7 +35,6 @@ body {
     background-position: 0 0;
   }
 }
-
 
 
 h1 {

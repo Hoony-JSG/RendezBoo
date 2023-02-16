@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import * as StompJs from '@stomp/stompjs'
 import SignalSelectedItem from './SignalSelectedItem'
@@ -17,16 +18,16 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
     yourpImg: '',
   })
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     axios
       .get('https://i8a107.p.ssafy.io/api/chat/' + chatRoomSeq)
       .then((response) => {
-        console.log(response.data)
         setChatList(response.data)
         return response.data[0]
       })
       .then((recentChat) => {
-        console.log(recentChat.receiverSeq)
         if (recentChat.senderSeq == userSeq) {
           axios
             .get('https://i8a107.p.ssafy.io/api/user/' + recentChat.receiverSeq)
@@ -49,7 +50,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
             })
         }
       })
-  }, [])
+  }, [chatRoomSeq])
 
   const connect = () => {
     // stomp js client 객체 생성
@@ -90,9 +91,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
     // (/sub: 웹소켓 공통 구독 주소), (/chat: 기능별(1:1, 3:3, 친구 추가후) 구독 주소), (/chatRoomSeq: 하위 구독 주소(채팅방))
     client.current.subscribe('/sub/chat/' + chatRoomSeq, (body) => {
       const json_body = JSON.parse(body.body)
-      console.log(json_body)
 
-      console.log(chatList)
       setChatList((_chat_list) => [
         {
           createdAt: json_body.createdAt,
@@ -119,7 +118,6 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
       senderSeq: userSeq,
       receiverSeq: you.yourSeq,
     })
-    console.log(body)
 
     // 메세지를 보내기
     client.current.publish({
@@ -135,7 +133,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
 
   // disconnect: 웹소켓 연결 끊기
   const disconnect = () => {
-    console.log('연결이 끊어졌습니다')
+    console.log('연결이 끊어졌습니다.')
     client.current.deactivate()
   }
 
@@ -173,6 +171,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
       >
         <img
           src={you.yourpImg || userLogo}
+          onClick={() => navigate(`/rocket/${you.yourSeq}`)}
           style={{ width: '75px', height: '75px' }}
           alt={userSeq}
         />

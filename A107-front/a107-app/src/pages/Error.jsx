@@ -1,16 +1,16 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const Error = ()=>{
+const Error = ({islogin}) => {
+  const navigate = useNavigate()
 
-  
-  useEffect(()=>{
-    
-  });
+  useEffect(() => {
+    alert('잘못된 접근입니다.')
+    if (islogin) navigate(-1)
+    else navigate('/')
+  }, [])
 
-  return (
-    <div>
-      <h1> 에러 페이지입니다</h1>
-    </div>
-  )
+  return <div></div>
 }
-export default Error;
+
+export default Error

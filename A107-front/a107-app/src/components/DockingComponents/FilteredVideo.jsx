@@ -9,7 +9,6 @@ export const FilteredVideo = ({
   startFaceAPI,
 }) => {
   const canvasRef = useRef(null)
-  // const videoRef = useRef(null)
   const { videoRef, speaking, micStatus, videoStatus } =
     useStream(streamManager)
 
@@ -30,7 +29,6 @@ export const FilteredVideo = ({
     height: '100%',
     position: 'absolute',
     objectFit: 'cover',
-    // transform: 'rotateY(180deg)',
     zIndex: 12,
   }
 

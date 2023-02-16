@@ -38,7 +38,7 @@ const Navbar = () => {
   return (
     <nav style={navStyle}>
       <div style={divStyle}>
-        <NavLink to="/" style={{ color: 'white', textDecoration: 'none' }}>
+        <NavLink to="/rendezboo" style={{ color: 'white', textDecoration: 'none' }}>
           Rendezboo
         </NavLink>
       </div>
@@ -52,7 +52,7 @@ const Navbar = () => {
       </div>
       <div style={divStyle}>
         <img src={logo} className="Main-logo" alt="logo" style={logoStyle}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/rendezboo')}
           onMouseOverCapture={() => setLogo(logoWhite)}
           onMouseOutCapture={() => setLogo(logoColor)}
         />

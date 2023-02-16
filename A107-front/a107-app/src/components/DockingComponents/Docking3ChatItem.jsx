@@ -3,17 +3,25 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import '../../Styles/SignalSelected.css'
 
-const DockingChatSelectedItem = ({ chat }) => {
-  const { message, createdAt, senderSeq } = chat
+const DockingChatItem = ({ chat }) => {
+  const { flag, message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
-  const [you, setYou] = useState({
-    yourSeq: null,
-    yourName: null,
-  })
+  const [you, setYou] = useState([])
   const time = new Date(createdAt)
 
   useEffect(() => {
-    if (senderSeq !== me) {
+    if (
+      flag == 'JOIN' ||
+      flag == 'EXIT' ||
+      flag == 'START' ||
+      flag == 'GAME' ||
+      flag == 'FIN'
+    ) {
+      setYou({
+        yourSeq: 0,
+        yourName: 'SYSTEM',
+      })
+    } else if (senderSeq !== me) {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
@@ -68,4 +76,4 @@ const DockingChatSelectedItem = ({ chat }) => {
   )
 }
 
-export default DockingChatSelectedItem
+export default DockingChatItem

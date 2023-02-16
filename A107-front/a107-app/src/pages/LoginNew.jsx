@@ -1,17 +1,13 @@
-import { setRefreshToken, removeToken } from '../modules/Auth/Jwt'
+import { setRefreshToken } from '../modules/Auth/Jwt'
 import React, { useState } from 'react'
-import { SET_TOKEN, REMOVE_TOKEN } from '../containers/JwtContainer'
-import {
-  SET_USER_INFO,
-  REMOVE_USER_INFO,
-} from '../containers/UserInfoContainer'
+import { SET_TOKEN } from '../containers/JwtContainer'
+import { SET_USER_INFO } from '../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router'
 
 const LoginNew = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSeq, setUserSeq] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
@@ -43,13 +39,11 @@ const LoginNew = () => {
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-      // setIsLoggedIn(true);
       setUserName(decode.name)
       setUserSeq(decode.seq)
       setEmail(decode.email)
 
       navigate('/')
-      // setUserSeq()
     } catch (error) {
       setError(error.message)
     }
@@ -73,28 +67,15 @@ const LoginNew = () => {
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-      // setIsLoggedIn(true);
       setUserName(decode.name)
       setUserSeq(decode.seq)
       setEmail(decode.email)
 
-      navigate('/')
-      // setUserSeq()
+      navigate('/rendezboo')
     } catch (error) {
       setError(error.message)
     }
   }
-
-  // const logout = () => {
-  //   // const { accessToken } = selector(state => state.accessToken)
-  //   // console.log(selector(state => state.accessTokenReducer.accessToken))
-
-  //   removeToken()
-  //   dispatch(REMOVE_TOKEN())
-  //   // dispatch(REMOVE_USER_INFO())
-
-  //   setIsLoggedIn(false);
-  // };
 
   return (
     <div>
