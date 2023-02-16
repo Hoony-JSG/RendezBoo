@@ -15,6 +15,7 @@
   fill: white;
   font-size: 18px;
   width: fit-content;
+  font-family: 'Gmarket_light' !important;
   padding-top: 50px;
 }
 
@@ -68,7 +69,8 @@ circle {
 }
 
 .apexcharts-datalabels text {
-  fill: white;
+  fill: rgb(255, 255, 255);
+  font-family: 'Gmarket_light' !important;
   font-size: 15px;
   background: black;
 }

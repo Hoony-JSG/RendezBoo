@@ -1,0 +1,111 @@
+.BadgeList_container {
+  margin-top: 15px;
+  border: 1px solid white;
+  width: 760px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 20px;
+  align-items: center;
+  background: linear-gradient(
+    250deg,
+    rgba(156, 142, 89, 0.328) 0%,
+    rgba(255, 255, 255, 0.363) 100%
+  );
+  padding-top: 20px;
+}
+.BadgeList_container-title {
+  font-size: 30px;
+  font-family: 'Gmarket_light';
+  border-bottom: 1px solid white;
+  width: 230px;
+}
+.BadgeList_list {
+  display: flex;
+  overflow-x: scroll;
+  height: 200px;
+  width: 760px;
+  align-items: center;
+}
+
+.BadgeList_item {
+  /* display: inline-block; */
+  flex: 0 0 auto;
+}
+
+.BadgeList_item-img {
+  width: 70;
+  height: 70px;
+}
+
+.BadgeList_item-name {
+  margin: 5px 5px;
+  max-width: 100%; /* set max width to prevent text from overflowing */
+  min-width: 100px; /* set a minimum width for the child div */
+  text-align: center;
+  font-family: 'Gmarket_light';
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+/* ........................... */
+.BadgeList_flip-card {
+  background-color: transparent;
+  width: 100px;
+  height: 100px;
+  perspective: 1000px;
+  font-family: sans-serif;
+  margin: 10px;
+}
+
+.BadgeList_title {
+  font-size: 1.5em;
+  font-weight: 900;
+  text-align: center;
+  margin: 0;
+}
+
+.BadgeList_flip-card-inner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.BadgeList_flip-card:hover .BadgeList_flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.BadgeList_flip-card-front,
+.BadgeList_flip-card-back {
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  box-sizing: border-box;
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 1rem;
+}
+
+.BadgeList_flip-card-front {
+  background: linear-gradient(315deg, #03a8f477, #ff005979);
+  color: coral;
+}
+
+.BadgeList_flip-card-back {
+  background: linear-gradient(315deg, #ff005979, #03a8f477);
+  color: white;
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: flex;
+}
