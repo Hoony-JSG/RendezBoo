@@ -3,6 +3,7 @@
 import Logo from '../logo_color.png'
 import KakaoLogin from '../components/JoinComponents/KakaoLogin'
 import NaverLogin from '../components/JoinComponents/NaverLogin'
+import GameBr31 from '../components/DockingComponents/GameComponents/GameBR31'
 
 const Home = () => {
   const homeDivStyle = {

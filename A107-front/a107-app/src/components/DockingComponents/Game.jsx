@@ -6,9 +6,11 @@ import GameFastClick from './GameComponents/GameFastClick'
 const Game = (props) => {
   const {
     client,
+    setGameFlag,
+    gameType,
+    setGameType,
     subscribers,
     multiMeetingRoomSeq,
-    gameType,
     br31MyTurnFlag,
     setBr31MyTurnFlag,
     br31Point,
@@ -21,7 +23,6 @@ const Game = (props) => {
   const userGender = useSelector((state) => state.userInfoReducer.userGender)
 
   const pubGame = (gameName, body) => {
-    // 연결이 안되어있을 경우
     if (!client || !client.current.connected) {
       alert('연결 상태를 확인해주세요.')
       return
@@ -105,6 +106,10 @@ const Game = (props) => {
           fastclickBody={fastclickBody}
         />
       ) : null}
+      <button onClick={()=>{
+        setGameType(false)
+        setGameFlag(false)
+        }}>X</button>
     </div>
   )
 }

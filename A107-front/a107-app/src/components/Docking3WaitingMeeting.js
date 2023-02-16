@@ -442,7 +442,9 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
         {gameFlag ? (
           <Game
             client={client}
+            setGameFlag={setGameFlag}
             gameType={gameType}
+            setGameType={setGameType}
             subscribers={subscribers}
             multiMeetingRoomSeq={multiMeetingRoomSeq}
             br31MyTurnFlag={br31MyTurnFlag}
