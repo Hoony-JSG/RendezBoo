@@ -3,10 +3,12 @@ import '../../Styles/ProfileImageUploaderStyle.css'
 const ProfileImageUploader = (props) => {
   const [newImage, setNewImage] = useState(null)
   const handleImageUpload = (e) => {
-    console.log('새로운 이미지를 input함 : ' + e.target.files[0])
+    console.log('새로운 이미지를 input함 : ')
+    console.log(e.target.files[0].name)
     props.setProfileImage(e.target.files[0])
     setNewImage(URL.createObjectURL(e.target.files[0]))
     // props.profileImagePath = newImage;
+    props.changeImage(e.target.files[0])
   }
 
   const imageInput = useRef()
@@ -15,9 +17,8 @@ const ProfileImageUploader = (props) => {
     console.log('쌔거 : ' + imageInput)
   }
 
-  useEffect(() => {
-    props.changeImage(newImage)
-  }, [newImage])
+  // useEffect(() => {
+  // }, [newImage])
 
   return (
     <div className="ImageUploader_whole-box">
