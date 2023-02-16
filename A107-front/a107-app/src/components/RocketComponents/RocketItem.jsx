@@ -6,7 +6,7 @@ import '../../Styles/Join3RocketItemStyle.css'
 import { useEffect } from 'react'
 
 const RocketItem = (props) => {
-  const { Me, Inquire, ver, setProfileImage } = props
+  const { Me, Inquire, ver, setProfileImage, rocketUser } = props
   const SRC_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
   // const MeAndYou = {
@@ -16,18 +16,24 @@ const RocketItem = (props) => {
   //   BadgeRep: 1,
   // }
 
-  const [image, setimage] = useState(userprofile)
+  const [image, setImage] = useState(userprofile)
   useEffect(() => {
     if (props.profileImagePath) {
       console.log('프사있음')
-      setimage(SRC_URL + props.profileImagePath)
+      setImage(SRC_URL + props.profileImagePath)
     }
-  }, [])
+  }, [props.profileImagePath])
+
+  //사진 업로드하면 일로 들어ㅓ옴 (image)
   const changeImage = (image) => {
-    if (image !== null) {
-      console.log('새 이미지를 가져와서 setProfileImage : ' + image)
-      setimage(image)
-      props.setTrue(true)
+    console.log('ProfileImageUploader에서 넘어오는 input에 넣은 : ' + image)
+    console.log(props.checkRocket + '?')
+    setImage(image)
+    props.setTrue(true)
+    props.checkFirst(true)
+    if (props.checkRocket !== undefined) {
+      console.log('checkRocket 트루')
+      props.setProfileImage(image)
     }
   }
   console.log('Btn :' + ver)
@@ -67,7 +73,7 @@ const RocketItem = (props) => {
             <ProfileImageUploader
               profileImagePath={props.profileImagePath}
               changeImage={changeImage}
-              setProfileImage={setProfileImage}
+              setProfileImage={props.setProfileImage}
             />
           </div>
         )}

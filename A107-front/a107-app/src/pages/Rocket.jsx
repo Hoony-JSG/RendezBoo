@@ -35,12 +35,52 @@ const Rocket = () => {
     userInterests: [],
   })
 
-  const setNewProfile = (file) => {
-    setRocketUser((prevState) => ({
-      ...prevState,
-      profileImagePath: file,
-    }))
+  // const [profileImage, setProfileImage] = useState('')
+  const chekcSetProfileImage = (inputFile) => {
+    // setProfileImage(inputFile.name)
+    console.log('체크 셋 프로필 이미지')
+    console.log(inputFile.name)
+    if (window.confirm('이미지 업로드?')) {
+      changeProfileImage(inputFile)
+    }
   }
+  // const setNewProfile = (file) => {
+  //   console.log('Rocket페이지에서 사진 setNewProfile : ' + file)
+  //   changeProfileImage(setProfileImage)
+  // }
+
+  const changeProfileImage = async (profileImage) => {
+    const formData = new FormData()
+    formData.append('file', profileImage)
+    console.log('변경할 파일 전체: ')
+    console.log(profileImage)
+    try {
+      axios({
+        method: 'post',
+        url:
+          'https://i8a107.p.ssafy.io/api/user/profile?userSeq=' +
+          rocketUser.seq,
+        data: formData,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      console.log('프로필 이미지 변경 성공')
+    } catch (error) {
+      console.log('프로필 이미지 변경 에러')
+      console.error(error)
+    }
+  }
+  const [first, setFirst] = useState(false)
+
+  // useEffect(() => {
+  //   if (first === true) {
+  //     console.log('지금 보는 곳')
+  //     console.log(profileImage)
+  //     if (window.confirm('이미지 업로드?')) {
+  //       changeProfileImage(profileImage)
+  //     }
+  //   }
+  // }, [profileImage])
+
   const [rocketUserEmotion, setRocketUserEmotion] = useState({
     anger: 0,
     disgust: 0,
@@ -61,7 +101,7 @@ const Rocket = () => {
   }
 
   useEffect(() => {
-    console.log('왜 자꾸 돌아가냐')
+    console.log('useEffect')
     axios
       .get(APPLICATION_SERVER_URL + 'api/user/' + Inquire, REQUEST_HEADER)
       .then((res) => {
@@ -116,8 +156,12 @@ const Rocket = () => {
           <div className="Rocket_rocketitem-left-box">
             <RocketItem
               {...MeAndYou}
-              setProfileImage={setNewProfile}
+              setProfileImage={chekcSetProfileImage}
+              profileImagePath={rocketUser.profileImagePath}
               setTrue={notJoin}
+              checkRocket={true}
+              checkFirst={setFirst}
+              rocketUser={rocketUser}
             />
           </div>
         </div>

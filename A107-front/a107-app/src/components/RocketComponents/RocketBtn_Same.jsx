@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import MBTISelector from '../JoinComponents/MBTISelector'
 
 import '../../Styles/RocketItemButtonStyle.css'
-import MBTISelector from '../JoinComponents/MBTISelector'
 
 const RocketBtn_Same = (props) => {
   const [rocketUser, setRocketUser] = useState({
