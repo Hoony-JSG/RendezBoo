@@ -40,7 +40,7 @@ const Rocket = () => {
     // setProfileImage(inputFile.name)
     console.log('체크 셋 프로필 이미지')
     console.log(inputFile.name)
-    if (window.confirm('이미지 업로드?')) {
+    if (window.confirm('업로드 하시겠습니까?')) {
       changeProfileImage(inputFile)
     }
   }
