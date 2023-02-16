@@ -52,22 +52,19 @@ const GameTheGameOfDeath = (props) => {
     [subscribers]
   )
 
-  ///////////////////////////////
-  useEffect(() => {
-    setPubbed(true)
-  }, [])
-
   return (
     <div className="TGD_whole-container">
       <h1>더게임오브데스</h1>
       {pubbed ? (
         <div className="TGD_result-box">
-          {gameofdeathBody.loseUserSeq ? (
+          {gameofdeathBody && gameofdeathBody.loseUserSeq ? (
             <div className="TGD_loser">
               {getLoseUserName(gameofdeathBody.loseUserSeq)}
-              has dead...
+              &nbsp; has dead...
             </div>
-          ) : null}
+          ) : (
+            <div className="TGD_loser">상대방의 선택을 기다리고 있습니다.</div>
+          )}
         </div>
       ) : (
         <div className="TGD_game-box">
@@ -100,15 +97,17 @@ const GameTheGameOfDeath = (props) => {
             <div className="TGD_game-choose-whole-person-box">
               <div className="TGD_card">
                 <span className="TGD_card-span">💀 Choose One 💀</span>
-                <div class="TGD_card-inner-select">
+                <div className="TGD_card-inner-select">
                   {subscribers.map((sub, idx) => (
                     <div className="TGD_game-choose-one-person-box" key={idx}>
                       <button
                         className="TGD_game-choose-one-person-button"
                         onClick={pubGOD}
-                        /* id={sub.userSeq} */ value={turn}
+                        id={sub.userSeq}
+                        value={turn}
+                        style={{ color: '#FFFFFF' }}
                       >
-                        {/* {sub.userName} */}
+                        {sub.userName}
                       </button>
                     </div>
                   ))}
