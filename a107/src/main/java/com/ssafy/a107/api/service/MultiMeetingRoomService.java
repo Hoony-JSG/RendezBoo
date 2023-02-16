@@ -8,6 +8,7 @@ import com.ssafy.a107.api.response.MeetingRoomRes;
 import com.ssafy.a107.api.response.MultiMeetingRoomRes;
 import com.ssafy.a107.common.exception.MeetingRoomAlreadyFullException;
 import com.ssafy.a107.common.exception.NotFoundException;
+import com.ssafy.a107.common.exception.UserAlreadyExistsInMultiMeetingRoomException;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
@@ -23,7 +24,7 @@ public interface MultiMeetingRoomService {
     MultiMeetingRoomRes findMultiMeetingRoom(Long roomSeq) throws NotFoundException;
     List<MultiMeetingRoomRes> findAllMultiMeetingRoom();
 
-    Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, MeetingRoomAlreadyFullException, InterruptedException;
+    Long saveUserToMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, UserAlreadyExistsInMultiMeetingRoomException, MeetingRoomAlreadyFullException, InterruptedException;
     void deleteUserFromMultiMeetingRoom(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException;
 
     void sendToWebSocketAtJoin(Long multiMeetingRoomSeq, Long userSeq) throws NotFoundException, InterruptedException;
