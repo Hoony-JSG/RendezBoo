@@ -5,6 +5,7 @@ import com.ssafy.a107.api.response.MultiChatFlag;
 import com.ssafy.a107.api.response.game.BR31Res;
 import com.ssafy.a107.api.response.game.FastClickRes;
 import com.ssafy.a107.api.response.game.GameOfDeathRes;
+import com.ssafy.a107.api.response.game.GameType;
 import com.ssafy.a107.common.exception.ConflictException;
 import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.game.BR31;
@@ -324,6 +325,7 @@ public class GameServiceImpl implements GameService {
                 .multiMeetingRoomSeq(fastClick.getMultiMeetingRoomSeq())
                 .message("FastClick이 시작되었습니다.")
                 .flag(MultiChatFlag.START)
+                .gameType(GameType.FASTCLICK)
                 .build();
     }
 
