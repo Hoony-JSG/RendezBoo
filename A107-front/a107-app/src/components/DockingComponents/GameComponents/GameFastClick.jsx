@@ -1,7 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 const GameFastClick = (props) => {
-  const { client, multiMeetingRoomSeq, userSeq, userName } = props
+  const {
+    client,
+    multiMeetingRoomSeq,
+    userSeq,
+    userName,
+    fastclickBody,
+    subscribers,
+  } = props
   const [clickCnt, setClickCnt] = useState(0)
   const [ready, setReady] = useState(false)
   const [pubbed, setPubbed] = useState(false)
@@ -36,11 +43,28 @@ const GameFastClick = (props) => {
     }, 10000)
   }
 
+  const getUserName = useCallback(
+    (seq) => {
+      if (userSeq == seq) {
+        return userName
+      } else {
+        return subscribers.filter((sub) => sub.userSeq == seq)[0].userName
+      }
+    },
+    [subscribers]
+  )
+
   return (
     <div>
       <h1>FastClick</h1>
       <div>
-        {!ready ? (
+        {pubbed ? (
+          fastclickBody ? (
+            <div>패배자는 {getUserName(fastclickBody.loseUserSeq)}</div>
+          ) : (
+            <div>시간이 다 되었습니다.</div>
+          )
+        ) : !ready ? (
           <div>
             <button onClick={onReadyGame}>준비</button>
           </div>
@@ -49,7 +73,6 @@ const GameFastClick = (props) => {
             <button onClick={handleClick}>빠르게 누르세요!</button>
           </div>
         )}
-        {pubbed ? <div>끝</div> : null}
       </div>
     </div>
   )
