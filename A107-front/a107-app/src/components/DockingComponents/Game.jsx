@@ -6,9 +6,10 @@ import GameFastClick from './GameComponents/GameFastClick'
 const Game = (props) => {
   const {
     client,
+    setGameFlag,
+    gameType,
     subscribers,
     multiMeetingRoomSeq,
-    gameType,
     br31MyTurnFlag,
     setBr31MyTurnFlag,
     br31Point,
@@ -103,6 +104,7 @@ const Game = (props) => {
           userName={userName}
         />
       ) : null}
+      <button onClick={()=>{setGameFlag(false)}}>X</button>
     </div>
   )
 }
