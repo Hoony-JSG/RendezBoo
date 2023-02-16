@@ -11,16 +11,10 @@ import { getHeader } from '../modules/Auth/Jwt'
 import Game from './DockingComponents/Game'
 import Docking3Chat from './DockingComponents/Docking3Chat'
 
-const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
+const Docking3WaitingMeeting = ({ multiMeetingRoomSeq, setMultiMeetingRoomSeq }) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
-  // process.env.NODE_ENV === 'production'
-  //   ? 'https://i8a107.p.ssafy.io'
-  //   : 'http://localhost:8080'
 
   const WEBSOCKET_SERVER_URL = 'wss://i8a107.p.ssafy.io'
-  // process.env.NODE_ENV === 'production'
-  //   ? 'wss://i8a107.p.ssafy .io'
-  //   : 'ws://localhost:8080'
 
   const navigate = useNavigate()
   const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
@@ -65,8 +59,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
 
   useEffect(() => {
     window.history.pushState(null, null, window.location.pathname)
-    window.addEventListener('popstate', onMove)
-    window.addEventListener('beforeunload', onMove)
+    window.addEventListener('popstate', leave)
+    window.addEventListener('beforeunload', leave)
     abortController = new AbortController()
 
     connect().then(() => {
@@ -157,14 +151,16 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
           setSession(session)
         })
         .catch((e) => {
+          alert("아마도 UserAlreadyExistFullException 아니면 MultiMeetingRoomAlreadyFullException")
           console.log(e.message)
-          navigate('/docking3')
+          //navigate(-1)
+          setMultiMeetingRoomSeq(null)
         })
     })
     return () => {
-      disconnect()
-      window.removeEventListener('popstate', onMove)
-      window.removeEventListener('unload', onMove)
+      leave()
+      window.removeEventListener('popstate', leave)
+      window.removeEventListener('beforeunload', leave)
     }
   }, [])
 
@@ -284,14 +280,16 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   }
 
   //뒤로가기 버튼 처리
-  const onMove = (e) => {
+  const leave = (e) => {
     e.preventDefault()
     e.returnValue = ''
-    navigate('/rendezboo')
+    disconnect()
+    setMultiMeetingRoomSeq(null)
+    //navigate(-1)
   }
 
   const disconnect = useCallback(async () => {
-    alert('웹소켓 디액티브, openvidu세션 disconnect,방에서 나간다.')
+    alert('disconnect')
     client.current.deactivate()
     if (session) {
       session.disconnect()

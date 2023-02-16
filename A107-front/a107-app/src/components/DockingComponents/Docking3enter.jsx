@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Docking3List from './Docking3List'
 import { ImEnter, ImExit } from 'react-icons/im'
 
-const Docking3Enter = () => {
+const Docking3Enter = ({setMultiMeetingRoomSeq}) => {
   const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
 
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
@@ -35,7 +35,8 @@ const Docking3Enter = () => {
         })
         .then((response) => {
           const multiMeetingRoomSeq = response.data
-          navigate(`/docking3/${multiMeetingRoomSeq}`)
+          setMultiMeetingRoomSeq(multiMeetingRoomSeq)
+          //navigate(`/docking3/${multiMeetingRoomSeq}`)
         })
     }
     setTitle('')
@@ -109,6 +110,7 @@ const Docking3Enter = () => {
           <Docking3List
             docking3room={docking3room}
             key={docking3room.multiMeetingRoomSeq}
+            setMultiMeetingRoomSeq={setMultiMeetingRoomSeq}
           />
         ))}
       </div>
