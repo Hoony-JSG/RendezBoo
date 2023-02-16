@@ -5,7 +5,7 @@ import '../../Styles/RocketItemButtonStyle.css'
 
 const RocketBtn_Same = (props) => {
   const [rocketUser, setRocketUser] = useState({
-    email: 'wjdgnsxhsl@naver.com',
+    email: props.rocketUser.email,
     gender: props.rocketUser.gender,
     phoneNumber: props.rocketUser.phoneNumber,
     name: props.rocketUser.name,

@@ -96,7 +96,7 @@ const RocketItem = (props) => {
         )}
       </div>
 
-      <RocketBtn mbti={props.mbti} ver={ver} rocketUser={props.rocketUser} />
+      <RocketBtn mbti={props.mbti} ver={ver} rocketUser={rocketUser} />
     </div>
   )
 }
