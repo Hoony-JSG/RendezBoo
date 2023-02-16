@@ -53,6 +53,9 @@ const GameTheGameOfDeath = (props) => {
   )
 
   ///////////////////////////////
+  useEffect(() => {
+    setPubbed(true)
+  }, [])
 
   return (
     <div className="TGD_whole-container">

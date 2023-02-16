@@ -24,7 +24,6 @@ const Home = () => {
 
   return (
     <div style={homeDivStyle}>
-      <GameTheGameOfDeath />
       <img src={Logo} alt="Logo" style={{ height: '240px' }} />
       <div style={sclLgnStyle}>
         <NaverLogin />
