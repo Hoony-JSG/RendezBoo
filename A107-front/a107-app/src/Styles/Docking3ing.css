@@ -51,7 +51,11 @@
     padding: 20px;
 }
 
-.game {
+.game-start-btn {
+
+}
+
+.game-modal {
     box-sizing: border-box;
     width: 960px;
     height: 720px;
