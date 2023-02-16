@@ -58,18 +58,22 @@ const Stick = (props) => {
           // ) : (
           //   <div> 매칭에 실패하셨습니다. </div>
           // )
-          <div>선택하셨습니다.</div>
+          <div style={{ fontSize: '2rem' }}>선택하셨습니다.</div>
         )
       ) : (
         <div>
-          <p>상대방을 선택하세요</p>
+          <p style={{ fontSize: '2rem' }}>상대방을 선택하세요</p>
           <div>
             <div>
               {subscribers
                 .filter((sub) => sub.userGender !== userGender)
                 .map((sub, idx) => (
                   <div key={idx}>
-                    <button onClick={pubStick} id={sub.userSeq}>
+                    <button
+                      className={'game-start-btn'}
+                      onClick={pubStick}
+                      id={sub.userSeq}
+                    >
                       {sub.userName}
                     </button>
                   </div>
