@@ -51,11 +51,16 @@
     padding: 20px;
 }
 
+.game-btn-containter {
+    border: 2px solid #FFFFFF;
+}
+
 .game-start-btn {
 
 }
 
 .game-modal {
+    z-index: 20;
     box-sizing: border-box;
     width: 960px;
     height: 720px;
