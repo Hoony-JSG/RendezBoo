@@ -18,24 +18,39 @@ const RocketItem = (props) => {
 
   const [image, setImage] = useState(userprofile)
   useEffect(() => {
-    if (props.profileImagePath) {
+    if (props.profileImagePath && ver !== 'Start') {
       console.log('프사있음')
       setImage(SRC_URL + props.profileImagePath)
+      console.log(props.profileImagePath)
     }
   }, [props.profileImagePath])
+  useEffect(() => {
+    console.log('처음 로딩 이미지 형식 : ')
+    console.log(image)
+    if (props.checkRocket) {
+      // setImage(SRC_URL + props.profileImagePath)
+    }
+  }, [])
 
-  //사진 업로드하면 일로 들어ㅓ옴 (image)
+  //profileImageUploader에서 업로드하면 사진 바꾸는 함수 하면 일로 들어ㅓ옴 (image)
   const changeImage = (image) => {
-    console.log('ProfileImageUploader에서 넘어오는 input에 넣은 : ' + image)
-    console.log(props.checkRocket + '?')
-    setImage(image)
+    console.log('ProfileImageUploader에서 넘어오는 input에 넣은 : ')
+    console.log(image)
+    const blobUrl = URL.createObjectURL(image)
+    setImage(blobUrl)
     props.setTrue(true)
-    props.checkFirst(true)
+    if (props.checkFirst !== undefined) props.checkFirst(true)
     if (props.checkRocket !== undefined) {
       console.log('checkRocket 트루')
-      props.setProfileImage(image)
+      // props.setProfileImage(image)
     }
   }
+
+  useEffect(() => {
+    console.log('이미지 바뀜')
+    console.log(image)
+  }, [image])
+
   console.log('Btn :' + ver)
   return (
     <div

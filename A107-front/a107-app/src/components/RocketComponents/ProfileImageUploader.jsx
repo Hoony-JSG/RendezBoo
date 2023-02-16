@@ -8,7 +8,7 @@ const ProfileImageUploader = (props) => {
     props.setProfileImage(e.target.files[0])
     setNewImage(URL.createObjectURL(e.target.files[0]))
     // props.profileImagePath = newImage;
-    // props.changeImage(newImage)
+    props.changeImage(e.target.files[0])
   }
 
   const imageInput = useRef()
