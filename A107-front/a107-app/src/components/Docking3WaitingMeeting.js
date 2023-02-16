@@ -47,6 +47,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
   const [gameType, setGameType] = useState()
   const [gameCount, setGameCount] = useState(0)
 
+  const [br31MyTurnFlag, setBr31MyTurnFlag] = useState(false)
+  const [br31Point, setBr31Point] = useState(0)
+
+  const [gameofdeathBody, setGameofdeathBody] = useState(false)
+
   //마스크 씌우기
   const [maskPath, setMaskPath] = useState(
     CLOUD_FRONT_URL + 'images/glass-1-mask-1.png'
@@ -83,8 +88,8 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                 {
                   streamManager: subscriber,
                   userSeq: data.userSeq, //다음과 같이 subscrber에 userSeq, gender가 포함되어 있다
-                  gender: data.userGender,
-                  name: data.userName,
+                  userGender: data.userGender,
+                  userName: data.userName,
                 },
               ]
             })
@@ -194,13 +199,33 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             }
           }
           ///////////////////////////////////////GAME: START, GAME, FIN
-          if (type === 'START') {
+          else if (type === 'START') {
             setGameType(json_body.gameType)
             setGameCount((prev) => prev + 1)
             if (gameFlag === false) {
               setGameFlag(true)
             }
+
           }
+          else if(type === 'end'){
+
+          }
+          if(type === 'GAME' || type === 'START'){
+            if(json_body.gameType === 'BR31'){
+              if(json_body.nextUser == userSeq){
+                setBr31MyTurnFlag(true)
+                setBr31Point(json_body.point)
+              }
+            }
+            else if(json_body.gameType === 'GAMEOFDEATH'){
+              setGameofdeathBody(json_body)              
+            }
+            else if(json_body.gameType === 'FASTCLICK'){
+              
+            }
+          }
+          
+
         }
       )
     }
@@ -294,7 +319,7 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
                   // userSeq={2}
                   startFaceAPI={() => {}}
                 />
-                <div>이름 : {sub.userName}</div>
+                <div style={{color:'#FFFFFF'}}>이름 : {sub.userName}</div>
               </div>
             ))}
 
@@ -324,9 +349,11 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
       <div className="side-multi">
         {/*게임 모달*/}
         {gameFlag ? (
-          <div></div>
+          <div className={'game-btn-containter'} >
+            게임 진행중입니다.
+          </div>
         ) : (
-          <div>
+          <div className={'game-btn-containter'} >
             <button
               className="game-start-btn"
               onClick={() => {
@@ -344,6 +371,10 @@ const Docking3WaitingMeeting = ({ multiMeetingRoomSeq }) => {
             gameType={gameType}
             subscribers={subscribers}
             multiMeetingRoomSeq={multiMeetingRoomSeq}
+            br31MyTurnFlag={br31MyTurnFlag}
+            setBr31MyTurnFlag={setBr31MyTurnFlag}
+            br31Point={br31Point}
+            gameofdeathBody={gameofdeathBody}
           />
         ) : null}
       </div>
