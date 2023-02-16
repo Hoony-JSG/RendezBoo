@@ -45,7 +45,7 @@ const Docking3Chat = ({ client, multiMeetingRoomSeq, userSeq, chatList }) => {
       <div className={'signal-selected'}>
         {chatList &&
           chatList.map((chat, index) => (
-            <DockingChatSelectedItem chat={chat} key={index} />
+            <Docking3ChatItem chat={chat} key={index} />
           ))}
       </div>
       <form className={'signal-form'} onSubmit={(e) => sendChat(e, message)}>
