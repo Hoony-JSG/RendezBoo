@@ -170,7 +170,7 @@ const SignalSelected = ({ userSeq, chatRoomSeq }) => {
         }}
       >
         <img
-          src={you.yourpImg || userLogo}
+          src={userLogo}
           onClick={() => navigate(`/rocket/${you.yourSeq}`)}
           style={{ width: '75px', height: '75px' }}
           alt={userSeq}
