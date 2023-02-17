@@ -1,0 +1,147 @@
+.FastClick_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: cent;
+  flex-direction: column;
+}
+/* /////////////////////// */
+.FastClick_fast-click-button-rainbow {
+  --border-radius: 15px;
+  --border-width: 4px;
+  appearance: none;
+  position: relative;
+  border-radius: 15px;
+  background-color: #212121;
+  font-family: 'Roboto', Arial, 'Segoe UI', sans-serif;
+  font-size: 36px;
+  font-weight: 500;
+  color: #ffffffb8;
+  z-index: 2;
+  width: 150px;
+  height: 100px;
+}
+
+.FastClick_fast-click-button-rainbow::after {
+  --m-i: linear-gradient(#000, #000);
+  --m-o: content-box, padding-box;
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: var(--border-width);
+  border-radius: var(--border-radius);
+  background-image: conic-gradient(
+    #488cfb,
+    #29dbbc,
+    #ddf505,
+    #ff9f0e,
+    #e440bb,
+    #655adc,
+    #488cfb
+  );
+  -webkit-mask-image: var(--m-i), var(--m-i);
+  mask-image: var(--m-i), var(--m-i);
+  -webkit-mask-origin: var(--m-o);
+  mask-origin: var(--m-o);
+  -webkit-mask-clip: var(--m-o);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  filter: hue-rotate(0);
+  animation: FastClick_rotate-hue linear 500ms infinite;
+  animation-play-state: paused;
+}
+
+.FastClick_fast-click-button-rainbow:hover::after {
+  animation-play-state: running;
+}
+
+@keyframes FastClick_rotate-hue {
+  to {
+    filter: hue-rotate(1turn);
+  }
+}
+
+.FastClick_fast-click-button-rainbow,
+.FastClick_fast-click-button-rainbow::after {
+  box-sizing: border-box;
+}
+
+.FastClick_fast-click-button-rainbow:active {
+  --border-width: 5px;
+}
+.FastClick_time-out {
+  border: 2px solid white;
+  background: linear-gradient(to bottom, #00000028, #e8000035);
+
+  font-size: 50px;
+  padding: 0.7em;
+  width: fit-content;
+  height: fit-content;
+  margin: 20px;
+}
+.FastClick_loser {
+  margin: 20px;
+  color: rgba(255, 255, 255, 0.757);
+  border: 5px solid rgb(72, 72, 72);
+  background: linear-gradient(to bottom, #a4a3a31c, #00000035);
+  font-size: 40px;
+  font-weight: 800;
+  padding: 0.7em;
+  width: fit-content;
+  height: fit-content;
+}
+/* ///////////////////////// */
+.FastClick_ready-button {
+  margin: 20px;
+  --green: #1bfd9c;
+  font-size: 20px;
+  padding: 0.7em 2.7em;
+  letter-spacing: 0.06em;
+  position: relative;
+  font-family: inherit;
+  border-radius: 0.6em;
+  overflow: hidden;
+  transition: all 0.3s;
+  line-height: 1.4em;
+  border: 2px solid var(--green);
+  background: linear-gradient(
+    to right,
+    rgba(27, 253, 156, 0.1) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(27, 253, 156, 0.1) 100%
+  );
+  color: var(--green);
+  box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.4),
+    0 0 9px 3px rgba(27, 253, 156, 0.1);
+}
+
+.FastClick_ready-button:hover {
+  color: #82ffc9;
+  box-shadow: inset 0 0 10px rgba(27, 253, 156, 0.6),
+    0 0 9px 3px rgba(27, 253, 156, 0.2);
+}
+
+.FastClick_ready-button:before {
+  content: '';
+  position: absolute;
+  left: -4em;
+  width: 4em;
+  height: 100%;
+  top: 0;
+  transition: transform 0.4s ease-in-out;
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    rgba(27, 253, 156, 0.1) 40%,
+    rgba(27, 253, 156, 0.1) 60%,
+    transparent 100%
+  );
+}
+
+.FastClick_ready-button:hover:before {
+  transform: translateX(15em);
+}

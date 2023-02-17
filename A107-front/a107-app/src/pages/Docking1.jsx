@@ -7,7 +7,7 @@ import * as tf from '@tensorflow/tfjs'
 import { FilteredVideo } from '../components/DockingComponents/FilteredVideo'
 import Docking1Chat from '../components/DockingComponents/Docking1Chat'
 import { EmotionComponent } from '../components/DockingComponents/EmotionComponent'
-import '../Styles/Docking1.css'
+import '../Styles/Docking.css'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { getHeader } from '../modules/Auth/Jwt'
@@ -18,12 +18,13 @@ import {
   BsMicMute,
 } from 'react-icons/bs'
 import { ImEnter, ImExit } from 'react-icons/im'
+import { FaHeart, FaHeartBroken } from 'react-icons/fa'
 
 const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io/'
 
 const CLOUD_FRONT_URL = 'https://d156wamfkmlo3m.cloudfront.net/'
 
-const Docking1 = (props) => {
+const Docking1 = () => {
   const minute = 30000
   const REQUEST_HEADER = getHeader()
 
@@ -94,7 +95,6 @@ const Docking1 = (props) => {
     setSession(null)
     setPublisher(null)
     setSubscribers([])
-    // navigate('/')
   }, [session, meetingRoomSeq])
 
   const leaveSessionWithAlert = () => {
@@ -131,7 +131,6 @@ const Docking1 = (props) => {
     session.on('streamCreated', (event) => {
       const subscriber = session.subscribe(event.stream, '')
       const data = JSON.parse(event.stream.connection.data)
-      console.log('here', subscriber)
       setSubscribers((prev) => {
         return [
           ...prev.filter((it) => it.userSeq !== data.userSeq),
@@ -278,10 +277,10 @@ const Docking1 = (props) => {
       { userSeq: userSeq },
       REQUEST_HEADER
     )
-    console.log("mm"+response.data)
+
     setMeetingRoomSeq(response.data.meetingRoomSeq)
     setToken(response.data.token)
-    console.log('Get Token!!!' + token)
+    console.log('Get Token!!! ' + token)
     if (response.status !== 200) {
       alert('매칭 실패!')
     }
@@ -391,15 +390,20 @@ const Docking1 = (props) => {
       disgust: disgustedCnt,
       fear: fearfulCnt,
       happiness: happyCnt,
-      meeting_room_seq: meetingRoomSeq,
+      meetingRoomSeq: meetingRoomSeq,
       neutral: 0,
       sadness: sadCnt,
       surprise: surprisedCnt,
-      user_seq: userSeq,
+      userSeq: userSeq,
     }
 
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/badges/onetoone',
       emotion_body,
       REQUEST_HEADER
     )
@@ -426,15 +430,20 @@ const Docking1 = (props) => {
       disgust: disgustedCnt,
       fear: fearfulCnt,
       happiness: happyCnt,
-      meeting_room_seq: meetingRoomSeq,
+      meetingRoomSeq: meetingRoomSeq,
       neutral: 0,
       sadness: sadCnt,
       surprise: surprisedCnt,
-      user_seq: userSeq,
+      userSeq: userSeq,
     }
 
     await axios.post(
       APPLICATION_SERVER_URL + 'api/emotion/',
+      emotion_body,
+      REQUEST_HEADER
+    )
+    await axios.post(
+      APPLICATION_SERVER_URL + 'api/badges/onetoone',
       emotion_body,
       REQUEST_HEADER
     )
@@ -472,24 +481,20 @@ const Docking1 = (props) => {
 
   return (
     <div className="container">
-      {/* <h1>일대일 매칭 테스트 중</h1> */}
       {session === undefined ? (
-        <div>
-          <div style={{ height: '300px' }}></div>
-          <h1>일대일 미팅</h1>
-          <button className="ready-enter-btn" onClick={joinSession}>
-            <ImEnter />
-            &nbsp;준비 완료
-          </button>
-          <button
-            className="ready-exit-btn"
-            onClick={() => {
-              navigate('/')
-            }}
-          >
-            <ImExit />
-            &nbsp;돌아가기
-          </button>
+        <div className="docking-modal">
+          <h1>1:1 Docking...</h1>
+          <p style={{ fontSize: '1.5rem' }}>1:1 미팅에 입장하시겠습니까?</p>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}>
+            <button className="ready-enter-btn" onClick={joinSession}>
+              <ImEnter />
+              &nbsp;입장하기
+            </button>
+            <button className="ready-exit-btn" onClick={() => {navigate('/rendezboo')}}>
+              <ImExit />
+              &nbsp;돌아가기
+            </button>
+          </div>
         </div>
       ) : null}
       {session !== undefined && !finished ? (
@@ -532,14 +537,14 @@ const Docking1 = (props) => {
               left={'750px'}
             />
             <div className="video-back" style={videoBackStyle}>
-              미팅 준비중입니다.
+              <h1>Waiting for Docking...</h1>
             </div>
             {subscribers.map((sub, idx) => (
               <div key={idx} id="subscriber">
                 <FilteredVideo
                   streamManager={sub.streamManager}
                   maskPath={maskPath}
-                  userSeq={2}
+                  // userSeq={2}
                   startFaceAPI={startFaceAPI}
                 />
               </div>
@@ -551,7 +556,7 @@ const Docking1 = (props) => {
                 <FilteredVideo
                   streamManager={publisher}
                   maskPath={maskPath}
-                  userSeq={userSeq}
+                  // userSeq={userSeq}
                   startFaceAPI={() => {}}
                 />
                 <div className="btn-group">
@@ -560,28 +565,26 @@ const Docking1 = (props) => {
                     onClick={onChangeCameraStatus}
                   >
                     {videoStatus ? <BsCameraVideo /> : <BsCameraVideoOff />}
-                    &nbsp;영상
                   </button>
                   <button className="btn-group-btn" onClick={onChangeMicStatus}>
                     {audioStatus ? <BsMic /> : <BsMicMute />}
-                    &nbsp;마이크
                   </button>
                   <button
                     className="btn-group-btn-exit"
                     onClick={leaveSessionWithAlert}
                   >
-                    <ImExit /> &nbsp;나가기
+                    <ImExit style={{position: 'relative', top: '5px', left: '4px'}}/>
                   </button>
                 </div>
               </div>
             ) : (
               <div className="me">
-                <div className="btn-group">
+                {/* <div className="btn-group">
                   <p>
                     Phase : {phase} , MeetingRoomSeq : {meetingRoomSeq}
                   </p>
                   <button onClick={leaveSessionWithAlert}>나가기</button>
-                </div>
+                </div> */}
               </div>
             )}
             <Docking1Chat
@@ -599,22 +602,23 @@ const Docking1 = (props) => {
       ) : null}
       {finished ? (
         // 미팅 종료 문구
-        <div style={{ fontSize: '3rem' }}>
-          <div style={{ height: '400px' }}></div> 미팅이 종료되었습니다.
-        </div>
+        <h1 style={{marginTop: '300px'}}>Docking Ended!</h1>
       ) : null}
       {phase === 4 && !finished ? (
         // 친구 추가 모달
-        <div id={'final-choice-modal'}>
-          <div style={{ height: '200px' }}></div>
-          <p style={{ fontSize: '2.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
-          <p>{happyCnt}</p>
-          <div>
-            <button className="choice-btn" onClick={choiceYes}>
-              O
+        <div
+          className="docking-modal"
+        >
+          <h1>Docking Complete!</h1>
+          <p style={{ fontSize: '1.5rem' }}>상대방과 친구를 맺으시겠습니까?</p>
+          <div
+            style={{ display: 'flex', flexDirection: 'row', marginTop: '60px' }}
+          >
+            <button className="ready-exit-btn" onClick={choiceYes}>
+              <FaHeart style={{fontSize: '3rem'}}/>
             </button>
-            <button className="choice-btn" onClick={choiceNo}>
-              X
+            <button className="ready-enter-btn" onClick={choiceNo}>
+              <FaHeartBroken style={{fontSize: '3rem'}}/>
             </button>
           </div>
         </div>

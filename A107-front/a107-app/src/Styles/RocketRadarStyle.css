@@ -1,0 +1,76 @@
+.apexcharts-menu-icon {
+  display: none;
+}
+
+.apexcharts-plot-series {
+}
+
+/* #SvgjhPolygon[id^="plygon175"][id$="80"] */
+
+#SvgjsG1191 polygon {
+  fill: none;
+}
+
+.apexcharts-xaxis text.apexcharts-datalabel {
+  fill: white;
+  font-size: 18px;
+  width: fit-content;
+  font-family: 'Gmarket_light' !important;
+  padding-top: 50px;
+}
+
+.apexcharts-xaxis {
+  margin-top: 5px;
+}
+
+#chart {
+  width: 100%;
+  height: 90%;
+}
+
+.apexcharts-yaxis text.apexcharts-text {
+  display: none;
+}
+
+/* rect {
+  fill: rgba(10, 104, 73, 0.382);
+} */
+circle {
+  display: none;
+}
+
+.apexcharts-radar-series polygon {
+  fill: none;
+}
+
+.apexcharts-plot-series {
+  fill: none;
+}
+
+.apexcharts-series path {
+  stroke: rgba(101, 209, 38, 0.657);
+  fill: rgba(10, 104, 73, 0.382);
+  stroke-width: 3px;
+}
+
+.apexcharts-datalabels rect {
+  fill: rgba(0, 0, 0, 0.355);
+  width: 35px;
+  height: 20px;
+  position: relative;
+  display: none;
+}
+.apexcharts-datalabels {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.apexcharts-datalabels text {
+  fill: rgb(255, 255, 255);
+  font-family: 'Gmarket_light' !important;
+  font-size: 15px;
+  background: black;
+}

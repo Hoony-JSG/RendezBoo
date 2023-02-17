@@ -1,0 +1,15 @@
+.navMenuStyle {
+  color: white;
+  text-decoration: none;
+  padding-top: 15px;
+  width: 160px;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  transition: transform 0.1s ease-out;
+}
+
+.navMenuStyle:hover {
+  transform: translateY(-12%);
+}

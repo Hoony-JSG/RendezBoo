@@ -76,7 +76,7 @@
   width: 100%;
   height: 10%;
   background-color: none;
-  transform-origin: center;
+  /* transform-origin: center; */
 }
 
 .JoinGender_gender-select-male::before {
@@ -123,8 +123,8 @@
   width: 160px;
   position: relative;
   height: 70px;
-  border-right: 3px ridge #ea1458;
-  border-left: 3px ridge #ea1458;
+  border-right: 3px ridge #ea14bc;
+  border-left: 3px ridge #ea14bc;
   outline: none;
   border-top: none;
   border-bottom: none;
@@ -164,25 +164,25 @@
 }
 
 .JoinGender_gender-select-female:hover {
-  box-shadow: inset 0px 0px 25px #ea1458;
-  border: 3px ridge #ea1458;
+  box-shadow: inset 0px 0px 25px #ea14bc;
+  border: 3px ridge #ea14bc;
 }
 .clicked-female {
   animation: JoinGender_glowing-female 1s ease-in-out infinite;
-  border: 3px ridge #ea1458;
+  border: 3px ridge #ea14bc;
 }
 
 @keyframes JoinGender_glowing-female {
   0% {
-    box-shadow: inset 0px 0px 40px #ea1458a7;
+    box-shadow: inset 0px 0px 40px #ea14aaae;
     /* background-color: #ea14585d; */
   }
   50% {
-    box-shadow: inset 0px 0px 15px #ea145853;
+    box-shadow: inset 0px 0px 15px #ea14aa64;
     /* background-color: #ea14582e; */
   }
   100% {
-    box-shadow: inset 0px 0px 40px #ea1458a7;
+    box-shadow: inset 0px 0px 40px #ea14aaae;
     /* background-color: #ea14585d; */
   }
 }

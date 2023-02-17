@@ -7,12 +7,9 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-import rootReducer from './modules'
-
 import { CookiesProvider } from 'react-cookie'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistStore } from 'redux-persist'
-// import store from './modules'
 import persistedReducer from './modules'
 import thunk from 'redux-thunk'
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import axios from 'axios'
 import '../../Styles/SignalSelected.css'
 
-const DockingChatSelectedItem = ({ chat }) => {
+const Docking1ChatItem = ({ chat }) => {
   const { message, createdAt, senderSeq } = chat
   const me = useSelector((state) => state.userInfoReducer.userSeq)
   const [you, setYou] = useState({
@@ -17,7 +17,6 @@ const DockingChatSelectedItem = ({ chat }) => {
       axios
         .get('https://i8a107.p.ssafy.io/api/user/' + senderSeq)
         .then((response) => {
-          console.log(response.data)
           setYou({
             yourSeq: senderSeq,
             yourName: response.data.name,
@@ -57,4 +56,4 @@ const DockingChatSelectedItem = ({ chat }) => {
   )
 }
 
-export default DockingChatSelectedItem
+export default Docking1ChatItem

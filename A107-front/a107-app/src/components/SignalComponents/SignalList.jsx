@@ -4,9 +4,7 @@ import userLogo from '../../Images/user-profile.png'
 const SignalList = ({ userSeq, chat }) => {
   const { userFemale, userMale } = chat
   const navigate = useNavigate()
-  const goToPage = (props) => {
-    navigate('/' + props)
-  }
+
   const chatListStyle = {
     width: '100%',
     height: '120px',
@@ -20,16 +18,20 @@ const SignalList = ({ userSeq, chat }) => {
     border: '2px solid #FFFFFF',
     borderRadius: '30px',
     background:
-    'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
+      'linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%)',
     filter:
       'drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25)) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25))',
   }
   return (
-    <div onClick={() => goToPage('signal/' + chat.seq)}>
+    <div
+      onClick={() => {
+        navigate(`/signal/${chat.seq}`)
+      }}
+    >
       {userFemale.seq !== userSeq ? (
         <div style={chatListStyle}>
           <img
-            src={userFemale.profileImagePath || userLogo}
+            src={userLogo}
             style={{ width: '75px', height: '75px' }}
             alt={userFemale.name}
           />
@@ -38,7 +40,7 @@ const SignalList = ({ userSeq, chat }) => {
       ) : (
         <div style={chatListStyle}>
           <img
-            src={userMale.profileImagePath || userLogo}
+            src={userLogo}
             style={{ width: '75px', height: '75px' }}
             alt={userMale.name}
           />

@@ -11,21 +11,17 @@ const Signal = () => {
   
   const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
   const [chatRoom, setChatRoom] = useState([])
-  // const [chatList, setChatList] = useState([])
-
-  useEffect( () => {
+  const getChatRoom = () => {
     axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
       setChatRoom(response.data)
-      console.log(response.data)
+    })
+  }
+
+  useEffect(() => {
+    axios.get('https://i8a107.p.ssafy.io/api/chatroom/'+ userSeq).then((response)=>{
+      setChatRoom(response.data)
     })
   }, [])
-
-  // useEffect( () => {
-  //   axios.get('https://i8a107.p.ssafy.io/api/chat/'+ tmpChatRoomSeq).then((response)=>{
-  //     setChatList(response.data)
-  //     console.log(response.data)
-  //   })
-  // }, [])
 
   const windowStyle = {
     boxSizing: 'border-box',
@@ -47,7 +43,7 @@ const Signal = () => {
   }
   const asideStyle = {
     display: 'flex',
-    width: '35%',
+    width: '480px',
     flexDirection: 'column',
     padding: '10px',
     gap: '20px',
@@ -63,8 +59,8 @@ const Signal = () => {
 
   return (
     <div style={{
-      position: 'relative',
-      left: '140px',
+      display: 'flex',
+      justifyContent: 'center',
       margin: '20px',
     }}>
       <div className="window" style={windowStyle}>
@@ -74,7 +70,8 @@ const Signal = () => {
           <div
             style={{
               display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'column-reverse',
+              justifyContent: 'flex-end',
               gap: '20px',
               width: '100%',
               height: '500px',
@@ -83,14 +80,14 @@ const Signal = () => {
           >
             {chatRoom.length ? 
               (chatRoom.map((chat) => (
-                <SignalList userSeq={userSeq} chat={chat} key={chat.seq} />
+                <SignalList userSeq={userSeq} chat={chat} key={chat.seq}/>
               ))
              ) : (
               <h2>주고받은 시그널이 없습니다.</h2>
             )}
           </div>
         </div>
-        <div style={{ width: '65%', alignSelf: 'center' }}>
+        <div style={{ width: '960px', alignSelf: 'center' }}>
           {tmpChatRoomSeq ? (
             <SignalSelected userSeq={userSeq} chatRoomSeq={tmpChatRoomSeq} />
           ) : (

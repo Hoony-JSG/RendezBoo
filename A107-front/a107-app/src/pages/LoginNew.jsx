@@ -1,27 +1,22 @@
-import { setRefreshToken, removeToken } from '../modules/Auth/Jwt'
+import { setRefreshToken } from '../modules/Auth/Jwt'
 import React, { useState } from 'react'
-import { SET_TOKEN, REMOVE_TOKEN } from '../containers/JwtContainer'
-import {
-  SET_USER_INFO,
-  REMOVE_USER_INFO,
-} from '../containers/UserInfoContainer'
+import { SET_TOKEN } from '../containers/JwtContainer'
+import { SET_USER_INFO } from '../containers/UserInfoContainer'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router'
+import ArrowComponent from '../components/DockingComponents/GameComponents/ArrowComponent'
 
 const LoginNew = () => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userSeq, setUserSeq] = useState('')
   const [userName, setUserName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
 
-  const APPLICATION_SERVER_URL = 
-    process.env.NODE_ENV === 'production'
-      ? 'https://i8a107.p.ssafy.io'
-      : 'http://localhost:8080'
+  const LOCAL_SERVER_URL = 'http://localhost:8080'
+  const APPLICATION_SERVER_URL = 'https://i8a107.p.ssafy.io'
 
   const dispatch = useDispatch()
   const accessToken = useSelector(
@@ -34,42 +29,54 @@ const LoginNew = () => {
     event.preventDefault()
 
     try {
-      const response = await axios.post(`${APPLICATION_SERVER_URL}/api/user/login`, {
+      const response = await axios.post(`${LOCAL_SERVER_URL}/api/user/login`, {
         email: email,
         password: password,
       })
 
-      console.log(response)
       setRefreshToken(response.data.refreshToken)
 
       const decode = jwtDecode(response.data.accessToken)
-      console.log(12)
-      console.log(decode)
       dispatch(SET_USER_INFO(decode))
       dispatch(SET_TOKEN(response.data.accessToken))
 
-      // setIsLoggedIn(true);
       setUserName(decode.name)
       setUserSeq(decode.seq)
       setEmail(decode.email)
 
       navigate('/')
-      // setUserSeq()
     } catch (error) {
       setError(error.message)
     }
   }
 
-  // const logout = () => {
-  //   // const { accessToken } = selector(state => state.accessToken)
-  //   // console.log(selector(state => state.accessTokenReducer.accessToken))
+  const serverLogin = async (event) => {
+    event.preventDefault()
 
-  //   removeToken()
-  //   dispatch(REMOVE_TOKEN())
-  //   // dispatch(REMOVE_USER_INFO())
+    try {
+      const response = await axios.post(
+        `${APPLICATION_SERVER_URL}/api/user/login`,
+        {
+          email: email,
+          password: password,
+        }
+      )
 
-  //   setIsLoggedIn(false);
-  // };
+      setRefreshToken(response.data.refreshToken)
+
+      const decode = jwtDecode(response.data.accessToken)
+      dispatch(SET_USER_INFO(decode))
+      dispatch(SET_TOKEN(response.data.accessToken))
+
+      setUserName(decode.name)
+      setUserSeq(decode.seq)
+      setEmail(decode.email)
+
+      navigate('/rendezboo')
+    } catch (error) {
+      setError(error.message)
+    }
+  }
 
   return (
     <div>
@@ -93,8 +100,9 @@ const LoginNew = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type="submit">Login</button>
+        <button type="submit">로컬로 로그인</button>
       </form>
+      <button onClick={serverLogin}>서버로 로그인</button>
     </div>
   )
 }
