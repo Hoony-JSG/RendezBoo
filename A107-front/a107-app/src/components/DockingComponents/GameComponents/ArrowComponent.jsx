@@ -50,12 +50,14 @@ const ArrowComponent = (props) => {
     border: 'grey solid 2px',
     borderRadius: '10px',
     padding: '5px',
+    fontSize: '2rem',
   }
   const pointStyle = {
     position: 'absolute',
     width: '1px',
     height: '1px',
     padding: '0px',
+    fontSize: '2rem',
   }
   return (
     <div>
