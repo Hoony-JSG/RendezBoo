@@ -1,3 +1,6 @@
+NAVER_CLIENT_SECRET: "3uChno1v8b"
+KAKAO_CLIENT_SECRET: "DGuf0uZuIjHSWb144JPJNsPBfxsSKJVD"
+
 spring:
   profiles:
     active: local
@@ -16,7 +19,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     generate-ddl: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
@@ -45,15 +48,24 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 jwt:
   header: Authorization
-  secret: rendez-boo-secret-key-needs-very-long-secret-key-for-safety
+  secret: rendezboosecretkeyneedsverylongsecretkeyforsafety
   access-token-validity-milliseconds: 1800000
-  refresh-token-validity-milliseconds: 259200000
+  refresh-token-validity-milliseconds: 604800000
 
 openvidu:
-  url: http://localhost:4443/
-  secret: MY_SECRET
+  #  url: http://i8a107.p.ssafy.io:4443/
+  url: https://52.78.60.53:4443/
+  secret: thisisrendezbooopenviduserversecretkey
+#openvidu:
+#  url: http://localhost:4443/
+#  secret: MY_SECRET
 
 logging:
   level:
@@ -86,10 +98,6 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
     open-in-view: true
 
   redis:
@@ -98,8 +106,8 @@ spring:
         max-active: 5
         max-idle: 5
         min-idle: 2
-      host: redis
-      port: 6379
+    host: redis
+    port: 6379
 
   data:
     mongodb:
@@ -114,14 +122,20 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
 jwt:
   header: Authorization
   secret: rendez-boo-secret-key-needs-very-long-secret-key-for-safety
   access-token-validity-milliseconds: 1800000
-  refresh-token-validity-milliseconds: 259200000
+  refresh-token-validity-milliseconds: 604800000
 
+#https로 요청 보내야함(http로 요청보낼시 https로 리다이렉트하고 301응답함)
 openvidu:
-  url: http://openvidu-openvidu-server-1:4443/
+  url: https://52.78.60.53:4443/
   secret: thisisrendezbooopenviduserversecretkey
 
 cloud:
@@ -133,3 +147,4 @@ cloud:
     stack:
       auto: false
     cloudfront: http://d156wamfkmlo3m.cloudfront.net/images/
+

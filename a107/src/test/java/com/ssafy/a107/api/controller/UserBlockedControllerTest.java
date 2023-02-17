@@ -1,5 +1,6 @@
 package com.ssafy.a107.api.controller;
 
+import com.ssafy.a107.common.exception.NotFoundException;
 import com.ssafy.a107.db.entity.User;
 import com.ssafy.a107.db.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -21,7 +22,7 @@ class UserBlockedControllerTest {
     UserRepository userRepository;
 
     @Test
-    void createBlockedUser() {
+    void createBlockedUser() throws NotFoundException {
 
         User userMe = User.builder()
                 .email("test@test.com")
@@ -31,7 +32,7 @@ class UserBlockedControllerTest {
                 .phoneNumber("01012341234")
                 .name("홍길동")
                 .profileImagePath("abc.jpg")
-                .MBTI("ENTJ")
+                .mbti("ENTJ")
                 .point(1000L)
                 .build();
 
@@ -45,7 +46,7 @@ class UserBlockedControllerTest {
                 .phoneNumber("01012341234")
                 .name("홍길동")
                 .profileImagePath("abc.jpg")
-                .MBTI("ENTJ")
+                .mbti("ENTJ")
                 .point(1000L)
                 .build();
 

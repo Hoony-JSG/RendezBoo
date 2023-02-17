@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+@font-face {
+  font-family: "KIMM_light";
+  src: url("../src/static/한국기계연구원_Light.ttf");
+}
+
+@font-face {
+  font-family: "KIMM_bold";
+  src: url("../src/static/한국기계연구원_bold.ttf");
+}
+
+@font-face {
+  font-family: "Gmarket_bold";
+  src: url("../src/static/GmarketSansBold.otf");
+}
+
+@font-face {
+  font-family: "Gmarket_medium";
+  src: url("../src/static/GmarketSansMedium.otf");
+}
+
+@font-face {
+  font-family: "Gmarket_light";
+  src: url("../src/static/GmarketSansLight.otf");
+}

@@ -10,6 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class BadgeCreateReq {
     private String name;
+    private String description;
     private MultipartFile image;
-
 }

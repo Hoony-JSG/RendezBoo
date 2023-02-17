@@ -1,0 +1,39 @@
+.next-page-button {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 40px;
+  border: 1px solid white;
+  font-size: 16px;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+  height: fit-content;
+}
+
+.next-page-button:hover {
+  background-color: rgba(255, 255, 255, 0.097);
+  background-size: 200% auto;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.097) 0%,
+    rgba(255, 255, 255, 0.097) 51%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  transition: background-color 0.3s ease-in-out;
+}
+
+.next-page-button:active {
+  background-color: rgba(255, 255, 255, 0.097);
+}
+
+.next-page-button:disabled {
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.next-page-icon {
+  margin-right: 10px;
+}

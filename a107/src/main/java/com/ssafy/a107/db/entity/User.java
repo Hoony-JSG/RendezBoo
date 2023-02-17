@@ -7,8 +7,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -16,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Column(nullable = false, length = 40)
     private String email;
@@ -26,6 +28,9 @@ public class User extends BaseEntity{
 
     @Column(nullable = false, length = 20)
     private String city;
+
+    @Column(nullable = false)
+    private Date birthday;
 
     /**
      * 남자: 1 여자: 0
@@ -48,6 +53,12 @@ public class User extends BaseEntity{
     @Column
     private Long point;
 
+    @Column(nullable = false)
+    private Boolean isValid = true;
+
+    @Column(nullable = false)
+    private Boolean isAdmin = false;
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -56,10 +67,36 @@ public class User extends BaseEntity{
     @Column
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch =FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = ALL)
     @JoinColumn(name = "badge_seq")
     private Badge badge;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<UserInterest> userInterests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Authority> authorities = new HashSet<>();
+
+    public void deleteUser() {
+        isValid = false;
+    }
+
+    public void addAuthority(Authority authority) {
+        authorities.add(authority);
+    }
+
+    public List<String> getRoles() {
+        return authorities.stream()
+                .map(Authority::getRole)
+                .collect(Collectors.toList());
+    }
+
+    public void addPoint(Long point) {
+        this.point += point;
+    }
+
+    public void updateProfileImage(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
 }

@@ -18,28 +18,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/emotion")
 @RequiredArgsConstructor
 public class EmotionDataController {
+
     private final EmotionDataService emotionDataService;
+
     @PostMapping("/")
     @ApiOperation(value="유저가 유발한 감정 저장", notes = "RequestBody로 매 1:1미팅에서의 유저가 유발한 감정을 반영한다")
-    public ResponseEntity<?> save(@RequestBody EmotionDataReq req){
-        try{
-            Long result = emotionDataService.addExpressionData(req);
-            return ResponseEntity.status(HttpStatus.CREATED).body(result);
-        } catch(NotFoundException e){
-            log.info(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-
+    public ResponseEntity<Long> save(@RequestBody EmotionDataReq req) throws NotFoundException {
+        Long result = emotionDataService.addExpressionData(req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
     @GetMapping("/{userSeq}")
     @ApiOperation(value="유저 감정 조회", notes="유저가 유발한 평균적인 감정을 제공한다.")
-    public ResponseEntity<?> getUserEmotion(@PathVariable Long userSeq){
-        try{
-                EmotionDataRes result = emotionDataService.getAvgExpressionDataByUserSeq(userSeq);
+    public ResponseEntity<EmotionDataRes> getUserEmotion(@PathVariable Long userSeq) throws NotFoundException {
+        EmotionDataRes result = emotionDataService.getAvgExpressionDataByUserSeq(userSeq);
         return ResponseEntity.status(HttpStatus.OK).body(result);
-        } catch(NotFoundException e){
-            log.info(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
     }
 }

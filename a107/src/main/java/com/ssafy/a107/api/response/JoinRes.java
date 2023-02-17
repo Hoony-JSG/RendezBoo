@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class JoinRes {
 
-    private Boolean gender;
     private String email;
-    private String phoneNumber;
-    private String name;
+    private Integer type; // 0 - 네이버, 1 - 카카오
 }

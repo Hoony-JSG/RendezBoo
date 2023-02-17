@@ -7,7 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface UserFriendRepository extends JpaRepository<UserFriend, Long> {
 
+//    @Modifying
+//    @Transactional
+//    void deleteByUserSeqAndFriendSeq(Long userSeq, Long friendSeq);
+    boolean existsByUserMaleSeqAndUserFemaleSeq(Long userMaleSeq, Long userFemaleSeq);
+
+    UserFriend findByUserMaleSeqAndUserFemaleSeq(Long userMaleSeq, Long userFemaleSeq);
+
     @Modifying
     @Transactional
-    void deleteByUserSeqAndFriendSeq(Long userSeq, Long friendSeq);
+    void deleteByUserMaleSeqAndUserFemaleSeq(Long userMaleSeq, Long userFemaleSeq);
 }

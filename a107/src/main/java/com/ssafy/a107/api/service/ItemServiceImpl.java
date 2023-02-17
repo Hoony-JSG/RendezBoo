@@ -13,6 +13,7 @@ import com.ssafy.a107.db.repository.UserItemRepository;
 import com.ssafy.a107.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,22 +29,21 @@ public class ItemServiceImpl implements ItemService {
     private final S3Uploader s3Uploader;
 
     @Override
-    public List<ItemRes> getItemByUserSeq(Long userSeq) {
-        List<Item> itemList = itemRepository.findItemsByUserSeq(userSeq);
-        List<ItemRes> itemResList = itemList.stream()
-                .map(item -> new ItemRes(item))
+    public List<ItemRes> getItemByUserSeq(Long userSeq) throws NotFoundException{
+        if(!userRepository.existsById(userSeq)) throw new NotFoundException("Wrong user seq!");
+        return itemRepository.findItemsByUserSeq(userSeq).stream()
+                .map(ItemRes::new)
                 .collect(Collectors.toList());
-
-        return itemResList;
     }
 
+    @Transactional
     @Override
     public void createUserItem(UserItemReq userItemReq) throws NotFoundException {
         UserItem userItem = UserItem.builder()
                 .user(userRepository.findById(userItemReq.getUserSeq())
-                        .orElseThrow(() -> new NotFoundException("Wrong User Seq!")))
+                        .orElseThrow(() -> new NotFoundException("Invalid user sequence!")))
                 .item(itemRepository.findById(userItemReq.getItemSeq())
-                        .orElseThrow(() -> new NotFoundException("Wrong Item Seq!")))
+                        .orElseThrow(() -> new NotFoundException("Invalid item sequence!")))
                 .build();
 
         userItemRepository.save(userItem);
@@ -51,14 +51,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemRes> getAllItems() {
-        List<Item> itemList = itemRepository.findAll();
-        List<ItemRes> itemResList = itemList.stream()
-                .map(item -> new ItemRes(item))
+        return itemRepository.findAll().stream()
+                .map(ItemRes::new)
                 .collect(Collectors.toList());
-
-        return itemResList;
     }
 
+    @Transactional
     @Override
     public Long createItem(ItemCreateReq itemCreateReq) throws IOException {
         String url = s3Uploader.upload(itemCreateReq.getImage(), "images");
@@ -72,19 +70,22 @@ public class ItemServiceImpl implements ItemService {
         return item.getSeq();
     }
 
+    @Transactional
     @Override
     public Long updateItem(ItemUpdateReq itemUpdateReq) throws NotFoundException, IOException {
         String url = s3Uploader.upload(itemUpdateReq.getImage(), "images");
         Item item = itemRepository.findById(itemUpdateReq.getSeq())
-                .orElseThrow(() -> new NotFoundException("Wrong Item Seq!"));
+                .orElseThrow(() -> new NotFoundException("Invalid item sequence!"));
 
         item.update(itemUpdateReq.getName(), url);
         itemRepository.save(item);
         return item.getSeq();
     }
 
+    @Transactional
     @Override
-    public void deleteItem(Long itemSeq) {
+    public void deleteItem(Long itemSeq) throws NotFoundException{
+        if(!itemRepository.existsById(itemSeq)) throw new NotFoundException("Invalid Item sequence!");
         itemRepository.deleteById(itemSeq);
     }
 }

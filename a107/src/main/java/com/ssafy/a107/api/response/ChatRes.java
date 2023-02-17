@@ -5,17 +5,18 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@RequiredArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ChatRes {
 
-    private final String Seq;
-    private final String message;
-    private final Long chatRoomSeq;
-    private final Long senderSeq;
-    private final Long receiverSeq;
-    private final LocalDateTime createdAt;
+    private String Seq;
+    private String message;
+    private Long chatRoomSeq;
+    private Long senderSeq;
+    private Long receiverSeq;
+    private LocalDateTime createdAt;
 
     @Builder
     public ChatRes(Chat chat) {

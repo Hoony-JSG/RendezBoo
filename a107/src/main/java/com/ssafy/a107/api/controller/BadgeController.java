@@ -1,14 +1,12 @@
 package com.ssafy.a107.api.controller;
 
-import com.ssafy.a107.api.request.BadgeCreateReq;
-import com.ssafy.a107.api.request.BadgeUpdateReq;
-import com.ssafy.a107.api.request.UserBadgeReq;
+import com.ssafy.a107.api.request.*;
+import com.ssafy.a107.api.response.BadgeCheckRes;
 import com.ssafy.a107.api.response.BadgeRes;
 import com.ssafy.a107.api.service.BadgeService;
 import com.ssafy.a107.common.exception.NotFoundException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,72 +18,87 @@ import java.util.List;
 @Api(value = "뱃지 API", tags = {"Badge"})
 @RestController
 @RequestMapping("/api/badges")
+@RequiredArgsConstructor
 public class BadgeController {
-    BadgeService badgeService;
 
-    @Autowired
-    public BadgeController(BadgeService badgeService) {
-        this.badgeService = badgeService;
-    }
+    private final BadgeService badgeService;
 
     @GetMapping()
     @ApiOperation(value = "전체 뱃지 리스트 조회")
-    public ResponseEntity<?> getAllBadgeList() {
-        List<BadgeRes> badges = badgeService.getAllBadges();
-        if (badges == null || badges.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
+    public ResponseEntity<List<BadgeRes>> getAllBadgeList() {
         return ResponseEntity.status(HttpStatus.OK).body(badgeService.getAllBadges());
     }
 
     @GetMapping("/{userSeq}")
     @ApiOperation(value = "특정 유저의 뱃지 리스트 조회", notes = "유저 시퀀스로 뱃지 리스트 제공")
-    public ResponseEntity<?> getBadgeListByUserSeq(@PathVariable Long userSeq) throws NotFoundException{
+    public ResponseEntity<List<BadgeRes>> getBadgeListByUserSeq(@PathVariable Long userSeq) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(badgeService.getBadgeByUserSeq(userSeq));
     }
 
     @PostMapping("/{userSeq}")
     @ApiOperation(value = "특정 유저에게 뱃지를 생성함")
-    public ResponseEntity<?> addBadgeToUser(@PathVariable Long userSeq, @RequestBody UserBadgeReq userBadgeReq) {
-        try {
-            badgeService.createUserBadge(userBadgeReq);
-            return ResponseEntity.status(HttpStatus.CREATED).body(null);
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<String> addBadgeToUser(@PathVariable Long userSeq, @RequestBody UserBadgeReq userBadgeReq) throws NotFoundException{
+        badgeService.createUserBadge(userBadgeReq);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Badge " + userBadgeReq.getBadgeSeq() + "has been added to User " + userSeq);
     }
 
     @PostMapping()
     @ApiOperation("새로운 뱃지 생성 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> createBadge(@RequestPart MultipartFile multipartFile, @RequestParam String name) {
-        BadgeCreateReq badgeCreateReq = new BadgeCreateReq(name, multipartFile);
-        try {
-            badgeService.createBadge(badgeCreateReq);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IOException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: 'Image Upload Fail'}");
-        }
+    public ResponseEntity<Long> createBadge(@RequestPart MultipartFile multipartFile, @RequestParam String name, @RequestParam String description) throws IOException{
+        Long createdSeq = badgeService.createBadge(BadgeCreateReq.builder()
+                .image(multipartFile)
+                .name(name)
+                .description(description)
+                .build());
 
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSeq);
     }
 
     @PutMapping("/{badgeSeq}")
     @ApiOperation("뱃지 업데이트 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> updateBadge(@PathVariable Long badgeSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name) {
-        BadgeUpdateReq badgeUpdateReq = new BadgeUpdateReq(badgeSeq, name, multipartFile);
-        try {
-            badgeService.updateBadge(badgeUpdateReq);
-            return ResponseEntity.status(HttpStatus.CREATED).body(null);
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (IOException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{ msg: 'Image Upload Fail'}");
-        }
+    public ResponseEntity<Long> updateBadge(@PathVariable Long badgeSeq, @RequestPart MultipartFile multipartFile, @RequestParam String name, @RequestParam String description) throws NotFoundException, IOException{
+        Long updatedSeq = badgeService.updateBadge(BadgeUpdateReq.builder()
+                .seq(badgeSeq)
+                .image(multipartFile)
+                .name(name)
+                .description(description)
+                .build());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedSeq);
     }
 
     @DeleteMapping("/{badgeSeq}")
     @ApiOperation("뱃지 삭제 - 관리자만 사용가능 해야함")
-    public ResponseEntity<?> deleteBadge(@PathVariable Long badgeSeq) {
+    public ResponseEntity<Long> deleteBadge(@PathVariable Long badgeSeq) throws NotFoundException {
         badgeService.deleteBadge(badgeSeq);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(badgeSeq);
     }
+
+    @PostMapping("/onetoone")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 일대일 미팅 종료시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeOneToOne(@RequestBody EmotionDataReq emotionDataReq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeOneToOne(emotionDataReq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+    }
+
+    @PostMapping("/manytomany/{userSeq}")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 다대다 미팅 종료시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeManyToMany(@PathVariable Long userSeq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeManyToMany(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+    }
+
+    @PostMapping("/item/{userSeq}")
+    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인 - 아이템 구매시")
+    public ResponseEntity<BadgeCheckRes> checkBadgeItem(@PathVariable Long userSeq) throws NotFoundException {
+        BadgeCheckRes badgeCheckRes = badgeService.checkBadgeItem(userSeq);
+        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+    }
+
+//    @PostMapping("/check/{userSeq}")
+//    @ApiOperation("유저가 뱃지 획득 조건을 만족하는지 확인")
+//    public ResponseEntity<?> checkBadge(@PathVariable Long userSeq, @RequestBody BadgeCheckReq badgeCheckReq) throws NotFoundException {
+//        BadgeCheckRes badgeCheckRes = badgeService.checkBadge(userSeq, badgeCheckReq);
+//        return ResponseEntity.status(HttpStatus.OK).body(badgeCheckRes);
+//    }
 }
