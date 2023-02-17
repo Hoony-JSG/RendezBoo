@@ -35,25 +35,16 @@ const Rocket = () => {
     userInterests: [],
   })
 
-  // const [profileImage, setProfileImage] = useState('')
   const chekcSetProfileImage = (inputFile) => {
-    // setProfileImage(inputFile.name)
-    console.log('체크 셋 프로필 이미지')
-    console.log(inputFile.name)
     if (window.confirm('업로드 하시겠습니까?')) {
       changeProfileImage(inputFile)
     }
   }
-  // const setNewProfile = (file) => {
-  //   console.log('Rocket페이지에서 사진 setNewProfile : ' + file)
-  //   changeProfileImage(setProfileImage)
-  // }
+
 
   const changeProfileImage = async (profileImage) => {
     const formData = new FormData()
     formData.append('file', profileImage)
-    console.log('변경할 파일 전체: ')
-    console.log(profileImage)
     try {
       axios({
         method: 'post',
@@ -63,23 +54,11 @@ const Rocket = () => {
         data: formData,
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      console.log('프로필 이미지 변경 성공')
     } catch (error) {
-      console.log('프로필 이미지 변경 에러')
       console.error(error)
     }
   }
   const [first, setFirst] = useState(false)
-
-  // useEffect(() => {
-  //   if (first === true) {
-  //     console.log('지금 보는 곳')
-  //     console.log(profileImage)
-  //     if (window.confirm('이미지 업로드?')) {
-  //       changeProfileImage(profileImage)
-  //     }
-  //   }
-  // }, [profileImage])
 
   const [rocketUserEmotion, setRocketUserEmotion] = useState({
     anger: 0,
@@ -136,9 +115,6 @@ const Rocket = () => {
   return (
     <div className="bottom-nav-page">
       <div className="Rocket_container">
-        {/* <div className="Rocket_title">
-          <span>{rocketUser.name}'s License</span>
-        </div> */}
         <div className="Rocket_rocketitem-whole-box">
           <div className="Rocket_rocketitem-right-box">
             <div className="Rocket_rocketitem-right-top-box">

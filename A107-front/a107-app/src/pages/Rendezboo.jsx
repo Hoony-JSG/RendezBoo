@@ -42,7 +42,6 @@ const Rendezboo = () => {
       })
   }, [])
 
-  console.log('랑데부 페이지')
   const navigate = useNavigate()
 
   const MeAndYou = {
@@ -53,7 +52,6 @@ const Rendezboo = () => {
     ver: '',
   }
 
-  // ??????????????????????????????
   return (
     <div className="RendezBoo_whole-container">
       <div className="Contents">
@@ -63,7 +61,7 @@ const Rendezboo = () => {
               className="RendezBoo_rocket-img"
               src={rocketImg}
               alt="rocketImg"
-            ></img>
+              ></img>
           </div>
           <div className="rocketItemSizeStyle">
             <RocketItem
