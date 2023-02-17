@@ -71,9 +71,27 @@
 
 ### 3대3 미팅
 
+![3대3방목록](https://user-images.githubusercontent.com/109324637/219396162-68171c62-4f91-45eb-b5ff-5dacf47969b8.PNG)
+
 ![3대3대기방](https://user-images.githubusercontent.com/109324637/219396059-3f85128b-d3dd-40e0-8afb-8e0ba0f52b8f.PNG)
 
-![3대3방목록](https://user-images.githubusercontent.com/109324637/219396162-68171c62-4f91-45eb-b5ff-5dacf47969b8.PNG)
+![3대3미팅시작](https://user-images.githubusercontent.com/109324637/219528295-98215273-a76d-4374-ba24-ce36e12ddea4.PNG)
+
+![3대3미팅게임목록](https://user-images.githubusercontent.com/109324637/219528342-6a7e3669-42d8-4e42-82c6-075e39d93d9c.PNG)
+
+![3대3미팅br31](https://user-images.githubusercontent.com/109324637/219528380-0cf08dbc-33c9-41a6-88cb-88026bc76e96.PNG)
+
+![3대3더게임오브데스](https://user-images.githubusercontent.com/109324637/219528430-6cedf28b-773a-42d2-9a69-42b96cfd26cd.PNG)
+
+![3대3fastclick](https://user-images.githubusercontent.com/109324637/219528479-7a11338a-bfa7-42a6-b42e-40ae13c07a8e.PNG)
+
+![3대3fastclick시작](https://user-images.githubusercontent.com/109324637/219528526-a5c1ff51-7b56-443f-a252-bc0dd9ffc7bf.PNG)
+
+![사랑의작대기](https://user-images.githubusercontent.com/109324637/219529010-90908057-e152-4f10-af96-3ebc7d3e987f.png)
+
+![사랑의작대기선택](https://user-images.githubusercontent.com/109324637/219529090-9b8ca502-21c1-4b9f-8103-a27503f17f3a.PNG)
+
+![사랑의작대기결과](https://user-images.githubusercontent.com/109324637/219529146-38685601-ca99-4875-a5b7-bf31c0fb3c8b.PNG)
 
 
 ### 채팅
@@ -130,7 +148,6 @@
 - OpenVidu API 설정 및 적용
 - Frontend 3대3 미팅방 구현
      
-> 회고가 들어갈 자리
 
 ✔ 김명준 
 - Backend Entity 및 API 구현
@@ -141,17 +158,18 @@
 - FaceAPI를 활용한 감정인식 설정 및 적용
 - Frontend 1대1 미팅방 구현
      
-> 회고가 들어갈 자리
 
 ✔ 안예나 
 - Figma를 활용한 Prototype 제작
-- Frontend 
-- Frontend 
-- Frontend  
+- 서비스 화면 컨셉 구현
+- 서비스 대표 로고 제작
+- Frontend 화상 서비스 시각적 요소 구성
+- Frontend Websocket 활용 요소 시각화
+- Frontend 미팅 룸 구분 요소 구성 및 구현
+- 서비스 시작 페이지, 화상미팅 서비스 페이지, 메신저 페이지 디자인
 - 프로젝트 기록 정리
 - UCC 제작
      
-> 회고가 들어갈 자리
 
 ✔ 유선준 
 - Backend Entity 및 API 구현
@@ -163,7 +181,6 @@
 - 산출물 문서화
 - 프로젝트 발표
      
-> 회고가 들어갈 자리
 
 ✔ 이재원 
 - Backend Entity 및 API 구현
@@ -173,13 +190,16 @@
 - Backend JWT 발급 및 인증 로직 구성 및 적용
 - 소셜 로그인 설정 및 적용
      
-> 회고가 들어갈 자리
 
 ✔ 정훈 
 - Figma를 활용한 Prototype 제작
-- Frontend 
-- Frontend 
-- Frontend  
+- Frontend 서비스 화면 컨셉 구현
+- 페이지 에니메이션 요소 구현
+- Frontend 소셜 로그인 프론트엔드 요소 구현
+- Frontend 휴대폰 인증 프론트엔드 요소 구현
+- Frontend 미팅용 게임 디자인 적용
+- Frontend 이용자 통계 요소 시각화 및 디자인
+- 페이지 구분 요소 구성 및 구현
+- 회원가입 페이지, 회원정보 페이지, 메인 페이지 디자인 
 
      
-> 회고가 들어갈 자리
