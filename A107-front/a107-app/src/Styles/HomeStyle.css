@@ -1,0 +1,35 @@
+.planet {
+  position: relative;
+  width: 300px; /* adjust as needed */
+  height: 300px; /* adjust as needed */
+}
+
+.astronaut {
+  position: absolute;
+}
+
+.astronaut-1 {
+  animation: orbit-1 10s linear infinite;
+}
+
+.astronaut-2 {
+  animation: orbit-2 10s linear infinite;
+}
+
+@keyframes orbit-1 {
+  0% {
+    transform: rotate(0deg) translateX(120px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(120px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-2 {
+  0% {
+    transform: rotate(0deg) translateX(-120px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(-120px) rotate(360deg);
+  }
+}

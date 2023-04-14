@@ -1,0 +1,75 @@
+.spaceship {
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.spaceship__body {
+  width: 80%;
+  height: 80%;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spaceship__cockpit {
+  width: 20%;
+  height: 20%;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.spaceship__wings {
+  width: 100%;
+  height: 20%;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 70%;
+}
+
+.spaceship:hover .spaceship__wings {
+  height: 40%;
+}
+
+.spaceship__wings::before,
+.spaceship__wings::after {
+  content: '';
+  display: block;
+  width: 10%;
+  height: 100%;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+}
+
+.spaceship__wings::before {
+  left: 20%;
+}
+
+.spaceship__wings::after {
+  right: 20%;
+}
+
+.spaceship__wings:hover::before,
+.spaceship__wings:hover::after {
+  height: 50%;
+}
+
+.spaceship__wings:hover::before {
+  transform: translateY(-25%);
+  transition: height 0.5s ease-in-out;
+}
+
+.spaceship__wings:hover::after {
+  transform: translateY(25%);
+  transition: height 0.5s ease-in-out;
+}

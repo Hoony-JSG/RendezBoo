@@ -7,17 +7,32 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
-import rootReducer from './modules'
+import { CookiesProvider } from 'react-cookie'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+import persistedReducer from './modules'
+import thunk from 'redux-thunk'
 
-const store = configureStore({ reducer: rootReducer }, composeWithDevTools())
+const store = configureStore({ 
+  reducer: persistedReducer,
+  middleware: [thunk] 
+}, composeWithDevTools())
+
+
+const persistor = persistStore(store)
 
 ReactDOM.render(
   //   <React.StrictMode>
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <CookiesProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+      </PersistGate>
+    </Provider>
+  </CookiesProvider>,
+
   //   </React.StrictMode>,
   document.getElementById('root')
 )

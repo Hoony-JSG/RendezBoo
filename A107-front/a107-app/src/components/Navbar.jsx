@@ -1,8 +1,16 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import logo from '../logo.png'
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import logoColor from '../logo_color.png'
+import logoWhite from '../logo_white.png'
+import { useSelector } from 'react-redux'
+
+import '../Styles/NavbarStyle.css'
 
 const Navbar = () => {
+  const navigate = useNavigate()
+  const userSeq = useSelector((state) => state.userInfoReducer.userSeq)
+  const [logo, setLogo] = useState(logoColor)
+
   const navStyle = {
     position: 'absolute fixed',
     top: 0,
@@ -26,38 +34,41 @@ const Navbar = () => {
   }
 
   const logoStyle = {
-    height: 'inherit',
+    height: '60%',
+    transition: 'all easy-in-out 0.5s',
   }
 
   return (
     <nav style={navStyle}>
       <div style={divStyle}>
-        <NavLink to="/" style={{ color: 'white', textDecoration: 'none' }}>
+        <NavLink to="/rendezboo" className="navMenuStyle">
           Rendezboo
         </NavLink>
       </div>
       <div style={divStyle}>
-        <NavLink
-          to="/signal"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
+        <NavLink to="/signal" className="navMenuStyle">
           Signal
         </NavLink>
       </div>
       <div style={divStyle}>
-        <img src={logo} className="Main-logo" alt="logo" style={logoStyle} />
+        <img
+          src={logo}
+          className="Main-logo"
+          alt="logo"
+          style={logoStyle}
+          onClick={() => navigate('/rendezboo')}
+          onMouseOverCapture={() => setLogo(logoWhite)}
+          onMouseOutCapture={() => setLogo(logoColor)}
+        />
       </div>
       <div style={divStyle}>
-        <NavLink to="/login" style={{ color: 'white', textDecoration: 'none' }}>
-          Login
+        <NavLink to={'/rocket/' + userSeq} className="navMenuStyle">
+          MyRocket
         </NavLink>
       </div>
       <div style={divStyle}>
-        <NavLink
-          to="/rocket/:userid"
-          style={{ color: 'white', textDecoration: 'none' }}
-        >
-          MyRocket
+        <NavLink to="/logout" className="navMenuStyle">
+          Logout
         </NavLink>
       </div>
     </nav>

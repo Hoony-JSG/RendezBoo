@@ -1,0 +1,201 @@
+.Game_whole-container-wholewhole {
+  width: 1000px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+  left: calc(50% - 960px / 2);
+  top: calc(50% - 720px / 2);
+  position: fixed;
+}
+.Game_whole-container {
+  box-sizing: border-box;
+  width: fit-content;
+  height: fit-content;
+  background: rgba(81, 96, 108, 0.641);
+  border: 2px solid #ffffff;
+  box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.1),
+    0px 0px 5px rgba(0, 0, 0, 0.1);
+  /* border-radius: 40px; */
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.Game_choose-game-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.Game_choose-game-box > span {
+  position: relative;
+  bottom: 18px;
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+.Game_choose-game-list {
+  width: 960px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 150px;
+  margin-bottom: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.335);
+}
+.Game_choose-game-list-left {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.36);
+  align-items: center;
+}
+.Game_choose-game-list-right {
+  width: 70%;
+  padding: 15px 20px 20px 20px;
+  box-sizing: border-box;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.692);
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-content: start;
+}
+#Game_choose-game-title {
+  font-family: 'Gmarket_bold';
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.Game_choose-game-list-right > div {
+  font-size: 20px;
+}
+.Game_choose-game-button-BR31 {
+}
+
+.Game_choose-game-button-TGD {
+}
+
+.Game_choose-game-button-fastclick {
+}
+
+.Game_started-game-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  box-sizing: border-box;
+  background: linear-gradient(
+    to top,
+    rgba(86, 33, 17, 0.449),
+    rgba(0, 0, 255, 0)
+  );
+  padding: 100px;
+  height: 100%;
+}
+.Game_button-X-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  box-sizing: border-box;
+  padding: 15px 15px 0px 15px;
+}
+
+.Game_button-X {
+  opacity: 0.87;
+  width: 50px;
+  height: 50px;
+  padding: 0.1em 0.25em;
+  background-color: #212121;
+  border: 0.08em solid #fff;
+  border-radius: 0.3em;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.Game_button-X span {
+  width: 100%;
+  height: 95%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0.4em;
+  background-color: #212121;
+  border-radius: 0.2em;
+  font-size: 1.5em;
+  color: #fff;
+  border: 0.08em solid #fff;
+  box-shadow: 0 0.4em 0.1em 0.019em #fff;
+}
+
+.Game_button-X span:hover {
+  transition: all 0.2s;
+  transform: translate(0, 0.4em);
+  box-shadow: 0 0 0 0 #fff;
+}
+
+.Game_button-X span:not(hover) {
+  transition: all 0.2s;
+}
+
+/* ////////////////// */
+.Game_scene {
+  width: 200px;
+  justify-content: center;
+  align-items: center;
+}
+
+.Game_cube {
+  width: 200px;
+  color: #ccc;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  transition: all 0.85s cubic-bezier(0.17, 0.67, 0.14, 0.93);
+  transform-style: preserve-3d;
+  transform-origin: 100% 50%;
+  width: 10em;
+  height: 4em;
+}
+
+.Game_cube:hover {
+  transform: rotateX(-90deg);
+}
+
+.Game_side {
+  box-sizing: border-box;
+  position: absolute;
+  display: inline-block;
+  height: 4em;
+  width: 10em;
+  text-align: center;
+  text-transform: uppercase;
+  padding-top: 1.5em;
+  font-weight: bold;
+}
+
+.Game_top {
+  background: #86009050;
+  color: #ffffff;
+  transform: rotateX(90deg) translate3d(0, 0, 2em);
+  box-shadow: inset 0 0 0 5px #ffffff;
+  left: 0px;
+  width: 200px;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  display: flex;
+}
+
+.Game_front {
+  left: 0px;
+  width: 200px;
+  background: #4821a450;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  display: flex;
+  color: #fff;
+  box-shadow: inset 0 0 0 5px #fff;
+  transform: translate3d(0, 0, 2em);
+}

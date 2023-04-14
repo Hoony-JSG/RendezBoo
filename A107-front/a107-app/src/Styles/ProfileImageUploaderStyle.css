@@ -1,31 +1,36 @@
-.ProfileImageUploader {
-  display: inline-block;
-  position: relative;
+.Rocket_profile-iamge-upload-button {
+  border: 1px solid red;
 }
 
-.ProfileImageUploader input[type='file'] {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-}
-
-.ProfileImageUploader .default-image {
-  width: 100px;
-  height: 100px;
+.ImageUploader_button {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-color: #ccc;
-  color: #fff;
-  font-size: 3em;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 17px;
+  padding: 0.8em 1.3em 0.8em 0.9em;
+  color: white;
+  background: #ad5389;
+  background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+  border: none;
+  letter-spacing: 0.05em;
+  border-radius: 16px;
 }
 
-.ProfileImageUploader img {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
+.ImageUploader_button .ImageUploader_svg {
+  margin-right: 3px;
+  transform: rotate(90deg);
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.ImageUploader_button .ImageUploader_span {
+  transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.ImageUploader_button:hover .ImageUploader_svg {
+  transform: translateX(5px) rotate(360deg);
+}
+
+.ImageUploader_button:hover .ImageUploader_span {
+  transform: translateX(7px);
 }

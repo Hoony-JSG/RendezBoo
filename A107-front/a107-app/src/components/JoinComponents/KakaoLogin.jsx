@@ -1,28 +1,17 @@
-import React from 'react'
-import kakaoLogo from '../../Images/kakao-logo.png'
+import kakaoLogo from '../../Images/kakaologin.png'
 
 const KakaoLogin = () => {
-  const handleKakaoLogin = () => {
-    // Kakao API initialization
-    window.Kakao.init('a51740fcfd163300a5d33f0c4ed76473')
+  const KAKAO_SOCIAL_LOGIN_URL =
+    'https://kauth.kakao.com/oauth/authorize?client_id=712c281c808f36c63bc8cea4a11ba42f&redirect_uri=https%3a%2f%2fi8a107.p.ssafy.io%2foauth%2fkakao&response_type=code'
 
-    // Kakao Login API call
-    window.Kakao.Auth.login({
-      redirectUri: 'http://localhost:3000/join',
-      success: (authObj) => {
-        console.log(authObj)
-      },
-      fail: (err) => {
-        console.error(err)
-      },
-    })
-  }
   return (
-    <div>
-      <button onClick={handleKakaoLogin}>
-        <img src={kakaoLogo} alt="Kakao logo" />
-      </button>
-    </div>
+      <a href={KAKAO_SOCIAL_LOGIN_URL}>
+        <img
+          src={kakaoLogo}
+          alt="Login with Kakao"
+          style={{ filter: 'drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)) drop-shadow(0px 0px 2px rgba(255, 255, 255, 0.25))' }}
+        />
+      </a>
   )
 }
 

@@ -1,21 +1,35 @@
 .mbti-selector {
-  place-content: center;
   display: flex;
   align-items: center;
+  margin-top: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.122);
+  padding: 30px 10px;
+}
+.MBTISelector_head {
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+}
+
+.MBTISelector_text {
+  font-size: 24px;
+  margin: 20px 0px;
 }
 
 .mbti-selector-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  width: 80px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0px 30px;
 }
 
-.mbti-selector-item div {
+.mbti-selector-item .mbti-selector-item-div {
   margin: 10px;
 }
 
-.mbti-selector-item button {
+.mbti-selector-item-btn {
   margin-bottom: 10px;
   cursor: pointer;
   border-radius: 25%;
@@ -23,4 +37,60 @@
   height: auto;
   border: 1px solid gray;
   background-color: lightgray;
+}
+
+.MBTISelector_btn {
+  width: fit-content;
+  height: fit-content;
+  /* border: 1px solid red; */
+}
+/* //////////////////////////////////////////////// */
+.mbti-selector-edit::-webkit-scrollbar-track {
+  margin: 0px;
+}
+.mbti-selector-edit {
+  border: 2px solid rgba(255, 255, 255, 0.189);
+  display: flex;
+  align-items: center;
+  height: fit-content;
+  border-bottom-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  margin: 0px !important;
+  background: rgba(189, 189, 189, 0.127);
+}
+/* .mbti-move {
+  animation: mbti-move-ani 1s ease-in-out;
+}
+
+@keyframes mbti-move-ani {
+  from {
+    left: 0px;
+  }
+  to {
+    left: 100px;
+  }
+} */
+.MBTISelector_btn-edit {
+  width: fit-content;
+  height: fit-content;
+  /* border: 1px solid red; */
+}
+.mbti-selector-item-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+}
+
+.MBTISelector_btn-edit .MBTIBtn_container {
+  padding: 10px;
+  padding-left: 40px;
+}
+.MBTISelector_btn-edit .MBTIBtn_container .MBTIBtn_button:hover .MBTIBtn_pop {
+  transform: translateX(-100%);
+}
+.MBTISelector_btn-edit .MBTIBtn_container .MBTIBtn_button .MBTIBtn_pop {
+  margin-top: 5px;
 }
